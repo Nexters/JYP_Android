@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class KakaoSearchModule {
+internal class KakaoSearchModule {
     @Provides
     @Singleton
     fun provideKakaoSearchApi(): KakaoSearchApi {
