@@ -1,4 +1,4 @@
-package com.example.jypandroid.ui.theme
+package com.jyp.jypandroid.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

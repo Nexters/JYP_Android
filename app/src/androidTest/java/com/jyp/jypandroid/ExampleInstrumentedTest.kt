@@ -1,4 +1,4 @@
-package com.example.jypandroid
+package com.jyp.jypandroid
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

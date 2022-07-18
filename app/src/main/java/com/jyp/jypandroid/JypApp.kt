@@ -1,4 +1,4 @@
-package com.example.jypandroid
+package com.jyp.jypandroid
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
