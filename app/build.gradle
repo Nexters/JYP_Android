@@ -55,6 +55,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    // module dependencies
+
+    implementation project(":core")
+
+
     // dependencies
 
     implementation composeDependencies.implementation.values()
