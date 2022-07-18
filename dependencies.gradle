@@ -1,0 +1,47 @@
+ext {
+    versions = [
+            retrofit_version        : "2.9.0",
+            okhttp3_version         : "4.9.0",
+            glide_version           : "4.12.0",
+            hilt_version            : "2.42",
+            compose_version         : "1.1.1",
+            compose_activity_version: "1.5.0",
+    ]
+
+    composeDependencies = [
+            implementation     : [
+                    compose_ui      : "androidx.compose.ui:ui:$versions.compose_version",
+                    compose_material: "androidx.compose.material:material:$versions.compose_version",
+                    compose_preview : "androidx.compose.ui:ui-tooling-preview:$versions.compose_version",
+                    compose_activity: "androidx.activity:activity-compose:$versions.compose_activity_version",
+            ],
+            debugImplementation: [
+                    compose_tooling: "androidx.compose.ui:ui-tooling:$versions.compose_version",
+            ]
+    ]
+
+    networkDependencies = [
+            implementation: [
+                    retrofit_core  : "com.squareup.retrofit2:retrofit:$versions.retrofit_version",
+                    retrofit_rx    : "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit_version",
+                    retrofit_gson  : "com.squareup.retrofit2:converter-gson:$versions.retrofit_version",
+                    okhttp3_core   : "com.squareup.okhttp3:okhttp:$versions.okhttp3_version",
+                    okhttp3_logging: "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3_version",
+            ],
+    ]
+
+    hiltDependencies = [
+            implementation: [
+                    hilt_core: "com.google.dagger:hilt-android:$versions.hilt_version",
+            ],
+            kapt          : [
+                    hilt_kapt: "com.google.dagger:hilt-compiler:$versions.hilt_version",
+            ],
+    ]
+
+    glideDependencies = [
+            implementation: [
+                    glide_core: "com.github.bumptech.glide:glide:$versions.glide_version",
+            ],
+    ]
+}
