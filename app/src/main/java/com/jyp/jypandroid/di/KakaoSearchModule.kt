@@ -1,5 +1,6 @@
-package com.jyp.core.kakao_search
+package com.jyp.jypandroid.di
 
+import com.jyp.core.kakao_search.KakaoSearchApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal class KakaoSearchModule {
+class KakaoSearchModule {
     @Provides
     @Singleton
     fun provideKakaoSearchApi(): KakaoSearchApi {
@@ -33,6 +34,16 @@ internal class KakaoSearchModule {
                 .addInterceptor(HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 })
+                .addInterceptor { chain ->
+                    chain.request().newBuilder()
+                            .addHeader("Authorization", "KakaoAK $REST_API_KEY")
+                            .build()
+                            .let(chain::proceed)
+                }
                 .build()
+    }
+
+    companion object {
+        private const val REST_API_KEY ="2e6ac72aaf904e0edcf6e4a8e537dfa5"
     }
 }
