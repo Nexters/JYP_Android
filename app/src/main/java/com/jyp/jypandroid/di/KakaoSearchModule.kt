@@ -1,6 +1,7 @@
 package com.jyp.jypandroid.di
 
 import com.jyp.core.kakao_search.KakaoSearchApi
+import com.jyp.jypandroid.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,14 +37,10 @@ class KakaoSearchModule {
                 })
                 .addInterceptor { chain ->
                     chain.request().newBuilder()
-                            .addHeader("Authorization", "KakaoAK $REST_API_KEY")
+                            .addHeader("Authorization", "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}")
                             .build()
                             .let(chain::proceed)
                 }
                 .build()
-    }
-
-    companion object {
-        private const val REST_API_KEY ="2e6ac72aaf904e0edcf6e4a8e537dfa5"
     }
 }
