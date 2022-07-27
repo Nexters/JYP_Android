@@ -1,4 +1,4 @@
-package com.jyp.jyp_design
+package com.jyp.jyp_design.resource
 
 import androidx.compose.ui.graphics.Color
 
