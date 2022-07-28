@@ -11,8 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
 
@@ -24,7 +23,9 @@ enum class GlobalNavigationBarColor {
 fun GlobalNavigationBar(
         color: GlobalNavigationBarColor = GlobalNavigationBarColor.WHITE,
         title: String = "",
-        tag: String? = null,
+        titleSize: TextUnit = 20.sp,
+        titleFontWeight: FontWeight = FontWeight.Medium,
+        description: String = "",
         activeBack: Boolean = false,
         backAction: () -> Unit = {},
 ) {
@@ -40,68 +41,50 @@ fun GlobalNavigationBar(
                     ),
             verticalAlignment = Alignment.CenterVertically,
     ) {
+        Spacer(modifier = Modifier.size(12.dp))
+        
         if (activeBack) {
             Icon(
                     modifier = Modifier
-                            .padding(start = 24.dp)
+                            .padding(start = 12.dp)
                             .clickable(onClick = backAction),
                     painter = painterResource(R.drawable.icon_left_arrow),
                     contentDescription = null,
+                    tint = when (color) {
+                        GlobalNavigationBarColor.BLACK -> JypColors.text_white
+                        GlobalNavigationBarColor.WHITE -> JypColors.text90
+                    }
             )
         }
 
-        Spacer(
-                modifier = Modifier.size(12.dp)
+        Text(
+                modifier = Modifier.padding(start = 12.dp),
+                text = title,
+                fontSize = titleSize,
+                color = when (color) {
+                    GlobalNavigationBarColor.BLACK -> JypColors.text_white
+                    GlobalNavigationBarColor.WHITE -> JypColors.text90
+                },
+                fontWeight = titleFontWeight,
         )
 
-        if (tag != null) {
-            GlobalNavigationBarTextBold(
-                    title = title,
-                    tag = tag,
-            )
-        } else {
-            GlobalNavigationBarTextMedium(title = title)
-        }
+        Text(
+                modifier = Modifier.padding(start = 12.dp),
+                text = description,
+                fontSize = 18.sp,
+                color = JypColors.tag_grey200,
+                fontWeight = FontWeight.Medium,
+        )
     }
-}
-
-@Composable
-internal fun GlobalNavigationBarTextMedium(
-        title: String,
-) {
-    Text(
-            text = title,
-            fontSize = 16.sp,
-            color = JypColors.text75,
-            fontWeight = FontWeight.Medium,
-    )
-}
-
-@Composable
-internal fun GlobalNavigationBarTextBold(
-        title: String,
-        tag: String,
-) {
-    Text(
-            text = title,
-            fontSize = 20.sp,
-            color = JypColors.text90,
-            fontWeight = FontWeight.SemiBold,
-    )
-    Text(
-            modifier = Modifier.padding(start = 12.dp),
-            text = tag,
-            fontSize = 18.sp,
-            color = JypColors.tag_grey200,
-            fontWeight = FontWeight.Medium,
-    )
 }
 
 @Composable
 fun GlobalNavigationBarLayout(
         color: GlobalNavigationBarColor = GlobalNavigationBarColor.WHITE,
         title: String = "",
-        tag: String? = null,
+        titleSize: TextUnit = 20.sp,
+        titleFontWeight: FontWeight = FontWeight.Medium,
+        description: String = "",
         activeBack: Boolean = false,
         backAction: () -> Unit = {},
         contents: @Composable (modifier: Modifier) -> Unit,
@@ -112,7 +95,9 @@ fun GlobalNavigationBarLayout(
         GlobalNavigationBar(
                 color = color,
                 title = title,
-                tag = tag,
+                titleSize = titleSize,
+                titleFontWeight = titleFontWeight,
+                description = description,
                 activeBack = activeBack,
                 backAction = backAction,
         )
@@ -126,7 +111,9 @@ fun GlobalNavigationBarLayout(
 internal fun GlobalNavigationBarBoldPreview() {
     GlobalNavigationBar(
             title = "BoldPreview",
-            tag = "12m 25d",
+            titleFontWeight = FontWeight.SemiBold,
+            titleSize = 20.sp,
+            description = "12m 25d",
             activeBack = true,
     )
 }
@@ -136,7 +123,8 @@ internal fun GlobalNavigationBarBoldPreview() {
 internal fun GlobalNavigationBarMediumPreview() {
     GlobalNavigationBar(
             title = "MediumPreview",
-            tag = "12m 25d",
-            activeBack = true,
+            titleFontWeight = FontWeight.Normal,
+            titleSize = 16.sp,
+            activeBack = false,
     )
 }
