@@ -27,6 +27,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion versions.compose_version
+    }
+    buildFeatures {
+        compose true
+    }
 }
 
 dependencies {
@@ -38,5 +44,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation networkDependencies.implementation.values()
+    implementation composeDependencies.implementation.values()
+    debugImplementation composeDependencies.debugImplementation.values()
 }

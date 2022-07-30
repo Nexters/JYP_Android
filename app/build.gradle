@@ -5,6 +5,9 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+Properties localProperties = new Properties()
+localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdk 32
 
@@ -19,6 +22,8 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField "String", "KAKAO_REST_API_KEY", localProperties['kakao_rest_api_key']
     }
 
     buildTypes {
@@ -58,6 +63,7 @@ dependencies {
     // module dependencies
 
     implementation project(":core")
+    implementation project(":jyp_design")
 
 
     // dependencies
