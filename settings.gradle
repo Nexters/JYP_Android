@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "JYPAndroid"
 include ':app'
 include ':core'
+include ':jyp_design'
