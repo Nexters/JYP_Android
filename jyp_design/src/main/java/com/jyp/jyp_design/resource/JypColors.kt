@@ -3,35 +3,37 @@ package com.jyp.jyp_design.resource
 import androidx.compose.ui.graphics.Color
 
 object JypColors {
-    val pink = Color(0xFFEF597D)
+    val Pink = Color(0xFFEF597D)
 
-    val sub_blue300 = Color(0xFF2886DD)
-    val sub_blue200 = Color(0xFF58C6E9)
-    val sub_black = Color(0xFF202020)
+    val PinkShadow = Color(0xFFFFA1B7)
 
-    val tag_blue100 = Color(0xFF6DB6FF)
-    val tag_white_blue100 = Color(0xFFF4F9FD)
+    val Sub_blue300 = Color(0xFF2886DD)
+    val Sub_blue200 = Color(0xFF58C6E9)
+    val Sub_black = Color(0xFF202020)
 
-    val tag_red300 = Color(0xFFDD295E)
-    val tag_red200 = Color(0xFFF6739A)
-    val tag_white_red100 = Color(0xFFFDF4F7)
+    val Tag_blue100 = Color(0xFF6DB6FF)
+    val Tag_white_blue100 = Color(0xFFF4F9FD)
 
-    val tag_orange300 = Color(0xFFEA780F)
-    val tag_orange200 = Color(0xFFFF9C40)
-    val tag_white_orange100 = Color(0xFFFFF4E3)
+    val Tag_red300 = Color(0xFFDD295E)
+    val Tag_red200 = Color(0xFFF6739A)
+    val Tag_white_red100 = Color(0xFFFDF4F7)
 
-    val tag_grey200 = Color(0xFF7A7A7A)
-    val tag_white_grey100 = Color(0xFFF1F1F1)
+    val Tag_orange300 = Color(0xFFEA780F)
+    val Tag_orange200 = Color(0xFFFF9C40)
+    val Tag_white_orange100 = Color(0xFFFFF4E3)
 
-    val text90 = Color(0xE61A1A1A)
-    val text80 = Color(0xCC333333)
-    val text75 = Color(0xBF404040)
-    val text40 = Color(0x66999999)
-    val text_white = Color(0xFFFFFFFF)
+    val Tag_grey200 = Color(0xFF7A7A7A)
+    val Tag_white_grey100 = Color(0xFFF1F1F1)
 
-    val background_grey300 = Color(0xFF353535)
-    val background_white200 = Color(0xFFFAFAFA)
-    val background_white100 = Color(0xFFFFFFFF)
+    val Text90 = Color(0xE61A1A1A)
+    val Text80 = Color(0xCC333333)
+    val Text75 = Color(0xBF404040)
+    val Text40 = Color(0x66999999)
+    val Text_white = Color(0xFFFFFFFF)
 
-    val background_dim = Color(0xBF000000)
+    val Background_grey300 = Color(0xFF353535)
+    val Background_white200 = Color(0xFFFAFAFA)
+    val Background_white100 = Color(0xFFFFFFFF)
+
+    val Background_dim = Color(0xBF000000)
 }
