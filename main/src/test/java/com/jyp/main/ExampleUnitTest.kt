@@ -1,4 +1,4 @@
-package com.example.main
+package com.jyp.main
 
 import org.junit.Test
 
