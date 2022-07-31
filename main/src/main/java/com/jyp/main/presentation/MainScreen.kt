@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.jyp.jyp_design.resource.JypColors
-import com.jyp.jyp_design.ui.shadow.drawColoredShadow
+import com.jyp.jyp_design.ui.shadow.drawShadow
 
 @Composable
 internal fun MainScreen(
@@ -141,7 +141,7 @@ internal fun RowScope.MainBottomNavigationItem(
             Image(
                     modifier = Modifier
                             .wrapContentSize()
-                            .drawColoredShadow(
+                            .drawShadow(
                                     color = JypColors.PinkShadow,
                                     enabled = selected
                             ),

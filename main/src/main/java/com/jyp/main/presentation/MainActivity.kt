@@ -9,14 +9,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jyp.jyp_design.resource.JypColors
-import com.jyp.jyp_design.ui.shadow.drawColoredShadow
+import com.jyp.jyp_design.ui.shadow.drawShadow
 import com.jyp.main.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,13 +47,13 @@ private fun Screen() {
                                         Text(
                                                 modifier = Modifier
                                                         .padding(16.dp)
-                                                        .drawColoredShadow(JypColors.Pink),
+                                                        .drawShadow(JypColors.Pink),
                                                 text = "Hello MY_JOURNEY!"
                                         )
                                         Image(
                                                 modifier = Modifier
                                                         .padding(top = 14.dp)
-                                                        .drawColoredShadow(JypColors.PinkShadow),
+                                                        .drawShadow(JypColors.PinkShadow),
                                                 painter = painterResource(R.drawable.ic_bottom_nav_my_journey_active),
                                                 contentDescription = null
                                         )
