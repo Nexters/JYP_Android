@@ -1,4 +1,4 @@
-package com.jyp.jypandroid
+package com.jyp.journeypiki
 
 import android.annotation.SuppressLint
 import android.os.*

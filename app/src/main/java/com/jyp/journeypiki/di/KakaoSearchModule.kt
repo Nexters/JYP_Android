@@ -1,7 +1,7 @@
-package com.jyp.jypandroid.di
+package com.jyp.journeypiki.di
 
 import com.jyp.core.kakao_search.KakaoSearchApi
-import com.jyp.jypandroid.BuildConfig
+import com.jyp.journeypiki.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
