@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.ui.shadow.drawColoredShadow
 import com.jyp.main.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -90,51 +91,3 @@ private fun Screen() {
             )
     )
 }
-
-fun Modifier.drawColoredShadow(
-        color: Color = Color.Black,
-        alpha: Float = 0.9f,
-        borderRadius: Dp = 10.dp,
-        offsetX: Dp = 1.dp,
-        offsetY: Dp = 2.5.dp,
-        blurRadius: Dp = 3.dp,
-        enabled: Boolean = true,
-) = if (enabled) {
-    this.drawBehind {
-        val transparentColor = color.copy(alpha = 0.0f).toArgb()
-        val shadowColor = color.copy(alpha = alpha).toArgb()
-        this.drawIntoCanvas {
-            val paint = Paint()
-            val frameworkPaint = paint.asFrameworkPaint()
-            frameworkPaint.color = transparentColor
-            frameworkPaint.setShadowLayer(
-                    blurRadius.toPx(),
-                    offsetX.toPx(),
-                    offsetY.toPx(),
-                    shadowColor
-            )
-            it.save()
-
-            it.scale(
-                    1f,
-                    1f,
-                    this.center.x,
-                    this.center.y
-            )
-
-            it.drawRoundRect(
-                    0f,
-                    0f,
-                    this.size.width,
-                    this.size.height,
-                    borderRadius.toPx(),
-                    borderRadius.toPx(),
-                    paint
-            )
-            it.restore()
-        }
-    }
-} else {
-    this
-}
-

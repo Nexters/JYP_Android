@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.ui.shadow.drawColoredShadow
 
 @Composable
 internal fun MainScreen(
