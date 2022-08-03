@@ -35,8 +35,8 @@ fun GlobalNavigationBar(
                     .fillMaxWidth()
                     .background(
                             when (color) {
-                                GlobalNavigationBarColor.BLACK -> JypColors.background_grey300
-                                GlobalNavigationBarColor.WHITE -> JypColors.background_white100
+                                GlobalNavigationBarColor.BLACK -> JypColors.Background_grey300
+                                GlobalNavigationBarColor.WHITE -> JypColors.Background_white100
                             }
                     ),
             verticalAlignment = Alignment.CenterVertically,
@@ -51,8 +51,8 @@ fun GlobalNavigationBar(
                     painter = painterResource(R.drawable.icon_left_arrow),
                     contentDescription = null,
                     tint = when (color) {
-                        GlobalNavigationBarColor.BLACK -> JypColors.text_white
-                        GlobalNavigationBarColor.WHITE -> JypColors.text90
+                        GlobalNavigationBarColor.BLACK -> JypColors.Text_white
+                        GlobalNavigationBarColor.WHITE -> JypColors.Text90
                     }
             )
         }
@@ -62,8 +62,8 @@ fun GlobalNavigationBar(
                 text = title,
                 fontSize = titleSize,
                 color = when (color) {
-                    GlobalNavigationBarColor.BLACK -> JypColors.text_white
-                    GlobalNavigationBarColor.WHITE -> JypColors.text90
+                    GlobalNavigationBarColor.BLACK -> JypColors.Text_white
+                    GlobalNavigationBarColor.WHITE -> JypColors.Text90
                 },
                 fontWeight = titleFontWeight,
         )
@@ -72,7 +72,7 @@ fun GlobalNavigationBar(
                 modifier = Modifier.padding(start = 12.dp),
                 text = description,
                 fontSize = 18.sp,
-                color = JypColors.tag_grey200,
+                color = JypColors.Tag_grey200,
                 fontWeight = FontWeight.Medium,
         )
     }
@@ -102,7 +102,7 @@ fun GlobalNavigationBarLayout(
                 backAction = backAction,
         )
 
-        contents(Modifier.background(JypColors.background_white100))
+        contents(Modifier.background(JypColors.Background_white100))
     }
 }
 

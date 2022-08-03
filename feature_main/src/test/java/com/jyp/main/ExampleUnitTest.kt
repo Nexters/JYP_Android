@@ -1,4 +1,4 @@
-package com.jyp.jypandroid
+package com.jyp.main
 
 import org.junit.Test
 
