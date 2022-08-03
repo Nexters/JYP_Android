@@ -69,11 +69,11 @@ internal fun TextInputField(
     Row(
             modifier = modifier
                     .fillMaxWidth()
-                    .background(JypColors.background_white200)
+                    .background(JypColors.Background_white200)
                     .drawWithContent {
                         drawContent()
                         drawLine(
-                                color = JypColors.border_grey,
+                                color = JypColors.Border_grey,
                                 strokeWidth = 1f,
                                 start = Offset(x = 0f, y = size.height),
                                 end = Offset(x = size.width, y = size.height),
@@ -124,10 +124,10 @@ internal fun TextInputBox(
     Row(
             modifier = modifier
                     .fillMaxWidth()
-                    .background(JypColors.background_white200)
+                    .background(JypColors.Background_white200)
                     .clip(RoundedCornerShape(6.dp))
                     .border(
-                            border = BorderStroke(1.dp, JypColors.border_grey),
+                            border = BorderStroke(1.dp, JypColors.Border_grey),
                             shape = RoundedCornerShape(6.dp)
                     )
                     .padding(
@@ -184,17 +184,17 @@ internal fun TextInputContent(
                 value = text,
                 onValueChange = valueChange,
                 textStyle = TextStyle(
-                        color = JypColors.text90,
+                        color = JypColors.Text90,
                         fontSize = fontSize,
                         fontWeight = FontWeight.SemiBold,
                 ),
-                cursorBrush = SolidColor(JypColors.text90),
+                cursorBrush = SolidColor(JypColors.Text90),
                 decorationBox = { innerTextField ->
                     if (text.isEmpty()) {
                         Text(
                                 text = hint,
                                 fontSize = fontSize,
-                                color = JypColors.text20,
+                                color = JypColors.Text20,
                                 fontWeight = FontWeight.Medium,
                         )
                     }
