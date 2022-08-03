@@ -1,4 +1,4 @@
-package com.jyp.jypandroid
+package com.jyp.journeypiki
 
 import org.junit.Test
 
