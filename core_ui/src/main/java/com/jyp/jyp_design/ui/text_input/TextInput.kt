@@ -1,6 +1,7 @@
 package com.jyp.jyp_design.ui.text_input
 
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -206,7 +207,12 @@ internal fun TextInputContent(
         if (text.isNotEmpty() && textFieldFocus) {
             Image(
                     modifier = Modifier
-                            .clickable { valueChange.invoke("") },
+                            .clickable(
+                                    interactionSource = MutableInteractionSource(),
+                                    indication = null,
+                            ) {
+                                valueChange.invoke("")
+                            },
                     painter = painterResource(id = R.drawable.ic_text_delete),
                     contentDescription = null,
             )
@@ -256,7 +262,7 @@ internal fun TextInputBoxHintPreview() {
     TextInput(
             type = TextInputType.BOX,
             text = "",
-            valueChange =  {},
+            valueChange = {},
             hint = "예) 서울 저니 식당",
             trailingImage = painterResource(id = R.drawable.ic_search),
     )
