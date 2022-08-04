@@ -12,7 +12,7 @@ import com.jyp.jyp_design.ui.typography.type.BodyType
 
 
 @Composable
-internal fun BodyText(
+fun BodyText(
     text: String,
     maxLines: Int = Int.MAX_VALUE,
     type: BodyType,

@@ -12,7 +12,7 @@ import com.jyp.jyp_design.ui.typography.type.TitleType
 
 
 @Composable
-internal fun TitleText(
+fun TitleText(
     text: String,
     maxLines: Int = Int.MAX_VALUE,
     type: TitleType,

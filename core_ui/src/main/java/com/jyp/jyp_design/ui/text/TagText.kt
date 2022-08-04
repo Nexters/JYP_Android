@@ -12,7 +12,7 @@ import com.jyp.jyp_design.ui.typography.type.TagType
 
 
 @Composable
-internal fun TagText(
+fun TagText(
     text: String,
     maxLines: Int = Int.MAX_VALUE,
     type: TagType,

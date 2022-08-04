@@ -12,7 +12,7 @@ import com.jyp.jyp_design.ui.typography.type.HeadingType
 
 
 @Composable
-internal fun HeadingText(
+fun HeadingText(
     text: String,
     maxLines: Int = Int.MAX_VALUE,
     type: HeadingType,
