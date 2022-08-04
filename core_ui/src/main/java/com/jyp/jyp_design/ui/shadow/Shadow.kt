@@ -32,8 +32,8 @@ fun Modifier.drawShadow(
             canvas.save()
 
             canvas.scale(
-                    0.9f,
-                    0.9f,
+                    1f,
+                    1f,
                     this.center.x,
                     this.center.y
             )
