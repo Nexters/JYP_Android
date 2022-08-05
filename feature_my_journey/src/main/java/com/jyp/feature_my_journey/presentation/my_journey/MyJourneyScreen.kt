@@ -13,6 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -91,7 +94,21 @@ internal fun MyJourneyContentTab() {
                     .padding(top = 24.dp, start = 24.dp, end = 20.dp)
     ) {
         Text(
-                text = "준비된 여행"
+                modifier = Modifier
+                        .drawWithContent {
+                            drawContent()
+                            drawRoundRect(
+                                    color = JypColors.Text80,
+                                    topLeft = Offset(0f, size.height + 4.dp.toPx()),
+                                    cornerRadius = CornerRadius(x = 16.dp.toPx(), y = 16.dp.toPx()),
+                            )
+                        }
+                        .padding(vertical = 6.dp)
+                ,
+                text = stringResource(id = R.string.my_journey_planned_journey),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = JypColors.Text80,
         )
     }
 }

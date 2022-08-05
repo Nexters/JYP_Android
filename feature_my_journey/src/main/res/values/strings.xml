@@ -2,4 +2,6 @@
 <resources>
     <string name="my_journey_header">%s,\n%s님의 시작된 여행</string>
     <string name="my_journey_suggest_new_journey">새로운 여행 이야기를\n만들어주세요!</string>
+    <string name="my_journey_planned_journey">준비된 여행</string>
+    <string name="my_journey_past_journey">지나간 여행</string>
 </resources>
