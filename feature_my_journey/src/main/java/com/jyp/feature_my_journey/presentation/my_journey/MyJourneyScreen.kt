@@ -28,10 +28,11 @@ import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.shadow.drawShadow
 
 @Composable
-internal fun MyJourneyScreen(
+fun MyJourneyScreen(
         journeyPropensity: String,
         userName: String,
         journeys: List<String>,
+        onClickNewJourney: () -> Unit,
 ) {
     Column(
             modifier = Modifier
@@ -43,7 +44,10 @@ internal fun MyJourneyScreen(
                 userName = userName,
         )
 
-        MyJourneyContent(journeys = journeys)
+        MyJourneyContent(
+                journeys = journeys,
+                onClickNewJourney = onClickNewJourney,
+        )
     }
 }
 
@@ -77,13 +81,17 @@ internal fun MyJourneyHeader(
 @Composable
 internal fun MyJourneyContent(
         journeys: List<String>,
+        onClickNewJourney: () -> Unit,
 ) {
     Column(
             modifier = Modifier
                     .background(JypColors.Background_white100),
     ) {
         MyJourneyContentTab()
-        PlannedJourney(journeys = journeys)
+        PlannedJourney(
+                journeys = journeys,
+                onClickNewJourney = onClickNewJourney,
+        )
     }
 }
 
@@ -103,8 +111,7 @@ internal fun MyJourneyContentTab() {
                                     cornerRadius = CornerRadius(x = 16.dp.toPx(), y = 16.dp.toPx()),
                             )
                         }
-                        .padding(vertical = 6.dp)
-                ,
+                        .padding(vertical = 6.dp),
                 text = stringResource(id = R.string.my_journey_planned_journey),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -116,12 +123,14 @@ internal fun MyJourneyContentTab() {
 @Composable
 internal fun PlannedJourney(
         journeys: List<String>,
+        onClickNewJourney: () -> Unit,
 ) {
     if (journeys.isEmpty()) {
-        PlannedJourneyEmptyScreen()
+        PlannedJourneyEmptyScreen(onClickNewJourney = onClickNewJourney)
     } else {
         LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                contentPadding = PaddingValues(start = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             journeys.forEach { journey ->
                 item {
@@ -137,7 +146,9 @@ internal fun PlannedJourney(
 }
 
 @Composable
-internal fun PlannedJourneyEmptyScreen() {
+internal fun PlannedJourneyEmptyScreen(
+        onClickNewJourney: () -> Unit,
+) {
     Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -184,7 +195,7 @@ internal fun PlannedJourneyEmptyScreen() {
                     modifier = Modifier
                             .fillMaxWidth()
                             .height(40.dp),
-                    onClick = { }
+                    onClick = onClickNewJourney,
             ) {
                 Text(text = "만들기", fontSize = 16.sp, color = JypColors.Text_white)
             }
@@ -260,6 +271,7 @@ internal fun MyJourneyScreenEmptyPreview() {
             journeyPropensity = "자유로운 탐험가",
             userName = "다정",
             journeys = emptyList(),
+            onClickNewJourney = {},
     )
 }
 
@@ -270,5 +282,6 @@ internal fun MyJourneyScreenPreview() {
             journeyPropensity = "자유로운 탐험가",
             userName = "다정",
             journeys = listOf("강릉여행기", "집앞여행기"),
+            onClickNewJourney = {}
     )
 }
