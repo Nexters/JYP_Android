@@ -13,8 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
@@ -100,6 +99,15 @@ internal fun MyJourneyContent(
 internal fun MyJourneyContentTab() {
     Row(
             modifier = Modifier
+                    .fillMaxWidth()
+                    .drawBehind {
+                        drawLine(
+                                color = JypColors.Background_white200,
+                                start = Offset(0f, size.height + 1.5.dp.toPx()),
+                                end = Offset(size.width, size.height + 1.5.dp.toPx()),
+                                strokeWidth = 2.dp.toPx()
+                        )
+                    }
                     .padding(top = 24.dp, start = 24.dp, end = 20.dp)
     ) {
         Text(
@@ -108,7 +116,7 @@ internal fun MyJourneyContentTab() {
                             drawContent()
                             drawRoundRect(
                                     color = JypColors.Text80,
-                                    topLeft = Offset(0f, size.height + 4.dp.toPx()),
+                                    topLeft = Offset(0f, size.height + 3.dp.toPx()),
                                     cornerRadius = CornerRadius(x = 16.dp.toPx(), y = 16.dp.toPx()),
                             )
                         }
