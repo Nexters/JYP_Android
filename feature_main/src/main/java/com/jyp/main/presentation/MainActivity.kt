@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_my_journey.presentation.my_journey.MyJourneyScreen
@@ -47,7 +48,7 @@ private fun Screen(
 
                                 GlobalNavigationBarLayout(
                                         color = GlobalNavigationBarColor.GREY,
-                                        title = "나의 여행",
+                                        title = stringResource(id = BottomNavItem.MY_JOURNEY.labelRes),
                                         titleSize = 16.sp,
                                         titleFontWeight = FontWeight.Medium,
                                 ) {
