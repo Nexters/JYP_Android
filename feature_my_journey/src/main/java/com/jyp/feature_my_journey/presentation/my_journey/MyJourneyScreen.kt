@@ -9,8 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
@@ -31,7 +30,8 @@ import com.jyp.jyp_design.ui.shadow.drawShadow
 fun MyJourneyScreen(
         journeyPropensity: String,
         userName: String,
-        journeys: List<String>,
+        plannedJourneys: List<String>,
+        pastJourneys: List<String>,
         onClickNewJourney: () -> Unit,
 ) {
     Column(
@@ -45,7 +45,8 @@ fun MyJourneyScreen(
         )
 
         MyJourneyContent(
-                journeys = journeys,
+                plannedJourneys = plannedJourneys,
+                pastJourneys = pastJourneys,
                 onClickNewJourney = onClickNewJourney,
         )
     }
@@ -80,23 +81,46 @@ internal fun MyJourneyHeader(
 
 @Composable
 internal fun MyJourneyContent(
-        journeys: List<String>,
+        plannedJourneys: List<String>,
+        pastJourneys: List<String>,
         onClickNewJourney: () -> Unit,
 ) {
+    var selectedTabPosition by remember {
+        mutableStateOf(0)
+    }
+
     Column(
             modifier = Modifier
                     .background(JypColors.Background_white100),
     ) {
-        MyJourneyContentTab()
-        PlannedJourney(
-                journeys = journeys,
-                onClickNewJourney = onClickNewJourney,
+        MyJourneyContentTab(
+                tabTitles = listOf(
+                        stringResource(id = R.string.my_journey_planned_journey),
+                        stringResource(id = R.string.my_journey_past_journey),
+                ),
+                selectedTabPosition = selectedTabPosition,
+                tabSelected = { selectedTabPosition = it },
         )
+
+        when (selectedTabPosition) {
+            0 -> PlannedJourney(
+                    journeys = plannedJourneys,
+                    onClickNewJourney = onClickNewJourney,
+            )
+            1 -> PastJourney(
+                    journeys = pastJourneys
+            )
+        }
+
     }
 }
 
 @Composable
-internal fun MyJourneyContentTab() {
+internal fun MyJourneyContentTab(
+        tabTitles: List<String>,
+        selectedTabPosition: Int,
+        tabSelected: (position: Int) -> Unit,
+) {
     Row(
             modifier = Modifier
                     .fillMaxWidth()
@@ -110,22 +134,44 @@ internal fun MyJourneyContentTab() {
                     }
                     .padding(top = 24.dp, start = 24.dp, end = 20.dp)
     ) {
-        Text(
-                modifier = Modifier
-                        .drawWithContent {
-                            drawContent()
-                            drawRoundRect(
-                                    color = JypColors.Text80,
-                                    topLeft = Offset(0f, size.height + 3.dp.toPx()),
-                                    cornerRadius = CornerRadius(x = 16.dp.toPx(), y = 16.dp.toPx()),
-                            )
-                        }
-                        .padding(vertical = 6.dp),
-                text = stringResource(id = R.string.my_journey_planned_journey),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = JypColors.Text80,
-        )
+        tabTitles.forEachIndexed { index, tabTitle ->
+            val selected = selectedTabPosition == index
+            Text(
+                    modifier = Modifier
+                            .let { modifier ->
+                                if (index > 0) {
+                                    modifier.padding(start = 28.dp)
+                                } else {
+                                    modifier
+                                }
+                            }
+                            .drawWithContent {
+                                drawContent()
+                                if (selected) {
+                                    drawRoundRect(
+                                            color = JypColors.Text80,
+                                            topLeft = Offset(0f, size.height + 3.dp.toPx()),
+                                            cornerRadius = CornerRadius(x = 16.dp.toPx(), y = 16.dp.toPx()),
+                                    )
+                                }
+                            }
+                            .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberRipple()
+                            ) {
+                                tabSelected.invoke(index)
+                            }
+                            .padding(vertical = 6.dp),
+                    text = tabTitle,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (selected) {
+                        JypColors.Text80
+                    } else {
+                        JypColors.Text40
+                    },
+            )
+        }
     }
 }
 
@@ -143,7 +189,7 @@ internal fun PlannedJourney(
         ) {
             journeys.forEach { journey ->
                 item {
-                    PlannedJourneyItem(
+                    JourneyItem(
                             journeyName = journey,
                             startDay = "7월 18일",
                             endDay = "7월 28일",
@@ -192,7 +238,7 @@ internal fun PlannedJourneyEmptyScreen(
                 )
                 Text(
                         modifier = Modifier.padding(top = 12.dp),
-                        text = stringResource(id = R.string.my_journey_suggest_new_journey),
+                        text = stringResource(id = R.string.my_journey_empty_description_planned_journey),
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp,
                         color = JypColors.Text75,
@@ -213,7 +259,78 @@ internal fun PlannedJourneyEmptyScreen(
 }
 
 @Composable
-internal fun PlannedJourneyItem(
+internal fun PastJourney(
+        journeys: List<String>,
+) {
+    if (journeys.isEmpty()) {
+        PastJourneyEmptyScreen()
+    } else {
+        LazyRow(
+                contentPadding = PaddingValues(start = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            journeys.forEach { journey ->
+                item {
+                    JourneyItem(
+                            journeyName = journey,
+                            startDay = "7월 18일",
+                            endDay = "7월 28일",
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+internal fun PastJourneyEmptyScreen() {
+    Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+    ) {
+        Column(
+                modifier = Modifier
+                        .padding(vertical = 24.dp)
+                        .width(width = 276.dp)
+                        .fillMaxHeight()
+                        .drawShadow(
+                                color = JypColors.Border_grey,
+                                borderRadius = 16.dp,
+                        )
+                        .clip(shape = RoundedCornerShape(16.dp))
+                        .background(
+                                color = JypColors.Background_white100,
+                                shape = RoundedCornerShape(16.dp),
+                        )
+                        .padding(20.dp),
+        ) {
+            Column(
+                    modifier = Modifier
+                            .weight(1f)
+                            .align(Alignment.CenterHorizontally),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+            ) {
+                Box(
+                        modifier = Modifier
+                                .background(JypColors.Tag_grey200)
+                                .size(120.dp)
+                )
+                Text(
+                        modifier = Modifier.padding(top = 12.dp),
+                        text = stringResource(id = R.string.my_journey_empty_description_past_journey),
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp,
+                        color = JypColors.Text75,
+                        textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+}
+
+@Composable
+internal fun JourneyItem(
         journeyName: String,
         startDay: String,
         endDay: String,
@@ -280,7 +397,8 @@ internal fun MyJourneyScreenEmptyPreview() {
     MyJourneyScreen(
             journeyPropensity = "자유로운 탐험가",
             userName = "다정",
-            journeys = emptyList(),
+            plannedJourneys = emptyList(),
+            pastJourneys = emptyList(),
             onClickNewJourney = {},
     )
 }
@@ -291,7 +409,8 @@ internal fun MyJourneyScreenPreview() {
     MyJourneyScreen(
             journeyPropensity = "자유로운 탐험가",
             userName = "다정",
-            journeys = listOf("강릉여행기", "집앞여행기"),
+            plannedJourneys = listOf("강릉여행기", "집앞여행기"),
+            pastJourneys = emptyList(),
             onClickNewJourney = {}
     )
 }

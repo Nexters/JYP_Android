@@ -42,7 +42,8 @@ private fun Screen(
                             content = {
                                 val journeyPropensity = "자유로운 여행가"
                                 val userName = "박진영"
-                                val journeys by myJourneyViewModel.journeys.collectAsState()
+                                val plannedJourneys by myJourneyViewModel.plannedJourneys.collectAsState()
+                                val pastJourneys by myJourneyViewModel.pastJourneys.collectAsState()
 
                                 GlobalNavigationBarLayout(
                                         color = GlobalNavigationBarColor.GREY,
@@ -53,7 +54,8 @@ private fun Screen(
                                     MyJourneyScreen(
                                             journeyPropensity = journeyPropensity,
                                             userName = userName,
-                                            journeys = journeys,
+                                            plannedJourneys = plannedJourneys,
+                                            pastJourneys = pastJourneys,
                                             onClickNewJourney = myJourneyViewModel::fetchJourneyList,
                                     )
                                 }
