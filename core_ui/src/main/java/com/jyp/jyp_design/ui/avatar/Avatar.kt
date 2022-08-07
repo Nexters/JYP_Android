@@ -91,8 +91,9 @@ fun AvatarList(
         height: Dp,
         showBorder: Boolean,
         borderColor: Color,
+        limitListCount: Int = Int.MAX_VALUE,
 ) {
-    val overflowCount: Int = profileImageUrls.size - 4
+    val overflowCount: Int = profileImageUrls.size - limitListCount
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Row(
@@ -165,6 +166,7 @@ fun AvatarListPreview() {
                         "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
                         "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
                         "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
                 ),
                 width = 44.dp,
                 height = 44.dp,
@@ -195,6 +197,7 @@ fun AvatarListMorePreview() {
                 height = 44.dp,
                 showBorder = true,
                 borderColor = JypColors.Background_white100,
+                limitListCount = 4,
         )
     }
 }
