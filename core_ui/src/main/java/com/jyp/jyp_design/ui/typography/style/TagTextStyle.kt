@@ -1,6 +1,5 @@
 package com.jyp.jyp_design.ui.typography.style
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -10,7 +9,6 @@ import com.jyp.jyp_design.ui.typography.font.PretendardFontFamily
 import com.jyp.jyp_design.ui.typography.type.TagType
 
 
-@Composable
 fun tagTextStyle(
     type: TagType,
     textAlign: TextAlign,
