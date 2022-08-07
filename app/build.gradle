@@ -75,5 +75,5 @@ dependencies {
     implementation hiltDependencies.implementation.values()
     kapt hiltDependencies.kapt.values()
 
-    implementation glideDependencies.implementation.values()
+    implementation imageDependencies.implementation.values()
 }
