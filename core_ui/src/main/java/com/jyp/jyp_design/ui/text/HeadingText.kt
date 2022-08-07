@@ -2,6 +2,7 @@ package com.jyp.jyp_design.ui.text
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -14,6 +15,7 @@ import com.jyp.jyp_design.ui.typography.type.HeadingType
 @Composable
 fun HeadingText(
     text: String,
+    modifier: Modifier = Modifier,
     maxLines: Int = Int.MAX_VALUE,
     type: HeadingType,
     textAlign: TextAlign,
@@ -21,6 +23,7 @@ fun HeadingText(
 ) {
     Text(
         text = text,
+        modifier = modifier,
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
         style = headingTextStyle(
