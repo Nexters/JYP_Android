@@ -16,7 +16,7 @@ import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
 
 enum class GlobalNavigationBarColor {
-    BLACK, WHITE
+    BLACK, WHITE, GREY
 }
 
 @Composable
@@ -37,6 +37,7 @@ fun GlobalNavigationBar(
                             when (color) {
                                 GlobalNavigationBarColor.BLACK -> JypColors.Background_grey300
                                 GlobalNavigationBarColor.WHITE -> JypColors.Background_white100
+                                GlobalNavigationBarColor.GREY -> JypColors.Background_white200
                             }
                     ),
             verticalAlignment = Alignment.CenterVertically,
@@ -53,6 +54,7 @@ fun GlobalNavigationBar(
                     tint = when (color) {
                         GlobalNavigationBarColor.BLACK -> JypColors.Text_white
                         GlobalNavigationBarColor.WHITE -> JypColors.Text90
+                        GlobalNavigationBarColor.GREY -> JypColors.Text90
                     }
             )
         }
@@ -64,6 +66,7 @@ fun GlobalNavigationBar(
                 color = when (color) {
                     GlobalNavigationBarColor.BLACK -> JypColors.Text_white
                     GlobalNavigationBarColor.WHITE -> JypColors.Text90
+                    GlobalNavigationBarColor.GREY -> JypColors.Text90
                 },
                 fontWeight = titleFontWeight,
         )
