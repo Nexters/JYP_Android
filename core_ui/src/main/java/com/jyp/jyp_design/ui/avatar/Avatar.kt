@@ -48,7 +48,7 @@ fun Avatar(
 }
 
 @Composable
-fun MoreAvatar(
+internal fun MoreAvatar(
         overflowCount: Int,
         width: Dp,
         height: Dp,
@@ -134,7 +134,7 @@ fun AvatarList(
 
 @Composable
 @Preview(showBackground = true)
-fun AvatarPreview() {
+internal fun AvatarPreview() {
     Box(
             modifier = Modifier
                     .size(100.dp)
@@ -153,7 +153,7 @@ fun AvatarPreview() {
 
 @Composable
 @Preview(showBackground = true)
-fun AvatarListPreview() {
+internal fun AvatarListPreview() {
     Box(
             modifier = Modifier
                     .size(width = 300.dp, height = 100.dp)
@@ -178,7 +178,7 @@ fun AvatarListPreview() {
 
 @Composable
 @Preview(showBackground = true)
-fun AvatarListMorePreview() {
+internal fun AvatarListMorePreview() {
     Box(
             modifier = Modifier
                     .size(width = 300.dp, height = 100.dp)
