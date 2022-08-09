@@ -4,31 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.presentation.my_journey.MyJourneyScreen
 import com.jyp.feature_my_journey.presentation.my_journey.MyJourneyViewModel
-import com.jyp.jyp_design.resource.JypColors
+import com.jyp.feature_my_page.presentation.MyPageScreen
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
-import com.jyp.jyp_design.ui.shadow.drawShadow
-import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
-import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
-import com.jyp.main.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -91,11 +81,15 @@ private fun Screen(
                     MainScreenItem(
                             navItem = BottomNavItem.MY_PAGE,
                             content = {
-                                Box(
-                                        modifier = Modifier.fillMaxSize(),
-                                        contentAlignment = Alignment.Center,
+                                GlobalNavigationBarLayout(
+                                        color = GlobalNavigationBarColor.GREY,
+                                        title = stringResource(id = BottomNavItem.MY_PAGE.labelRes),
+                                        titleSize = 16.sp,
+                                        titleFontWeight = FontWeight.Medium,
                                 ) {
-                                    Text(text = "Hello MY_PAGE!")
+                                    MyPageScreen(
+                                            journeyPropensity = "자유로운 탐험가",
+                                    )
                                 }
                             }
                     ),
