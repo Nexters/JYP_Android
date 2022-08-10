@@ -39,6 +39,10 @@ android {
 
 dependencies {
     implementation project(':core_ui')
+    implementation project(':feature_my_journey')
+    implementation project(':feature_another_journey')
+    implementation project(':feature_my_page')
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
