@@ -36,11 +36,11 @@ fun MyPageScreen(
                         .padding(horizontal = 24.dp)
                         .fillMaxSize(),
         ) {
-            HeadingText(
+            Text(
                     modifier = Modifier
                             .padding(top = 8.dp),
                     text = journeyPropensity,
-                    type = HeadingType.HEADING_1,
+                    type = TextType.HEADING_1,
                     textAlign = TextAlign.Start,
                     color = JypColors.Text90,
             )
@@ -72,11 +72,11 @@ private fun Profile() {
 
         Spacer(modifier = Modifier.size(9.dp))
 
-        TitleText(
+        Text(
                 modifier = Modifier
                         .align(Alignment.CenterHorizontally),
                 text = "박진영",
-                type = TitleType.TITLE_2,
+                type = TextType.TITLE_2,
                 textAlign = TextAlign.Start,
                 color = JypColors.Text90,
         )
@@ -86,10 +86,10 @@ private fun Profile() {
 @Composable
 internal fun Menu() {
     Column {
-        TitleText(
+        Text(
                 modifier = Modifier.padding(start = 14.dp),
                 text = "공지사항",
-                type = TitleType.TITLE_6,
+                type = TextType.TITLE_6,
                 textAlign = TextAlign.Start,
                 color = JypColors.Text80,
         )
@@ -98,10 +98,10 @@ internal fun Menu() {
         Divider()
         Spacer(modifier = Modifier.size(12.dp))
 
-        TitleText(
+        Text(
                 modifier = Modifier.padding(start = 14.dp),
                 text = "이용약관",
-                type = TitleType.TITLE_6,
+                type = TextType.TITLE_6,
                 textAlign = TextAlign.Start,
                 color = JypColors.Text80,
         )
@@ -114,18 +114,18 @@ internal fun Menu() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            TitleText(
+            Text(
                     modifier = Modifier.padding(start = 14.dp),
                     text = "버전정보",
-                    type = TitleType.TITLE_6,
+                    type = TextType.TITLE_6,
                     textAlign = TextAlign.Start,
                     color = JypColors.Text80,
             )
 
-            TitleText(
+            Text(
                     modifier = Modifier.padding(end = 14.dp),
                     text = "1.0",
-                    type = TitleType.TITLE_6,
+                    type = TextType.TITLE_6,
                     textAlign = TextAlign.Start,
                     color = JypColors.Text80,
             )
@@ -137,10 +137,10 @@ internal fun Menu() {
         Divider()
         Spacer(modifier = Modifier.size(12.dp))
 
-        TitleText(
+        Text(
                 modifier = Modifier.padding(start = 14.dp),
                 text = "로그아웃",
-                type = TitleType.TITLE_6,
+                type = TextType.TITLE_6,
                 textAlign = TextAlign.Start,
                 color = JypColors.Text80,
         )
