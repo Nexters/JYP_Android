@@ -20,18 +20,19 @@ fun Text(
     type: TextType,
     textAlign: TextAlign = TextAlign.Start,
     color: Color
-
-) = Text(
-    text = text,
-    modifier = modifier,
-    maxLines = maxLines,
-    overflow = TextOverflow.Ellipsis,
-    style = TextStyle(
-        type = type,
-        textAlign = textAlign,
-        color = color
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis,
+        style = TextStyle(
+            type = type,
+            textAlign = textAlign,
+            color = color
+        )
     )
-)
+}
 
 
 @Composable
