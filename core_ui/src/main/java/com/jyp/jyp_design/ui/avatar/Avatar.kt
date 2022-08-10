@@ -21,25 +21,26 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun Avatar(
+        modifier: Modifier = Modifier,
         profileImageUrl: String,
         width: Dp,
         height: Dp,
-        showBorder: Boolean,
-        borderColor: Color,
+        showBorder: Boolean = true,
+        borderColor: Color = JypColors.Background_white100,
 ) {
     GlideImage(
-            modifier = Modifier
+            modifier = modifier
                     .size(width = width, height = height)
                     .clip(RoundedCornerShape(12.dp))
-                    .let { modifier ->
+                    .let { imageModifier ->
                         if (showBorder) {
-                            modifier.border(
+                            imageModifier.border(
                                     width = 1.dp,
                                     color = borderColor,
                                     shape = RoundedCornerShape(12.dp),
                             )
                         } else {
-                            modifier
+                            imageModifier
                         }
                     },
             imageModel = profileImageUrl,
@@ -86,17 +87,19 @@ internal fun MoreAvatar(
 
 @Composable
 fun AvatarList(
+        modifier: Modifier = Modifier,
         profileImageUrls: List<String>,
         width: Dp,
         height: Dp,
-        showBorder: Boolean,
-        borderColor: Color,
+        showBorder: Boolean = true,
+        borderColor: Color = JypColors.Background_white100,
         limitListCount: Int = Int.MAX_VALUE,
 ) {
     val overflowCount: Int = profileImageUrls.size - limitListCount
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Row(
+                modifier = modifier,
                 horizontalArrangement = Arrangement.spacedBy((-18).dp),
         ) {
             if (overflowCount > 0) {
