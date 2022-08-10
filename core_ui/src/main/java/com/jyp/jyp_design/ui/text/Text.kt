@@ -18,7 +18,7 @@ fun Text(
     modifier: Modifier = Modifier,
     maxLines: Int = Int.MAX_VALUE,
     type: TextType,
-    textAlign: TextAlign,
+    textAlign: TextAlign = TextAlign.Start,
     color: Color
 
 ) = Text(
