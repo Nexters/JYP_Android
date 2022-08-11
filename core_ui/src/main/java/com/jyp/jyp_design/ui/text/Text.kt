@@ -15,9 +15,10 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @Composable
 fun Text(
     text: String,
+    type: TextType,
     modifier: Modifier = Modifier,
     maxLines: Int = Int.MAX_VALUE,
-    type: TextType,
+    lineHeight: Double = 1.5,
     textAlign: TextAlign = TextAlign.Start,
     color: Color
 ) {
@@ -28,6 +29,7 @@ fun Text(
         overflow = TextOverflow.Ellipsis,
         style = TextStyle(
             type = type,
+            lineHeight = lineHeight,
             textAlign = textAlign,
             color = color
         )
@@ -41,7 +43,6 @@ internal fun HeadingText_1() {
     Text(
         text = "HeadingText_1",
         type = TextType.HEADING_1,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -52,7 +53,6 @@ internal fun HeadingText_2() {
     Text(
         text = "HeadingText_2",
         type = TextType.HEADING_2,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -63,7 +63,6 @@ internal fun HeadingText_3() {
     Text(
         text = "HeadingText_3",
         type = TextType.HEADING_3,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -74,7 +73,6 @@ internal fun TitleText_1() {
     Text(
         text = "TitleText_1",
         type = TextType.TITLE_1,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -85,7 +83,6 @@ internal fun TitleText_2() {
     Text(
         text = "TitleText_2",
         type = TextType.TITLE_2,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -96,7 +93,6 @@ internal fun TitleText_3() {
     Text(
         text = "TitleText_3",
         type = TextType.TITLE_3,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -107,7 +103,6 @@ internal fun TitleText_4() {
     Text(
         text = "TitleText_4",
         type = TextType.TITLE_4,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -118,7 +113,6 @@ internal fun TitleText_5() {
     Text(
         text = "TitleText_5",
         type = TextType.TITLE_5,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -129,7 +123,6 @@ internal fun TitleText_6() {
     Text(
         text = "TitleText_6",
         type = TextType.TITLE_6,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -140,7 +133,6 @@ internal fun BodyText_1() {
     Text(
         text = "BodyText_1",
         type = TextType.BODY_1,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -151,7 +143,6 @@ internal fun BodyText_2() {
     Text(
         text = "BodyText_2",
         type = TextType.BODY_2,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -162,7 +153,6 @@ internal fun BodyText_3() {
     Text(
         text = "BodyText_3",
         type = TextType.BODY_3,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -173,7 +163,6 @@ internal fun BodyText_4() {
     Text(
         text = "BodyText_4",
         type = TextType.BODY_4,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -184,7 +173,6 @@ internal fun TagText_1() {
     Text(
         text = "TagText_1",
         type = TextType.TAG_1,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
@@ -195,7 +183,6 @@ internal fun TagText_2() {
     Text(
         text = "TagText_2",
         type = TextType.TAG_2,
-        textAlign = TextAlign.Center,
         color = JypColors.Text90
     )
 }
