@@ -20,6 +20,8 @@ object JypColors {
 
     val Tag_orange300 = Color(0xFFEA780F)
     val Tag_orange200 = Color(0xFFFF9C40)
+    val Tag_yellow100 = Color(0xFFFFDC60)
+    val Tag_brown200 = Color(0xFF7B5916)
     val Tag_white_orange100 = Color(0xFFFFF4E3)
 
     val Tag_grey200 = Color(0xFF7A7A7A)
