@@ -7,8 +7,20 @@ import com.jyp.jyp_design.R
 
 
 val PretendardFontFamily = FontFamily(
-    Font(R.font.pretendard_regular, FontWeight.Normal),
-    Font(R.font.pretendard_medium, FontWeight.Medium),
-    Font(R.font.pretendard_semi_bold, FontWeight.SemiBold),
-    Font(R.font.pretendard_bold, FontWeight.Bold)
+    Font(
+        resId = R.font.pretendard_regular,
+        weight = FontWeight.Normal
+    ),
+    Font(
+        resId = R.font.pretendard_medium,
+        weight = FontWeight.Medium
+    ),
+    Font(
+        resId = R.font.pretendard_semi_bold,
+        weight = FontWeight.SemiBold
+    ),
+    Font(
+        resId = R.font.pretendard_bold,
+        weight = FontWeight.Bold
+    )
 )

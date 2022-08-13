@@ -3,7 +3,6 @@ package com.jyp.feature_my_page.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,7 +13,6 @@ import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.avatar.Avatar
 import com.jyp.jyp_design.ui.text.*
 import com.jyp.jyp_design.ui.typography.type.*
-import kotlinx.coroutines.flow.flow
 
 @Composable
 fun MyPageScreen(
@@ -36,7 +34,7 @@ fun MyPageScreen(
                         .padding(horizontal = 24.dp)
                         .fillMaxSize(),
         ) {
-            Text(
+            JypText(
                     modifier = Modifier
                             .padding(top = 8.dp),
                     text = journeyPropensity,
@@ -72,7 +70,7 @@ private fun Profile() {
 
         Spacer(modifier = Modifier.size(9.dp))
 
-        Text(
+        JypText(
                 modifier = Modifier
                         .align(Alignment.CenterHorizontally),
                 text = "박진영",
@@ -86,7 +84,7 @@ private fun Profile() {
 @Composable
 internal fun Menu() {
     Column {
-        Text(
+        JypText(
                 modifier = Modifier.padding(start = 14.dp),
                 text = "공지사항",
                 type = TextType.TITLE_6,
@@ -98,7 +96,7 @@ internal fun Menu() {
         Divider()
         Spacer(modifier = Modifier.size(12.dp))
 
-        Text(
+        JypText(
                 modifier = Modifier.padding(start = 14.dp),
                 text = "이용약관",
                 type = TextType.TITLE_6,
@@ -114,7 +112,7 @@ internal fun Menu() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
+            JypText(
                     modifier = Modifier.padding(start = 14.dp),
                     text = "버전정보",
                     type = TextType.TITLE_6,
@@ -122,7 +120,7 @@ internal fun Menu() {
                     color = JypColors.Text80,
             )
 
-            Text(
+            JypText(
                     modifier = Modifier.padding(end = 14.dp),
                     text = "1.0",
                     type = TextType.TITLE_6,
@@ -137,7 +135,7 @@ internal fun Menu() {
         Divider()
         Spacer(modifier = Modifier.size(12.dp))
 
-        Text(
+        JypText(
                 modifier = Modifier.padding(start = 14.dp),
                 text = "로그아웃",
                 type = TextType.TITLE_6,
