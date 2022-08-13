@@ -8,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -23,8 +23,10 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.jyp.feature_planner.R
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBar
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
+import com.jyp.jyp_design.ui.shadow.drawShadow
 import com.jyp.jyp_design.ui.tag.DecoratedTag
 import com.jyp.jyp_design.ui.tag.TagType
 import com.jyp.jyp_design.ui.text.JypText
@@ -200,6 +202,8 @@ private fun PlannerForumContent() {
     ) {
         Spacer(modifier = Modifier.size(28.dp))
         PlannerJourneyTagContent()
+        Spacer(modifier = Modifier.size(48.dp))
+        PlannerPickMeContent()
     }
 }
 
@@ -209,53 +213,56 @@ private fun PlannerJourneyTagContent() {
         mutableStateOf(false)
     }
 
-    Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        JypText(
-                text = stringResource(id = R.string.planner_journey_tags),
-                type = TextType.TITLE_6,
-                color = JypColors.Text80,
-        )
+    Column {
 
         Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Image(
-                    painter = painterResource(id = R.drawable.icon_pencil),
-                    contentDescription = null,
+            JypText(
+                    text = stringResource(id = R.string.planner_journey_tags_title),
+                    type = TextType.TITLE_6,
+                    color = JypColors.Text80,
             )
+
+            Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Image(
+                        painter = painterResource(id = R.drawable.icon_pencil),
+                        contentDescription = null,
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+                Image(
+                        modifier = Modifier
+                                .clip(CircleShape)
+                                .clickable { isCollapsed = !isCollapsed },
+                        painter = painterResource(id = R.drawable.icon_arrow_top),
+                        contentDescription = null,
+                )
+            }
+        }
+        Spacer(modifier = Modifier.size(6.dp))
+        JypText(
+                text = stringResource(id = R.string.planner_journey_tags_description),
+                type = TextType.BODY_3,
+                color = JypColors.Text40,
+        )
+        if (!isCollapsed) {
             Spacer(modifier = Modifier.size(16.dp))
-            Image(
-                    modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable { isCollapsed = !isCollapsed },
-                    painter = painterResource(id = R.drawable.icon_arrow_top),
-                    contentDescription = null,
+            PlannerTagLayout(
+                    tags = listOf(
+                            Tag(TagType.Like(), "시러시러"),
+                            Tag(TagType.Like(), "시러허허"),
+                            Tag(TagType.Like(), "좋아"),
+                            Tag(TagType.Like(), "싫어싫"),
+                            Tag(TagType.Dislike(), "조아아"),
+                            Tag(TagType.Dislike(), "좋아"),
+                            Tag(TagType.Dislike(), "시러머버더거서ㅛㅓ"),
+                            Tag(TagType.Soso(), "상관업"),
+                    )
             )
         }
-    }
-    Spacer(modifier = Modifier.size(6.dp))
-    JypText(
-            text = "여행 취향을 확인해보세요!",
-            type = TextType.BODY_3,
-            color = JypColors.Text40,
-    )
-    if (!isCollapsed) {
-        Spacer(modifier = Modifier.size(16.dp))
-        PlannerTagLayout(
-                tags = listOf(
-                        Tag(TagType.Like(), "시러시러"),
-                        Tag(TagType.Like(), "시러허허"),
-                        Tag(TagType.Like(), "좋아"),
-                        Tag(TagType.Like(), "싫어싫"),
-                        Tag(TagType.Dislike(), "조아아"),
-                        Tag(TagType.Dislike(), "좋아"),
-                        Tag(TagType.Dislike(), "시러머버더거서ㅛㅓ"),
-                        Tag(TagType.Soso(), "상관업"),
-                )
-        )
     }
 }
 
@@ -273,6 +280,68 @@ private fun PlannerTagLayout(
                     content = tag.content,
             )
         }
+    }
+}
+
+@Composable
+private fun PlannerPickMeContent() {
+    Column {
+        Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            JypText(
+                    text = stringResource(id = R.string.planner_pick_me_title),
+                    type = TextType.TITLE_6,
+                    color = JypColors.Text80,
+            )
+
+            Image(
+                    painter = painterResource(id = R.drawable.icon_add),
+                    contentDescription = null,
+            )
+        }
+        Spacer(modifier = Modifier.size(6.dp))
+        JypText(
+                text = stringResource(id = R.string.planner_pick_me_description),
+                type = TextType.BODY_3,
+                color = JypColors.Text40,
+        )
+        Spacer(modifier = Modifier.size(20.dp))
+        PlannerPickMeEmptyCard()
+    }
+}
+
+@Composable
+private fun PlannerPickMeEmptyCard() {
+    Column(
+            modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(
+                            elevation = 2.dp,
+                            shape = RoundedCornerShape(16.dp),
+                    )
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(JypColors.Background_white100),
+            horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Spacer(modifier = Modifier.size(27.dp))
+        Box(
+                modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .background(JypColors.Background_grey300)
+        )
+        Spacer(modifier = Modifier.size(24.dp))
+        JypTextButton(
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                text = "후보 장소 추가하기",
+                buttonType = ButtonType.MEDIUM,
+                buttonColorSet = ButtonColorSetType.BLACK,
+        )
+        Spacer(modifier = Modifier.size(20.dp))
     }
 }
 
