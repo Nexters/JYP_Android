@@ -17,7 +17,7 @@ import com.jyp.jyp_design.ui.text.Text
 import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
-fun Tag(
+fun DecoratedTag(
         tagType: TagType,
         content: String,
 ) {
@@ -35,7 +35,7 @@ fun Tag(
                     .padding(vertical = 4.dp)
     ) {
         Spacer(modifier = Modifier.size(4.dp))
-        TagIcon(
+        DecoratedTagIcon(
                 tagType = tagType
         )
         Spacer(modifier = Modifier.size(9.dp))
@@ -49,7 +49,7 @@ fun Tag(
 }
 
 @Composable
-private fun TagIcon(tagType: TagType) {
+private fun DecoratedTagIcon(tagType: TagType) {
     Box(
             modifier = Modifier
                     .size(24.dp)
@@ -67,8 +67,8 @@ private fun TagIcon(tagType: TagType) {
 
 @Composable
 @Preview(showBackground = true)
-internal fun TagSosoPreview() {
-    Tag(
+internal fun DecoratedTagSosoPreview() {
+    DecoratedTag(
             tagType = TagType.Soso(),
             "상관없어"
     )
@@ -76,8 +76,8 @@ internal fun TagSosoPreview() {
 
 @Composable
 @Preview(showBackground = true)
-internal fun TagLikePreview() {
-    Tag(
+internal fun DecoratedTagLikePreview() {
+    DecoratedTag(
             tagType = TagType.Like(),
             "좋아용"
     )
@@ -85,8 +85,8 @@ internal fun TagLikePreview() {
 
 @Composable
 @Preview(showBackground = true)
-internal fun TagDisLikePreview() {
-    Tag(
+internal fun DecoratedTagDisLikePreview() {
+    DecoratedTag(
             tagType = TagType.Dislike(),
             "좋지않아"
     )
