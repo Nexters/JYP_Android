@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,7 +24,7 @@ import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
 
 @Composable
-fun TextInput(
+fun JypTextInput(
         modifier: Modifier = Modifier,
         type: TextInputType,
         text: String = "",
@@ -223,7 +222,7 @@ internal fun TextInputContent(
 @Composable
 @Preview(showBackground = true)
 internal fun TextInputFieldPreview() {
-    TextInput(
+    JypTextInput(
             type = TextInputType.FIELD,
             text = "아르떼 뮤지엄",
             valueChange = {},
@@ -235,7 +234,7 @@ internal fun TextInputFieldPreview() {
 @Composable
 @Preview(showBackground = true)
 internal fun TextInputFieldHintPreview() {
-    TextInput(
+    JypTextInput(
             type = TextInputType.FIELD,
             text = "",
             valueChange = {},
@@ -247,7 +246,7 @@ internal fun TextInputFieldHintPreview() {
 @Composable
 @Preview(showBackground = true)
 internal fun TextInputBoxPreview() {
-    TextInput(
+    JypTextInput(
             type = TextInputType.BOX,
             text = "아르떼 뮤지엄",
             valueChange = {},
@@ -259,7 +258,7 @@ internal fun TextInputBoxPreview() {
 @Composable
 @Preview(showBackground = true)
 internal fun TextInputBoxHintPreview() {
-    TextInput(
+    JypTextInput(
             type = TextInputType.BOX,
             text = "",
             valueChange = {},
