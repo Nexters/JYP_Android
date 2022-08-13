@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 object JypColors {
     val Pink = Color(0xFFEF597D)
+    val Yellow = Color(0xFFFAE000)
 
     val PinkShadow = Color(0xFFFFA1B7)
 
