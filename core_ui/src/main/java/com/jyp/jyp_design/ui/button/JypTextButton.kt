@@ -6,12 +6,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.text.JypText
 
 
@@ -21,12 +19,12 @@ fun JypTextButton(
     buttonType: ButtonType,
     modifier: Modifier = Modifier,
     enabled: Boolean = false,
-    enabledBackgroundColor: Color,
     shape: Shape = RoundedCornerShape(12.dp),
     border: BorderStroke? = null,
+    buttonColorSet: ButtonColorSetType,
     elevation: ButtonElevation? = null,
-    onClickEnabled: () -> Unit,
-    onClickDisabled: () -> Unit
+    onClickEnabled: () -> Unit = {},
+    onClickDisabled: () -> Unit = {}
 ) {
     TextButton(
         modifier = modifier,
@@ -39,10 +37,7 @@ fun JypTextButton(
             false -> onClickDisabled
         },
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = when (enabled) {
-                true -> enabledBackgroundColor
-                false -> JypColors.Tag_white_grey100
-            }
+            backgroundColor = buttonColorSet.backgroundColor
         )
     ) {
         JypText(
@@ -53,10 +48,7 @@ fun JypTextButton(
             ),
             maxLines = 1,
             textAlign = TextAlign.Center,
-            color = when (enabled) {
-                true -> JypColors.Text_white
-                false -> JypColors.Text40
-            }
+            color = buttonColorSet.textColor
         )
     }
 }
@@ -68,9 +60,7 @@ internal fun ThickButtonPreview() {
         text = "ThickButton",
         buttonType = ButtonType.THICK,
         enabled = true,
-        enabledBackgroundColor = JypColors.Pink,
-        onClickEnabled = {  },
-        onClickDisabled = {  }
+        buttonColorSet = ButtonColorSetType.PINK
     )
 }
 
@@ -81,9 +71,7 @@ internal fun MediumButtonPreview() {
         text = "MediumButton",
         buttonType = ButtonType.MEDIUM,
         enabled = true,
-        enabledBackgroundColor = JypColors.Pink,
-        onClickEnabled = {  },
-        onClickDisabled = {  }
+        buttonColorSet = ButtonColorSetType.BLACK
     )
 }
 
@@ -94,8 +82,6 @@ internal fun ThinButtonPreview() {
         text = "ThinButton",
         buttonType = ButtonType.THIN,
         enabled = true,
-        enabledBackgroundColor = JypColors.Pink,
-        onClickEnabled = {  },
-        onClickDisabled = {  }
+        buttonColorSet = ButtonColorSetType.YELLOW
     )
 }
