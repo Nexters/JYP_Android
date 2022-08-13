@@ -18,7 +18,6 @@ fun Text(
     type: TextType,
     modifier: Modifier = Modifier,
     maxLines: Int = Int.MAX_VALUE,
-    lineHeight: Double = 1.5,
     textAlign: TextAlign = TextAlign.Start,
     color: Color
 ) {
@@ -29,7 +28,6 @@ fun Text(
         overflow = TextOverflow.Ellipsis,
         style = TextStyle(
             type = type,
-            lineHeight = lineHeight,
             textAlign = textAlign,
             color = color
         )

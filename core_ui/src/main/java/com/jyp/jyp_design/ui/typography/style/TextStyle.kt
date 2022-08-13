@@ -9,7 +9,6 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 fun TextStyle(
     type: TextType,
-    lineHeight: Double,
     textAlign: TextAlign,
     color: Color
 ): TextStyle {
@@ -18,7 +17,7 @@ fun TextStyle(
         fontFamily = type.fontFamily,
         fontWeight = type.fontWeight,
         fontSize = type.fontSize.sp,
-        lineHeight = lineHeight.sp,
+        lineHeight = (type.fontSize * type.lineHeight).sp,
         textAlign = textAlign,
         color = color
     )
