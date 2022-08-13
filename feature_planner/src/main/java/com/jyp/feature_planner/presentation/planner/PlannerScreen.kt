@@ -56,7 +56,7 @@ internal fun PlannerScreen() {
                 )
             },
             backLayerBackgroundColor = JypColors.Background_grey300,
-            frontLayerScrimColor = Color.Transparent,
+            frontLayerScrimColor = Color.Unspecified,
     )
 }
 
@@ -121,6 +121,10 @@ private fun PlannerContent(
                 selectedTabPosition = selectedTabPosition,
                 tabSelected = tabSelected,
         )
+
+        when (selectedTabPosition) {
+            0 -> PlannerForumContent()
+        }
     }
 }
 
@@ -182,6 +186,50 @@ private fun PlannerContentTab(
             )
         }
     }
+}
+
+@Composable
+private fun PlannerForumContent() {
+    Column(
+            modifier = Modifier.padding(horizontal = 24.dp)
+    ) {
+        Spacer(modifier = Modifier.size(28.dp))
+        PlannerJourneyTagContent()
+    }
+}
+
+@Composable
+private fun PlannerJourneyTagContent() {
+    Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        JypText(
+                text = stringResource(id = R.string.planner_journey_tags),
+                type = TextType.TITLE_6,
+                color = JypColors.Text80,
+        )
+
+        Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Image(
+                    painter = painterResource(id = R.drawable.icon_pencil),
+                    contentDescription = null,
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            Image(
+                    painter = painterResource(id = R.drawable.icon_arrow_top),
+                    contentDescription = null,
+            )
+        }
+    }
+    Spacer(modifier = Modifier.size(6.dp))
+    JypText(
+            text = "여행 취향을 확인해보세요!",
+            type = TextType.BODY_3,
+            color = JypColors.Text40,
+    )
 }
 
 @Composable
