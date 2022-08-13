@@ -212,9 +212,9 @@ private fun PlannerForumContent() {
         Spacer(modifier = Modifier.size(48.dp))
         PlannerPikMeContent(
                 listOf(
-                        PikMe("아르떼", "마포구 122", "박물관"),
-                        PikMe("뮤지엄", "마포구 122", "음식점"),
-                        PikMe("아르떼 뮤지엄", "마포구 122", "주차장"),
+                        PikMe("아르떼", "마포구 122", "박물관",6),
+                        PikMe("뮤지엄", "마포구 122", "음식점", 5),
+                        PikMe("아르떼 뮤지엄", "마포구 122", "주차장", 0),
                 )
         )
     }
@@ -347,14 +347,35 @@ private fun PlannerPikMeCard(pikMe: PikMe) {
                     .background(JypColors.Background_white100)
                     .padding(20.dp),
     ) {
-        Box(
+        Column(
                 modifier = Modifier
                         .size(62.dp)
+                        .shadow(
+                                elevation = 2.dp,
+                                shape = CircleShape,
+                        )
                         .clip(CircleShape)
                         .align(Alignment.BottomEnd)
-                        .background(JypColors.Pink)
-        )
+                        .background(JypColors.Background_white100),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Image(
+                    modifier = Modifier.size(width = 30.dp, height = 24.dp),
+                    painter = painterResource(id = R.drawable.icon_heart_like),
+                    contentDescription = null,
+            )
 
+            if (pikMe.likeCount > 0) {
+                Spacer(modifier = Modifier.size(3.dp))
+                Text(
+                        text = pikMe.likeCount.toString(),
+                        color = JypColors.Pink,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                )
+            }
+        }
         Column {
             JypText(
                     text = pikMe.category,
@@ -381,10 +402,22 @@ private fun PlannerPikMeCard(pikMe: PikMe) {
                             )
                             .clip(RoundedCornerShape(8.dp))
                             .background(JypColors.Background_white100)
-                            .padding(8.dp),
+                            .padding(2.dp),
             ) {
+                Spacer(modifier = Modifier.size(2.dp))
+                Image(
+                        modifier = Modifier.size(36.dp),
+                        painter = painterResource(id = R.drawable.icon_eyes),
+                        contentDescription = null,
+                )
+                Spacer(modifier = Modifier.size(3.dp))
                 JypText(
-                        text = "정보보기",
+                        modifier = Modifier.padding(
+                                top = 6.dp,
+                                end = 6.dp,
+                                bottom = 6.dp,
+                        ),
+                        text = "정보 보기",
                         type = TextType.BODY_1,
                         color = JypColors.Text80,
                 )
