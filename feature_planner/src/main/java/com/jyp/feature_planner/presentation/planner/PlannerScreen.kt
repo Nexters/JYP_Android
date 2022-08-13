@@ -3,6 +3,7 @@ package com.jyp.feature_planner.presentation.planner
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
@@ -18,10 +19,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.flowlayout.FlowRow
 import com.jyp.feature_planner.R
+import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBar
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
+import com.jyp.jyp_design.ui.tag.DecoratedTag
+import com.jyp.jyp_design.ui.tag.TagType
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
@@ -200,6 +205,10 @@ private fun PlannerForumContent() {
 
 @Composable
 private fun PlannerJourneyTagContent() {
+    var isCollapsed by remember {
+        mutableStateOf(false)
+    }
+
     Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -219,6 +228,9 @@ private fun PlannerJourneyTagContent() {
             )
             Spacer(modifier = Modifier.size(16.dp))
             Image(
+                    modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable { isCollapsed = !isCollapsed },
                     painter = painterResource(id = R.drawable.icon_arrow_top),
                     contentDescription = null,
             )
@@ -230,6 +242,38 @@ private fun PlannerJourneyTagContent() {
             type = TextType.BODY_3,
             color = JypColors.Text40,
     )
+    if (!isCollapsed) {
+        Spacer(modifier = Modifier.size(16.dp))
+        PlannerTagLayout(
+                tags = listOf(
+                        Tag(TagType.Like(), "시러시러"),
+                        Tag(TagType.Like(), "시러허허"),
+                        Tag(TagType.Like(), "좋아"),
+                        Tag(TagType.Like(), "싫어싫"),
+                        Tag(TagType.Dislike(), "조아아"),
+                        Tag(TagType.Dislike(), "좋아"),
+                        Tag(TagType.Dislike(), "시러머버더거서ㅛㅓ"),
+                        Tag(TagType.Soso(), "상관업"),
+                )
+        )
+    }
+}
+
+@Composable
+private fun PlannerTagLayout(
+        tags: List<Tag> = emptyList(),
+) {
+    FlowRow(
+            crossAxisSpacing = 12.dp,
+            mainAxisSpacing = 8.dp,
+    ) {
+        tags.forEach { tag ->
+            DecoratedTag(
+                    tagType = tag.type,
+                    content = tag.content,
+            )
+        }
+    }
 }
 
 @Composable

@@ -7,18 +7,20 @@ ext {
             compose_version                            : "1.1.1",
             compose_activity_version                   : "1.5.0",
             compose_navigation_version                 : "2.5.1",
-            landscapist_version       : "1.4.9",
+            landscapist_version                        : "1.4.9",
             compose_customview_version                 : "1.1.0",
             compose_customview_poolingcontainer_version: "1.0.0",
+            compose_flowlayout                         : "0.25.0",
     ]
 
     composeDependencies = [
-            implementation: [
-                    compose_ui              : "androidx.compose.ui:ui:$versions.compose_version",
-                    compose_material        : "androidx.compose.material:material:$versions.compose_version",
-                    compose_preview         : "androidx.compose.ui:ui-tooling-preview:$versions.compose_version",
-                    compose_activity        : "androidx.activity:activity-compose:$versions.compose_activity_version",
-                    compose_navigation      : "androidx.navigation:navigation-compose:$versions.compose_navigation_version",
+            implementation     : [
+                    compose_ui        : "androidx.compose.ui:ui:$versions.compose_version",
+                    compose_material  : "androidx.compose.material:material:$versions.compose_version",
+                    compose_preview   : "androidx.compose.ui:ui-tooling-preview:$versions.compose_version",
+                    compose_activity  : "androidx.activity:activity-compose:$versions.compose_activity_version",
+                    compose_navigation: "androidx.navigation:navigation-compose:$versions.compose_navigation_version",
+                    compose_flowlayout: "com.google.accompanist:accompanist-flowlayout:$versions.compose_flowlayout",
             ],
             debugImplementation: [
                     compose_tooling                    : "androidx.compose.ui:ui-tooling:$versions.compose_version",
