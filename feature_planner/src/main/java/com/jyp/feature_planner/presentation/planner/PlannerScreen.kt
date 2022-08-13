@@ -22,7 +22,7 @@ import com.jyp.feature_planner.R
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBar
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
-import com.jyp.jyp_design.ui.text.Text
+import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -68,7 +68,7 @@ private fun PlannerBackLayer() {
                     .padding(start = 24.dp)
     ) {
         Spacer(modifier = Modifier.size(20.dp))
-        Text(
+        JypText(
                 text = "7월 18일 - 7월 20일",
                 type = TextType.BODY_1,
                 color = JypColors.Text_white,
@@ -88,7 +88,7 @@ private fun PlannerBackLayer() {
                     contentDescription = null,
             )
             Spacer(modifier = Modifier.size(2.dp))
-            Text(
+            JypText(
                     text = "일행 초대하기",
                     type = TextType.BODY_3,
                     color = JypColors.Text_white,
