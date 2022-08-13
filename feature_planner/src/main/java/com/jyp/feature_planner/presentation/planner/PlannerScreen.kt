@@ -1,6 +1,7 @@
 package com.jyp.feature_planner.presentation.planner
 
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -21,12 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import com.jyp.feature_planner.R
+import com.jyp.feature_planner.domain.PikMe
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBar
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
-import com.jyp.jyp_design.ui.shadow.drawShadow
 import com.jyp.jyp_design.ui.tag.DecoratedTag
 import com.jyp.jyp_design.ui.tag.TagType
 import com.jyp.jyp_design.ui.text.JypText
@@ -128,6 +129,8 @@ private fun PlannerContent(
                 selectedTabPosition = selectedTabPosition,
                 tabSelected = tabSelected,
         )
+        
+        Spacer(modifier = Modifier.size(4.dp))
 
         when (selectedTabPosition) {
             0 -> PlannerForumContent()
@@ -197,13 +200,23 @@ private fun PlannerContentTab(
 
 @Composable
 private fun PlannerForumContent() {
+    val rememberScrollState = rememberScrollState()
+
     Column(
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .verticalScroll(rememberScrollState)
     ) {
-        Spacer(modifier = Modifier.size(28.dp))
+        Spacer(modifier = Modifier.size(24.dp))
         PlannerJourneyTagContent()
         Spacer(modifier = Modifier.size(48.dp))
-        PlannerPickMeContent()
+        PlannerPikMeContent(
+                listOf(
+                        PikMe("아르떼", "마포구 122", "박물관"),
+                        PikMe("뮤지엄", "마포구 122", "음식점"),
+                        PikMe("아르떼 뮤지엄", "마포구 122", "주차장"),
+                )
+        )
     }
 }
 
@@ -214,7 +227,6 @@ private fun PlannerJourneyTagContent() {
     }
 
     Column {
-
         Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -284,14 +296,16 @@ private fun PlannerTagLayout(
 }
 
 @Composable
-private fun PlannerPickMeContent() {
+private fun PlannerPikMeContent(
+        pikMes: List<PikMe>,
+) {
     Column {
         Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             JypText(
-                    text = stringResource(id = R.string.planner_pick_me_title),
+                    text = stringResource(id = R.string.planner_pik_me_title),
                     type = TextType.TITLE_6,
                     color = JypColors.Text80,
             )
@@ -303,17 +317,84 @@ private fun PlannerPickMeContent() {
         }
         Spacer(modifier = Modifier.size(6.dp))
         JypText(
-                text = stringResource(id = R.string.planner_pick_me_description),
+                text = stringResource(id = R.string.planner_pik_me_description),
                 type = TextType.BODY_3,
                 color = JypColors.Text40,
         )
         Spacer(modifier = Modifier.size(20.dp))
-        PlannerPickMeEmptyCard()
+
+        if (pikMes.isEmpty()) {
+            PlannerPikMeEmptyCard()
+        } else {
+            pikMes.forEach { pikMe ->
+                PlannerPikMeCard(pikMe = pikMe)
+                Spacer(modifier = Modifier.size(20.dp))
+            }
+        }
     }
 }
 
 @Composable
-private fun PlannerPickMeEmptyCard() {
+private fun PlannerPikMeCard(pikMe: PikMe) {
+    Box(
+            modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(
+                            elevation = 2.dp,
+                            shape = RoundedCornerShape(12.dp),
+                    )
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(JypColors.Background_white100)
+                    .padding(20.dp),
+    ) {
+        Box(
+                modifier = Modifier
+                        .size(62.dp)
+                        .clip(CircleShape)
+                        .align(Alignment.BottomEnd)
+                        .background(JypColors.Pink)
+        )
+
+        Column {
+            JypText(
+                    text = pikMe.category,
+                    type = TextType.BODY_4,
+                    color = JypColors.Tag_grey200,
+            )
+            Spacer(modifier = Modifier.size(7.dp))
+            JypText(
+                    text = pikMe.title,
+                    type = TextType.HEADING_2,
+                    color = JypColors.Text80,
+            )
+            JypText(
+                    text = pikMe.address,
+                    type = TextType.BODY_4,
+                    color = JypColors.Tag_grey200,
+            )
+            Spacer(modifier = Modifier.size(14.dp))
+            Row(
+                    modifier = Modifier
+                            .shadow(
+                                    elevation = 2.dp,
+                                    shape = RoundedCornerShape(8.dp),
+                            )
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(JypColors.Background_white100)
+                            .padding(8.dp),
+            ) {
+                JypText(
+                        text = "정보보기",
+                        type = TextType.BODY_1,
+                        color = JypColors.Text80,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlannerPikMeEmptyCard() {
     Column(
             modifier = Modifier
                     .fillMaxWidth()
