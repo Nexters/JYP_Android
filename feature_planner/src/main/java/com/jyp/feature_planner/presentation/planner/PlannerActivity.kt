@@ -3,14 +3,20 @@ package com.jyp.feature_planner.presentation.planner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.Composable
+import dagger.hilt.android.AndroidEntryPoint
 
-@ExperimentalMaterialApi
+@AndroidEntryPoint
 class PlannerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PlannerScreen()
+            Screen()
         }
     }
+}
+
+@Composable
+private fun Screen() {
+    PlannerScreen()
 }
