@@ -1,5 +1,7 @@
 package com.jyp.feature_planner.presentation.planner
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -129,7 +131,7 @@ private fun PlannerContent(
                 selectedTabPosition = selectedTabPosition,
                 tabSelected = tabSelected,
         )
-        
+
         Spacer(modifier = Modifier.size(4.dp))
 
         when (selectedTabPosition) {
@@ -212,7 +214,7 @@ private fun PlannerForumContent() {
         Spacer(modifier = Modifier.size(48.dp))
         PlannerPikMeContent(
                 listOf(
-                        PikMe("아르떼", "마포구 122", "박물관",6),
+                        PikMe("아르떼", "마포구 122", "박물관", 6),
                         PikMe("뮤지엄", "마포구 122", "음식점", 5),
                         PikMe("아르떼 뮤지엄", "마포구 122", "주차장", 0),
                 )
@@ -225,6 +227,14 @@ private fun PlannerJourneyTagContent() {
     var isCollapsed by remember {
         mutableStateOf(false)
     }
+
+    val rotateAnimate by animateFloatAsState(
+            targetValue = if (isCollapsed) {
+                180f
+            } else {
+                0f
+            }
+    )
 
     Column {
         Row(
@@ -248,6 +258,7 @@ private fun PlannerJourneyTagContent() {
                 Image(
                         modifier = Modifier
                                 .clip(CircleShape)
+                                .rotate(rotateAnimate)
                                 .clickable { isCollapsed = !isCollapsed },
                         painter = painterResource(id = R.drawable.icon_arrow_top),
                         contentDescription = null,
@@ -260,20 +271,26 @@ private fun PlannerJourneyTagContent() {
                 type = TextType.BODY_3,
                 color = JypColors.Text40,
         )
-        if (!isCollapsed) {
-            Spacer(modifier = Modifier.size(16.dp))
-            PlannerTagLayout(
-                    tags = listOf(
-                            Tag(TagType.Like(), "시러시러"),
-                            Tag(TagType.Like(), "시러허허"),
-                            Tag(TagType.Like(), "좋아"),
-                            Tag(TagType.Like(), "싫어싫"),
-                            Tag(TagType.Dislike(), "조아아"),
-                            Tag(TagType.Dislike(), "좋아"),
-                            Tag(TagType.Dislike(), "시러머버더거서ㅛㅓ"),
-                            Tag(TagType.Soso(), "상관업"),
-                    )
-            )
+        AnimatedVisibility(
+                visible = !isCollapsed,
+                enter = expandVertically(),
+                exit = shrinkVertically(),
+        ) {
+            Column {
+                Spacer(modifier = Modifier.size(16.dp))
+                PlannerTagLayout(
+                        tags = listOf(
+                                Tag(TagType.Like(), "시러시러"),
+                                Tag(TagType.Like(), "시러허허"),
+                                Tag(TagType.Like(), "좋아"),
+                                Tag(TagType.Like(), "싫어싫"),
+                                Tag(TagType.Dislike(), "조아아"),
+                                Tag(TagType.Dislike(), "좋아"),
+                                Tag(TagType.Dislike(), "시러머버더거서ㅛㅓ"),
+                                Tag(TagType.Soso(), "상관업"),
+                        )
+                )
+            }
         }
     }
 }
