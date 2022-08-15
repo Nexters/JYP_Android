@@ -69,7 +69,6 @@ internal fun TextInputField(
     Row(
             modifier = modifier
                     .fillMaxWidth()
-                    .background(JypColors.Background_white200)
                     .drawWithContent {
                         drawContent()
                         drawLine(
