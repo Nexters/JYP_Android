@@ -72,7 +72,7 @@ internal fun TextInputField(
                     .drawWithContent {
                         drawContent()
                         drawLine(
-                                color = JypColors.Border_grey,
+                                color = JypColors.Black20,
                                 strokeWidth = 1f,
                                 start = Offset(x = 0f, y = size.height),
                                 end = Offset(x = size.width, y = size.height),
@@ -193,7 +193,7 @@ internal fun TextInputContent(
                         Text(
                                 text = hint,
                                 fontSize = fontSize,
-                                color = JypColors.Text20,
+                                color = JypColors.Text30,
                                 fontWeight = FontWeight.Medium,
                         )
                     }
