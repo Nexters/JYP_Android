@@ -27,12 +27,12 @@ internal fun CreatePlannerScreen(
 ) {
     Box(
             modifier = Modifier
+                    .background(JypColors.Background_white100)
                     .padding(horizontal = 24.dp)
     ) {
         Column(
                 modifier = Modifier
                         .fillMaxSize()
-                        .background(JypColors.Background_white100)
                         .padding(top = 12.dp)
         ) {
             CreatePlannerHeader(step = step)
@@ -71,7 +71,7 @@ private fun CreatePlannerHeader(
 
         when (step) {
             CreatePlannerStep.TITLE -> CreatePlannerTitleArea()
-            CreatePlannerStep.DATE -> Unit
+            CreatePlannerStep.DATE -> CreatePlannerDateArea()
             CreatePlannerStep.TASTE -> Unit
         }
     }
@@ -138,9 +138,93 @@ private fun PlannerCreateTitleSuggestion(
 }
 
 @Composable
+private fun CreatePlannerDateArea() {
+    Row {
+        DateForm(
+                modifier = Modifier.weight(1f),
+                title = "여행 시작",
+                date = "22.07.17",
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        DateFormSeparator()
+        Spacer(modifier = Modifier.size(8.dp))
+        DateForm(
+                modifier = Modifier.weight(1f),
+                title = "여행 종료",
+                date = "22.07.19",
+        )
+    }
+}
+
+@Composable
+private fun DateForm(
+        modifier: Modifier = Modifier,
+        title: String,
+        date: String,
+) {
+    Column(modifier = modifier) {
+        JypText(
+                text = title,
+                type = TextType.BODY_4,
+                color = JypColors.Text80,
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        Box(
+                modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .fillMaxWidth()
+                        .background(JypColors.Background_white200)
+                        .padding(vertical = 8.dp),
+                contentAlignment = Alignment.Center,
+        ) {
+            JypText(
+                    text = date,
+                    type = TextType.TITLE_2,
+                    color = JypColors.Text90,
+            )
+        }
+    }
+}
+
+@Composable
+private fun DateFormSeparator() {
+    Column {
+        JypText(
+                text = " ",
+                type = TextType.BODY_4,
+                color = JypColors.Text80,
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        Box(
+                modifier = Modifier.padding(vertical = 8.dp),
+                contentAlignment = Alignment.Center,
+        ) {
+            JypText(
+                    text = "-",
+                    type = TextType.TITLE_2,
+                    color = JypColors.Text90,
+            )
+        }
+    }
+}
+
+@Composable
 @Preview(showBackground = true)
 internal fun CreatePlannerScreenPreview() {
     CreatePlannerScreen(
             CreatePlannerStep.TITLE,
     )
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun TitleAreaPreview() {
+    CreatePlannerTitleArea()
+}
+
+@Composable
+@Preview
+@Preview(showBackground = true)
+private fun DateFormAreaPreview() {
+    CreatePlannerDateArea()
 }
