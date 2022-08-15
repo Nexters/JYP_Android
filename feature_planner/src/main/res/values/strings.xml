@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="create_planner_name_navigation_title">여행 제목</string>
+    <string name="create_planner_name_title">여행기 제목은 무엇인가요?</string>
+    <string name="create_planner_name_description"><b>최대 10글자</b>까지 입력할 수 있어요</string>
+
+    <string name="create_planner_date_navigation_title">여행 날짜</string>
+    <string name="create_planner_date_title">언제 출발하시나요?</string>
+    <string name="create_planner_date_description">시작일을 선택해 주세요</string>
+
+    <string name="create_planner_taste_navigation_title">여행 취향 태그</string>
+    <string name="create_planner_taste_title">어떤 여행을 하고 싶으신가요?</string>
+    <string name="create_planner_taste_description">일행과 공유할 태그를 <b>최대 3개</b> 선택해 주세요</string>
+
+</resources>
