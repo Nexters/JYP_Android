@@ -1,5 +1,6 @@
 package com.jyp.main.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,7 @@ import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.presentation.my_journey.MyJourneyScreen
 import com.jyp.feature_my_journey.presentation.my_journey.MyJourneyViewModel
 import com.jyp.feature_my_page.presentation.MyPageScreen
+import com.jyp.feature_planner.presentation.planner.PlannerActivity
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +32,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             Screen(
                     myJourneyViewModel = myJourneyViewModel,
+                    onClickPlanner = {
+                        startActivity(Intent(this, PlannerActivity::class.java))
+                    }
             )
         }
     }
@@ -38,6 +43,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun Screen(
         myJourneyViewModel: MyJourneyViewModel,
+        onClickPlanner: () -> Unit,
 ) {
     MainScreen(
             listOf(
@@ -61,6 +67,7 @@ private fun Screen(
                                             plannedJourneys = plannedJourneys,
                                             pastJourneys = pastJourneys,
                                             onClickNewJourney = myJourneyViewModel::fetchJourneyList,
+                                            onClickPlanner = onClickPlanner,
                                     )
                                 }
                             }
