@@ -42,6 +42,7 @@ dependencies {
     implementation project(':feature_my_journey')
     implementation project(':feature_another_journey')
     implementation project(':feature_my_page')
+    implementation project(':feature_planner')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'

@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jyp.jyp_design.ui.text.Text
+import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
@@ -39,7 +39,7 @@ fun DecoratedTag(
                 tagType = tagType
         )
         Spacer(modifier = Modifier.size(9.dp))
-        Text(
+        JypText(
                 text = content,
                 type = TextType.TAG_1,
                 color = tagType.textColor,
