@@ -14,8 +14,13 @@ import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.android.material.internal.FlowLayout
+import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
+import com.jyp.jyp_design.ui.tag.DecoratedTag
+import com.jyp.jyp_design.ui.tag.TagType
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.text_input.JypTextInput
 import com.jyp.jyp_design.ui.text_input.TextInputType
@@ -72,7 +77,23 @@ private fun CreatePlannerHeader(
         when (step) {
             CreatePlannerStep.TITLE -> CreatePlannerTitleArea()
             CreatePlannerStep.DATE -> CreatePlannerDateArea()
-            CreatePlannerStep.TASTE -> Unit
+            CreatePlannerStep.TASTE -> CreatePlannerTasteArea(
+                    tags = listOf(
+                            Tag(TagType.Soso(), "모두 찬성"),
+                            Tag(TagType.Soso(), "상관없어"),
+                            Tag(TagType.Like(), "좋아1"),
+                            Tag(TagType.Like(), "좋아2"),
+                            Tag(TagType.Like(), "좋아3"),
+                            Tag(TagType.Like(), "좋아4"),
+                            Tag(TagType.Like(), "좋아5"),
+                            Tag(TagType.Like(), "좋아6"),
+                            Tag(TagType.Like(), "좋아7"),
+                            Tag(TagType.Dislike(), "싫어1"),
+                            Tag(TagType.Dislike(), "싫어2"),
+                            Tag(TagType.Dislike(), "싫어3"),
+                            Tag(TagType.Dislike(), "싫어4"),
+                    )
+            )
         }
     }
 }
@@ -204,6 +225,56 @@ private fun DateFormSeparator() {
                     type = TextType.TITLE_2,
                     color = JypColors.Text90,
             )
+        }
+    }
+}
+
+@Composable
+private fun CreatePlannerTasteArea(tags: List<Tag>) {
+    val sosoTags = tags.filter { tag -> tag.type is TagType.Soso }
+    val likeTags = tags.filter { tag -> tag.type is TagType.Like }
+    val dislikeTags = tags.filter { tag -> tag.type is TagType.Dislike }
+
+    TastesSection(
+            tagCategory = "상관 없어요 태그",
+            tags = sosoTags,
+    )
+    Spacer(modifier = Modifier.size(40.dp))
+    TastesSection(
+            tagCategory = "좋아요 태그",
+            tags = likeTags,
+    )
+    Spacer(modifier = Modifier.size(40.dp))
+    TastesSection(
+            tagCategory = "싫어요 태그",
+            tags = dislikeTags,
+    )
+}
+
+@Composable
+private fun TastesSection(
+        tagCategory: String,
+        tags: List<Tag>,
+) {
+    Column {
+        JypText(
+                text = tagCategory,
+                type = TextType.TITLE_6,
+                color = JypColors.Text90,
+        )
+        Spacer(modifier = Modifier.size(16.dp))
+        FlowRow {
+            FlowRow(
+                    crossAxisSpacing = 12.dp,
+                    mainAxisSpacing = 8.dp,
+            ) {
+                tags.forEach { tag ->
+                    DecoratedTag(
+                            tagType = tag.type,
+                            content = tag.content,
+                    )
+                }
+            }
         }
     }
 }

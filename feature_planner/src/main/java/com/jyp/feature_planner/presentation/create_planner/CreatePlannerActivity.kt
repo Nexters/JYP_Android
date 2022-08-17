@@ -23,7 +23,7 @@ class CreatePlannerActivity : ComponentActivity() {
 
 @Composable
 private fun Screen(
-        step: CreatePlannerStep = CreatePlannerStep.DATE,
+        step: CreatePlannerStep = CreatePlannerStep.TASTE,
 ) {
     GlobalNavigationBarLayout(
             color = GlobalNavigationBarColor.WHITE,
