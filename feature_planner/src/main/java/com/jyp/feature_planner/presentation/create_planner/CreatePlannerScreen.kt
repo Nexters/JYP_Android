@@ -19,8 +19,7 @@ import com.google.android.material.internal.FlowLayout
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
-import com.jyp.jyp_design.ui.tag.DecoratedTag
-import com.jyp.jyp_design.ui.tag.TagType
+import com.jyp.jyp_design.ui.tag.*
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.text_input.JypTextInput
 import com.jyp.jyp_design.ui.text_input.TextInputType
@@ -74,25 +73,58 @@ private fun CreatePlannerHeader(
         )
         Spacer(modifier = Modifier.size(48.dp))
 
+        val state = remember {
+            mutableStateListOf(
+                    Tag(type = TagType.Soso(), content = "모두 찬성"),
+                    Tag(type = TagType.Soso(), content = "상관없어"),
+                    Tag(type = TagType.Like(), content = "좋아1"),
+                    Tag(type = TagType.Like(), content = "좋아2"),
+                    Tag(type = TagType.Like(), content = "좋아3"),
+                    Tag(type = TagType.Like(), content = "좋아4"),
+                    Tag(type = TagType.Like(), content = "좋아5"),
+                    Tag(type = TagType.Like(), content = "좋아6"),
+                    Tag(type = TagType.Like(), content = "좋아7"),
+                    Tag(type = TagType.Dislike(), content = "싫어1"),
+                    Tag(type = TagType.Dislike(), content = "싫어2"),
+                    Tag(type = TagType.Dislike(), content = "싫어3"),
+                    Tag(type = TagType.Dislike(), content = "싫어4"),
+            )
+        }
+
         when (step) {
             CreatePlannerStep.TITLE -> CreatePlannerTitleArea()
             CreatePlannerStep.DATE -> CreatePlannerDateArea()
             CreatePlannerStep.TASTE -> CreatePlannerTasteArea(
-                    tags = listOf(
-                            Tag(TagType.Soso(), "모두 찬성"),
-                            Tag(TagType.Soso(), "상관없어"),
-                            Tag(TagType.Like(), "좋아1"),
-                            Tag(TagType.Like(), "좋아2"),
-                            Tag(TagType.Like(), "좋아3"),
-                            Tag(TagType.Like(), "좋아4"),
-                            Tag(TagType.Like(), "좋아5"),
-                            Tag(TagType.Like(), "좋아6"),
-                            Tag(TagType.Like(), "좋아7"),
-                            Tag(TagType.Dislike(), "싫어1"),
-                            Tag(TagType.Dislike(), "싫어2"),
-                            Tag(TagType.Dislike(), "싫어3"),
-                            Tag(TagType.Dislike(), "싫어4"),
-                    )
+                    tags = state,
+                    // TODO : 아래 로직은 ViewModel로 이동해야한다
+                    tagClick = { tag ->
+                        val clickIndex = state.indexOf(tag)
+                        val tagState = tag.state
+                        val newTag = tag.copy(
+                                state = when (tagState) {
+                                    TagState.DEFAULT -> TagState.SELECTED
+                                    TagState.SELECTED -> TagState.DEFAULT
+                                    TagState.DISABLED -> TagState.DISABLED
+                                }
+                        )
+
+                        state[clickIndex] = newTag
+
+                        val clickedTagCount = state.count { it.state == TagState.SELECTED }
+                        if (clickedTagCount >= 3) {
+                            repeat(state.size) { i ->
+                                if (state[i].state == TagState.DEFAULT) {
+                                    state[i] = state[i].copy(state = TagState.DISABLED)
+                                }
+                            }
+                        } else {
+                            repeat(state.size) { i ->
+                                if (state[i].state == TagState.DISABLED) {
+                                    state[i] = state[i].copy(state = TagState.DEFAULT)
+                                }
+                            }
+                        }
+                    }
             )
         }
     }
@@ -230,7 +262,10 @@ private fun DateFormSeparator() {
 }
 
 @Composable
-private fun CreatePlannerTasteArea(tags: List<Tag>) {
+private fun CreatePlannerTasteArea(
+        tags: List<Tag>,
+        tagClick: (Tag) -> Unit,
+) {
     val sosoTags = tags.filter { tag -> tag.type is TagType.Soso }
     val likeTags = tags.filter { tag -> tag.type is TagType.Like }
     val dislikeTags = tags.filter { tag -> tag.type is TagType.Dislike }
@@ -238,16 +273,19 @@ private fun CreatePlannerTasteArea(tags: List<Tag>) {
     TastesSection(
             tagCategory = "상관 없어요 태그",
             tags = sosoTags,
+            tagClick = tagClick,
     )
     Spacer(modifier = Modifier.size(40.dp))
     TastesSection(
             tagCategory = "좋아요 태그",
             tags = likeTags,
+            tagClick = tagClick,
     )
     Spacer(modifier = Modifier.size(40.dp))
     TastesSection(
             tagCategory = "싫어요 태그",
             tags = dislikeTags,
+            tagClick = tagClick,
     )
 }
 
@@ -255,6 +293,7 @@ private fun CreatePlannerTasteArea(tags: List<Tag>) {
 private fun TastesSection(
         tagCategory: String,
         tags: List<Tag>,
+        tagClick: (Tag) -> Unit,
 ) {
     Column {
         JypText(
@@ -270,7 +309,14 @@ private fun TastesSection(
             ) {
                 tags.forEach { tag ->
                     DecoratedTag(
+                            modifier = Modifier
+                                    .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = null,
+                                            onClick = { tagClick.invoke(tag) },
+                                    ),
                             tagType = tag.type,
+                            tagState = tag.state,
                             content = tag.content,
                     )
                 }
