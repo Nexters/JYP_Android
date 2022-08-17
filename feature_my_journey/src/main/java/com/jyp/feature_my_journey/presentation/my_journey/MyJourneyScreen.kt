@@ -33,6 +33,7 @@ fun MyJourneyScreen(
         plannedJourneys: List<String>,
         pastJourneys: List<String>,
         onClickNewJourney: () -> Unit,
+        onClickPlanner: () -> Unit,
 ) {
     Column(
             modifier = Modifier
@@ -48,6 +49,7 @@ fun MyJourneyScreen(
                 plannedJourneys = plannedJourneys,
                 pastJourneys = pastJourneys,
                 onClickNewJourney = onClickNewJourney,
+                onClickPlanner = onClickPlanner,
         )
     }
 }
@@ -84,6 +86,7 @@ internal fun MyJourneyContent(
         plannedJourneys: List<String>,
         pastJourneys: List<String>,
         onClickNewJourney: () -> Unit,
+        onClickPlanner: () -> Unit,
 ) {
     var selectedTabPosition by remember {
         mutableStateOf(0)
@@ -106,9 +109,11 @@ internal fun MyJourneyContent(
             0 -> PlannedJourney(
                     journeys = plannedJourneys,
                     onClickNewJourney = onClickNewJourney,
+                    onClickPlanner = onClickPlanner,
             )
             1 -> PastJourney(
-                    journeys = pastJourneys
+                    journeys = pastJourneys,
+                    onClickPlanner = onClickPlanner,
             )
         }
 
@@ -179,6 +184,7 @@ internal fun MyJourneyContentTab(
 internal fun PlannedJourney(
         journeys: List<String>,
         onClickNewJourney: () -> Unit,
+        onClickPlanner: () -> Unit,
 ) {
     if (journeys.isEmpty()) {
         PlannedJourneyEmptyScreen(onClickNewJourney = onClickNewJourney)
@@ -193,6 +199,7 @@ internal fun PlannedJourney(
                             journeyName = journey,
                             startDay = "7월 18일",
                             endDay = "7월 28일",
+                            onClickPlanner = onClickPlanner
                     )
                 }
             }
@@ -261,6 +268,7 @@ internal fun PlannedJourneyEmptyScreen(
 @Composable
 internal fun PastJourney(
         journeys: List<String>,
+        onClickPlanner: () -> Unit,
 ) {
     if (journeys.isEmpty()) {
         PastJourneyEmptyScreen()
@@ -275,6 +283,7 @@ internal fun PastJourney(
                             journeyName = journey,
                             startDay = "7월 18일",
                             endDay = "7월 28일",
+                            onClickPlanner = onClickPlanner
                     )
                 }
             }
@@ -331,12 +340,18 @@ internal fun PastJourneyEmptyScreen() {
 
 @Composable
 internal fun JourneyItem(
+        onClickPlanner: () -> Unit,
         journeyName: String,
         startDay: String,
         endDay: String,
 ) {
     Column(
             modifier = Modifier
+                    .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = onClickPlanner
+                    )
                     .padding(vertical = 24.dp)
                     .width(width = 276.dp)
                     .fillMaxHeight()
@@ -400,6 +415,7 @@ internal fun MyJourneyScreenEmptyPreview() {
             plannedJourneys = emptyList(),
             pastJourneys = emptyList(),
             onClickNewJourney = {},
+            onClickPlanner = {},
     )
 }
 
@@ -411,6 +427,7 @@ internal fun MyJourneyScreenPreview() {
             userName = "다정",
             plannedJourneys = listOf("강릉여행기", "집앞여행기"),
             pastJourneys = emptyList(),
-            onClickNewJourney = {}
+            onClickNewJourney = {},
+            onClickPlanner = {}
     )
 }

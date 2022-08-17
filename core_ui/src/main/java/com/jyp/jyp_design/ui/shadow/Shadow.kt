@@ -14,6 +14,7 @@ fun Modifier.drawShadow(
         offsetX: Dp = 1.dp,
         offsetY: Dp = 2.5.dp,
         blurRadius: Dp = 3.dp,
+        scale: Float = 1f,
         enabled: Boolean = true,
 ) = if (enabled) {
     this.drawBehind {
@@ -32,8 +33,8 @@ fun Modifier.drawShadow(
             canvas.save()
 
             canvas.scale(
-                    1f,
-                    1f,
+                    scale,
+                    scale,
                     this.center.x,
                     this.center.y
             )

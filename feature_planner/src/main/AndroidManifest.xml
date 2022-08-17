@@ -5,4 +5,7 @@
     <application>
         <activity android:name=".presentation.create_planner.CreatePlannerActivity" />
     </application>
+    <application>
+        <activity android:name=".presentation.planner.PlannerActivity" />
+    </application>
 </manifest>
