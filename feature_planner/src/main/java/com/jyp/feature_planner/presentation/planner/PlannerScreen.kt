@@ -280,14 +280,14 @@ private fun PlannerJourneyTagContent() {
                 Spacer(modifier = Modifier.size(16.dp))
                 PlannerTagLayout(
                         tags = listOf(
-                                Tag(TagType.Like(), "시러시러"),
-                                Tag(TagType.Like(), "시러허허"),
-                                Tag(TagType.Like(), "좋아"),
-                                Tag(TagType.Like(), "싫어싫"),
-                                Tag(TagType.Dislike(), "조아아"),
-                                Tag(TagType.Dislike(), "좋아"),
-                                Tag(TagType.Dislike(), "시러머버더거서ㅛㅓ"),
-                                Tag(TagType.Soso(), "상관업"),
+                                Tag(type = TagType.Like(), content = "시러시러"),
+                                Tag(type = TagType.Like(), content = "시러허허"),
+                                Tag(type = TagType.Like(), content = "좋아"),
+                                Tag(type = TagType.Like(), content = "싫어싫"),
+                                Tag(type = TagType.Dislike(), content = "조아아"),
+                                Tag(type = TagType.Dislike(), content = "좋아"),
+                                Tag(type = TagType.Dislike(), content = "시러머버더거서ㅛㅓ"),
+                                Tag(type = TagType.Soso(), content = "상관업"),
                         )
                 )
             }
@@ -306,6 +306,7 @@ private fun PlannerTagLayout(
         tags.forEach { tag ->
             DecoratedTag(
                     tagType = tag.type,
+                    tagState = tag.state,
                     content = tag.content,
             )
         }
