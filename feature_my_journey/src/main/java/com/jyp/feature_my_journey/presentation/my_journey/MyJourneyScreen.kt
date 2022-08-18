@@ -247,13 +247,12 @@ internal fun PlannedJourneyEmptyScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
             ) {
-                Box(
-                        modifier = Modifier
-                                .background(JypColors.Tag_grey200)
-                                .size(120.dp)
+                Image(
+                        painter = painterResource(id = R.drawable.ic_planned_journey_empty),
+                        contentDescription = null,
                 )
+                Spacer(modifier = Modifier.size(16.dp))
                 Text(
-                        modifier = Modifier.padding(top = 12.dp),
                         text = stringResource(id = R.string.my_journey_empty_description_planned_journey),
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp,
