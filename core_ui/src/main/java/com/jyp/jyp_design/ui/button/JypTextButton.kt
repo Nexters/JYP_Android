@@ -37,7 +37,10 @@ fun JypTextButton(
             false -> onClickDisabled
         },
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = buttonColorSet.backgroundColor
+            backgroundColor = when (enabled) {
+                true -> buttonColorSet.backgroundColor
+                false -> ButtonColorSetType.GRAY.backgroundColor
+            }
         )
     ) {
         JypText(
@@ -48,7 +51,10 @@ fun JypTextButton(
             ),
             maxLines = 1,
             textAlign = TextAlign.Center,
-            color = buttonColorSet.textColor
+            color = when (enabled) {
+                true -> buttonColorSet.textColor
+                false -> ButtonColorSetType.GRAY.textColor
+            }
         )
     }
 }

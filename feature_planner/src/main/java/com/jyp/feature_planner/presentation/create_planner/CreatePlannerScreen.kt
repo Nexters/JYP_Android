@@ -28,7 +28,14 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @Composable
 internal fun CreatePlannerScreen(
         step: CreatePlannerStep,
+        submitOnTitle: (String) -> Unit,
+        submitOnDate: (String) -> Unit,
+        submitOnTaste: (String) -> Unit,
 ) {
+    var title by remember {
+        mutableStateOf("")
+    }
+
     Box(
             modifier = Modifier
                     .background(JypColors.Background_white100)
@@ -40,18 +47,28 @@ internal fun CreatePlannerScreen(
                         .padding(top = 12.dp)
         ) {
             CreatePlannerHeader(step = step)
-        }
+            CreatePlannerContent(
+                    modifier = Modifier.weight(1f),
+                    step = step,
+                    title = title,
+                    titleChange = { title = it }
+            )
 
-        JypTextButton(
-                modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 28.dp),
-                text = "다음으로",
-                buttonType = ButtonType.THICK,
-                buttonColorSet = ButtonColorSetType.PINK,
-        )
+            JypTextButton(
+                    modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
+                    text = "다음으로",
+                    buttonType = ButtonType.THICK,
+                    buttonColorSet = ButtonColorSetType.PINK,
+                    enabled = title.isNotEmpty() && title.length < 6,
+                    onClickEnabled = {
+                        submitOnTitle.invoke(title)
+                    }
+            )
+        }
     }
+
 
 }
 
@@ -73,76 +90,90 @@ private fun CreatePlannerHeader(
         )
         Spacer(modifier = Modifier.size(48.dp))
 
-        val state = remember {
-            mutableStateListOf(
-                    Tag(type = TagType.Soso(), content = "모두 찬성"),
-                    Tag(type = TagType.Soso(), content = "상관없어"),
-                    Tag(type = TagType.Like(), content = "좋아1"),
-                    Tag(type = TagType.Like(), content = "좋아2"),
-                    Tag(type = TagType.Like(), content = "좋아3"),
-                    Tag(type = TagType.Like(), content = "좋아4"),
-                    Tag(type = TagType.Like(), content = "좋아5"),
-                    Tag(type = TagType.Like(), content = "좋아6"),
-                    Tag(type = TagType.Like(), content = "좋아7"),
-                    Tag(type = TagType.Dislike(), content = "싫어1"),
-                    Tag(type = TagType.Dislike(), content = "싫어2"),
-                    Tag(type = TagType.Dislike(), content = "싫어3"),
-                    Tag(type = TagType.Dislike(), content = "싫어4"),
-            )
-        }
 
-        when (step) {
-            CreatePlannerStep.TITLE -> CreatePlannerTitleArea()
-            CreatePlannerStep.DATE -> CreatePlannerDateArea()
-            CreatePlannerStep.TASTE -> CreatePlannerTasteArea(
-                    tags = state,
-                    // TODO : 아래 로직은 ViewModel로 이동해야한다
-                    tagClick = { tag ->
-                        val clickIndex = state.indexOf(tag)
-                        val tagState = tag.state
-                        val newTag = tag.copy(
-                                state = when (tagState) {
-                                    TagState.DEFAULT -> TagState.SELECTED
-                                    TagState.SELECTED -> TagState.DEFAULT
-                                    TagState.DISABLED -> TagState.DISABLED
-                                }
-                        )
-
-                        state[clickIndex] = newTag
-
-                        val clickedTagCount = state.count { it.state == TagState.SELECTED }
-                        if (clickedTagCount >= 3) {
-                            repeat(state.size) { i ->
-                                if (state[i].state == TagState.DEFAULT) {
-                                    state[i] = state[i].copy(state = TagState.DISABLED)
-                                }
-                            }
-                        } else {
-                            repeat(state.size) { i ->
-                                if (state[i].state == TagState.DISABLED) {
-                                    state[i] = state[i].copy(state = TagState.DEFAULT)
-                                }
-                            }
-                        }
-                    }
-            )
-        }
     }
 }
 
 @Composable
-private fun CreatePlannerTitleArea() {
-    var inputText by remember {
-        mutableStateOf("")
+private fun CreatePlannerContent(
+        modifier: Modifier = Modifier,
+        step: CreatePlannerStep,
+        title: String,
+        titleChange: (String) -> Unit,
+) {
+    val state = remember {
+        mutableStateListOf(
+                Tag(type = TagType.Soso(), content = "모두 찬성"),
+                Tag(type = TagType.Soso(), content = "상관없어"),
+                Tag(type = TagType.Like(), content = "좋아1"),
+                Tag(type = TagType.Like(), content = "좋아2"),
+                Tag(type = TagType.Like(), content = "좋아3"),
+                Tag(type = TagType.Like(), content = "좋아4"),
+                Tag(type = TagType.Like(), content = "좋아5"),
+                Tag(type = TagType.Like(), content = "좋아6"),
+                Tag(type = TagType.Like(), content = "좋아7"),
+                Tag(type = TagType.Dislike(), content = "싫어1"),
+                Tag(type = TagType.Dislike(), content = "싫어2"),
+                Tag(type = TagType.Dislike(), content = "싫어3"),
+                Tag(type = TagType.Dislike(), content = "싫어4"),
+        )
     }
 
-    Column {
+    when (step) {
+        CreatePlannerStep.TITLE -> CreatePlannerTitleArea(
+                modifier = modifier,
+                title = title,
+                titleChange = titleChange
+        )
+        CreatePlannerStep.DATE -> CreatePlannerDateArea()
+        CreatePlannerStep.TASTE -> CreatePlannerTasteArea(
+                tags = state,
+                // TODO : 아래 로직은 ViewModel로 이동해야한다
+                tagClick = { tag ->
+                    val clickIndex = state.indexOf(tag)
+                    val tagState = tag.state
+                    val newTag = tag.copy(
+                            state = when (tagState) {
+                                TagState.DEFAULT -> TagState.SELECTED
+                                TagState.SELECTED -> TagState.DEFAULT
+                                TagState.DISABLED -> TagState.DISABLED
+                            }
+                    )
+
+                    state[clickIndex] = newTag
+
+                    val clickedTagCount = state.count { it.state == TagState.SELECTED }
+                    if (clickedTagCount >= 3) {
+                        repeat(state.size) { i ->
+                            if (state[i].state == TagState.DEFAULT) {
+                                state[i] = state[i].copy(state = TagState.DISABLED)
+                            }
+                        }
+                    } else {
+                        repeat(state.size) { i ->
+                            if (state[i].state == TagState.DISABLED) {
+                                state[i] = state[i].copy(state = TagState.DEFAULT)
+                            }
+                        }
+                    }
+                }
+        )
+    }
+}
+
+@Composable
+private fun CreatePlannerTitleArea(
+        modifier: Modifier = Modifier,
+        title: String,
+        titleChange: (String) -> Unit,
+) {
+    Column(modifier = modifier) {
         JypTextInput(
                 modifier = Modifier
                         .fillMaxWidth(),
                 type = TextInputType.FIELD,
-                text = inputText,
-                valueChange = { inputText = it },
+                text = title,
+                valueChange = titleChange,
                 hint = "예) 제주도 여행기"
         )
         Spacer(modifier = Modifier.size(16.dp))
@@ -158,9 +189,20 @@ private fun CreatePlannerTitleArea() {
             ).forEach {
                 PlannerCreateTitleSuggestion(
                         suggestionTitle = it,
-                        clickSuggestion = { clickedText -> inputText = clickedText }
+                        clickSuggestion = titleChange
                 )
             }
+        }
+        if (title.length > 6) {
+            Spacer(modifier = Modifier.weight(1f))
+            JypText(
+                    modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                    text = "입력 가능 글자를 초과했어요",
+                    type = TextType.BODY_3,
+                    color = JypColors.Pink,
+            )
+            Spacer(modifier = Modifier.size(16.dp))
         }
     }
 }
@@ -330,13 +372,19 @@ private fun TastesSection(
 internal fun CreatePlannerScreenPreview() {
     CreatePlannerScreen(
             CreatePlannerStep.TITLE,
+            {},
+            {},
+            {},
     )
 }
 
 @Composable
 @Preview(showBackground = true)
 private fun TitleAreaPreview() {
-    CreatePlannerTitleArea()
+    CreatePlannerTitleArea(
+            title = "",
+            titleChange = {}
+    )
 }
 
 @Composable
