@@ -88,25 +88,34 @@ internal fun MainBottomNavigation(
         currentScreen: BottomNavItem,
         onTabSelectAction: (String) -> Unit,
 ) {
-    Row(
-            modifier = Modifier
-                    .fillMaxWidth()
-                    .height(76.dp)
-                    .selectableGroup(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        navItems.forEach { navItem ->
-            MainBottomNavigationItem(
-                    selected = navItem == currentScreen,
-                    activeIconRes = navItem.activeIconRes,
-                    inactiveIconRes = navItem.inactiveIconRes,
-                    labelRes = navItem.labelRes,
-                    activeLabelColor = JypColors.Pink,
-                    inactiveLabelColor = JypColors.Text40,
-                    onTabSelectAction = {
-                        onTabSelectAction.invoke(navItem.name)
-                    }
-            )
+    Column {
+        Box(
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color(0x1D000000))
+        )
+
+        Row(
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .height(76.dp)
+                        .selectableGroup(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            navItems.forEach { navItem ->
+                MainBottomNavigationItem(
+                        selected = navItem == currentScreen,
+                        activeIconRes = navItem.activeIconRes,
+                        inactiveIconRes = navItem.inactiveIconRes,
+                        labelRes = navItem.labelRes,
+                        activeLabelColor = JypColors.Pink,
+                        inactiveLabelColor = JypColors.Text40,
+                        onTabSelectAction = {
+                            onTabSelectAction.invoke(navItem.name)
+                        }
+                )
+            }
         }
     }
 }
