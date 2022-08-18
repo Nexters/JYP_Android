@@ -5,17 +5,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
-import com.google.android.material.internal.FlowLayout
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
@@ -24,13 +21,18 @@ import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.text_input.JypTextInput
 import com.jyp.jyp_design.ui.text_input.TextInputType
 import com.jyp.jyp_design.ui.typography.type.TextType
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 internal fun CreatePlannerScreen(
         step: CreatePlannerStep,
         submitOnTitle: (String) -> Unit,
-        submitOnDate: (String) -> Unit,
-        submitOnTaste: (String) -> Unit,
+        selectDateClick: () -> Unit,
+        startDateMillis: Long,
+        endDateMillis: Long,
+        submitOnDate: (Long, Long) -> Unit,
+        submitOnTaste: () -> Unit,
 ) {
     var title by remember {
         mutableStateOf("")
@@ -51,7 +53,10 @@ internal fun CreatePlannerScreen(
                     modifier = Modifier.weight(1f),
                     step = step,
                     title = title,
-                    titleChange = { title = it }
+                    titleChange = { title = it },
+                    selectDateClick = selectDateClick,
+                    startDateMillis = startDateMillis,
+                    endDateMillis = endDateMillis,
             )
 
             JypTextButton(
@@ -61,9 +66,17 @@ internal fun CreatePlannerScreen(
                     text = "다음으로",
                     buttonType = ButtonType.THICK,
                     buttonColorSet = ButtonColorSetType.PINK,
-                    enabled = title.isNotEmpty() && title.length < 6,
+                    enabled = when (step) {
+                        CreatePlannerStep.TITLE -> title.isNotEmpty() && title.length < 6
+                        CreatePlannerStep.DATE -> startDateMillis > 0 && endDateMillis > 0
+                        CreatePlannerStep.TASTE -> true
+                    },
                     onClickEnabled = {
-                        submitOnTitle.invoke(title)
+                        when (step) {
+                            CreatePlannerStep.TITLE -> submitOnTitle.invoke(title)
+                            CreatePlannerStep.DATE -> submitOnDate.invoke(startDateMillis, endDateMillis)
+                            CreatePlannerStep.TASTE -> submitOnTaste.invoke()
+                        }
                     }
             )
         }
@@ -100,6 +113,9 @@ private fun CreatePlannerContent(
         step: CreatePlannerStep,
         title: String,
         titleChange: (String) -> Unit,
+        selectDateClick: () -> Unit,
+        startDateMillis: Long,
+        endDateMillis: Long,
 ) {
     val state = remember {
         mutableStateListOf(
@@ -125,7 +141,12 @@ private fun CreatePlannerContent(
                 title = title,
                 titleChange = titleChange
         )
-        CreatePlannerStep.DATE -> CreatePlannerDateArea()
+        CreatePlannerStep.DATE -> CreatePlannerDateArea(
+                modifier = modifier,
+                selectDateClick = selectDateClick,
+                startDateMillis = startDateMillis,
+                endDateMillis = endDateMillis,
+        )
         CreatePlannerStep.TASTE -> CreatePlannerTasteArea(
                 tags = state,
                 // TODO : 아래 로직은 ViewModel로 이동해야한다
@@ -233,21 +254,35 @@ private fun PlannerCreateTitleSuggestion(
 }
 
 @Composable
-private fun CreatePlannerDateArea() {
-    Row {
-        DateForm(
-                modifier = Modifier.weight(1f),
-                title = "여행 시작",
-                date = "22.07.17",
-        )
-        Spacer(modifier = Modifier.size(8.dp))
-        DateFormSeparator()
-        Spacer(modifier = Modifier.size(8.dp))
-        DateForm(
-                modifier = Modifier.weight(1f),
-                title = "여행 종료",
-                date = "22.07.19",
-        )
+private fun CreatePlannerDateArea(
+        modifier: Modifier,
+        selectDateClick: () -> Unit,
+        startDateMillis: Long,
+        endDateMillis: Long,
+) {
+    Box(
+            modifier = modifier
+                    .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = selectDateClick,
+                    )
+    ) {
+        Row {
+            DateForm(
+                    modifier = Modifier.weight(1f),
+                    title = "여행 시작",
+                    millis = startDateMillis,
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            DateFormSeparator()
+            Spacer(modifier = Modifier.size(8.dp))
+            DateForm(
+                    modifier = Modifier.weight(1f),
+                    title = "여행 종료",
+                    millis = endDateMillis,
+            )
+        }
     }
 }
 
@@ -255,7 +290,7 @@ private fun CreatePlannerDateArea() {
 private fun DateForm(
         modifier: Modifier = Modifier,
         title: String,
-        date: String,
+        millis: Long,
 ) {
     Column(modifier = modifier) {
         JypText(
@@ -272,6 +307,13 @@ private fun DateForm(
                         .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center,
         ) {
+            val date = if (millis <= 0) {
+                " "
+            } else {
+                SimpleDateFormat("MM월 dd일", Locale.getDefault())
+                        .format(Date(millis))
+            }
+
             JypText(
                     text = date,
                     type = TextType.TITLE_2,
@@ -374,22 +416,9 @@ internal fun CreatePlannerScreenPreview() {
             CreatePlannerStep.TITLE,
             {},
             {},
+            0,
+            0,
+            { _, _ -> },
             {},
     )
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun TitleAreaPreview() {
-    CreatePlannerTitleArea(
-            title = "",
-            titleChange = {}
-    )
-}
-
-@Composable
-@Preview
-@Preview(showBackground = true)
-private fun DateFormAreaPreview() {
-    CreatePlannerDateArea()
 }

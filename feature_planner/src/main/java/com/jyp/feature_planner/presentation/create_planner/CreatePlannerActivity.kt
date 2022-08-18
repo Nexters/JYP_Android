@@ -4,31 +4,55 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.FragmentActivity
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreatePlannerActivity : ComponentActivity() {
+class CreatePlannerActivity : AppCompatActivity() {
+    private val viewModel: CreatePlannerViewModel by viewModels()
+
     private val title: String? by lazy {
         intent.getStringExtra(EXTRA_CREATE_PLANNER_TITLE)
+    }
+
+    private val date: Pair<Long, Long>? by lazy {
+        intent.getSerializableExtra(EXTRA_CREATE_PLANNER_DATE) as? Pair<Long, Long>
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Screen(
+                    viewModel = viewModel,
                     step = intent.getSerializableExtra(EXTRA_CREATE_PLANNER_STEP) as? CreatePlannerStep ?: CreatePlannerStep.TITLE,
                     submitOnTitle = { title ->
                         startActivity(
                                 Intent(this, CreatePlannerActivity::class.java).apply {
                                     putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.DATE)
                                     putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
+                                }
+                        )
+                    },
+                    selectDateClick = {
+                        RangeDatePicker().show(supportFragmentManager) { start, end ->
+                            viewModel.updateDate(start, end)
+                        }
+                    },
+                    submitOnDate = { startMillis, endMillis ->
+                        startActivity(
+                                Intent(this, CreatePlannerActivity::class.java).apply {
+                                    putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
+                                    putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
+                                    putExtra(EXTRA_CREATE_PLANNER_DATE, startMillis to endMillis)
                                 }
                         )
                     }
@@ -46,9 +70,15 @@ class CreatePlannerActivity : ComponentActivity() {
 
 @Composable
 private fun Screen(
+        viewModel: CreatePlannerViewModel,
         step: CreatePlannerStep = CreatePlannerStep.TASTE,
         submitOnTitle: (String) -> Unit,
+        selectDateClick: () -> Unit,
+        submitOnDate: (Long, Long) -> Unit,
 ) {
+    val startDateMillis by viewModel.startDateMillis.collectAsState()
+    val endDateMillis by viewModel.endDateMillis.collectAsState()
+
     GlobalNavigationBarLayout(
             color = GlobalNavigationBarColor.WHITE,
             title = stringResource(id = step.navigationTitleRes),
@@ -59,7 +89,10 @@ private fun Screen(
         CreatePlannerScreen(
                 step = step,
                 submitOnTitle = submitOnTitle,
-                submitOnDate = {},
+                selectDateClick = selectDateClick,
+                startDateMillis = startDateMillis,
+                endDateMillis = endDateMillis,
+                submitOnDate = submitOnDate,
                 submitOnTaste = {}
         )
     }
