@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,15 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_my_journey.R
+import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.shadow.drawShadow
+import com.jyp.jyp_design.ui.text.JypText
+import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 fun MyJourneyScreen(
         journeyPropensity: String,
         userName: String,
-        plannedJourneys: List<String>,
-        pastJourneys: List<String>,
+        plannedJourneys: List<Journey>,
+        pastJourneys: List<Journey>,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
 ) {
@@ -83,8 +88,8 @@ internal fun MyJourneyHeader(
 
 @Composable
 internal fun MyJourneyContent(
-        plannedJourneys: List<String>,
-        pastJourneys: List<String>,
+        plannedJourneys: List<Journey>,
+        pastJourneys: List<Journey>,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
 ) {
@@ -182,7 +187,7 @@ internal fun MyJourneyContentTab(
 
 @Composable
 internal fun PlannedJourney(
-        journeys: List<String>,
+        journeys: List<Journey>,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
 ) {
@@ -190,16 +195,18 @@ internal fun PlannedJourney(
         PlannedJourneyEmptyScreen(onClickNewJourney = onClickNewJourney)
     } else {
         LazyRow(
-                contentPadding = PaddingValues(start = 24.dp),
+                contentPadding = PaddingValues(horizontal = 24.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            journeys.forEach { journey ->
+            journeys.forEachIndexed { index, journey ->
                 item {
                     JourneyItem(
-                            journeyName = journey,
-                            startDay = "7월 18일",
-                            endDay = "7월 28일",
-                            onClickPlanner = onClickPlanner
+                            journeyName = journey.title,
+                            dDay = journey.dDay,
+                            startDay = journey.startDay,
+                            endDay = journey.endDay,
+                            onClickPlanner = onClickPlanner,
+                            themeType = ThemeType.values()[journey.theme]
                     )
                 }
             }
@@ -267,7 +274,7 @@ internal fun PlannedJourneyEmptyScreen(
 
 @Composable
 internal fun PastJourney(
-        journeys: List<String>,
+        journeys: List<Journey>,
         onClickPlanner: () -> Unit,
 ) {
     if (journeys.isEmpty()) {
@@ -280,10 +287,12 @@ internal fun PastJourney(
             journeys.forEach { journey ->
                 item {
                     JourneyItem(
-                            journeyName = journey,
-                            startDay = "7월 18일",
-                            endDay = "7월 28일",
-                            onClickPlanner = onClickPlanner
+                            journeyName = journey.title,
+                            dDay = journey.dDay,
+                            startDay = journey.startDay,
+                            endDay = journey.endDay,
+                            onClickPlanner = onClickPlanner,
+                            themeType = ThemeType.values()[journey.theme]
                     )
                 }
             }
@@ -342,67 +351,85 @@ internal fun PastJourneyEmptyScreen() {
 internal fun JourneyItem(
         onClickPlanner: () -> Unit,
         journeyName: String,
+        dDay: String,
         startDay: String,
         endDay: String,
+        themeType: ThemeType,
 ) {
-    Column(
+    Box(
             modifier = Modifier
-                    .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = onClickPlanner
-                    )
-                    .padding(vertical = 24.dp)
-                    .width(width = 276.dp)
-                    .fillMaxHeight()
-                    .drawShadow(
-                            color = JypColors.Border_grey,
-                            borderRadius = 16.dp,
-                    )
                     .clip(shape = RoundedCornerShape(16.dp))
+                    .width(276.dp)
+                    .fillMaxHeight()
+                    .padding(vertical = 24.dp)
                     .background(
-                            color = JypColors.Background_white100,
-                            shape = RoundedCornerShape(16.dp),
-                    )
-                    .padding(20.dp),
+                            color = themeType.backgroundColor,
+                            shape = RoundedCornerShape(16.dp)),
+    ) {
+        Image(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                painter = painterResource(id = themeType.imageRes),
+                contentDescription = null,
+        )
 
-            ) {
-        Row(
+        Column(
                 modifier = Modifier
-                        .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                        .fillMaxSize()
+                        .padding(20.dp)
+                        .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = onClickPlanner
+                        ),
         ) {
-            Box(modifier = Modifier
-                    .size(width = 30.dp, height = 20.dp)
-                    .background(JypColors.Sub_blue200))
-
-            Image(
+            Row(
                     modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberRipple(),
-                            ) {
+                            .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                JypText(
+                        modifier = Modifier
+                                .background(
+                                        color = JypColors.Sub_black,
+                                        shape = RoundedCornerShape(6.dp)
+                                )
+                                .padding(
+                                        vertical = 4.dp,
+                                        horizontal = 9.dp,
+                                ),
+                        text = dDay,
+                        type = TextType.TAG_2,
+                        color = JypColors.Text_white,
+                )
 
-                            },
-                    painter = painterResource(id = R.drawable.ic_more_menu),
-                    contentDescription = null,
+                Image(
+                        modifier = Modifier
+                                .clip(CircleShape)
+                                .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = rememberRipple(),
+                                ) {
+
+                                },
+                        painter = painterResource(id = R.drawable.ic_more_menu),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(JypColors.Text_white)
+                )
+            }
+            Spacer(modifier = Modifier.padding(top = 16.dp))
+            Text(
+                    text = journeyName,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 22.sp,
+                    color = JypColors.Text_white
+            )
+            Text(
+                    text = "$startDay - $endDay",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    color = JypColors.Text_white,
             )
         }
-
-        Text(
-                modifier = Modifier.padding(top = 16.dp),
-                text = journeyName,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 22.sp,
-                color = JypColors.Text80
-        )
-        Text(
-                text = "$startDay - $endDay",
-                fontWeight = FontWeight.Medium,
-                fontSize = 14.sp,
-                color = JypColors.Text75,
-        )
     }
 }
 
@@ -425,7 +452,24 @@ internal fun MyJourneyScreenPreview() {
     MyJourneyScreen(
             journeyPropensity = "자유로운 탐험가",
             userName = "다정",
-            plannedJourneys = listOf("강릉여행기", "집앞여행기"),
+            plannedJourneys = listOf(
+                    Journey(
+                            dDay = "D-3",
+                            title = "강릉여행기",
+                            theme = 0,
+                            startDay = "8월 23일",
+                            endDay = "8월 25일",
+                            profileUrls = emptyList()
+                    ),
+                    Journey(
+                            dDay = "D-8",
+                            title = "즐거운여행기",
+                            theme = 1,
+                            startDay = "8월 28일",
+                            endDay = "8월 30일",
+                            profileUrls = emptyList()
+                    ),
+            ),
             pastJourneys = emptyList(),
             onClickNewJourney = {},
             onClickPlanner = {}

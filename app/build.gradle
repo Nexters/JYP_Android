@@ -61,7 +61,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation project(':core_network')
     implementation project(':core_ui')
-    implementation project(':feature_planner')
+    implementation project(':feature_main')
 
     // module dependencies
 
