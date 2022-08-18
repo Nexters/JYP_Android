@@ -18,11 +18,13 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 fun DecoratedTag(
+        modifier: Modifier = Modifier,
         tagType: TagType,
+        tagState: TagState,
         content: String,
 ) {
     Row(
-            modifier = Modifier
+            modifier = modifier
                     .clip(
                             RoundedCornerShape(
                                     topStart = 20.dp,
@@ -31,35 +33,39 @@ fun DecoratedTag(
                                     bottomEnd = 8.dp,
                             )
                     )
-                    .background(tagType.backgroundColor)
+                    .background(tagType.getBackgroundColor(tagState))
                     .padding(vertical = 4.dp)
     ) {
         Spacer(modifier = Modifier.size(4.dp))
         DecoratedTagIcon(
-                tagType = tagType
+                tagType = tagType,
+                tagState = tagState,
         )
         Spacer(modifier = Modifier.size(9.dp))
         JypText(
                 text = content,
                 type = TextType.TAG_1,
-                color = tagType.textColor,
+                color = tagType.getTextColor(tagState),
         )
         Spacer(modifier = Modifier.size(8.dp))
     }
 }
 
 @Composable
-private fun DecoratedTagIcon(tagType: TagType) {
+private fun DecoratedTagIcon(
+        tagType: TagType,
+        tagState: TagState,
+) {
     Box(
             modifier = Modifier
                     .size(24.dp)
                     .clip(CircleShape)
-                    .background(tagType.iconBackgroundColor),
+                    .background(tagType.getIconBackgroundColor(tagState)),
             contentAlignment = Alignment.Center,
     ) {
         Image(
                 painter = painterResource(id = tagType.iconRes),
-                colorFilter = ColorFilter.tint(tagType.iconColor),
+                colorFilter = ColorFilter.tint(tagType.getIconColor(tagState)),
                 contentDescription = null,
         )
     }
@@ -70,7 +76,8 @@ private fun DecoratedTagIcon(tagType: TagType) {
 internal fun DecoratedTagSosoPreview() {
     DecoratedTag(
             tagType = TagType.Soso(),
-            "상관없어"
+            tagState = TagState.DEFAULT,
+            content = "상관없어",
     )
 }
 
@@ -79,7 +86,8 @@ internal fun DecoratedTagSosoPreview() {
 internal fun DecoratedTagLikePreview() {
     DecoratedTag(
             tagType = TagType.Like(),
-            "좋아용"
+            tagState = TagState.DEFAULT,
+            content = "좋아용"
     )
 }
 
@@ -88,6 +96,7 @@ internal fun DecoratedTagLikePreview() {
 internal fun DecoratedTagDisLikePreview() {
     DecoratedTag(
             tagType = TagType.Dislike(),
-            "좋지않아"
+            tagState = TagState.DEFAULT,
+            content = "좋지않아"
     )
 }
