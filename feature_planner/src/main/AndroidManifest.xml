@@ -5,7 +5,9 @@
     <application>
         <activity
             android:name=".presentation.create_planner.CreatePlannerActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
+            android:taskAffinity=".presentation.create_planner.CreatePlannerActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+        
         <activity android:name=".presentation.planner.PlannerActivity" />
     </application>
 </manifest>

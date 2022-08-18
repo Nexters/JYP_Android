@@ -2,7 +2,7 @@ package com.jyp.feature_planner.presentation.create_planner
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.fragment.app.FragmentActivity
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
@@ -55,6 +54,10 @@ class CreatePlannerActivity : AppCompatActivity() {
                                     putExtra(EXTRA_CREATE_PLANNER_DATE, startMillis to endMillis)
                                 }
                         )
+                    },
+                    submitOnTaste = {
+                        Toast.makeText(this, "여행을 만들었어요!", Toast.LENGTH_SHORT).show()
+                        finishAffinity()
                     }
             )
         }
@@ -64,7 +67,6 @@ class CreatePlannerActivity : AppCompatActivity() {
         const val EXTRA_CREATE_PLANNER_STEP = "EXTRA_CREATE_PLANNER_STEP"
         const val EXTRA_CREATE_PLANNER_TITLE = "EXTRA_CREATE_PLANNER_TITLE"
         const val EXTRA_CREATE_PLANNER_DATE = "EXTRA_CREATE_PLANNER_DATE"
-        const val EXTRA_CREATE_PLANNER_TASTE = "EXTRA_CREATE_PLANNER_TASTE"
     }
 }
 
@@ -75,9 +77,11 @@ private fun Screen(
         submitOnTitle: (String) -> Unit,
         selectDateClick: () -> Unit,
         submitOnDate: (Long, Long) -> Unit,
+        submitOnTaste: (List<Tag>) -> Unit,
 ) {
     val startDateMillis by viewModel.startDateMillis.collectAsState()
     val endDateMillis by viewModel.endDateMillis.collectAsState()
+    val tags by viewModel.tags.collectAsState()
 
     GlobalNavigationBarLayout(
             color = GlobalNavigationBarColor.WHITE,
@@ -93,7 +97,9 @@ private fun Screen(
                 startDateMillis = startDateMillis,
                 endDateMillis = endDateMillis,
                 submitOnDate = submitOnDate,
-                submitOnTaste = {}
+                tags = tags,
+                tagClick = viewModel::clickTag,
+                submitOnTaste = submitOnTaste,
         )
     }
 }

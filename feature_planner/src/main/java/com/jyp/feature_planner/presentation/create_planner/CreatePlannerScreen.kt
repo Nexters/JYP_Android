@@ -32,7 +32,9 @@ internal fun CreatePlannerScreen(
         startDateMillis: Long,
         endDateMillis: Long,
         submitOnDate: (Long, Long) -> Unit,
-        submitOnTaste: () -> Unit,
+        tags: List<Tag>,
+        tagClick: (Tag) -> Unit,
+        submitOnTaste: (List<Tag>) -> Unit,
 ) {
     var title by remember {
         mutableStateOf("")
@@ -57,25 +59,31 @@ internal fun CreatePlannerScreen(
                     selectDateClick = selectDateClick,
                     startDateMillis = startDateMillis,
                     endDateMillis = endDateMillis,
+                    tags = tags,
+                    tagClick = tagClick,
             )
 
             JypTextButton(
                     modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 28.dp),
-                    text = "다음으로",
+                    text = if (step == CreatePlannerStep.TASTE) {
+                        "여행 계획 시작하기"
+                    } else {
+                        "다음으로"
+                    },
                     buttonType = ButtonType.THICK,
                     buttonColorSet = ButtonColorSetType.PINK,
                     enabled = when (step) {
                         CreatePlannerStep.TITLE -> title.isNotEmpty() && title.length < 6
                         CreatePlannerStep.DATE -> startDateMillis > 0 && endDateMillis > 0
-                        CreatePlannerStep.TASTE -> true
+                        CreatePlannerStep.TASTE -> tags.count { it.state == TagState.SELECTED } >= 1
                     },
                     onClickEnabled = {
                         when (step) {
                             CreatePlannerStep.TITLE -> submitOnTitle.invoke(title)
                             CreatePlannerStep.DATE -> submitOnDate.invoke(startDateMillis, endDateMillis)
-                            CreatePlannerStep.TASTE -> submitOnTaste.invoke()
+                            CreatePlannerStep.TASTE -> submitOnTaste.invoke(tags.filter { it.state == TagState.SELECTED })
                         }
                     }
             )
@@ -116,25 +124,9 @@ private fun CreatePlannerContent(
         selectDateClick: () -> Unit,
         startDateMillis: Long,
         endDateMillis: Long,
+        tags: List<Tag>,
+        tagClick: (Tag) -> Unit,
 ) {
-    val state = remember {
-        mutableStateListOf(
-                Tag(type = TagType.Soso(), content = "모두 찬성"),
-                Tag(type = TagType.Soso(), content = "상관없어"),
-                Tag(type = TagType.Like(), content = "좋아1"),
-                Tag(type = TagType.Like(), content = "좋아2"),
-                Tag(type = TagType.Like(), content = "좋아3"),
-                Tag(type = TagType.Like(), content = "좋아4"),
-                Tag(type = TagType.Like(), content = "좋아5"),
-                Tag(type = TagType.Like(), content = "좋아6"),
-                Tag(type = TagType.Like(), content = "좋아7"),
-                Tag(type = TagType.Dislike(), content = "싫어1"),
-                Tag(type = TagType.Dislike(), content = "싫어2"),
-                Tag(type = TagType.Dislike(), content = "싫어3"),
-                Tag(type = TagType.Dislike(), content = "싫어4"),
-        )
-    }
-
     when (step) {
         CreatePlannerStep.TITLE -> CreatePlannerTitleArea(
                 modifier = modifier,
@@ -148,36 +140,9 @@ private fun CreatePlannerContent(
                 endDateMillis = endDateMillis,
         )
         CreatePlannerStep.TASTE -> CreatePlannerTasteArea(
-                tags = state,
-                // TODO : 아래 로직은 ViewModel로 이동해야한다
-                tagClick = { tag ->
-                    val clickIndex = state.indexOf(tag)
-                    val tagState = tag.state
-                    val newTag = tag.copy(
-                            state = when (tagState) {
-                                TagState.DEFAULT -> TagState.SELECTED
-                                TagState.SELECTED -> TagState.DEFAULT
-                                TagState.DISABLED -> TagState.DISABLED
-                            }
-                    )
-
-                    state[clickIndex] = newTag
-
-                    val clickedTagCount = state.count { it.state == TagState.SELECTED }
-                    if (clickedTagCount >= 3) {
-                        repeat(state.size) { i ->
-                            if (state[i].state == TagState.DEFAULT) {
-                                state[i] = state[i].copy(state = TagState.DISABLED)
-                            }
-                        }
-                    } else {
-                        repeat(state.size) { i ->
-                            if (state[i].state == TagState.DISABLED) {
-                                state[i] = state[i].copy(state = TagState.DEFAULT)
-                            }
-                        }
-                    }
-                }
+                modifier = modifier,
+                tags = tags,
+                tagClick = tagClick
         )
     }
 }
@@ -347,6 +312,7 @@ private fun DateFormSeparator() {
 
 @Composable
 private fun CreatePlannerTasteArea(
+        modifier: Modifier = Modifier,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
 ) {
@@ -354,23 +320,27 @@ private fun CreatePlannerTasteArea(
     val likeTags = tags.filter { tag -> tag.type is TagType.Like }
     val dislikeTags = tags.filter { tag -> tag.type is TagType.Dislike }
 
-    TastesSection(
-            tagCategory = "상관 없어요 태그",
-            tags = sosoTags,
-            tagClick = tagClick,
-    )
-    Spacer(modifier = Modifier.size(40.dp))
-    TastesSection(
-            tagCategory = "좋아요 태그",
-            tags = likeTags,
-            tagClick = tagClick,
-    )
-    Spacer(modifier = Modifier.size(40.dp))
-    TastesSection(
-            tagCategory = "싫어요 태그",
-            tags = dislikeTags,
-            tagClick = tagClick,
-    )
+    Column(
+            modifier = modifier,
+    ) {
+        TastesSection(
+                tagCategory = "상관 없어요 태그",
+                tags = sosoTags,
+                tagClick = tagClick,
+        )
+        Spacer(modifier = Modifier.size(40.dp))
+        TastesSection(
+                tagCategory = "좋아요 태그",
+                tags = likeTags,
+                tagClick = tagClick,
+        )
+        Spacer(modifier = Modifier.size(40.dp))
+        TastesSection(
+                tagCategory = "싫어요 태그",
+                tags = dislikeTags,
+                tagClick = tagClick,
+        )
+    }
 }
 
 @Composable
@@ -413,12 +383,14 @@ private fun TastesSection(
 @Preview(showBackground = true)
 internal fun CreatePlannerScreenPreview() {
     CreatePlannerScreen(
-            CreatePlannerStep.TITLE,
-            {},
-            {},
-            0,
-            0,
-            { _, _ -> },
-            {},
+            step = CreatePlannerStep.TITLE,
+            submitOnTitle = {},
+            selectDateClick = {},
+            startDateMillis = 0,
+            endDateMillis = 0,
+            submitOnDate = { _, _ -> },
+            tags = emptyList(),
+            tagClick = {},
+            submitOnTaste = {},
     )
 }
