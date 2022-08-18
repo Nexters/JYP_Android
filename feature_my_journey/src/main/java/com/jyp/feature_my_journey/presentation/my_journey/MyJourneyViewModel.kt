@@ -29,7 +29,10 @@ class MyJourneyViewModel @Inject constructor(
                             theme = 0,
                             startDay = "8월 23일",
                             endDay = "8월 25일",
-                            profileUrls = emptyList()
+                            profileUrls = listOf(
+                                    "https://img.marieclairekorea.com/2022/02/mck_620b83ff0751b.jpg",
+                                    "https://newsimg.hankookilbo.com/cms/articlerelease/2021/05/17/b41ab909-e0e2-40e8-a36a-4bae809a9024.jpg",
+                            )
                     ),
                     Journey(
                             dDay = "D-8",
@@ -37,7 +40,11 @@ class MyJourneyViewModel @Inject constructor(
                             theme = 1,
                             startDay = "8월 28일",
                             endDay = "8월 30일",
-                            profileUrls = emptyList()
+                            profileUrls = listOf(
+                                    "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/U4IIQNIIYFLA3JC7EYMNJMOCIA.JPG",
+                                    "https://biz.chosun.com/resizer/dsZb3djSs5sc6SFm0xr302MixnM=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/5LTZLDMDHKG2QTJO6K5DD2IKKI.jpg",
+                                    "https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/17/106977090.2.jpg",
+                            )
                     ),
                     Journey(
                             dDay = "D-31",
@@ -45,7 +52,15 @@ class MyJourneyViewModel @Inject constructor(
                             theme = 2,
                             startDay = "9월 20일",
                             endDay = "9월 25일",
-                            profileUrls = emptyList()
+                            profileUrls = listOf(
+                                    "https://img.marieclairekorea.com/2022/02/mck_620b83ff0751b.jpg",
+                                    "https://newsimg.hankookilbo.com/cms/articlerelease/2021/05/17/b41ab909-e0e2-40e8-a36a-4bae809a9024.jpg",
+                                    "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/U4IIQNIIYFLA3JC7EYMNJMOCIA.JPG",
+                                    "https://biz.chosun.com/resizer/dsZb3djSs5sc6SFm0xr302MixnM=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/5LTZLDMDHKG2QTJO6K5DD2IKKI.jpg",
+                                    "https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/17/106977090.2.jpg",
+                                    "https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/17/106977090.2.jpg",
+                                    "https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/17/106977090.2.jpg",
+                            )
                     ),
                     Journey(
                             dDay = "D-40",
@@ -53,7 +68,17 @@ class MyJourneyViewModel @Inject constructor(
                             theme = 3,
                             startDay = "9월 29일",
                             endDay = "10월 25일",
-                            profileUrls = emptyList()
+                            profileUrls = listOf(
+                                    "https://dimg.donga.com/wps/NEWS/IMAGE/2021/05/17/106977090.2.jpg",
+                                    "https://img.marieclairekorea.com/2022/02/mck_620b83ff0751b.jpg",
+                                    "https://newsimg.hankookilbo.com/cms/articlerelease/2021/05/17/b41ab909-e0e2-40e8-a36a-4bae809a9024.jpg",
+                                    "https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/U4IIQNIIYFLA3JC7EYMNJMOCIA.JPG",
+                                    "https://biz.chosun.com/resizer/dsZb3djSs5sc6SFm0xr302MixnM=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/5LTZLDMDHKG2QTJO6K5DD2IKKI.jpg",
+                                    "https://biz.chosun.com/resizer/dsZb3djSs5sc6SFm0xr302MixnM=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/5LTZLDMDHKG2QTJO6K5DD2IKKI.jpg",
+                                    "https://biz.chosun.com/resizer/dsZb3djSs5sc6SFm0xr302MixnM=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/5LTZLDMDHKG2QTJO6K5DD2IKKI.jpg",
+                                    "https://biz.chosun.com/resizer/dsZb3djSs5sc6SFm0xr302MixnM=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/5LTZLDMDHKG2QTJO6K5DD2IKKI.jpg",
+                                    "https://biz.chosun.com/resizer/dsZb3djSs5sc6SFm0xr302MixnM=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/5LTZLDMDHKG2QTJO6K5DD2IKKI.jpg",
+                            )
                     ),
             )
         }

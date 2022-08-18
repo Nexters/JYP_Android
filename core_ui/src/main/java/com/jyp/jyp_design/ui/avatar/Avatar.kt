@@ -28,24 +28,26 @@ fun Avatar(
         showBorder: Boolean = true,
         borderColor: Color = JypColors.Background_white100,
 ) {
-    GlideImage(
-            modifier = modifier
-                    .size(width = width, height = height)
-                    .clip(RoundedCornerShape(12.dp))
-                    .let { imageModifier ->
-                        if (showBorder) {
-                            imageModifier.border(
-                                    width = 1.dp,
-                                    color = borderColor,
-                                    shape = RoundedCornerShape(12.dp),
-                            )
-                        } else {
-                            imageModifier
-                        }
-                    },
-            imageModel = profileImageUrl,
-            previewPlaceholder = R.drawable.ic_search,
-    )
+    Box(
+            modifier = if (showBorder) {
+                Modifier.border(
+                        width = 2.dp,
+                        color = borderColor,
+                        shape = RoundedCornerShape(12.dp),
+                )
+            } else {
+                Modifier
+            }
+    ) {
+        GlideImage(
+                modifier = modifier
+                        .size(width = width, height = height)
+                        .clip(RoundedCornerShape(12.dp))
+                        .padding(2.dp),
+                imageModel = profileImageUrl,
+                previewPlaceholder = R.drawable.ic_search,
+        )
+    }
 }
 
 @Composable
@@ -64,7 +66,7 @@ internal fun MoreAvatar(
                     .let { modifier ->
                         if (showBorder) {
                             modifier.border(
-                                    width = 1.dp,
+                                    width = 2.dp,
                                     color = borderColor,
                                     shape = RoundedCornerShape(12.dp),
                             )

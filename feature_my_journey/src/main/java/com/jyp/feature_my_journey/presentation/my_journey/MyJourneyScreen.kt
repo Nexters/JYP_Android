@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.jyp.feature_my_journey.R
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.ui.avatar.AvatarList
 import com.jyp.jyp_design.ui.shadow.drawShadow
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
@@ -206,7 +207,8 @@ internal fun PlannedJourney(
                             startDay = journey.startDay,
                             endDay = journey.endDay,
                             onClickPlanner = onClickPlanner,
-                            themeType = ThemeType.values()[journey.theme]
+                            themeType = ThemeType.values()[journey.theme],
+                            profileUrls = journey.profileUrls,
                     )
                 }
             }
@@ -292,7 +294,8 @@ internal fun PastJourney(
                             startDay = journey.startDay,
                             endDay = journey.endDay,
                             onClickPlanner = onClickPlanner,
-                            themeType = ThemeType.values()[journey.theme]
+                            themeType = ThemeType.values()[journey.theme],
+                            profileUrls = journey.profileUrls,
                     )
                 }
             }
@@ -355,6 +358,7 @@ internal fun JourneyItem(
         startDay: String,
         endDay: String,
         themeType: ThemeType,
+        profileUrls: List<String>,
 ) {
     Box(
             modifier = Modifier
@@ -370,6 +374,17 @@ internal fun JourneyItem(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 painter = painterResource(id = themeType.imageRes),
                 contentDescription = null,
+        )
+
+        AvatarList(
+                modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(20.dp),
+                profileImageUrls = profileUrls,
+                width = 44.dp,
+                height = 44.dp,
+                borderColor = themeType.profileBorderColor,
+                limitListCount = 4
         )
 
         Column(
