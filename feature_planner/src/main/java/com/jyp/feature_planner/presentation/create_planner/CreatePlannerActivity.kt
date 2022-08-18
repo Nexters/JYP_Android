@@ -56,7 +56,7 @@ class CreatePlannerActivity : AppCompatActivity() {
                         )
                     },
                     submitOnTaste = {
-                        Toast.makeText(this, "여행을 만들었어요!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "여행 계획을 만들었어요!", Toast.LENGTH_SHORT).show()
                         finishAffinity()
                     }
             )
