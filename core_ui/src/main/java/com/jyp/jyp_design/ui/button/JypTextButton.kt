@@ -1,6 +1,7 @@
 package com.jyp.jyp_design.ui.button
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -38,7 +39,8 @@ fun JypTextButton(
         },
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = buttonColorSet.backgroundColor
-        )
+        ),
+        contentPadding = PaddingValues(0.dp),
     ) {
         JypText(
             text = text,
