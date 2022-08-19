@@ -48,7 +48,7 @@ fun DecoratedTag(
                 type = TextType.TAG_1,
                 color = tagType.getTextColor(tagState),
         )
-        if (tagCount > 0) {
+        if (tagCount > 1) {
             Spacer(modifier = Modifier.size(6.dp))
             JypText(
                     text = tagCount.toString(),
