@@ -372,6 +372,7 @@ private fun TastesSection(
                             tagType = tag.type,
                             tagState = tag.state,
                             content = tag.content,
+                            tagCount = 0,
                     )
                 }
             }

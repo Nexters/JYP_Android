@@ -308,6 +308,7 @@ private fun PlannerTagLayout(
                     tagType = tag.type,
                     tagState = tag.state,
                     content = tag.content,
+                    tagCount = 1,
             )
         }
     }
