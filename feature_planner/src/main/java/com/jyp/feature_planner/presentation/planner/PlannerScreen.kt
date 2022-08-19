@@ -40,6 +40,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 internal fun PlannerScreen(
         pikMes: List<PikMe>,
         tags: List<Tag>,
+        tagClick: (Tag) -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -68,6 +69,7 @@ internal fun PlannerScreen(
                         tabSelected = { selectedTabPosition = it },
                         pikMes = pikMes,
                         tags = tags,
+                        tagClick = tagClick,
                 )
             },
             backLayerBackgroundColor = JypColors.Background_grey300,
@@ -121,6 +123,7 @@ private fun PlannerContent(
         tabSelected: (position: Int) -> Unit,
         pikMes: List<PikMe>,
         tags: List<Tag>,
+        tagClick: (Tag) -> Unit,
 ) {
     Column(
             modifier = Modifier
@@ -145,6 +148,7 @@ private fun PlannerContent(
             0 -> PlannerForumContent(
                     pikMes = pikMes,
                     tags = tags,
+                    tagClick = tagClick,
             )
         }
     }
@@ -214,6 +218,7 @@ private fun PlannerContentTab(
 private fun PlannerForumContent(
         pikMes: List<PikMe>,
         tags: List<Tag>,
+        tagClick: (Tag) -> Unit,
 ) {
     val rememberScrollState = rememberScrollState()
 
@@ -223,7 +228,10 @@ private fun PlannerForumContent(
                     .verticalScroll(rememberScrollState)
     ) {
         Spacer(modifier = Modifier.size(24.dp))
-        PlannerJourneyTagContent(tags = tags)
+        PlannerJourneyTagContent(
+                tags = tags,
+                tagClick = tagClick,
+        )
         Spacer(modifier = Modifier.size(48.dp))
         PlannerPikMeContent(pikMes = pikMes)
         Spacer(modifier = Modifier.size(20.dp))
@@ -233,6 +241,7 @@ private fun PlannerForumContent(
 @Composable
 private fun PlannerJourneyTagContent(
         tags: List<Tag>,
+        tagClick: (Tag) -> Unit,
 ) {
     var isCollapsed by remember {
         mutableStateOf(false)
@@ -290,6 +299,7 @@ private fun PlannerJourneyTagContent(
                 Spacer(modifier = Modifier.size(16.dp))
                 PlannerTagLayout(
                         tags = tags,
+                        tagClick = tagClick,
                 )
             }
         }
@@ -299,6 +309,7 @@ private fun PlannerJourneyTagContent(
 @Composable
 private fun PlannerTagLayout(
         tags: List<Tag> = emptyList(),
+        tagClick: (Tag) -> Unit,
 ) {
     FlowRow(
             crossAxisSpacing = 12.dp,
@@ -306,6 +317,12 @@ private fun PlannerTagLayout(
     ) {
         tags.forEach { tag ->
             DecoratedTag(
+                    modifier = Modifier
+                            .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                    onClick = { tagClick.invoke(tag) }
+                            ),
                     tagType = tag.type,
                     tagState = tag.state,
                     content = tag.content,
@@ -484,5 +501,6 @@ internal fun PlannerScreenPreview() {
     PlannerScreen(
             pikMes = emptyList(),
             tags = emptyList(),
+            tagClick = {},
     )
 }

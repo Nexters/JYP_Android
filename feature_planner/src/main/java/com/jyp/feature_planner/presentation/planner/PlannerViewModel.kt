@@ -34,7 +34,7 @@ class PlannerViewModel @Inject constructor() : ViewModel() {
                                     ),
                                     Person(
                                             name = "방시혁",
-                                            profileUrl = "http://ojsfile.ohmynews.com/STD_IMG_FILE/2017/1206/IE002255004_STD.jpg"
+                                            profileUrl = "https://ojsfile.ohmynews.com/STD_IMG_FILE/2017/1206/IE002255004_STD.jpg"
                                     ),
                             )
                     ),
