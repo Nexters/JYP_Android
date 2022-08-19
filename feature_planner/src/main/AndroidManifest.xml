@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jyp.feature_planner">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application>
         <activity
             android:name=".presentation.create_planner.CreatePlannerActivity"
@@ -10,5 +12,6 @@
 
         <activity android:name=".presentation.planner.PlannerActivity" />
         <activity android:name=".presentation.place_info.PlaceMapActivity" />
+        <activity android:name=".presentation.place_info.PlaceInfoActivity" />
     </application>
 </manifest>
