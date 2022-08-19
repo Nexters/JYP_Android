@@ -12,10 +12,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.jyp.jyp_design.resource.JypColors
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -76,13 +74,17 @@ private fun Screen(viewModel: PlannerViewModel) {
                                 bottomSheetScaffoldState.bottomSheetState.expand()
                             }
                         }
+                    },
+                    newPikMeClick = {
+                        viewModel.fetchPikMes()
                     }
             )
             if (!bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
                 Box(
                         modifier = Modifier
                                 .fillMaxSize()
-                                .background(JypColors.Black20)
+                                .alpha(0.3f)
+                                .background(Color(0xFF000000))
                 )
             }
         }

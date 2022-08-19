@@ -132,4 +132,15 @@ class PlannerViewModel @Inject constructor() : ViewModel() {
     )
     val tags: StateFlow<List<Tag>>
         get() = _tags
+
+    fun fetchPikMes() {
+        _pikMes.value = listOf(
+                PikMe(
+                        title = "아르떼 뮤지엄",
+                        address = "강원 강릉시 난설헌로 131",
+                        category = "문화시설",
+                        likeCount = 0,
+                )
+        )
+    }
 }

@@ -1,5 +1,6 @@
 package com.jyp.feature_planner.presentation.planner
 
+import android.util.MutableInt
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
@@ -43,6 +44,7 @@ internal fun PlannerScreen(
         joinMembers: List<String>,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
+        newPikMeClick: () -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -74,6 +76,7 @@ internal fun PlannerScreen(
                         pikMes = pikMes,
                         tags = tags,
                         tagClick = tagClick,
+                        newPikMeClick = newPikMeClick,
                 )
             },
             backLayerBackgroundColor = JypColors.Background_grey300,
@@ -146,6 +149,7 @@ private fun PlannerContent(
         pikMes: List<PikMe>,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
+        newPikMeClick: () -> Unit,
 ) {
     Column(
             modifier = Modifier
@@ -171,6 +175,7 @@ private fun PlannerContent(
                     pikMes = pikMes,
                     tags = tags,
                     tagClick = tagClick,
+                    newPikMeClick = newPikMeClick,
             )
         }
     }
@@ -241,6 +246,7 @@ private fun PlannerForumContent(
         pikMes: List<PikMe>,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
+        newPikMeClick: () -> Unit,
 ) {
     val rememberScrollState = rememberScrollState()
 
@@ -255,7 +261,10 @@ private fun PlannerForumContent(
                 tagClick = tagClick,
         )
         Spacer(modifier = Modifier.size(48.dp))
-        PlannerPikMeContent(pikMes = pikMes)
+        PlannerPikMeContent(
+                pikMes = pikMes,
+                newPikMeClick = newPikMeClick,
+        )
         Spacer(modifier = Modifier.size(20.dp))
     }
 }
@@ -357,6 +366,7 @@ private fun PlannerTagLayout(
 @Composable
 private fun PlannerPikMeContent(
         pikMes: List<PikMe>,
+        newPikMeClick: () -> Unit,
 ) {
     Column {
         Row(
@@ -370,6 +380,13 @@ private fun PlannerPikMeContent(
             )
 
             Image(
+                    modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                    onClick = newPikMeClick
+                            ),
                     painter = painterResource(id = R.drawable.icon_add),
                     contentDescription = null,
             )
@@ -383,7 +400,9 @@ private fun PlannerPikMeContent(
         Spacer(modifier = Modifier.size(20.dp))
 
         if (pikMes.isEmpty()) {
-            PlannerPikMeEmptyCard()
+            PlannerPikMeEmptyCard(
+                    newPikMeClick = newPikMeClick,
+            )
         } else {
             pikMes.forEach { pikMe ->
                 PlannerPikMeCard(pikMe = pikMe)
@@ -486,7 +505,9 @@ private fun PlannerPikMeCard(pikMe: PikMe) {
 }
 
 @Composable
-private fun PlannerPikMeEmptyCard() {
+private fun PlannerPikMeEmptyCard(
+        newPikMeClick: () -> Unit,
+) {
     Column(
             modifier = Modifier
                     .fillMaxWidth()
@@ -512,6 +533,7 @@ private fun PlannerPikMeEmptyCard() {
                 buttonType = ButtonType.MEDIUM,
                 buttonColorSet = ButtonColorSetType.BLACK,
                 enabled = true,
+                onClickEnabled = newPikMeClick,
         )
         Spacer(modifier = Modifier.size(20.dp))
     }
@@ -525,5 +547,6 @@ internal fun PlannerScreenPreview() {
             joinMembers = emptyList(),
             tags = emptyList(),
             tagClick = {},
+            newPikMeClick = {},
     )
 }
