@@ -9,6 +9,6 @@
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
 
         <activity android:name=".presentation.planner.PlannerActivity" />
-        <activity android:name=".presentation.place_info.PlaceInfoActivity" />
+        <activity android:name=".presentation.place_info.PlaceMapActivity" />
     </application>
 </manifest>

@@ -27,7 +27,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 
 @Composable
-internal fun PlaceInfoScreen() {
+internal fun PlaceMapScreen() {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -153,6 +153,6 @@ internal fun PlaceInfoScreen() {
 
 @Composable
 @Preview(showBackground = true)
-internal fun PlaceInfoScreenPreview() {
-    PlaceInfoScreen()
+internal fun PlaceMapScreenPreview() {
+    PlaceMapScreen()
 }
