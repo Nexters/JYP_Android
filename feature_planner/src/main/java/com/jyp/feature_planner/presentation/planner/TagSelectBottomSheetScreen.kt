@@ -84,6 +84,7 @@ private fun Person(person: Person) {
                 profileImageUrl = person.profileUrl,
                 width = 44.dp,
                 height = 44.dp,
+                showBorder = false,
         )
         Spacer(modifier = Modifier.size(8.dp))
         JypText(
