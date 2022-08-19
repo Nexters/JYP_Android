@@ -24,8 +24,10 @@ class PlannerActivity : ComponentActivity() {
 @Composable
 private fun Screen(viewModel: PlannerViewModel) {
     val pikMes by viewModel.pikMes.collectAsState()
+    val tags by viewModel.tags.collectAsState()
 
     PlannerScreen(
             pikMes = pikMes,
+            tags = tags,
     )
 }

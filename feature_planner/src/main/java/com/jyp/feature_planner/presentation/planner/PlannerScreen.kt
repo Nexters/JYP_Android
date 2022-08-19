@@ -39,6 +39,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @Composable
 internal fun PlannerScreen(
         pikMes: List<PikMe>,
+        tags: List<Tag>,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -66,6 +67,7 @@ internal fun PlannerScreen(
                         selectedTabPosition = selectedTabPosition,
                         tabSelected = { selectedTabPosition = it },
                         pikMes = pikMes,
+                        tags = tags,
                 )
             },
             backLayerBackgroundColor = JypColors.Background_grey300,
@@ -118,6 +120,7 @@ private fun PlannerContent(
         selectedTabPosition: Int,
         tabSelected: (position: Int) -> Unit,
         pikMes: List<PikMe>,
+        tags: List<Tag>,
 ) {
     Column(
             modifier = Modifier
@@ -141,6 +144,7 @@ private fun PlannerContent(
         when (selectedTabPosition) {
             0 -> PlannerForumContent(
                     pikMes = pikMes,
+                    tags = tags,
             )
         }
     }
@@ -209,6 +213,7 @@ private fun PlannerContentTab(
 @Composable
 private fun PlannerForumContent(
         pikMes: List<PikMe>,
+        tags: List<Tag>,
 ) {
     val rememberScrollState = rememberScrollState()
 
@@ -218,7 +223,7 @@ private fun PlannerForumContent(
                     .verticalScroll(rememberScrollState)
     ) {
         Spacer(modifier = Modifier.size(24.dp))
-        PlannerJourneyTagContent()
+        PlannerJourneyTagContent(tags = tags)
         Spacer(modifier = Modifier.size(48.dp))
         PlannerPikMeContent(pikMes = pikMes)
         Spacer(modifier = Modifier.size(20.dp))
@@ -226,7 +231,9 @@ private fun PlannerForumContent(
 }
 
 @Composable
-private fun PlannerJourneyTagContent() {
+private fun PlannerJourneyTagContent(
+        tags: List<Tag>,
+) {
     var isCollapsed by remember {
         mutableStateOf(false)
     }
@@ -279,16 +286,6 @@ private fun PlannerJourneyTagContent() {
                 enter = expandVertically(),
                 exit = shrinkVertically(),
         ) {
-            val tags = listOf(
-                    Tag(type = TagType.Like(), content = "시러시러"),
-                    Tag(type = TagType.Like(), content = "시러허허"),
-                    Tag(type = TagType.Like(), content = "좋아"),
-                    Tag(type = TagType.Like(), content = "싫어싫"),
-                    Tag(type = TagType.Dislike(), content = "조아아"),
-                    Tag(type = TagType.Dislike(), content = "좋아"),
-                    Tag(type = TagType.Dislike(), content = "시러머버더거서ㅛㅓ"),
-                    Tag(type = TagType.Soso(), content = "상관업"),
-            )
             Column {
                 Spacer(modifier = Modifier.size(16.dp))
                 PlannerTagLayout(
@@ -485,6 +482,7 @@ private fun PlannerPikMeEmptyCard() {
 @Preview(showBackground = true)
 internal fun PlannerScreenPreview() {
     PlannerScreen(
-            pikMes = emptyList()
+            pikMes = emptyList(),
+            tags = emptyList(),
     )
 }
