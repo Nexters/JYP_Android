@@ -1,6 +1,5 @@
 package com.jyp.feature_planner.presentation.planner
 
-import android.util.MutableInt
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
@@ -24,8 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.*
 import com.google.accompanist.flowlayout.FlowRow
 import com.jyp.feature_planner.R
+import com.jyp.feature_planner.R.*
 import com.jyp.feature_planner.domain.PikMe
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.resource.JypColors
@@ -68,8 +69,8 @@ internal fun PlannerScreen(
             frontLayerContent = {
                 PlannerContent(
                         tabTitles = listOf(
-                                stringResource(id = R.string.planner_tab_forum),
-                                stringResource(id = R.string.planner_tab_piki),
+                                stringResource(id = string.planner_tab_forum),
+                                stringResource(id = string.planner_tab_piki),
                         ),
                         selectedTabPosition = selectedTabPosition,
                         tabSelected = { selectedTabPosition = it },
@@ -109,7 +110,7 @@ private fun PlannerBackLayer(
             ) {
                 Image(
                         modifier = Modifier.size(52.dp),
-                        painter = painterResource(id = R.drawable.icon_invite_small),
+                        painter = painterResource(id = drawable.icon_invite_small),
                         contentDescription = null,
                         contentScale = ContentScale.Fit
                 )
@@ -292,7 +293,7 @@ private fun PlannerJourneyTagContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             JypText(
-                    text = stringResource(id = R.string.planner_journey_tags_title),
+                    text = stringResource(id = string.planner_journey_tags_title),
                     type = TextType.TITLE_6,
                     color = JypColors.Text80,
             )
@@ -301,7 +302,7 @@ private fun PlannerJourneyTagContent(
                     horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Image(
-                        painter = painterResource(id = R.drawable.icon_pencil),
+                        painter = painterResource(id = drawable.icon_pencil),
                         contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
@@ -310,14 +311,14 @@ private fun PlannerJourneyTagContent(
                                 .clip(CircleShape)
                                 .rotate(rotateAnimate)
                                 .clickable { isCollapsed = !isCollapsed },
-                        painter = painterResource(id = R.drawable.icon_arrow_top),
+                        painter = painterResource(id = drawable.icon_arrow_top),
                         contentDescription = null,
                 )
             }
         }
         Spacer(modifier = Modifier.size(6.dp))
         JypText(
-                text = stringResource(id = R.string.planner_journey_tags_description),
+                text = stringResource(id = string.planner_journey_tags_description),
                 type = TextType.BODY_3,
                 color = JypColors.Text40,
         )
@@ -374,7 +375,7 @@ private fun PlannerPikMeContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             JypText(
-                    text = stringResource(id = R.string.planner_pik_me_title),
+                    text = stringResource(id = string.planner_pik_me_title),
                     type = TextType.TITLE_6,
                     color = JypColors.Text80,
             )
@@ -387,13 +388,13 @@ private fun PlannerPikMeContent(
                                     indication = null,
                                     onClick = newPikMeClick
                             ),
-                    painter = painterResource(id = R.drawable.icon_add),
+                    painter = painterResource(id = drawable.icon_add),
                     contentDescription = null,
             )
         }
         Spacer(modifier = Modifier.size(6.dp))
         JypText(
-                text = stringResource(id = R.string.planner_pik_me_description),
+                text = stringResource(id = string.planner_pik_me_description),
                 type = TextType.BODY_3,
                 color = JypColors.Text40,
         )
@@ -425,8 +426,16 @@ private fun PlannerPikMeCard(pikMe: PikMe) {
                     .background(JypColors.Background_white100)
                     .padding(20.dp),
     ) {
-        Column(
+        var isPlaying by remember {
+            mutableStateOf(false)
+        }
+        Box(
                 modifier = Modifier
+                        .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { isPlaying = true }
+                        )
                         .size(62.dp)
                         .shadow(
                                 elevation = 2.dp,
@@ -435,19 +444,22 @@ private fun PlannerPikMeCard(pikMe: PikMe) {
                         .clip(CircleShape)
                         .align(Alignment.BottomEnd)
                         .background(JypColors.Background_white100),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                contentAlignment = Alignment.Center,
+//                verticalArrangement = Arrangement.Center,
+//                horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Image(
-                    modifier = Modifier.size(width = 30.dp, height = 24.dp),
-                    painter = painterResource(id = R.drawable.icon_heart_like),
-                    contentDescription = null,
+            val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.like_alone_alpha))
+            LottieAnimation(
+                    composition = composition,
+                    isPlaying = isPlaying,
             )
 
-            if (pikMe.likeCount > 0) {
-                Spacer(modifier = Modifier.size(3.dp))
+            if (isPlaying) {
                 Text(
-                        text = pikMe.likeCount.toString(),
+                        modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = 8.dp),
+                        text = "1",
                         color = JypColors.Pink,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -485,7 +497,7 @@ private fun PlannerPikMeCard(pikMe: PikMe) {
                 Spacer(modifier = Modifier.size(2.dp))
                 Image(
                         modifier = Modifier.size(36.dp),
-                        painter = painterResource(id = R.drawable.icon_eyes),
+                        painter = painterResource(id = drawable.icon_eyes),
                         contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(3.dp))
@@ -521,7 +533,7 @@ private fun PlannerPikMeEmptyCard(
     ) {
         Spacer(modifier = Modifier.size(32.dp))
         Image(
-                painter = painterResource(id = R.drawable.icon_pik_me_empty),
+                painter = painterResource(id = drawable.icon_pik_me_empty),
                 contentDescription = null,
         )
         Spacer(modifier = Modifier.size(24.dp))

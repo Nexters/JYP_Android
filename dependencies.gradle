@@ -10,7 +10,8 @@ ext {
             landscapist_version                        : "1.4.9",
             compose_customview_version                 : "1.1.0",
             compose_customview_poolingcontainer_version: "1.0.0",
-            compose_flowlayout                         : "0.25.0",
+            compose_flowlayout_version                 : "0.25.0",
+            lottie_version                             : "5.2.0",
     ]
 
     composeDependencies = [
@@ -20,7 +21,7 @@ ext {
                     compose_preview   : "androidx.compose.ui:ui-tooling-preview:$versions.compose_version",
                     compose_activity  : "androidx.activity:activity-compose:$versions.compose_activity_version",
                     compose_navigation: "androidx.navigation:navigation-compose:$versions.compose_navigation_version",
-                    compose_flowlayout: "com.google.accompanist:accompanist-flowlayout:$versions.compose_flowlayout",
+                    compose_flowlayout: "com.google.accompanist:accompanist-flowlayout:$versions.compose_flowlayout_version",
             ],
             debugImplementation: [
                     compose_tooling                    : "androidx.compose.ui:ui-tooling:$versions.compose_version",
@@ -52,5 +53,11 @@ ext {
             implementation: [
                     landscapist_glide: "com.github.skydoves:landscapist-glide:$versions.landscapist_version",
             ],
+    ]
+
+    lottieDependencies = [
+            implementation: [
+                    lottie_compose: "com.airbnb.android:lottie-compose:$versions.lottie_version",
+            ]
     ]
 }
