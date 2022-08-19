@@ -38,7 +38,10 @@ fun JypTextButton(
             false -> onClickDisabled
         },
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = buttonColorSet.backgroundColor
+            backgroundColor = when (enabled) {
+                true -> buttonColorSet.backgroundColor
+                false -> ButtonColorSetType.GRAY.backgroundColor
+            }
         ),
         contentPadding = PaddingValues(0.dp)
     ) {
