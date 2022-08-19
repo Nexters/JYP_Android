@@ -96,6 +96,7 @@ fun AvatarList(
         showBorder: Boolean = true,
         borderColor: Color = JypColors.Background_white100,
         limitListCount: Int = Int.MAX_VALUE,
+        tailContent: @Composable () -> Unit = {},
 ) {
     val overflowCount: Int = profileImageUrls.size - limitListCount
 
@@ -132,6 +133,8 @@ fun AvatarList(
                             borderColor = borderColor,
                     )
                 }
+
+                tailContent.invoke()
             }
         }
     }

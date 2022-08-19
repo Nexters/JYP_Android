@@ -3,7 +3,6 @@ package com.jyp.feature_planner.presentation.planner
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -11,11 +10,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,11 +28,11 @@ import com.jyp.feature_planner.R
 import com.jyp.feature_planner.domain.PikMe
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.ui.avatar.AvatarList
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBar
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.tag.DecoratedTag
-import com.jyp.jyp_design.ui.tag.TagType
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
@@ -39,6 +40,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @Composable
 internal fun PlannerScreen(
         pikMes: List<PikMe>,
+        joinMembers: List<String>,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
 ) {
@@ -57,7 +59,9 @@ internal fun PlannerScreen(
                 )
             },
             backLayerContent = {
-                PlannerBackLayer()
+                PlannerBackLayer(
+                        profileImageUrls = joinMembers,
+                )
             },
             frontLayerContent = {
                 PlannerContent(
@@ -78,7 +82,9 @@ internal fun PlannerScreen(
 }
 
 @Composable
-private fun PlannerBackLayer() {
+private fun PlannerBackLayer(
+        profileImageUrls: List<String>,
+) {
     Column(
             modifier = Modifier
                     .fillMaxWidth()
@@ -91,27 +97,43 @@ private fun PlannerBackLayer() {
                 color = JypColors.Text_white,
         )
         Spacer(modifier = Modifier.size(16.dp))
-        Button(
-                modifier = Modifier
-                        .height(40.dp),
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(backgroundColor = JypColors.Pink),
-                contentPadding = PaddingValues(0.dp)
-        ) {
-            Spacer(modifier = Modifier.size(8.dp))
-            Image(
-                    modifier = Modifier.size(36.dp),
-                    painter = painterResource(id = R.drawable.icon_smile_plus),
-                    contentDescription = null,
-            )
-            Spacer(modifier = Modifier.size(2.dp))
-            JypText(
-                    text = "일행 초대하기",
-                    type = TextType.BODY_3,
-                    color = JypColors.Text_white,
-            )
-            Spacer(modifier = Modifier.size(10.dp))
+        Box {
+            AvatarList(
+                    profileImageUrls = profileImageUrls,
+                    width = 44.dp,
+                    height = 44.dp,
+                    borderColor = JypColors.Background_grey300,
+            ) {
+                Image(
+                        modifier = Modifier.size(52.dp),
+                        painter = painterResource(id = R.drawable.icon_invite_small),
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit
+                )
+            }
         }
+
+//        Button(
+//                modifier = Modifier
+//                        .height(40.dp),
+//                onClick = { },
+//                colors = ButtonDefaults.buttonColors(backgroundColor = JypColors.Pink),
+//                contentPadding = PaddingValues(0.dp)
+//        ) {
+//            Spacer(modifier = Modifier.size(8.dp))
+//            Image(
+//                    modifier = Modifier.size(36.dp),
+//                    painter = painterResource(id = R.drawable.icon_smile_plus),
+//                    contentDescription = null,
+//            )
+//            Spacer(modifier = Modifier.size(2.dp))
+//            JypText(
+//                    text = "일행 초대하기",
+//                    type = TextType.BODY_3,
+//                    color = JypColors.Text_white,
+//            )
+//            Spacer(modifier = Modifier.size(10.dp))
+//        }
         Spacer(modifier = Modifier.size(16.dp))
     }
 }
@@ -500,6 +522,7 @@ private fun PlannerPikMeEmptyCard() {
 internal fun PlannerScreenPreview() {
     PlannerScreen(
             pikMes = emptyList(),
+            joinMembers = emptyList(),
             tags = emptyList(),
             tagClick = {},
     )
