@@ -28,6 +28,7 @@ import com.jyp.feature_my_journey.R
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.avatar.AvatarList
+import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.shadow.drawShadow
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
@@ -261,14 +262,23 @@ internal fun PlannedJourneyEmptyScreen(
                 )
             }
 
-            Button(
+            JypTextButton(
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .height(40.dp),
-                    onClick = onClickNewJourney,
-            ) {
-                Text(text = "만들기", fontSize = 16.sp, color = JypColors.Text_white)
-            }
+                            .fillMaxWidth(),
+                    text = "후보 장소 추가하기",
+                    buttonType = ButtonType.MEDIUM,
+                    buttonColorSet = ButtonColorSetType.BLACK,
+                    onClickEnabled = onClickNewJourney,
+                    enabled = true,
+            )
+//            Button(
+//                    modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(40.dp),
+//                    onClick = onClickNewJourney,
+//            ) {
+//                Text(text = "만들기", fontSize = 16.sp, color = JypColors.Text_white)
+//            }
         }
     }
 }
