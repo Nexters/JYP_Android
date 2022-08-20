@@ -75,7 +75,7 @@ internal fun CreatePlannerScreen(
                     buttonType = ButtonType.THICK,
                     buttonColorSet = ButtonColorSetType.PINK,
                     enabled = when (step) {
-                        CreatePlannerStep.TITLE -> title.isNotEmpty() && title.length < 6
+                        CreatePlannerStep.TITLE -> title.isNotEmpty() && title.length <= 6
                         CreatePlannerStep.DATE -> startDateMillis > 0 && endDateMillis > 0
                         CreatePlannerStep.TASTE -> tags.count { it.state == TagState.SELECTED } >= 1
                     },
