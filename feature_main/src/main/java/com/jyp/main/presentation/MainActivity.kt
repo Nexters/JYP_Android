@@ -18,6 +18,7 @@ import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.presentation.my_journey.MyJourneyScreen
 import com.jyp.feature_my_journey.presentation.my_journey.MyJourneyViewModel
 import com.jyp.feature_my_page.presentation.MyPageScreen
+import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity
 import com.jyp.feature_planner.presentation.planner.PlannerActivity
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
@@ -32,6 +33,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             Screen(
                     myJourneyViewModel = myJourneyViewModel,
+                    onClickNewJourney = {
+                        startActivity(Intent(this, CreatePlannerActivity::class.java))
+                    },
                     onClickPlanner = {
                         startActivity(Intent(this, PlannerActivity::class.java))
                     }
@@ -43,6 +47,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun Screen(
         myJourneyViewModel: MyJourneyViewModel,
+        onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
 ) {
     MainScreen(
@@ -66,7 +71,7 @@ private fun Screen(
                                             userName = userName,
                                             plannedJourneys = plannedJourneys,
                                             pastJourneys = pastJourneys,
-                                            onClickNewJourney = myJourneyViewModel::fetchJourneyList,
+                                            onClickNewJourney = onClickNewJourney,
                                             onClickPlanner = onClickPlanner,
                                     )
                                 }

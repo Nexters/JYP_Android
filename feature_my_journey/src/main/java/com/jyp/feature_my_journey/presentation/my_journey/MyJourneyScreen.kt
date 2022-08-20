@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.sp
 import com.jyp.feature_my_journey.R
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.resource.JypDrawableRes
 import com.jyp.jyp_design.ui.avatar.AvatarList
+import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.shadow.drawShadow
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
@@ -109,6 +111,7 @@ internal fun MyJourneyContent(
                 ),
                 selectedTabPosition = selectedTabPosition,
                 tabSelected = { selectedTabPosition = it },
+                onClickNewJourney = onClickNewJourney,
         )
 
         when (selectedTabPosition) {
@@ -131,6 +134,7 @@ internal fun MyJourneyContentTab(
         tabTitles: List<String>,
         selectedTabPosition: Int,
         tabSelected: (position: Int) -> Unit,
+        onClickNewJourney: () -> Unit,
 ) {
     Row(
             modifier = Modifier
@@ -143,46 +147,58 @@ internal fun MyJourneyContentTab(
                                 strokeWidth = 2.dp.toPx()
                         )
                     }
-                    .padding(top = 24.dp, start = 24.dp, end = 20.dp)
+                    .padding(top = 24.dp, start = 24.dp, end = 20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        tabTitles.forEachIndexed { index, tabTitle ->
-            val selected = selectedTabPosition == index
-            Text(
-                    modifier = Modifier
-                            .let { modifier ->
-                                if (index > 0) {
-                                    modifier.padding(start = 28.dp)
-                                } else {
-                                    modifier
+        Row {
+            tabTitles.forEachIndexed { index, tabTitle ->
+                val selected = selectedTabPosition == index
+                Text(
+                        modifier = Modifier
+                                .let { modifier ->
+                                    if (index > 0) {
+                                        modifier.padding(start = 28.dp)
+                                    } else {
+                                        modifier
+                                    }
                                 }
-                            }
-                            .drawWithContent {
-                                drawContent()
-                                if (selected) {
-                                    drawRoundRect(
-                                            color = JypColors.Text80,
-                                            topLeft = Offset(0f, size.height + 3.dp.toPx()),
-                                            cornerRadius = CornerRadius(x = 16.dp.toPx(), y = 16.dp.toPx()),
-                                    )
+                                .drawWithContent {
+                                    drawContent()
+                                    if (selected) {
+                                        drawRoundRect(
+                                                color = JypColors.Text80,
+                                                topLeft = Offset(0f, size.height + 3.dp.toPx()),
+                                                cornerRadius = CornerRadius(x = 16.dp.toPx(), y = 16.dp.toPx()),
+                                        )
+                                    }
                                 }
-                            }
-                            .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberRipple()
-                            ) {
-                                tabSelected.invoke(index)
-                            }
-                            .padding(vertical = 6.dp),
-                    text = tabTitle,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = if (selected) {
-                        JypColors.Text80
-                    } else {
-                        JypColors.Text40
-                    },
-            )
+                                .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = rememberRipple()
+                                ) {
+                                    tabSelected.invoke(index)
+                                }
+                                .padding(vertical = 6.dp),
+                        text = tabTitle,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (selected) {
+                            JypColors.Text80
+                        } else {
+                            JypColors.Text40
+                        },
+                )
+            }
         }
+        Image(
+                modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable(onClick = onClickNewJourney)
+                        .align(Alignment.Bottom)
+                        .padding(bottom = 7.dp),
+                painter = painterResource(id = JypDrawableRes.add),
+                contentDescription = null,
+        )
     }
 }
 
@@ -261,14 +277,23 @@ internal fun PlannedJourneyEmptyScreen(
                 )
             }
 
-            Button(
+            JypTextButton(
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .height(40.dp),
-                    onClick = onClickNewJourney,
-            ) {
-                Text(text = "만들기", fontSize = 16.sp, color = JypColors.Text_white)
-            }
+                            .fillMaxWidth(),
+                    text = "후보 장소 추가하기",
+                    buttonType = ButtonType.MEDIUM,
+                    buttonColorSet = ButtonColorSetType.BLACK,
+                    onClickEnabled = onClickNewJourney,
+                    enabled = true,
+            )
+//            Button(
+//                    modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(40.dp),
+//                    onClick = onClickNewJourney,
+//            ) {
+//                Text(text = "만들기", fontSize = 16.sp, color = JypColors.Text_white)
+//            }
         }
     }
 }
