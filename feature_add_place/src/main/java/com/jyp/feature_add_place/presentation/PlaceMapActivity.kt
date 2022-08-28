@@ -55,10 +55,10 @@ class PlaceMapActivity : Activity() {
     }
 
     private fun initComposeView() {
-        // Todo - Set const val and Get place info from intent.
-        val placeName = intent.getStringExtra("PLACE_NAME") ?: "아르떼 뮤지엄"
-        val placeCategory = intent.getStringExtra("PLACE_CATEGORY") ?: "문화시설"
-        val placeAddress = intent.getStringExtra("PLACE_ADDRESS") ?: "강원 강릉시 난설헌로 131"
+        // Todo - Get place info from intent.
+        val placeName = intent.getStringExtra(PLACE_NAME) ?: "아르떼 뮤지엄"
+        val placeCategory = intent.getStringExtra(PLACE_CATEGORY) ?: "문화시설"
+        val placeAddress = intent.getStringExtra(PLACE_ADDRESS) ?: "강원 강릉시 난설헌로 131"
 
         viewBinding.composeViewAppBar.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -90,14 +90,22 @@ class PlaceMapActivity : Activity() {
     }
 
     private fun initKakaoMapView() {
-        // Todo - Set const val and Get place info from intent.
-        val placeLatitude = intent.getDoubleExtra("PLACE_LATITUDE", 0.0)
-        val placeLongitude = intent.getDoubleExtra("PLACE_LONGITUDE", 0.0)
+        // Todo - Get place info from intent.
+        val placeLatitude = intent.getDoubleExtra(PLACE_LATITUDE, 0.0)
+        val placeLongitude = intent.getDoubleExtra(PLACE_LONGITUDE, 0.0)
 
         mapView.apply {
             setMapCenterPoint(MapPoint.mapPointWithGeoCoord(placeLatitude, placeLongitude), true)
         }
         viewBinding.frameLayoutMapViewContainer.addView(mapView)
+    }
+    
+    companion object {
+        private const val PLACE_NAME = "PLACE_NAME"
+        private const val PLACE_CATEGORY = "PLACE_CATEGORY"
+        private const val PLACE_ADDRESS = "PLACE_ADDRESS"
+        private const val PLACE_LATITUDE = "PLACE_LATITUDE"
+        private const val PLACE_LONGITUDE = "PLACE_LONGITUDE"
     }
 }
 
