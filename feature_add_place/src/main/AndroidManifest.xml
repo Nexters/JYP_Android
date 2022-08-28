@@ -2,4 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jyp.feature_add_place">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+
+    <application>
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="${kakao_native_app_key}" />
+
+        <activity
+            android:name="com.jyp.feature_add_place.presentation.PlaceMapActivity"
+            android:exported="false" />
+    </application>
 </manifest>
