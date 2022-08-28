@@ -2,7 +2,6 @@ package com.jyp.feature_planner.presentation.create_planner
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -56,7 +55,6 @@ class CreatePlannerActivity : AppCompatActivity() {
                         )
                     },
                     submitOnTaste = {
-                        Toast.makeText(this, "여행 계획을 만들었어요!", Toast.LENGTH_SHORT).show()
                         finishAffinity()
                     }
             )

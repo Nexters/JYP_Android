@@ -42,6 +42,12 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
+
+    // TODO : 제거해야함
+    override fun onRestart() {
+        super.onRestart()
+        myJourneyViewModel.fetchJourneyList()
+    }
 }
 
 @Composable
