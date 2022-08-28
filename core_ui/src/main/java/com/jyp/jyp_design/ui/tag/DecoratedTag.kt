@@ -22,6 +22,7 @@ fun DecoratedTag(
         tagType: TagType,
         tagState: TagState,
         content: String,
+        tagCount: Int,
 ) {
     Row(
             modifier = modifier
@@ -41,12 +42,20 @@ fun DecoratedTag(
                 tagType = tagType,
                 tagState = tagState,
         )
-        Spacer(modifier = Modifier.size(9.dp))
+        Spacer(modifier = Modifier.size(6.dp))
         JypText(
                 text = content,
                 type = TextType.TAG_1,
                 color = tagType.getTextColor(tagState),
         )
+        if (tagCount > 1) {
+            Spacer(modifier = Modifier.size(6.dp))
+            JypText(
+                    text = tagCount.toString(),
+                    type = TextType.TAG_1,
+                    color = tagType.getTextColor(tagState),
+            )
+        }
         Spacer(modifier = Modifier.size(8.dp))
     }
 }
@@ -72,31 +81,34 @@ private fun DecoratedTagIcon(
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview
 internal fun DecoratedTagSosoPreview() {
     DecoratedTag(
             tagType = TagType.Soso(),
             tagState = TagState.DEFAULT,
             content = "상관없어",
+            tagCount = 3,
     )
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview
 internal fun DecoratedTagLikePreview() {
     DecoratedTag(
             tagType = TagType.Like(),
             tagState = TagState.DEFAULT,
-            content = "좋아용"
+            content = "좋아용",
+            tagCount = 2,
     )
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview
 internal fun DecoratedTagDisLikePreview() {
     DecoratedTag(
             tagType = TagType.Dislike(),
             tagState = TagState.DEFAULT,
-            content = "좋지않아"
+            content = "좋지않아",
+            tagCount = 0,
     )
 }
