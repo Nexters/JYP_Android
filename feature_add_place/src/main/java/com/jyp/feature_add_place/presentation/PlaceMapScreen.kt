@@ -1,4 +1,4 @@
-package com.jyp.feature_planner.presentation.place_info
+package com.jyp.feature_add_place.presentation
 
 import android.app.Activity
 import android.content.Intent
@@ -11,13 +11,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
-import com.jyp.feature_planner.R
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
 import com.jyp.jyp_design.ui.button.ButtonType
@@ -91,12 +89,12 @@ internal fun PlaceMapScreen() {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.image_map),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillHeight
-            )
+//            Image(
+//                painter = painterResource(id = R.drawable.image_map),
+//                contentDescription = null,
+//                modifier = Modifier.fillMaxSize(),
+//                contentScale = ContentScale.FillHeight
+//            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -148,7 +146,7 @@ internal fun PlaceMapScreen() {
                         contentPadding = PaddingValues(horizontal = 8.dp)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon_eyes),
+                            painter = painterResource(id = com.jyp.jyp_design.R.drawable.icon_eyes),
                             contentDescription = null,
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )

@@ -1,4 +1,4 @@
-package com.jyp.feature_planner.presentation.place_info
+package com.jyp.feature_add_place.presentation
 
 import android.annotation.SuppressLint
 import android.app.Activity
