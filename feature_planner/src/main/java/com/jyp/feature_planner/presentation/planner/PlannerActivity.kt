@@ -37,22 +37,21 @@ private fun Screen(viewModel: PlannerViewModel) {
     val pikMes by viewModel.pikMes.collectAsState()
     val tags by viewModel.tags.collectAsState()
 
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-            bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+    val bottomSheetScaffoldState = rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
     )
     val coroutineScope = rememberCoroutineScope()
     var selectedTag by remember {
         mutableStateOf(tags.firstOrNull())
     }
 
-    BottomSheetScaffold(
-            scaffoldState = bottomSheetScaffoldState,
+    ModalBottomSheetLayout(
+            sheetState = bottomSheetScaffoldState,
             sheetContent = {
                 selectedTag?.let {
                     TagSelectedBottomSheetScreen(tag = it)
                 }
             },
-            sheetPeekHeight = 0.dp,
             sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
         Box(
@@ -70,8 +69,8 @@ private fun Screen(viewModel: PlannerViewModel) {
                     tagClick = {
                         selectedTag = it
                         coroutineScope.launch {
-                            if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
-                                bottomSheetScaffoldState.bottomSheetState.expand()
+                            if (!bottomSheetScaffoldState.isVisible) {
+                                bottomSheetScaffoldState.show()
                             }
                         }
                     },
@@ -79,14 +78,6 @@ private fun Screen(viewModel: PlannerViewModel) {
                         viewModel.fetchPikMes()
                     }
             )
-            if (!bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
-                Box(
-                        modifier = Modifier
-                                .fillMaxSize()
-                                .alpha(0.3f)
-                                .background(Color(0xFF000000))
-                )
-            }
         }
     }
 }
