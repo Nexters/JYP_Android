@@ -20,6 +20,7 @@ class MyJourneyViewModel @Inject constructor(
     val pastJourneys: StateFlow<List<Journey>>
         get() = _pastJourneys
 
+    @Inject
     fun fetchJourneyList() {
         viewModelScope.launch {
             _plannedJourneys.value = listOf(

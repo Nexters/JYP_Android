@@ -42,6 +42,7 @@ fun MyJourneyScreen(
         pastJourneys: List<Journey>,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
+        onClickMore: (journey: Journey) -> Unit,
 ) {
     Column(
             modifier = Modifier
@@ -58,6 +59,7 @@ fun MyJourneyScreen(
                 pastJourneys = pastJourneys,
                 onClickNewJourney = onClickNewJourney,
                 onClickPlanner = onClickPlanner,
+                onClickMore = onClickMore,
         )
     }
 }
@@ -95,6 +97,7 @@ internal fun MyJourneyContent(
         pastJourneys: List<Journey>,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
+        onClickMore: (journey: Journey) -> Unit,
 ) {
     var selectedTabPosition by remember {
         mutableStateOf(0)
@@ -119,10 +122,12 @@ internal fun MyJourneyContent(
                     journeys = plannedJourneys,
                     onClickNewJourney = onClickNewJourney,
                     onClickPlanner = onClickPlanner,
+                    onClickMore = onClickMore,
             )
             1 -> PastJourney(
                     journeys = pastJourneys,
                     onClickPlanner = onClickPlanner,
+                    onClickMore = onClickMore,
             )
         }
 
@@ -207,6 +212,7 @@ internal fun PlannedJourney(
         journeys: List<Journey>,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
+        onClickMore: (journey: Journey) -> Unit,
 ) {
     if (journeys.isEmpty()) {
         PlannedJourneyEmptyScreen(onClickNewJourney = onClickNewJourney)
@@ -215,7 +221,7 @@ internal fun PlannedJourney(
                 contentPadding = PaddingValues(horizontal = 24.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            journeys.forEachIndexed { index, journey ->
+            journeys.forEach { journey ->
                 item {
                     JourneyItem(
                             journeyName = journey.title,
@@ -225,6 +231,9 @@ internal fun PlannedJourney(
                             onClickPlanner = onClickPlanner,
                             themeType = ThemeType.values()[journey.theme],
                             profileUrls = journey.profileUrls,
+                            onClickMore = {
+                                onClickMore.invoke(journey)
+                            }
                     )
                 }
             }
@@ -286,14 +295,6 @@ internal fun PlannedJourneyEmptyScreen(
                     onClickEnabled = onClickNewJourney,
                     enabled = true,
             )
-//            Button(
-//                    modifier = Modifier
-//                            .fillMaxWidth()
-//                            .height(40.dp),
-//                    onClick = onClickNewJourney,
-//            ) {
-//                Text(text = "만들기", fontSize = 16.sp, color = JypColors.Text_white)
-//            }
         }
     }
 }
@@ -302,6 +303,7 @@ internal fun PlannedJourneyEmptyScreen(
 internal fun PastJourney(
         journeys: List<Journey>,
         onClickPlanner: () -> Unit,
+        onClickMore: (journey: Journey) -> Unit,
 ) {
     if (journeys.isEmpty()) {
         PastJourneyEmptyScreen()
@@ -320,6 +322,9 @@ internal fun PastJourney(
                             onClickPlanner = onClickPlanner,
                             themeType = ThemeType.values()[journey.theme],
                             profileUrls = journey.profileUrls,
+                            onClickMore = {
+                                onClickMore.invoke(journey)
+                            }
                     )
                 }
             }
@@ -375,13 +380,14 @@ internal fun PastJourneyEmptyScreen() {
 
 @Composable
 internal fun JourneyItem(
-        onClickPlanner: () -> Unit,
         journeyName: String,
         dDay: String,
         startDay: String,
         endDay: String,
         themeType: ThemeType,
         profileUrls: List<String>,
+        onClickPlanner: () -> Unit,
+        onClickMore: () -> Unit,
 ) {
     Box(
             modifier = Modifier
@@ -446,9 +452,8 @@ internal fun JourneyItem(
                                 .clickable(
                                         interactionSource = remember { MutableInteractionSource() },
                                         indication = rememberRipple(),
-                                ) {
-
-                                },
+                                        onClick = onClickMore,
+                                ),
                         painter = painterResource(id = R.drawable.ic_more_menu),
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(JypColors.Text_white)
@@ -481,6 +486,7 @@ internal fun MyJourneyScreenEmptyPreview() {
             pastJourneys = emptyList(),
             onClickNewJourney = {},
             onClickPlanner = {},
+            onClickMore = {}
     )
 }
 
@@ -510,6 +516,7 @@ internal fun MyJourneyScreenPreview() {
             ),
             pastJourneys = emptyList(),
             onClickNewJourney = {},
-            onClickPlanner = {}
+            onClickPlanner = {},
+            onClickMore = {}
     )
 }
