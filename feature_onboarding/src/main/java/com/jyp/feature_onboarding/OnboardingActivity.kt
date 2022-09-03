@@ -1,7 +1,15 @@
 package com.jyp.feature_onboarding
 
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 
-class OnboardingActivity: AppCompatActivity() {
-    
+
+class OnboardingActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+
+        }
+    }
 }
