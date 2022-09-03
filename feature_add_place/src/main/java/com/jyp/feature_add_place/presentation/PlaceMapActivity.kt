@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -270,16 +271,22 @@ internal fun ComposablePlaceMarker(
                 type = TextType.TITLE_6,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
-                    .padding(top = 24.dp),
-                color = JypColors.Text80
+                    .padding(top = 24.dp)
+                    .align(Alignment.CenterHorizontally),
+                maxLines = 1,
+                color = JypColors.Text80,
+                textAlign = TextAlign.Center
             )
             JypText(
                 text = placeCategory,
                 type = TextType.BODY_4,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
-                    .padding(bottom = 8.dp),
-                color = JypColors.Text80
+                    .padding(bottom = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                maxLines = 1,
+                color = JypColors.Text80,
+                textAlign = TextAlign.Center
             )
         }
         Image(
