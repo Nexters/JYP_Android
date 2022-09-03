@@ -1,6 +1,7 @@
 package com.jyp.feature_my_journey.presentation.my_journey
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +22,7 @@ fun JourneyMoreBottomSheetScreen(
     Column(
             modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 28.dp, bottom = 24.dp)
+                    .padding(start = 24.dp, end = 24.dp, top = 28.dp, bottom = 54.dp)
     ) {
         Header(journey.title)
         Spacer(modifier = Modifier.size(32.dp))
@@ -36,7 +37,6 @@ fun JourneyMoreBottomSheetScreen(
                         ),
                 )
         )
-        Spacer(modifier = Modifier.size(54.dp))
     }
 }
 
@@ -70,7 +70,10 @@ private fun SelectOptions(
             modifier = Modifier.fillMaxWidth(),
     ) {
         options.forEach { option ->
-            Row {
+            Row(
+                    modifier = Modifier
+                            .clickable { option.onClickOption.invoke() },
+            ) {
                 Image(
                         painter = option.icon,
                         contentDescription = null,

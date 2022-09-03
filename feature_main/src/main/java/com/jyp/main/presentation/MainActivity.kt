@@ -56,12 +56,14 @@ private fun Screen(
         onClickPlanner: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val modalBottomSheetState = rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Hidden
-    )
-    var moreClickedJourney by remember {
-        mutableStateOf<Journey?>(null)
+
+    var currentBottomSheetItem by remember {
+        mutableStateOf<MainBottomSheetItem>(MainBottomSheetItem.None)
     }
+
+    val modalBottomSheetState = rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+    )
 
     val myJourneyScreenItem = createMyJourneyScreenItem(
             myJourneyViewModel = myJourneyViewModel,
@@ -69,7 +71,8 @@ private fun Screen(
             onClickPlanner = onClickPlanner,
             onClickMore = { journey ->
                 coroutineScope.launch {
-                    moreClickedJourney = journey
+                    currentBottomSheetItem = MainBottomSheetItem.JourneyMore(journey)
+
                     modalBottomSheetState.show()
                 }
             }
@@ -81,17 +84,25 @@ private fun Screen(
     ModalBottomSheetLayout(
             sheetState = modalBottomSheetState,
             sheetContent = {
-                moreClickedJourney.let { journey ->
-                    if (journey != null) {
-                        JourneyMoreBottomSheetScreen(
-                                journey = journey,
-                                onClickRemove = {},
-                        )
-                    } else {
+                when (val bottomSheetItem = currentBottomSheetItem) {
+                    is MainBottomSheetItem.None -> {
                         Box(
                                 modifier = Modifier
                                         .background(JypColors.Background_grey300)
                                         .size(1.dp)
+                        )
+                    }
+                    is MainBottomSheetItem.JourneyMore -> {
+                        JourneyMoreBottomSheetScreen(
+                                journey = bottomSheetItem.journey,
+                                onClickRemove = { journey ->
+                                    currentBottomSheetItem = MainBottomSheetItem.ConfirmRemoveJourney(journey)
+                                },
+                        )
+                    }
+                    is MainBottomSheetItem.ConfirmRemoveJourney -> {
+                        ConfirmRemoveJourneyBottomSheetScreen(
+                                journey = bottomSheetItem.journey,
                         )
                     }
                 }
