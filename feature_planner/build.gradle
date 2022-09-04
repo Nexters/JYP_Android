@@ -52,4 +52,6 @@ dependencies {
 
     implementation hiltDependencies.implementation.values()
     kapt hiltDependencies.kapt.values()
+
+    implementation lottieDependencies.implementation.values()
 }
