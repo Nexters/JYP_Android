@@ -5,11 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.*
+import androidx.compose.animation.core.keyframes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +32,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: MainViewModel by viewModels()
     private val myJourneyViewModel: MyJourneyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +40,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Screen(
+                    mainViewModel = mainViewModel,
                     myJourneyViewModel = myJourneyViewModel,
                     onClickNewJourney = {
                         startActivity(Intent(this, CreatePlannerActivity::class.java))
@@ -51,6 +56,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun Screen(
+        mainViewModel: MainViewModel,
         myJourneyViewModel: MyJourneyViewModel,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
@@ -115,6 +121,36 @@ private fun Screen(
                         anotherJourneyScreenItem,
                         myPageScreenItem,
                 )
+        )
+    }
+
+    SelectProfileScreen(mainViewModel)
+}
+
+@Composable
+private fun SelectProfileScreen(mainViewModel: MainViewModel) {
+    val selectedPosition by mainViewModel.profileSelectedPosition.collectAsState()
+    var isShow by remember {
+        mutableStateOf(true)
+    }
+
+    AnimatedVisibility(
+            visible = isShow,
+            exit = slideOutVertically(
+                    targetOffsetY = { it },
+                    animationSpec = keyframes {
+                        durationMillis = 400
+                    }
+            ),
+    ) {
+        SelectProfileScreen(
+                name = "홍길동",
+                selectedPosition = selectedPosition,
+                showDim = isShow,
+                onSelectProfile = mainViewModel::selectProfile,
+                submitProfile = {
+                    isShow = false
+                }
         )
     }
 }

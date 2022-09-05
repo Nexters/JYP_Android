@@ -54,6 +54,8 @@ dependencies {
     implementation composeDependencies.implementation.values()
     debugImplementation composeDependencies.debugImplementation.values()
 
+    implementation imageDependencies.implementation.values()
+
     implementation hiltDependencies.implementation.values()
     kapt hiltDependencies.kapt.values()
 }

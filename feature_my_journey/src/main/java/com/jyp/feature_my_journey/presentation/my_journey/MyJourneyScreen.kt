@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.jyp.feature_my_journey.R
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.resource.JypColors
-import com.jyp.jyp_design.resource.JypDrawableRes
+import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.avatar.AvatarList
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.shadow.drawShadow
@@ -201,7 +199,7 @@ internal fun MyJourneyContentTab(
                         .clickable(onClick = onClickNewJourney)
                         .align(Alignment.Bottom)
                         .padding(bottom = 7.dp),
-                painter = painterResource(id = JypDrawableRes.add),
+                painter = JypPainter.add,
                 contentDescription = null,
         )
     }
