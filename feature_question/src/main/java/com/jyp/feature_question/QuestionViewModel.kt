@@ -1,34 +1,22 @@
 package com.jyp.feature_question
 
 import androidx.lifecycle.*
-import kotlinx.coroutines.launch
 
 
-class QuestionViewModel(
-    questionRepositoryImpl: QuestionRepositoryImpl
-) : ViewModel() {
+class QuestionViewModel: ViewModel() {
 
-    private val _questionDataRepository = MutableLiveData<List<QuestionData>>()
-    val questionData: LiveData<List<QuestionData>> get() = _questionDataRepository
+    private var _selectedQuestionOptions = MutableLiveData<List<Int>>()
+    val selectedQuestionOptions: LiveData<List<Int>> get() = _selectedQuestionOptions
+
+    private val updatedSelectedQuestionOptions = mutableListOf<Int>()
 
 
-    init {
-        viewModelScope.launch {
-            _questionDataRepository.postValue(questionRepositoryImpl.getQuestion())
-        }
-    }
 
-    fun updateResponseLiveData(questionIndex: Int, selectedOption: Int) {
-        _questionDataRepository.value
-    }
-}
+    fun setSelectedQuestionOptions(index: Int, selectedOption: Int) {
+        updatedSelectedQuestionOptions.clear()
+        _selectedQuestionOptions.value?.forEach { updatedSelectedQuestionOptions.add(it) }
 
-class QuestionViewModelFactory(
-    private val questionRepositoryImpl: QuestionRepositoryImpl
-) : ViewModelProvider.NewInstanceFactory() {
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return QuestionViewModel(questionRepositoryImpl) as T
+        updatedSelectedQuestionOptions.add(index, selectedOption)
+        _selectedQuestionOptions.value = updatedSelectedQuestionOptions
     }
 }
