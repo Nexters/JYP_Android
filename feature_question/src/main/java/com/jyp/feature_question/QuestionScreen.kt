@@ -34,8 +34,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-internal fun QuestionScreen() {
-
+internal fun QuestionScreen(
+    viewModel: QuestionViewModel
+) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
     val questions = listOf(
@@ -55,6 +56,7 @@ internal fun QuestionScreen() {
             QuestionViewPager(
                 pagerState = pagerState,
                 questions = questions,
+                viewModel = viewModel,
                 modifier = Modifier
                     .fillMaxSize()
                     .weight(1f, false)
@@ -110,6 +112,7 @@ internal fun QuestionAppBar(
 internal fun QuestionViewPager(
     pagerState: PagerState,
     questions: List<QuestionEnum>,
+    viewModel: QuestionViewModel,
     modifier: Modifier
 ) {
     HorizontalPager(
@@ -120,13 +123,17 @@ internal fun QuestionViewPager(
         itemSpacing = 0.dp,
         contentPadding = PaddingValues(0.dp)
     ) { page ->
-        QuestionScreenItem(question = questions[page])
+        QuestionScreenItem(
+            question = questions[page],
+            viewModel = viewModel
+        )
     }
 }
 
 @Composable
 internal fun QuestionScreenItem(
-    question: QuestionEnum
+    question: QuestionEnum,
+    viewModel: QuestionViewModel
 ) {
     Column(
         modifier = Modifier.padding(horizontal = 24.dp),
@@ -146,7 +153,7 @@ internal fun QuestionScreenItem(
         Spacer(modifier = Modifier.size(88.dp))
         QuestionOptionRadioButtons(
             question = question,
-            viewModel = QuestionViewModel()
+            viewModel = viewModel
         )
         Spacer(modifier = Modifier.size(44.dp))
     }
@@ -272,5 +279,7 @@ internal fun QuestionDoneButton(
 @Composable
 @Preview(showBackground = true)
 internal fun QuestionScreenPreview() {
-    QuestionScreen()
+    QuestionScreen(
+        viewModel = QuestionViewModel()
+    )
 }
