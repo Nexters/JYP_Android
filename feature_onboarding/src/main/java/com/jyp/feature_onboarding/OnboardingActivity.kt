@@ -7,15 +7,16 @@ import androidx.compose.runtime.Composable
 
 
 class OnboardingActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Screen()
+            Screen(this.finish())
         }
     }
 }
 
 @Composable
-private fun Screen() {
-    OnboardingContent()
+private fun Screen(finishApp: Unit) {
+    OnboardingContent(finishApp)
 }

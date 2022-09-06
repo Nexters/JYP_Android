@@ -1,18 +1,17 @@
 package com.jyp.feature_onboarding
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -26,7 +25,6 @@ import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
 import com.jyp.jyp_design.ui.button.ButtonType
 import com.jyp.jyp_design.ui.button.JypTextButton
-import com.jyp.jyp_design.ui.shadow.drawShadow
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 import kotlinx.coroutines.launch
@@ -34,7 +32,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun OnboardingContent() {
+fun OnboardingContent(finishApp: Unit) {
 
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -42,6 +40,16 @@ fun OnboardingContent() {
         OnboardingEnum.ONBOARDING_01,
         OnboardingEnum.ONBOARDING_02
     )
+
+
+    when (pagerState.currentPage) {
+        0 -> BackHandler(enabled = true) { finishApp }
+        1 -> BackHandler(enabled = true) {
+            coroutineScope.launch {
+                pagerState.scrollToPage(pagerState.currentPage + 1)
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -162,5 +170,5 @@ internal fun OnboardingScreenItem(
 @Composable
 @Preview(showBackground = true)
 internal fun OnboardingContentPreview() {
-    OnboardingContent()
+    OnboardingContent((LocalContext.current as Activity).finish())
 }
