@@ -3,6 +3,10 @@
     package="com.jyp.feature_onboarding">
 
     <application>
-        <activity android:name="com.jyp.feature_onboarding.OnboardingActivity" />
+        <activity
+            android:name=".SignInActivity"
+            android:exported="false" />
+        <activity android:name=".OnboardingActivity" />
     </application>
+
 </manifest>
