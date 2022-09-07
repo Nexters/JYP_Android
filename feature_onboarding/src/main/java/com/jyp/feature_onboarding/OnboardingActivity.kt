@@ -1,5 +1,6 @@
 package com.jyp.feature_onboarding
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,12 +12,23 @@ class OnboardingActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Screen(this.finish())
+            Screen(
+                onBackPressed = { this.finish() },
+                onOnboardingFinished = {
+                    startActivity(Intent(this, SignInActivity::class.java))
+                }
+            )
         }
     }
 }
 
 @Composable
-private fun Screen(finishApp: Unit) {
-    OnboardingContent(finishApp)
+private fun Screen(
+    onBackPressed: () -> Unit,
+    onOnboardingFinished: () -> Unit
+) {
+    OnboardingContent(
+        onBackPressed,
+        onOnboardingFinished
+    )
 }

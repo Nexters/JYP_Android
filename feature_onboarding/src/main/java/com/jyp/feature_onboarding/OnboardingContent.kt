@@ -1,8 +1,8 @@
 package com.jyp.feature_onboarding
 
-import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,7 +11,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,26 +26,32 @@ import com.jyp.jyp_design.ui.button.ButtonType
 import com.jyp.jyp_design.ui.button.JypTextButton
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun OnboardingContent(finishApp: Unit) {
-
-    val pagerState = rememberPagerState()
+fun OnboardingContent(
+    onBackPressed: () -> Unit,
+    onOnboardingFinished: () -> Unit
+) {
     val coroutineScope = rememberCoroutineScope()
+    val pagerState = rememberPagerState().apply {
+        coroutineScope.launch { disableScrolling() }
+    }
     val onboardings = listOf(
         OnboardingEnum.ONBOARDING_01,
         OnboardingEnum.ONBOARDING_02
     )
 
-
     when (pagerState.currentPage) {
-        0 -> BackHandler(enabled = true) { finishApp }
+        0 -> BackHandler(enabled = true) { onBackPressed() }
         1 -> BackHandler(enabled = true) {
             coroutineScope.launch {
-                pagerState.scrollToPage(pagerState.currentPage + 1)
+                pagerState.enableScrolling()
+                pagerState.scrollToPage(pagerState.currentPage - 1)
+                pagerState.disableScrolling()
             }
         }
     }
@@ -87,14 +92,30 @@ fun OnboardingContent(finishApp: Unit) {
             enabled = true,
             buttonColorSet = ButtonColorSetType.PINK,
             onClickEnabled = {
-                when (pagerState.currentPage == onboardings.size) {
-                    true -> {} // Todo - Set intent to kakao sign in.
+                when (pagerState.currentPage >= onboardings.size - 1) {
+                    true -> onOnboardingFinished()
                     false -> coroutineScope.launch {
+                        pagerState.enableScrolling()
                         pagerState.scrollToPage(pagerState.currentPage + 1)
+                        pagerState.disableScrolling()
                     }
                 }
             }
         )
+    }
+}
+
+@ExperimentalPagerApi
+internal suspend fun PagerState.disableScrolling() {
+    scroll(scrollPriority = MutatePriority.PreventUserInput) {
+        awaitCancellation()
+    }
+}
+
+@ExperimentalPagerApi
+internal suspend fun PagerState.enableScrolling() {
+    scroll(scrollPriority = MutatePriority.PreventUserInput) {
+        // Do nothing, just cancel the previous indefinite "scroll"
     }
 }
 
@@ -170,5 +191,8 @@ internal fun OnboardingScreenItem(
 @Composable
 @Preview(showBackground = true)
 internal fun OnboardingContentPreview() {
-    OnboardingContent((LocalContext.current as Activity).finish())
+    OnboardingContent(
+        onBackPressed = {},
+        onOnboardingFinished = {}
+    )
 }
