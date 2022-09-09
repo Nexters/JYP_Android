@@ -1,22 +1,20 @@
 package com.jyp.feature_question
 
 import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class QuestionViewModel: ViewModel() {
+@HiltViewModel
+class QuestionViewModel @Inject constructor() : ViewModel() {
 
-    private var _selectedQuestionOptions = MutableLiveData<List<Int>>()
-    val selectedQuestionOptions: LiveData<List<Int>> get() = _selectedQuestionOptions
-
-    private val updatedSelectedQuestionOptions = mutableListOf<Int>()
-
+    private val _selectedQuestionOptions = MutableLiveData<MutableList<Int?>>(mutableListOf(null, null, null))
+    val selectedQuestionOptions: LiveData<MutableList<Int?>> get() = _selectedQuestionOptions
 
 
     fun setSelectedQuestionOptions(index: Int, selectedOption: Int) {
-        updatedSelectedQuestionOptions.clear()
-        _selectedQuestionOptions.value?.forEach { updatedSelectedQuestionOptions.add(it) }
-
-        updatedSelectedQuestionOptions.add(index, selectedOption)
-        _selectedQuestionOptions.value = updatedSelectedQuestionOptions
+        val tempSelectedQuestionOptions = _selectedQuestionOptions.value
+        tempSelectedQuestionOptions?.set(index, selectedOption)
+        _selectedQuestionOptions.value = tempSelectedQuestionOptions
     }
 }
