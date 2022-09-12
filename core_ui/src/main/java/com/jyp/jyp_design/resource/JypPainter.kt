@@ -13,4 +13,8 @@ object JypPainter {
     val check: Painter
         @Composable
         get() = painterResource(id = R.drawable.icon_check)
+
+    val CulturalInstitution: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.icon_cultural_institution)
 }
