@@ -147,6 +147,9 @@ private fun PlannerContent(
                     tagClick = tagClick,
                     newPikMeClick = newPikMeClick,
             )
+            1 -> PlannerJourneyPlanScreen(
+
+            )
         }
     }
 }
