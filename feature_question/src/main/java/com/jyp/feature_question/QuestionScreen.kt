@@ -1,10 +1,10 @@
 package com.jyp.feature_question
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -28,7 +28,6 @@ import com.jyp.jyp_design.ui.button.JypTextButton
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 
 
@@ -40,9 +39,7 @@ internal fun QuestionScreen(
     onQuestionFinished: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState().apply {
-        coroutineScope.launch { disableScrolling() }
-    }
+    val pagerState = rememberPagerState()
     val questions = listOf(
         QuestionEnum.QUESTION_01,
         QuestionEnum.QUESTION_02,
@@ -78,9 +75,10 @@ internal fun QuestionScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
-                    .weight(1f, false),
-                questionOptionButtons = {
+                    .weight(1f, false)
+                    .selectableGroup(),
 
+                questionOptionButtons = {
                     QuestionOptionButtons(
                         question = questions[page],
                         isOptionSelected = isOptionSelected,
@@ -99,19 +97,6 @@ internal fun QuestionScreen(
     }
 }
 
-@ExperimentalPagerApi
-internal suspend fun PagerState.disableScrolling() {
-    scroll(scrollPriority = MutatePriority.PreventUserInput) {
-        awaitCancellation()
-    }
-}
-
-@ExperimentalPagerApi
-internal suspend fun PagerState.enableScrolling() {
-    scroll(scrollPriority = MutatePriority.PreventUserInput) {
-        // Do nothing, just cancel the previous indefinite "scroll"
-    }
-}
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -129,9 +114,7 @@ internal fun QuestionAppBar(
         IconButton(
             onClick = {
                 if (pagerState.currentPage != 0) coroutineScope.launch {
-                    pagerState.enableScrolling()
                     pagerState.scrollToPage(pagerState.currentPage - 1)
-                    pagerState.disableScrolling()
                 }
             },
             enabled = pagerState.currentPage != 0
@@ -299,9 +282,7 @@ internal fun QuestionDoneButton(
             when (isLastQuestion) {
                 true -> onQuestionFinished()
                 false -> coroutineScope.launch {
-                    pagerState.enableScrolling()
                     pagerState.scrollToPage(pagerState.currentPage + 1)
-                    pagerState.disableScrolling()
                 }
             }
         },
