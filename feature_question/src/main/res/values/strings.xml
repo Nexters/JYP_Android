@@ -1,0 +1,22 @@
+<resources>
+    <string name="question01">본인이 생각하는 여행이란\n무엇인가요?</string>
+    <string-array name="question01_options">
+        <item>새롭고 많은 것들을\n경험하는 것이라고 생각해요</item>
+        <item>여유롭게 휴식하는 것이라고\n생각해요</item>
+    </string-array>
+    
+    <string name="question02">여행 중, 새로운 장소를\n발견하면 어떤 선택을 하실 건가요?</string>
+    <string-array name="question02_options">
+        <item>미리 세운 계획에\n영향이 간다면 방문하지 않아요</item>
+        <item>궁금증을 참지 못하고\n무조건 방문해요</item>
+    </string-array>
+
+    <string name="question03">여행 계획을 세울 때,\n어떤 모습이신가요?</string>
+    <string-array name="question03_options">
+        <item>시간 단위로 꼼꼼하게\n계획해요</item>
+        <item>방문할 지역만 대략 생각하고,\n나의 직관을 믿어요</item>
+    </string-array>
+
+    <string name="question_next">다음으로</string>
+    <string name="question_done">완료하기</string>
+</resources>

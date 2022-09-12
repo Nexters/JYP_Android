@@ -9,10 +9,10 @@ ext {
             compose_navigation_version                 : "2.5.1",
             compose_customview_version                 : "1.1.0",
             compose_customview_poolingcontainer_version: "1.0.0",
-            compose_flowlayout                         : "0.25.0",
+            compose_flowlayout_version                 : "0.25.0",
             accompanist_pager_version                  : "0.23.1",
             landscapist_version                        : "1.4.9",
-            lottie_version                             : "5.2.0"
+            lottie_version                             : "5.2.0",
     ]
 
     composeDependencies = [
@@ -20,16 +20,15 @@ ext {
                     compose_ui                         : "androidx.compose.ui:ui:$versions.compose_version",
                     compose_material                   : "androidx.compose.material:material:$versions.compose_version",
                     compose_preview                    : "androidx.compose.ui:ui-tooling-preview:$versions.compose_version",
+                    compose_live_data                  : "androidx.compose.runtime:runtime-livedata:$versions.compose_version",
                     compose_activity                   : "androidx.activity:activity-compose:$versions.compose_activity_version",
                     compose_navigation                 : "androidx.navigation:navigation-compose:$versions.compose_navigation_version",
-                    compose_flowlayout                 : "com.google.accompanist:accompanist-flowlayout:$versions.compose_flowlayout",
+                    compose_flowlayout                 : "com.google.accompanist:accompanist-flowlayout:$versions.compose_flowlayout_version",
                     compose_pager                      : "com.google.accompanist:accompanist-pager:$versions.accompanist_pager_version",
                     compose_pager_indicators           : "com.google.accompanist:accompanist-pager-indicators:$versions.accompanist_pager_version"
             ],
             debugImplementation: [
                     compose_tooling                    : "androidx.compose.ui:ui-tooling:$versions.compose_version",
-                    compose_customview                 : "androidx.customview:customview:1.2.0-alpha01",
-                    compose_customview_poolingcontainer: "androidx.customview:customview-poolingcontainer:1.0.0-alpha01"
             ]
     ]
 
