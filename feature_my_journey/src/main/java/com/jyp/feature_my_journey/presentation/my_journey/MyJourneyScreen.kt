@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.jyp.feature_my_journey.R
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.resource.JypColors
-import com.jyp.jyp_design.resource.JypDrawableRes
+import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.avatar.AvatarList
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.shadow.drawShadow
@@ -42,6 +40,7 @@ fun MyJourneyScreen(
         pastJourneys: List<Journey>,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
+        onClickMore: (journey: Journey) -> Unit,
 ) {
     Column(
             modifier = Modifier
@@ -58,6 +57,7 @@ fun MyJourneyScreen(
                 pastJourneys = pastJourneys,
                 onClickNewJourney = onClickNewJourney,
                 onClickPlanner = onClickPlanner,
+                onClickMore = onClickMore,
         )
     }
 }
@@ -95,6 +95,7 @@ internal fun MyJourneyContent(
         pastJourneys: List<Journey>,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
+        onClickMore: (journey: Journey) -> Unit,
 ) {
     var selectedTabPosition by remember {
         mutableStateOf(0)
@@ -119,10 +120,12 @@ internal fun MyJourneyContent(
                     journeys = plannedJourneys,
                     onClickNewJourney = onClickNewJourney,
                     onClickPlanner = onClickPlanner,
+                    onClickMore = onClickMore,
             )
             1 -> PastJourney(
                     journeys = pastJourneys,
                     onClickPlanner = onClickPlanner,
+                    onClickMore = onClickMore,
             )
         }
 
@@ -196,7 +199,7 @@ internal fun MyJourneyContentTab(
                         .clickable(onClick = onClickNewJourney)
                         .align(Alignment.Bottom)
                         .padding(bottom = 7.dp),
-                painter = painterResource(id = JypDrawableRes.add),
+                painter = JypPainter.add,
                 contentDescription = null,
         )
     }
@@ -207,6 +210,7 @@ internal fun PlannedJourney(
         journeys: List<Journey>,
         onClickNewJourney: () -> Unit,
         onClickPlanner: () -> Unit,
+        onClickMore: (journey: Journey) -> Unit,
 ) {
     if (journeys.isEmpty()) {
         PlannedJourneyEmptyScreen(onClickNewJourney = onClickNewJourney)
@@ -215,7 +219,7 @@ internal fun PlannedJourney(
                 contentPadding = PaddingValues(horizontal = 24.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            journeys.forEachIndexed { index, journey ->
+            journeys.forEach { journey ->
                 item {
                     JourneyItem(
                             journeyName = journey.title,
@@ -225,6 +229,9 @@ internal fun PlannedJourney(
                             onClickPlanner = onClickPlanner,
                             themeType = ThemeType.values()[journey.theme],
                             profileUrls = journey.profileUrls,
+                            onClickMore = {
+                                onClickMore.invoke(journey)
+                            }
                     )
                 }
             }
@@ -286,14 +293,6 @@ internal fun PlannedJourneyEmptyScreen(
                     onClickEnabled = onClickNewJourney,
                     enabled = true,
             )
-//            Button(
-//                    modifier = Modifier
-//                            .fillMaxWidth()
-//                            .height(40.dp),
-//                    onClick = onClickNewJourney,
-//            ) {
-//                Text(text = "만들기", fontSize = 16.sp, color = JypColors.Text_white)
-//            }
         }
     }
 }
@@ -302,6 +301,7 @@ internal fun PlannedJourneyEmptyScreen(
 internal fun PastJourney(
         journeys: List<Journey>,
         onClickPlanner: () -> Unit,
+        onClickMore: (journey: Journey) -> Unit,
 ) {
     if (journeys.isEmpty()) {
         PastJourneyEmptyScreen()
@@ -320,6 +320,9 @@ internal fun PastJourney(
                             onClickPlanner = onClickPlanner,
                             themeType = ThemeType.values()[journey.theme],
                             profileUrls = journey.profileUrls,
+                            onClickMore = {
+                                onClickMore.invoke(journey)
+                            }
                     )
                 }
             }
@@ -375,13 +378,14 @@ internal fun PastJourneyEmptyScreen() {
 
 @Composable
 internal fun JourneyItem(
-        onClickPlanner: () -> Unit,
         journeyName: String,
         dDay: String,
         startDay: String,
         endDay: String,
         themeType: ThemeType,
         profileUrls: List<String>,
+        onClickPlanner: () -> Unit,
+        onClickMore: () -> Unit,
 ) {
     Box(
             modifier = Modifier
@@ -446,9 +450,8 @@ internal fun JourneyItem(
                                 .clickable(
                                         interactionSource = remember { MutableInteractionSource() },
                                         indication = rememberRipple(),
-                                ) {
-
-                                },
+                                        onClick = onClickMore,
+                                ),
                         painter = painterResource(id = R.drawable.ic_more_menu),
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(JypColors.Text_white)
@@ -481,6 +484,7 @@ internal fun MyJourneyScreenEmptyPreview() {
             pastJourneys = emptyList(),
             onClickNewJourney = {},
             onClickPlanner = {},
+            onClickMore = {}
     )
 }
 
@@ -510,6 +514,7 @@ internal fun MyJourneyScreenPreview() {
             ),
             pastJourneys = emptyList(),
             onClickNewJourney = {},
-            onClickPlanner = {}
+            onClickPlanner = {},
+            onClickMore = {}
     )
 }
