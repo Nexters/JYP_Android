@@ -3,6 +3,10 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+Properties localProperties = new Properties()
+localProperties.load(rootProject.file('local.properties').newDataInputStream())
+String kakao_native_app_key = localProperties.getProperty('kakao_native_app_key')
+
 android {
     compileSdk 32
 
@@ -12,6 +16,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        manifestPlaceholders = [
+                kakao_native_app_key: kakao_native_app_key
+        ]
     }
 
     buildTypes {
@@ -30,6 +38,9 @@ android {
 }
 
 dependencies {
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
