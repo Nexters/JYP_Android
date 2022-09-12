@@ -116,28 +116,6 @@ private fun PlannerBackLayer(
                 )
             }
         }
-
-//        Button(
-//                modifier = Modifier
-//                        .height(40.dp),
-//                onClick = { },
-//                colors = ButtonDefaults.buttonColors(backgroundColor = JypColors.Pink),
-//                contentPadding = PaddingValues(0.dp)
-//        ) {
-//            Spacer(modifier = Modifier.size(8.dp))
-//            Image(
-//                    modifier = Modifier.size(36.dp),
-//                    painter = painterResource(id = R.drawable.icon_smile_plus),
-//                    contentDescription = null,
-//            )
-//            Spacer(modifier = Modifier.size(2.dp))
-//            JypText(
-//                    text = "일행 초대하기",
-//                    type = TextType.BODY_3,
-//                    color = JypColors.Text_white,
-//            )
-//            Spacer(modifier = Modifier.size(10.dp))
-//        }
         Spacer(modifier = Modifier.size(16.dp))
     }
 }
