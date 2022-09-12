@@ -2,4 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jyp.feature_add_place">
 
+    <application>
+        <activity
+            android:name=".PlaceMapActivity"
+            android:exported="false" />
+    </application>
+
 </manifest>
