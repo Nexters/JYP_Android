@@ -19,7 +19,11 @@
 
         <activity
             android:name="com.jyp.feature_add_place.PlaceMapActivity"
-            android:exported="true" />
+            android:exported="false" />
+
+        <activity
+            android:name=".PlaceInfoActivity"
+            android:exported="false" />
 
     </application>
 </manifest>
