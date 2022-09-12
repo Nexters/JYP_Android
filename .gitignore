@@ -56,7 +56,7 @@ gen-external-apklibs
 
 # Package Files #
 *.jar
-\!libDaumMapAndroid.jar
+!libs/*.jar
 
 *.war
 *.nar
