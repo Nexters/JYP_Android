@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jyp.feature_planner.domain.Pikis
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.text.JypText
@@ -23,22 +24,62 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 internal fun PlannerJourneyPlanScreen(
-
+        planItems: List<PlanItem> = listOf(
+                PlanItem(
+                        day = 1,
+                        pikis = listOf(Pikis("아르떼", "우리집")),
+                        isCollapsed = false,
+                ),
+                PlanItem(
+                        day = 2,
+                        pikis = listOf(Pikis("아르떼", "우리집")),
+                        isCollapsed = true,
+                ),
+                PlanItem(
+                        day = 3,
+                        pikis = listOf(
+                                Pikis("아르떼", "우리집"),
+                                Pikis("아르떼", "우리집"),
+                        ),
+                        isCollapsed = false,
+                ),
+        ),
 ) {
     Column(
             modifier = Modifier
                     .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.size(28.dp))
-        PlanGroupItem()
-        Spacer(modifier = Modifier.size(12.dp))
-        PlanEachItem()
-        PlanEachContentDivider()
+        planItems.forEachIndexed { index, planItem ->
+            if (planItem.isCollapsed) {
+                PlanGroupItem(
+                        day = planItem.day,
+                )
+                if (index != planItems.lastIndex) {
+                    Spacer(modifier = Modifier.size(12.dp))
+                }
+            }
+            else {
+                planItem.pikis.forEachIndexed { pikisIndex, pikis ->
+                    PlanEachItem(
+                            order = pikisIndex + 1,
+                    )
+                    if (pikisIndex != planItem.pikis.lastIndex) {
+                        PlanEachContentDivider()
+                    } else {
+                        Spacer(modifier = Modifier.size(48.dp))
+                    }
+                }
+            }
+        }
+
     }
 }
 
 @Composable
-private fun PlanGroupItem() {
+private fun PlanGroupItem(
+        day: Int,
+) {
     Row(
             modifier = Modifier
                     .height(72.dp)
@@ -55,7 +96,7 @@ private fun PlanGroupItem() {
     ) {
         Row {
             JypText(
-                    text = "Day 1",
+                    text = "Day $day",
                     type = TextType.TITLE_6,
                     color = JypColors.Text80,
             )
@@ -76,19 +117,25 @@ private fun PlanGroupItem() {
 }
 
 @Composable
-private fun PlanEachItem() {
+private fun PlanEachItem(
+        order: Int,
+) {
     Row(
             modifier = Modifier
                     .height(81.dp)
     ) {
-        PlanEachOrder()
+        PlanEachOrder(
+                order = order,
+        )
         Spacer(modifier = Modifier.size(12.dp))
         PlanEachContent()
     }
 }
 
 @Composable
-private fun PlanEachOrder() {
+private fun PlanEachOrder(
+        order: Int,
+) {
     Column {
         Text(
                 modifier = Modifier
@@ -97,7 +144,7 @@ private fun PlanEachOrder() {
                                 color = JypColors.Sub_black,
                                 shape = CircleShape,
                         ),
-                text = "1",
+                text = "$order",
                 fontWeight = FontWeight.SemiBold,
                 color = JypColors.Text_white,
                 fontSize = 12.sp,
