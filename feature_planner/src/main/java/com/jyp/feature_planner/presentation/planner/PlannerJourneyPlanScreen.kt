@@ -33,6 +33,7 @@ internal fun PlannerJourneyPlanScreen(
         PlanGroupItem()
         Spacer(modifier = Modifier.size(12.dp))
         PlanEachItem()
+        PlanEachContentDivider()
     }
 }
 
@@ -118,6 +119,7 @@ private fun PlanEachOrder() {
 private fun PlanEachContent() {
     Row(
             modifier = Modifier
+                    .padding(end = 4.dp)
                     .fillMaxSize()
                     .shadow(
                             elevation = 2.dp,
@@ -159,6 +161,25 @@ private fun PlanEachContent() {
                     color = JypColors.Tag_grey200,
             )
         }
+    }
+}
+
+@Composable
+private fun PlanEachContentDivider() {
+    Box(
+            modifier = Modifier
+                    .width(20.dp)
+                    .height(12.dp)
+    ) {
+        Box(
+                modifier = Modifier
+                        .fillMaxHeight()
+                        .width(1.dp)
+                        .background(
+                                color = Color(0xFFE8E8E8)
+                        )
+                        .align(Alignment.Center),
+        )
     }
 }
 
