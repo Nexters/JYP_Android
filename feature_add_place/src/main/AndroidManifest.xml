@@ -4,6 +4,9 @@
 
     <application>
         <activity
+            android:name=".PlaceSearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".PlaceMapActivity"
             android:exported="false" />
     </application>
