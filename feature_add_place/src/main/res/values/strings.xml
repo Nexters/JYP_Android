@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="request_search_place">등록할 장소를\n검색해주세요!</string>
+    <string name="search_place_empty">해당 장소를 찾을 수 없어요!</string>
+
+    <string name="category_name_mart">"마트"</string>
+    <string name="category_name_convenience_store">"편의점"</string>
+    <string name="category_name_school">"학교"</string>
+    <string name="category_name_transportation">"교통"</string>
+    <string name="category_name_cultural_institution">"문화시설"</string>
+    <string name="category_name_public_institution">"공공기관"</string>
+    <string name="category_name_tour_spot">"관광지"</string>
+    <string name="category_name_lodging">"숙소"</string>
+    <string name="category_name_restaurant">"음식점"</string>
+    <string name="category_name_cafe">"카페"</string>
+    <string name="category_name_hospital">"병원"</string>
+    <string name="category_name_pharmacy">"약국"</string>
+    <string name="category_name_bank">"은행"</string>
+    <string name="category_name_charging_zone">"충전소"</string>
+    <string name="category_name_parking_lot">"주차장"</string>
+    <string name="category_name_etc">"기타"</string>
+</resources>
