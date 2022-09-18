@@ -1,12 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
 }
-
-Properties localProperties = new Properties()
-localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
     compileSdk 32
@@ -22,8 +17,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-
-        buildConfigField "String", "KAKAO_REST_API_KEY", localProperties['kakao_rest_api_key']
     }
 
     buildTypes {
@@ -71,8 +64,6 @@ dependencies {
 
     implementation composeDependencies.implementation.values()
     debugImplementation composeDependencies.debugImplementation.values()
-
-    implementation networkDependencies.implementation.values()
 
     implementation hiltDependencies.implementation.values()
     kapt hiltDependencies.kapt.values()
