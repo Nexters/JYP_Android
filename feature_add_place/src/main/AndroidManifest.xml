@@ -4,10 +4,11 @@
 
     <application>
         <activity
-            android:name=".PlaceSearchActivity"
-            android:exported="false" />
+            android:name=".presentation.SearchPlaceActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".PlaceMapActivity"
+            android:name=".presentation.PlaceMapActivity"
             android:exported="false" />
     </application>
 

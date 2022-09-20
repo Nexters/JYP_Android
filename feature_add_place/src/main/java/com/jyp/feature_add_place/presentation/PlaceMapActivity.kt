@@ -1,7 +1,8 @@
-package com.jyp.feature_add_place
+package com.jyp.feature_add_place.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.jyp.feature_add_place.R
 
 class PlaceMapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
