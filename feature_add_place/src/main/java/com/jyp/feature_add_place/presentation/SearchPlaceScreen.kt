@@ -1,5 +1,6 @@
 package com.jyp.feature_add_place.presentation
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.feature_add_place.util.getJourneyPikiPlaceCategoryEnum
 import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
@@ -21,44 +23,42 @@ import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.text_input.JypTextInput
 import com.jyp.jyp_design.ui.text_input.TextInputType
 import com.jyp.jyp_design.ui.typography.type.TextType
+import kotlinx.coroutines.Job
 
 
 @Composable
-fun PlaceSearchScreen(
+fun SearchPlaceScreen(
+    uiState: UiState,
+    onPlaceNameChanged: (String) -> Unit,
     onClickBackButton: () -> Unit
 ) {
-    var place by remember { mutableStateOf("") }
-//    val placeSearchResults = remember { emptyList<PlaceModel>() }
-//    val placeSearchResults = remember { SearchPlaceResultProvider.placeList }
-//    val placeSearchResults = remember { SearchPlaceResultProvider.placeList }
+    var placeName by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(JypColors.Background_white100)
     ) {
-        PlaceSearchHeader(
-            place = place,
-            onValueChanged = { place = it },
+        SearchPlaceHeader(
+            placeName = placeName,
+            onPlaceNameChanged = {
+                placeName = it
+                onPlaceNameChanged(placeName)
+                Log.d("TAG", "SearchPlaceScreen: $placeName")
+            },
             onClickBackButton = onClickBackButton,
         )
-        when (place.isBlank()) {
-            true -> RequestPlaceSearchView()
-            false -> {
-
-                when (placeSearchResults.isEmpty()) {
-                    true -> PlaceSearchEmptyView()
-                    false -> PlaceSearchResultView(placeSearchResults)
-                }
-            }
+        when (placeName.isBlank()) {
+            true -> RequestSearchPlaceView()
+            false -> SearchPlaceResultWithApiResponse(uiState)
         }
     }
 }
 
 @Composable
-fun PlaceSearchHeader(
-    place: String,
-    onValueChanged: (String) -> Unit,
+fun SearchPlaceHeader(
+    placeName: String,
+    onPlaceNameChanged: (String) -> Unit,
     onClickBackButton: () -> Unit
 ) {
     Row(
@@ -85,8 +85,8 @@ fun PlaceSearchHeader(
                 .wrapContentHeight()
                 .align(Alignment.CenterVertically),
             type = TextInputType.BOX,
-            text = place,
-            valueChange = { onValueChanged(it) },
+            text = placeName,
+            valueChange = { onPlaceNameChanged(it) },
             hint = "예) 서울 저니 식당",
             trailingImage = painterResource(id = R.drawable.ic_search),
         )
@@ -94,14 +94,14 @@ fun PlaceSearchHeader(
 }
 
 @Composable
-fun RequestPlaceSearchView() {
+fun RequestSearchPlaceView() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(com.jyp.feature_add_place.R.drawable.icon_search_place), 
+            painter = painterResource(com.jyp.feature_add_place.R.drawable.icon_search_place),
             contentDescription = null,
             modifier = Modifier
                 .height(100.dp)
@@ -116,7 +116,21 @@ fun RequestPlaceSearchView() {
 }
 
 @Composable
-fun PlaceSearchEmptyView() {
+fun SearchPlaceResultWithApiResponse(uiState: UiState) {
+    when (uiState) {
+        is UiState.Loading -> return
+        is UiState.Success -> {
+            when (uiState.searchPlaceResult.isEmpty()) {
+                true -> SearchPlaceEmptyView()
+                false -> SearchPlaceResultView(uiState.searchPlaceResult)
+            }
+        }
+        is UiState.Failure -> SearchPlaceEmptyView()
+    }
+}
+
+@Composable
+fun SearchPlaceEmptyView() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -138,8 +152,8 @@ fun PlaceSearchEmptyView() {
 }
 
 @Composable
-fun PlaceSearchResultView(
-    placeSearchResults: List<PlaceModel>
+fun SearchPlaceResultView(
+    SearchPlaceResults: List<SearchPlaceResultModel>
 ) {
     LazyColumn(
         contentPadding = PaddingValues(
@@ -147,17 +161,17 @@ fun PlaceSearchResultView(
             vertical = 6.dp
         )
     ) {
-        itemsIndexed(items = placeSearchResults) { index, item ->
-            PlaceSearchResultItem(place = item)
+        itemsIndexed(items = SearchPlaceResults) { index, item ->
+            SearchPlaceResultItem(placeResult = item)
         }
     }
 }
 
 @Composable
-fun PlaceSearchResultItem(
-    place: PlaceModel
+fun SearchPlaceResultItem(
+    placeResult: SearchPlaceResultModel
 ) {
-    val placeCategoryEnum = place.category.getJourneyPikiPlaceCategoryEnum()
+    val placeCategoryEnum = placeResult.category.getJourneyPikiPlaceCategoryEnum()
 
     Row(
         modifier = Modifier
@@ -171,12 +185,12 @@ fun PlaceSearchResultItem(
                 .weight(1f)
         ) {
             JypText(
-                text = place.name,
+                text = placeResult.name,
                 type = TextType.TITLE_5,
                 color = JypColors.Text80
             )
             JypText(
-                text = place.address,
+                text = placeResult.address,
                 type = TextType.BODY_4,
                 color = JypColors.Text40
             )
@@ -199,8 +213,10 @@ fun PlaceSearchResultItem(
 
 @Preview(showBackground = true)
 @Composable
-fun PlaceSearchScreenPreview() {
-    PlaceSearchScreen(
+fun SearchPlaceScreenPreview() {
+    SearchPlaceScreen(
+        uiState = UiState.Success(emptyList()),
+        onPlaceNameChanged = { Job() },
         onClickBackButton = { }
     )
 }
