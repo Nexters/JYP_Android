@@ -24,6 +24,9 @@ android {
         }
 
         buildConfigField "String", "KAKAO_REST_API_KEY", localProperties['kakao_rest_api_key']
+
+        buildConfigField "String", "JYP_JWT_MASTER_KEY", localProperties['jyp-jwt-master-key']
+        buildConfigField "String", "JYP_OVERRIDE_ID", localProperties['jyp-override-id']
     }
 
     buildTypes {

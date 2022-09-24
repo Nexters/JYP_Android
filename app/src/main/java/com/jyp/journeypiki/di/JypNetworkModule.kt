@@ -1,6 +1,6 @@
 package com.jyp.journeypiki.di
 
-import com.jyp.core_network.kakao_search.KakaoSearchApi
+import com.jyp.core_network.jyp.JypApi
 import com.jyp.journeypiki.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -15,16 +15,16 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class KakaoSearchModule {
+class JypNetworkModule {
     @Provides
     @Singleton
-    fun provideKakaoSearchApi(): KakaoSearchApi {
+    fun provideJypApi(): JypApi {
         return getRetrofit().create()
     }
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-                .baseUrl("https://dapi.kakao.com/")
+                .baseUrl("https://journeypiki.duckdns.org/")
                 .client(getOkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -37,7 +37,8 @@ class KakaoSearchModule {
                 })
                 .addInterceptor { chain ->
                     chain.request().newBuilder()
-                            .addHeader("Authorization", "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}")
+                            .addHeader("jyp-jwt-master-key", BuildConfig.JYP_JWT_MASTER_KEY)
+                            .addHeader("jyp-override-id", BuildConfig.JYP_OVERRIDE_ID)
                             .build()
                             .let(chain::proceed)
                 }

@@ -1,4 +1,4 @@
-package com.jyp.core.kakao_search
+package com.jyp.core_network.kakao_search
 
 import retrofit2.http.GET
 import retrofit2.http.Query
