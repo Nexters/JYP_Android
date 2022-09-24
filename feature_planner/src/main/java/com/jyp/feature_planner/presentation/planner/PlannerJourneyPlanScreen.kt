@@ -27,11 +27,15 @@ internal fun PlannerJourneyPlanScreen(
         planItems: List<PlanItem> = listOf(
                 PlanItem(
                         day = 1,
-                        pikis = listOf(Pikis("아르떼", "우리집")),
+                        pikis = listOf(
+                                Pikis("아르떼", "우리집"),
+                                Pikis("아르떼", "우리집"),
+                                Pikis("아르떼", "우리집"),
+                        ),
                 ),
                 PlanItem(
                         day = 2,
-                        pikis = listOf(Pikis("아르떼", "우리집")),
+                        pikis = listOf(),
                 ),
                 PlanItem(
                         day = 3,
@@ -56,6 +60,10 @@ internal fun PlannerJourneyPlanScreen(
                     Spacer(modifier = Modifier.size(12.dp))
                 }
             } else {
+                if (index > 0 && planItems[index].pikis.isNotEmpty() && planItems[index - 1].pikis.isEmpty()) {
+                    Spacer(modifier = Modifier.size(36.dp))
+                }
+                
                 PlanEachTitle(
                         day = planItem.day,
                 )
