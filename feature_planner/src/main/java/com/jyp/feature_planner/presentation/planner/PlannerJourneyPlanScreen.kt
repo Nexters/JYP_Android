@@ -28,12 +28,10 @@ internal fun PlannerJourneyPlanScreen(
                 PlanItem(
                         day = 1,
                         pikis = listOf(Pikis("아르떼", "우리집")),
-                        isCollapsed = false,
                 ),
                 PlanItem(
                         day = 2,
                         pikis = listOf(Pikis("아르떼", "우리집")),
-                        isCollapsed = true,
                 ),
                 PlanItem(
                         day = 3,
@@ -41,7 +39,6 @@ internal fun PlannerJourneyPlanScreen(
                                 Pikis("아르떼", "우리집"),
                                 Pikis("아르떼", "우리집"),
                         ),
-                        isCollapsed = false,
                 ),
         ),
 ) {
@@ -49,17 +46,20 @@ internal fun PlannerJourneyPlanScreen(
             modifier = Modifier
                     .padding(horizontal = 20.dp),
     ) {
-        Spacer(modifier = Modifier.size(28.dp))
+        Spacer(modifier = Modifier.size(30.dp))
         planItems.forEachIndexed { index, planItem ->
-            if (planItem.isCollapsed) {
+            if (planItem.pikis.isEmpty()) {
                 PlanGroupItem(
                         day = planItem.day,
                 )
                 if (index != planItems.lastIndex) {
                     Spacer(modifier = Modifier.size(12.dp))
                 }
-            }
-            else {
+            } else {
+                PlanEachTitle(
+                        day = planItem.day,
+                )
+                Spacer(modifier = Modifier.size(26.dp))
                 planItem.pikis.forEachIndexed { pikisIndex, pikis ->
                     PlanEachItem(
                             order = pikisIndex + 1,
@@ -72,7 +72,6 @@ internal fun PlannerJourneyPlanScreen(
                 }
             }
         }
-
     }
 }
 
@@ -112,6 +111,25 @@ private fun PlanGroupItem(
                 modifier = Modifier.size(24.dp),
                 painter = JypPainter.add,
                 contentDescription = null,
+        )
+    }
+}
+
+@Composable
+private fun PlanEachTitle(
+        day: Int,
+) {
+    Row {
+        JypText(
+                text = "Day $day",
+                type = TextType.TITLE_6,
+                color = JypColors.Text80,
+        )
+        Spacer(modifier = Modifier.size(14.dp))
+        JypText(
+                text = "mm월 dd일",
+                type = TextType.BODY_1,
+                color = JypColors.Text40,
         )
     }
 }
