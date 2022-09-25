@@ -44,7 +44,6 @@ fun SearchPlaceScreen(
             onPlaceNameChanged = {
                 placeName = it
                 onPlaceNameChanged(placeName)
-                Log.d("TAG", "SearchPlaceScreen: $placeName")
             },
             onClickBackButton = onClickBackButton,
         )

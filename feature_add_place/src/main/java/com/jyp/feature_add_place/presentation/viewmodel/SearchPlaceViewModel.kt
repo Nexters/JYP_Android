@@ -26,8 +26,6 @@ class SearchPlaceViewModel @Inject constructor(
 
 
     fun getSearchPlaceResult(placeName: String) {
-        Log.d("TAG", "getSearchPlaceResult: $placeName")
-
         searchPlaceJob?.cancel()
         searchPlaceJob = viewModelScope.launch(Dispatchers.IO) {
             getSearchPlaceUseCase.getSearchPlaceResult(placeName)

@@ -15,9 +15,11 @@ class SearchPlaceRepositoryImpl @Inject constructor(
     private val searchPlaceApi: SearchPlaceApi
 ): SearchPlaceRepositoryInterface() {
 
-    override fun getSearchPlaceResult(placeName: String): Flow<List<SearchPlaceResultModel>> {
+    override fun getSearchPlaceResult(
+        placeName: String
+    ): Flow<List<SearchPlaceResultModel>> {
+
         return flow {
-            Log.d("TAG", "Impl - getSearchPlaceResult: $placeName") // Todo - blank
             delay(2000L)
             searchPlaceApi.getSearchPlaceResult(placeName).documents.map {
                 it.toDataModelList()
