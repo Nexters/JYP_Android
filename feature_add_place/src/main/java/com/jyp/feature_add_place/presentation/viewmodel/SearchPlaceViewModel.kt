@@ -30,7 +30,7 @@ class SearchPlaceViewModel @Inject constructor(
 
         searchPlaceJob?.cancel()
         searchPlaceJob = viewModelScope.launch(Dispatchers.IO) {
-            getSearchPlaceUseCase(placeName)
+            getSearchPlaceUseCase.getSearchPlaceResult(placeName)
                 .onStart { _uiState.emit(UiState.Loading) }
                 .cancellable()
                 .collect { result ->
