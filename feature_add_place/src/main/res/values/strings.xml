@@ -2,6 +2,7 @@
 <resources>
     <string name="request_search_place">등록할 장소를\n검색해주세요!</string>
     <string name="search_place_empty">해당 장소를 찾을 수 없어요!</string>
+    <string name="common_toast_check_network_status">네트워크 상태를 확인해주세요</string>
 
     <string name="category_name_mart">"마트"</string>
     <string name="category_name_convenience_store">"편의점"</string>

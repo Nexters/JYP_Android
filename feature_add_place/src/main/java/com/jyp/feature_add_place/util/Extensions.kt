@@ -1,0 +1,42 @@
+package com.jyp.feature_add_place.util
+
+import android.content.Context
+import android.content.Context.CONNECTIVITY_SERVICE
+import android.net.ConnectivityManager
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import com.jyp.feature_add_place.R
+
+
+@RequiresApi(Build.VERSION_CODES.M)
+inline fun Context.checkNetworkStatus(
+    isActivated: () -> Unit,
+    isInactivated: (() -> Unit) = { }
+) {
+    when (isNetworkActivated(this)) {
+        true -> isActivated()
+        false -> {
+            isInactivated()
+            showToast(R.string.common_toast_check_network_status)
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun isNetworkActivated(context: Context): Boolean {
+    val networkStatus = (context.getSystemService(CONNECTIVITY_SERVICE)
+            as ConnectivityManager).activeNetwork
+    return networkStatus != null
+}
+
+private var toast: Toast? = null
+fun Context.showToast(message: Any) {
+    toast?.cancel()
+    toast = when (message) {
+        is Int -> Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+        is String -> Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+        else -> null
+    }
+    toast?.show()
+}
