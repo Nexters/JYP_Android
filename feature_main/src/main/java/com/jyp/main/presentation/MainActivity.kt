@@ -2,7 +2,6 @@ package com.jyp.main.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -133,12 +131,15 @@ private fun Screen(
         )
     }
 
-    SelectProfileScreen(mainViewModel)
+    SelectProfileScreen(myJourneyViewModel)
 }
 
 @Composable
-private fun SelectProfileScreen(mainViewModel: MainViewModel) {
-    val selectedPosition by mainViewModel.profileSelectedPosition.collectAsState()
+private fun SelectProfileScreen(myJourneyViewModel: MyJourneyViewModel) {
+    val selectedPosition by myJourneyViewModel.profileSelectedPosition.collectAsState()
+    val userName by myJourneyViewModel.userName.collectAsState()
+    val personality by myJourneyViewModel.personality.collectAsState()
+
     var isShow by remember {
         mutableStateOf(true)
     }
@@ -153,10 +154,11 @@ private fun SelectProfileScreen(mainViewModel: MainViewModel) {
             ),
     ) {
         SelectProfileScreen(
-                name = "홍길동",
+                name = userName,
+                personality = personality,
                 selectedPosition = selectedPosition,
                 showDim = isShow,
-                onSelectProfile = mainViewModel::selectProfile,
+                onSelectProfile = myJourneyViewModel::selectProfile,
                 submitProfile = {
                     isShow = false
                 }

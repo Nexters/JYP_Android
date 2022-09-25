@@ -31,6 +31,10 @@ class MyJourneyViewModel @Inject constructor(
     val pastJourneys: StateFlow<List<Journey>>
         get() = _pastJourneys
 
+    private val _profileSelectedPosition = MutableStateFlow<Int?>(null)
+    val profileSelectedPosition: StateFlow<Int?>
+        get() = _profileSelectedPosition
+
     fun fetchUser() {
         viewModelScope.launch {
             getUserUseCase("kakao-556894")
@@ -105,5 +109,9 @@ class MyJourneyViewModel @Inject constructor(
                     ),
             )
         }
+    }
+
+    fun selectProfile(position: Int) {
+        _profileSelectedPosition.value = position
     }
 }

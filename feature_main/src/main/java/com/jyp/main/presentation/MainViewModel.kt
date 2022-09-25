@@ -13,11 +13,5 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
-    private val _profileSelectedPosition = MutableStateFlow<Int?>(null)
-    val profileSelectedPosition: StateFlow<Int?>
-        get() = _profileSelectedPosition
 
-    fun selectProfile(position: Int) {
-        _profileSelectedPosition.value = position
-    }
 }
