@@ -2,6 +2,7 @@ package com.jyp.main.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -50,6 +51,8 @@ class MainActivity : ComponentActivity() {
                     },
             )
         }
+
+        myJourneyViewModel.fetchUser()
     }
 
     // TODO : 제거해야함
@@ -171,8 +174,9 @@ private fun createMyJourneyScreenItem(
     return MainScreenItem(
             navItem = BottomNavItem.MY_JOURNEY,
             content = {
-                val journeyPropensity = "자유로운 여행가"
-                val userName = "박진영"
+                val userName by myJourneyViewModel.userName.collectAsState("")
+                val personality by myJourneyViewModel.personality.collectAsState("")
+
                 val plannedJourneys by myJourneyViewModel.plannedJourneys.collectAsState()
                 val pastJourneys by myJourneyViewModel.pastJourneys.collectAsState()
 
@@ -183,7 +187,7 @@ private fun createMyJourneyScreenItem(
                         titleFontWeight = FontWeight.Medium,
                 ) {
                     MyJourneyScreen(
-                            journeyPropensity = journeyPropensity,
+                            journeyPropensity = personality,
                             userName = userName,
                             plannedJourneys = plannedJourneys,
                             pastJourneys = pastJourneys,

@@ -2,16 +2,27 @@ package com.jyp.feature_my_journey.presentation.my_journey
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jyp.core_network.jyp.*
+import com.jyp.feature_my_journey.domain.GetUserUseCase
 import com.jyp.feature_my_journey.domain.Journey
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyJourneyViewModel @Inject constructor(
-        // use case..
+        private val getUserUseCase: GetUserUseCase,
 ) : ViewModel() {
+    private val _userName = MutableStateFlow("")
+    val userName: StateFlow<String>
+        get() = _userName
+
+    private val _personality = MutableStateFlow("")
+    val personality: StateFlow<String>
+        get() = _personality
+
     private val _plannedJourneys = MutableStateFlow(listOf<Journey>())
     val plannedJourneys: StateFlow<List<Journey>>
         get() = _plannedJourneys
@@ -19,6 +30,18 @@ class MyJourneyViewModel @Inject constructor(
     private val _pastJourneys = MutableStateFlow(listOf<Journey>())
     val pastJourneys: StateFlow<List<Journey>>
         get() = _pastJourneys
+
+    fun fetchUser() {
+        viewModelScope.launch {
+            getUserUseCase("kakao-556894")
+                    .onSuccess { user ->
+                        _userName.value = user.name
+                        _personality.value = user.personality
+                    }.onFailure {
+                        it.printStackTrace()
+                    }
+        }
+    }
 
     @Inject
     fun fetchJourneyList() {
