@@ -11,9 +11,19 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
+
+    @Provides
+    @Singleton
+    fun provideSearchPlaceApi(
+        retrofit: Retrofit
+    ): SearchPlaceApi {
+        return retrofit.create(SearchPlaceApi::class.java)
+    }
 
     @Provides
     @Singleton
@@ -21,7 +31,7 @@ class NetworkModule {
         okHttpClient: OkHttpClient
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://dapi.kakao.com/")
+            .baseUrl("https://dapi.kakao.com")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -41,13 +51,5 @@ class NetworkModule {
                     .let(chain::proceed)
             }
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideSearchPlaceApi(
-        retrofit: Retrofit
-    ): SearchPlaceApi {
-        return retrofit.create(SearchPlaceApi::class.java)
     }
 }
