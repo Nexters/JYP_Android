@@ -169,8 +169,6 @@ fun SearchPlaceResultView(
 fun SearchPlaceResultItem(
     placeResult: SearchPlaceResultModel
 ) {
-    val placeCategoryEnum = placeResult.category.getJourneyPikiPlaceCategoryEnum()
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -197,11 +195,11 @@ fun SearchPlaceResultItem(
             modifier = Modifier.wrapContentSize()
         ) {
             Image(
-                painter = painterResource(placeCategoryEnum.categoryIconRes),
+                painter = painterResource(placeResult.categoryEnum.categoryIconRes),
                 contentDescription = null
             )
             JypText(
-                text = stringResource(placeCategoryEnum.journeyPikiCategoryNameRes),
+                text = stringResource(placeResult.categoryEnum.journeyPikiCategoryNameRes),
                 type = TextType.BODY_4,
                 color = JypColors.Text75
             )
