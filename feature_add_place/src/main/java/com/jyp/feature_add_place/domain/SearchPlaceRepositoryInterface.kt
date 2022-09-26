@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 abstract class SearchPlaceRepositoryInterface {
     abstract fun getSearchPlaceResult(
         placeName: String
-    ): Flow<List<SearchPlaceResultModel>>
+    ): Flow<Result<List<SearchPlaceResultModel>>>
 }
