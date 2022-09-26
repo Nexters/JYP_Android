@@ -2,6 +2,7 @@ package com.jyp.feature_add_place.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -17,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
-import com.jyp.feature_add_place.util.getJourneyPikiPlaceCategoryEnum
 import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.text.JypText
@@ -31,6 +31,7 @@ import kotlinx.coroutines.Job
 fun SearchPlaceScreen(
     uiState: UiState,
     onPlaceNameChanged: (String) -> Unit,
+    onClickPlaceItem: (SearchPlaceResultModel) -> Unit,
     onClickBackButton: () -> Unit
 ) {
     var placeName by remember { mutableStateOf("") }
@@ -50,7 +51,10 @@ fun SearchPlaceScreen(
         )
         when (placeName.isBlank()) {
             true -> RequestSearchPlaceView()
-            false -> SearchPlaceResultWithApiResponse(uiState)
+            false -> SearchPlaceResultView(
+                uiState,
+                onClickPlaceItem
+            )
         }
     }
 }
@@ -116,13 +120,19 @@ fun RequestSearchPlaceView() {
 }
 
 @Composable
-fun SearchPlaceResultWithApiResponse(uiState: UiState) {
+fun SearchPlaceResultView(
+    uiState: UiState,
+    onClickPlaceItem: (SearchPlaceResultModel) -> Unit,
+) {
     when (uiState) {
         is UiState.Loading -> return
         is UiState.Success -> {
             when (uiState.searchPlaceResult.isEmpty()) {
                 true -> SearchPlaceEmptyView()
-                false -> SearchPlaceResultView(uiState.searchPlaceResult)
+                false -> SearchPlaceListView(
+                    uiState.searchPlaceResult,
+                    onClickPlaceItem
+                )
             }
         }
         is UiState.Failure -> SearchPlaceEmptyView()
@@ -152,27 +162,31 @@ fun SearchPlaceEmptyView() {
 }
 
 @Composable
-fun SearchPlaceResultView(
-    SearchPlaceResults: List<SearchPlaceResultModel>
+fun SearchPlaceListView(
+    SearchPlaceResults: List<SearchPlaceResultModel>,
+    onClickPlaceItem: (SearchPlaceResultModel) -> Unit,
 ) {
-    LazyColumn(
-//        contentPadding = PaddingValues(horizontal = 24.dp)
-    ) {
-        itemsIndexed(items = SearchPlaceResults) { index, item ->
-            SearchPlaceResultItem(placeResult = item)
+    LazyColumn {
+        itemsIndexed(items = SearchPlaceResults) { _, item ->
+            SearchPlaceResultItem(
+                placeResult = item,
+                onClickPlaceItem = onClickPlaceItem
+            )
         }
     }
 }
 
 @Composable
 fun SearchPlaceResultItem(
-    placeResult: SearchPlaceResultModel
+    placeResult: SearchPlaceResultModel,
+    onClickPlaceItem: (SearchPlaceResultModel) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(top = 12.dp)
+            .clickable { onClickPlaceItem(placeResult) }
     ) {
         Row(
             modifier = Modifier
@@ -238,6 +252,7 @@ fun SearchPlaceScreenPreview() {
     SearchPlaceScreen(
         uiState = UiState.Success(emptyList()),
         onPlaceNameChanged = { Job() },
-        onClickBackButton = { }
+        onClickPlaceItem = {},
+        onClickBackButton = {}
     )
 }

@@ -1,6 +1,7 @@
 package com.jyp.feature_add_place.presentation
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.feature_add_place.presentation.viewmodel.SearchPlaceViewModel
 import com.jyp.feature_add_place.util.checkNetworkStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,9 +29,20 @@ class SearchPlaceActivity : ComponentActivity() {
             Screen(
                 context = this,
                 searchPlaceViewModel = viewModel,
+                onClickPlaceItem = { searchPlaceResultModel ->
+                    startActivity(
+                        Intent(this, PlaceMapActivity::class.java).apply {
+                            putExtra(SEARCH_PLACE_RESULT, searchPlaceResultModel)
+                        }
+                    )
+                },
                 onClickBackButton = { this.finish() }
             )
         }
+    }
+
+    companion object {
+        const val SEARCH_PLACE_RESULT = "SEARCH_PLACE_RESULT"
     }
 }
 
@@ -38,6 +51,7 @@ class SearchPlaceActivity : ComponentActivity() {
 private fun Screen(
     context: Context,
     searchPlaceViewModel: SearchPlaceViewModel,
+    onClickPlaceItem: (SearchPlaceResultModel) -> Unit,
     onClickBackButton: () -> Unit
 ) {
     SearchPlaceScreen(
@@ -48,6 +62,7 @@ private fun Screen(
                 isInactivated = { }
             )
         },
+        onClickPlaceItem = onClickPlaceItem,
         onClickBackButton = onClickBackButton
     )
 }
