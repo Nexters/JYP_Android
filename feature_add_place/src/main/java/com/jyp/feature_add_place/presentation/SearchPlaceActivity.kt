@@ -3,14 +3,12 @@ package com.jyp.feature_add_place.presentation
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import com.jyp.feature_add_place.presentation.viewmodel.SearchPlaceViewModel
 import com.jyp.feature_add_place.util.checkNetworkStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,10 +40,8 @@ private fun Screen(
     searchPlaceViewModel: SearchPlaceViewModel,
     onClickBackButton: () -> Unit
 ) {
-    val viewModel = remember { searchPlaceViewModel }
-
     SearchPlaceScreen(
-        uiState = viewModel.uiState.collectAsState().value,
+        uiState = searchPlaceViewModel.uiState.collectAsState().value,
         onPlaceNameChanged = { placeName ->
             context.checkNetworkStatus(
                 isActivated = { searchPlaceViewModel.getSearchPlaceResult(placeName) },
