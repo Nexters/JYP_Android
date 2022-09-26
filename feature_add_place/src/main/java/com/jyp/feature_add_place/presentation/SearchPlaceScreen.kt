@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
@@ -154,10 +156,7 @@ fun SearchPlaceResultView(
     SearchPlaceResults: List<SearchPlaceResultModel>
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(
-            horizontal = 24.dp,
-            vertical = 6.dp
-        )
+//        contentPadding = PaddingValues(horizontal = 24.dp)
     ) {
         itemsIndexed(items = SearchPlaceResults) { index, item ->
             SearchPlaceResultItem(placeResult = item)
@@ -169,41 +168,67 @@ fun SearchPlaceResultView(
 fun SearchPlaceResultItem(
     placeResult: SearchPlaceResultModel
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .padding(top = 12.dp)
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .weight(1f)
+                .padding(bottom = 12.dp)
         ) {
-            JypText(
-                text = placeResult.name,
-                type = TextType.TITLE_5,
-                color = JypColors.Text80
-            )
-            JypText(
-                text = placeResult.address,
-                type = TextType.BODY_4,
-                color = JypColors.Text40
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .weight(1f)
+                    .padding(start = 32.dp)
+            ) {
+                JypText(
+                    text = placeResult.name,
+                    type = TextType.TITLE_5,
+                    modifier = Modifier.padding(bottom = 2.dp),
+                    color = JypColors.Text80
+                )
+                JypText(
+                    text = placeResult.address,
+                    type = TextType.BODY_4,
+                    color = JypColors.Text40
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .wrapContentSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                Image(
+                    painter = painterResource(placeResult.categoryEnum.categoryIconRes),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .height(30.dp)
+                        .padding(horizontal = 24.dp)
+                        .padding(bottom = 2.dp)
+                )
+                JypText(
+                    text = stringResource(placeResult.categoryEnum.journeyPikiCategoryNameRes),
+                    type = TextType.BODY_4,
+                    modifier = Modifier.wrapContentSize(),
+                    textAlign = TextAlign.Center,
+                    color = JypColors.Text75
+                )
+            }
         }
-        Column(
-            modifier = Modifier.wrapContentSize()
-        ) {
-            Image(
-                painter = painterResource(placeResult.categoryEnum.categoryIconRes),
-                contentDescription = null
-            )
-            JypText(
-                text = stringResource(placeResult.categoryEnum.journeyPikiCategoryNameRes),
-                type = TextType.BODY_4,
-                color = JypColors.Text75
-            )
-        }
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            color = JypColors.Black10,
+            thickness = 1.dp
+        )
     }
 }
 
