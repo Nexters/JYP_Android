@@ -11,6 +11,7 @@ ext {
             compose_customview_poolingcontainer_version: "1.0.0",
             compose_flowlayout_version                 : "0.25.0",
             compose_view_model_version                 : "2.5.1",
+            compose_constrintlayout_version            : "1.0.1",
             accompanist_pager_version                  : "0.23.1",
             landscapist_version                        : "1.4.9",
             lottie_version                             : "5.2.0",
@@ -25,6 +26,7 @@ ext {
                     compose_activity                   : "androidx.activity:activity-compose:$versions.compose_activity_version",
                     compose_view_model                 : "androidx.lifecycle:lifecycle-viewmodel-compose:$versions.compose_view_model_version",
                     compose_navigation                 : "androidx.navigation:navigation-compose:$versions.compose_navigation_version",
+                    compose_constrintlayout            : "androidx.constraintlayout:constraintlayout-compose:$versions.compose_constrintlayout_version",
                     compose_flowlayout                 : "com.google.accompanist:accompanist-flowlayout:$versions.compose_flowlayout_version",
                     compose_pager                      : "com.google.accompanist:accompanist-pager:$versions.accompanist_pager_version",
                     compose_pager_indicators           : "com.google.accompanist:accompanist-pager-indicators:$versions.accompanist_pager_version"

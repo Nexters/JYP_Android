@@ -6,4 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".presentation.PlaceMapActivity">
 
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/composeView_appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/frameLayout_mapViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/composeView_placeInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/composeView_appBar" />
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/composeView_mapMarker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/frameLayout_mapViewContainer"
+        app:layout_constraintEnd_toEndOf="@id/frameLayout_mapViewContainer"
+        app:layout_constraintStart_toStartOf="@id/frameLayout_mapViewContainer"
+        app:layout_constraintTop_toTopOf="@id/frameLayout_mapViewContainer" />
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/composeView_placeInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/view_bottomSheetTop"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/r20_top"
+        android:backgroundTint="#ffffff"
+        app:layout_constraintBottom_toTopOf="@id/composeView_placeInfo"
+        app:layout_constraintEnd_toEndOf="@id/composeView_placeInfo"
+        app:layout_constraintStart_toStartOf="@id/composeView_placeInfo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

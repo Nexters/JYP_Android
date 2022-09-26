@@ -20,4 +20,7 @@
     <string name="category_name_charging_zone">"충전소"</string>
     <string name="category_name_parking_lot">"주차장"</string>
     <string name="category_name_etc">"기타"</string>
+    
+    <string name="button_see_info">정보 보기</string>
+    <string name="button_add_place">추가하기</string>
 </resources>
