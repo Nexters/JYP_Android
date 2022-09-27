@@ -12,6 +12,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -65,6 +67,8 @@ fun SearchPlaceHeader(
     onPlaceNameChanged: (String) -> Unit,
     onClickBackButton: () -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -87,13 +91,17 @@ fun SearchPlaceHeader(
             modifier = Modifier
                 .fillMaxWidth(1f)
                 .wrapContentHeight()
-                .align(Alignment.CenterVertically),
+                .align(Alignment.CenterVertically)
+                .focusRequester(focusRequester),
             type = TextInputType.BOX,
             text = placeName,
             valueChange = { onPlaceNameChanged(it) },
             hint = "예) 서울 저니 식당",
             trailingImage = painterResource(id = R.drawable.ic_search),
         )
+    }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
 }
 
