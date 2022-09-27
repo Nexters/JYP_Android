@@ -3,10 +3,7 @@ package com.jyp.feature_add_place.presentation
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -16,6 +13,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -23,13 +21,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.jyp_design.R
 import com.jyp.feature_add_place.databinding.ActivityPlaceMapBinding
+import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.SEARCH_PLACE_RESULT
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
 import com.jyp.jyp_design.ui.button.ButtonType
 import com.jyp.jyp_design.ui.button.JypTextButton
 import com.jyp.jyp_design.ui.text.JypText
+import com.jyp.jyp_design.ui.text_input.JypTextInput
+import com.jyp.jyp_design.ui.text_input.TextInputType
 import com.jyp.jyp_design.ui.typography.type.TextType
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -41,7 +43,9 @@ class PlaceMapActivity : ComponentActivity() {
     private val viewBinding get() = _viewBinding!!
 
     private lateinit var mapView: MapView
-
+    private val searchPlaceResultModel: SearchPlaceResultModel? by lazy {
+        intent.getParcelableExtra(SEARCH_PLACE_RESULT)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,70 +60,86 @@ class PlaceMapActivity : ComponentActivity() {
     }
 
     private fun initComposeView() {
-        val placeName = intent.getStringExtra(PLACE_NAME) ?: "아르떼 뮤지엄"
-        val placeCategory = intent.getStringExtra(PLACE_CATEGORY) ?: "문화시설"
-        val placeAddress = intent.getStringExtra(PLACE_ADDRESS) ?: "강원 강릉시 난설헌로 131"
-
         viewBinding.composeViewAppBar.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ComposableAppBar(
-                    placeName = placeName,
-                    onClickBackButton = { this@PlaceMapActivity.finish() }
+                    placeName = searchPlaceResultModel?.name ?: "",
+                    onClickBackButton = { this@PlaceMapActivity.finish() },
+                    onClickClearButton = {
+                        startActivity(
+                            Intent(this@PlaceMapActivity, SearchPlaceActivity::class.java).apply {
+                                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            }
+                        )
+                    }
                 )
             }
         }
         viewBinding.composeViewMapMarker.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                ComposablePlaceMarker(
-                    placeName = placeName,
-                    placeCategory = placeCategory
-                )
+                searchPlaceResultModel?.let {
+                    ComposablePlaceMarker(
+                        placeName = it.name,
+                        placeCategory = getString(it.categoryEnum.journeyPikiCategoryNameRes)
+                    )
+                }
             }
         }
         viewBinding.composeViewPlaceInfo.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                ComposablePlaceInfoBottomSheet(
-                    placeName = placeName,
-                    placeAddress = placeAddress,
-                    onClickInfoButton = {
-                        startActivity(Intent(context, PlaceInfoActivity::class.java))
-                    }
-                )
+                searchPlaceResultModel?.let {
+                    ComposablePlaceInfoBottomSheet(
+                        placeName = it.name,
+                        placeAddress = it.address,
+                        onClickInfoButton = {
+                            startActivity(
+                                Intent(context, PlaceInfoActivity::class.java).apply {
+                                    putExtra(SEARCH_PLACE_RESULT, searchPlaceResultModel)
+                                }
+                            )
+                        }
+                    )
+                }
             }
         }
     }
 
     private fun initKakaoMapView() {
-        val placeLatitude = intent.getDoubleExtra(PLACE_LATITUDE, 0.0)
-        val placeLongitude = intent.getDoubleExtra(PLACE_LONGITUDE, 0.0)
-
         mapView = MapView(this).apply {
             viewBinding.frameLayoutMapViewContainer.addView(this)
-            setMapCenterPoint(MapPoint.mapPointWithGeoCoord(placeLatitude, placeLongitude), true)
+            setMapCenterPoint(
+                MapPoint.mapPointWithGeoCoord(
+                    searchPlaceResultModel?.x ?: 0.0,
+                    searchPlaceResultModel?.y ?: 0.0
+                ),
+                true)
         }
-    }
-
-    companion object {
-        private const val PLACE_NAME = "PLACE_NAME"
-        private const val PLACE_CATEGORY = "PLACE_CATEGORY"
-        private const val PLACE_ADDRESS = "PLACE_ADDRESS"
-        private const val PLACE_LATITUDE = "PLACE_LATITUDE"
-        private const val PLACE_LONGITUDE = "PLACE_LONGITUDE"
     }
 }
 
 @Composable
 private fun ComposableAppBar(
     placeName: String,
-    onClickBackButton: () -> Unit
+    onClickBackButton: () -> Unit,
+    onClickClearButton: () -> Unit
 ) {
     Row(
         modifier = Modifier
-            .wrapContentHeight()
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .background(JypColors.Background_white100)
+            .clip(RoundedCornerShape(6.dp))
+            .border(
+                border = BorderStroke(1.dp, JypColors.Border_grey),
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(
+                horizontal = 12.dp,
+                vertical = 6.dp,
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
@@ -137,7 +157,7 @@ private fun ComposableAppBar(
         }
         Row(
             modifier = Modifier
-                .padding(end = 24.dp)
+                .padding(end = 12.dp)
                 .padding(vertical = 10.dp)
                 .fillMaxWidth()
                 .wrapContentHeight()
@@ -169,6 +189,7 @@ private fun ComposableAppBar(
                     .padding(vertical = 8.dp)
                     .padding(end = 12.dp)
                     .wrapContentSize()
+                    .clickable { onClickClearButton() }
             )
         }
     }
