@@ -52,12 +52,8 @@ fun isNetworkActivated(context: Context): Boolean {
 }
 
 private var toast: Toast? = null
-fun Context.showToast(message: Any) {
+fun Context.showToast(messageRes: Int) {
     toast?.cancel()
-    toast = when (message) {
-        is Int -> Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
-        is String -> Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
-        else -> null
-    }
+    toast = Toast.makeText(applicationContext, messageRes, Toast.LENGTH_SHORT)
     toast?.show()
 }
