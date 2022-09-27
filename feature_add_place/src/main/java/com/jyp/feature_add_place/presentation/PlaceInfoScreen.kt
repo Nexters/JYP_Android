@@ -1,7 +1,6 @@
-package com.jyp.feature_add_place
+package com.jyp.feature_add_place.presentation
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.graphics.Bitmap
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -13,11 +12,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.jyp.feature_add_place.R
+import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
+import com.jyp.feature_add_place.util.JourneyPikiPlaceCategoryEnum
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
@@ -26,6 +27,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 internal fun PlaceInfoScreen(
+    searchPlaceResultModel: SearchPlaceResultModel,
     onClickCloseButton: () -> Unit
 ) {
     Column(
@@ -42,7 +44,7 @@ internal fun PlaceInfoScreen(
                 onClick = { onClickCloseButton() }
             ) {
                 Icon(
-                    painter = painterResource(com.jyp.jyp_design.R.drawable.icon_close),
+                    painter = painterResource(R.drawable.icon_close),
                     contentDescription = null,
                     modifier = Modifier.padding(
                         vertical = 16.dp,
@@ -59,7 +61,7 @@ internal fun PlaceInfoScreen(
                     .wrapContentHeight()
             ) {
                 JypText(
-                    text = "아르떼 뮤지엄",
+                    text = searchPlaceResultModel.name,
                     type = TextType.TITLE_3,
                     modifier = Modifier.padding(vertical = 6.dp),
                     color = JypColors.Text80
@@ -68,9 +70,9 @@ internal fun PlaceInfoScreen(
             }
         }
 
-        val url = "https://place.map.kakao.com/m/2115731103"
         var backEnabled by remember { mutableStateOf(false) }
         var webView: WebView? = null
+
         AndroidView(
             modifier = Modifier.fillMaxSize(),
             factory = { context ->
@@ -86,7 +88,7 @@ internal fun PlaceInfoScreen(
                     }
                     settings.javaScriptEnabled = true
 
-                    loadUrl(url)
+                    loadUrl(searchPlaceResultModel.infoUrl)
                     webView = this
                 }
             }, update = {
@@ -103,6 +105,14 @@ internal fun PlaceInfoScreen(
 @Preview(showBackground = true)
 internal fun PlaceInfoScreenPreview() {
     PlaceInfoScreen(
+        searchPlaceResultModel = SearchPlaceResultModel(
+            name = "",
+            address = "",
+            categoryEnum = JourneyPikiPlaceCategoryEnum.CAFE,
+            x = 0.0,
+            y = 0.0,
+            infoUrl = "https://place.map.kakao.com/m/2115731103"
+        ),
         onClickCloseButton = {}
     )
 }
