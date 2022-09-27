@@ -24,12 +24,8 @@
         <activity
             android:name=".presentation.PlaceMapActivity"
             android:exported="false" />
-
         <activity
-            android:name="com.jyp.feature_add_place.PlaceMapActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PlaceInfoActivity"
+            android:name=".presentation.PlaceInfoActivity"
             android:exported="false" />
 
     </application>
