@@ -1,7 +1,7 @@
 package com.jyp.core
 
 import com.jyp.core.search_place.domain.KakaoLocalRetrofit
-import com.jyp.core.search_place.domain.SearchPlaceApi
+import com.jyp.core.search_place.domain.KakaoLocalApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,10 +20,10 @@ object NetworkModule {
     @Provides
     @Singleton
     @KakaoLocalRetrofit
-    fun provideSearchPlaceApi(
+    fun provideKakaoLocalApi(
         @KakaoLocalRetrofit retrofit: Retrofit
-    ): SearchPlaceApi {
-        return retrofit.create(SearchPlaceApi::class.java)
+    ): KakaoLocalApi {
+        return retrofit.create(KakaoLocalApi::class.java)
     }
 
     @Provides

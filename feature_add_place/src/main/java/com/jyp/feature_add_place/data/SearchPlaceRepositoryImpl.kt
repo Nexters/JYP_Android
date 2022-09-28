@@ -1,9 +1,9 @@
 package com.jyp.feature_add_place.data
 
 import com.jyp.core.search_place.domain.KakaoLocalRetrofit
-import com.jyp.core.search_place.domain.SearchPlaceApi
+import com.jyp.core.search_place.domain.KakaoLocalApi
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
-import com.jyp.feature_add_place.data.mapper.toDataModelList
+import com.jyp.feature_add_place.data.mapper.toSearchPlaceResultModelList
 import com.jyp.feature_add_place.domain.SearchPlaceRepositoryInterface
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 
 class SearchPlaceRepositoryImpl @Inject constructor(
-    @KakaoLocalRetrofit private val searchPlaceApi: SearchPlaceApi
+    @KakaoLocalRetrofit private val kakaoLocalApi: KakaoLocalApi
 ) : SearchPlaceRepositoryInterface() {
 
     override fun getSearchPlaceResult(
@@ -24,8 +24,8 @@ class SearchPlaceRepositoryImpl @Inject constructor(
         return flow {
             delay(300L)
             emit(resultOf {
-                searchPlaceApi.getSearchPlaceResult(placeName).documents.map {
-                    it.toDataModelList()
+                kakaoLocalApi.getKakaoLocalSearchResult(placeName).documents.map {
+                    it.toSearchPlaceResultModelList()
                 }
             })
         }

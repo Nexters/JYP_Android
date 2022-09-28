@@ -1,7 +1,7 @@
 package com.jyp.core.search_place.domain.model
 
 
-data class SearchPlaceResponseModel(
+data class KakaoLocalResponseModel(
     val meta: PlaceMeta,                    // 장소 메타데이터
     val documents: List<Place>              // 검색 결과
 ) {
