@@ -1,4 +1,4 @@
-package com.jyp.journeypiki
+package com.jyp.journeypiki.presentation.splash
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

@@ -1,4 +1,4 @@
-package com.jyp.feature_sign_in.presentation.sign_in
+package com.jyp.journeypiki.presentation.sign_in
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,9 +15,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.jyp.journeypiki.R
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
+
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -44,9 +46,7 @@ fun SignInContent() {
             contentAlignment = Alignment.Center,
         ) {
             Image(
-                painter = painterResource(
-                    id = com.jyp.feature_sign_in.R.drawable.image_journey_piki_app
-                ),
+                painter = painterResource(id = R.drawable.image_journey_piki_app),
                 contentDescription = null,
                 modifier = Modifier
                     .width(100.dp)
@@ -54,7 +54,7 @@ fun SignInContent() {
             )
         }
         JypText(
-            text = stringResource(id = com.jyp.feature_sign_in.R.string.sign_in_description),
+            text = stringResource(id = R.string.sign_in_description),
             type = TextType.BODY_1,
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,9 +65,7 @@ fun SignInContent() {
             color = JypColors.Background_grey300
         )
         Image(
-            painter = painterResource(
-                id = com.jyp.feature_sign_in.R.drawable.button_kakao_sign_in
-            ),
+            painter = painterResource(id = R.drawable.button_kakao_sign_in),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()

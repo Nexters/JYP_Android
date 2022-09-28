@@ -1,11 +1,11 @@
-package com.jyp.feature_sign_in.presentation.onboarding
+package com.jyp.journeypiki.presentation.onboarding
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import com.jyp.feature_sign_in.presentation.sign_in.SignInActivity
+import com.jyp.journeypiki.presentation.sign_in.SignInActivity
 
 
 class OnboardingActivity : ComponentActivity() {

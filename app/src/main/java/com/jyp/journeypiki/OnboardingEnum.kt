@@ -1,6 +1,6 @@
-package com.jyp.feature_sign_in
+package com.jyp.journeypiki
 
-import com.jyp.feature_sign_in.R
+import com.jyp.journeypiki.R
 
 
 enum class OnboardingEnum(

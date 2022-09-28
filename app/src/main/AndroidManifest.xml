@@ -13,16 +13,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JYPAndroid">
         <activity
-            android:name="com.jyp.journeypiki.SplashActivity"
+            android:name="com.jyp.journeypiki.presentation.splash.SplashActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.JYPAndroid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.jyp.journeypiki.presentation.onboarding.OnboardingActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.jyp.journeypiki.presentation.sign_in.SignInActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

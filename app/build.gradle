@@ -62,7 +62,6 @@ dependencies {
     implementation project(':core_network')
     implementation project(':core_ui')
     implementation project(':feature_main')
-    implementation project(':feature_sign_in')
 
     // module dependencies
 

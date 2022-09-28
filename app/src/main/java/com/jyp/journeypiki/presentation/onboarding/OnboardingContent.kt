@@ -1,4 +1,4 @@
-package com.jyp.feature_sign_in.presentation.onboarding
+package com.jyp.journeypiki.presentation.onboarding
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -20,7 +20,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.jyp.feature_sign_in.OnboardingEnum
+import com.jyp.journeypiki.OnboardingEnum
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
 import com.jyp.jyp_design.ui.button.ButtonType
