@@ -1,4 +1,7 @@
-package com.jyp.feature_onboarding
+package com.jyp.feature_sign_in
+
+import com.jyp.feature_sign_in.R
+
 
 enum class OnboardingEnum(
     val titleRes: Int,

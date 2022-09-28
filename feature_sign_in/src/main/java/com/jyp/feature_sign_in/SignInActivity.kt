@@ -1,4 +1,4 @@
-package com.jyp.feature_onboarding
+package com.jyp.feature_sign_in
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
