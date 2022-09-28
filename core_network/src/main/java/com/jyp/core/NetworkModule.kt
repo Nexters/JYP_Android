@@ -1,5 +1,6 @@
 package com.jyp.core
 
+import com.jyp.core.search_place.domain.KakaoLocalRetrofit
 import com.jyp.core.search_place.domain.SearchPlaceApi
 import dagger.Module
 import dagger.Provides
@@ -14,26 +15,28 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NetworkModule {
-
+object NetworkModule {
 
     @Provides
     @Singleton
+    @KakaoLocalRetrofit
     fun provideSearchPlaceApi(
-        retrofit: Retrofit
+        @KakaoLocalRetrofit retrofit: Retrofit
     ): SearchPlaceApi {
         return retrofit.create(SearchPlaceApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideRetrofit(
+    @KakaoLocalRetrofit
+    fun provideKakaoLocalRetrofit(
         okHttpClient: OkHttpClient
     ): Retrofit {
+
         return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://dapi.kakao.com")
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
@@ -46,7 +49,6 @@ class NetworkModule {
             })
             .addInterceptor { chain ->
                 chain.request().newBuilder()
-                    .addHeader("Authorization", "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}")
                     .build()
                     .let(chain::proceed)
             }

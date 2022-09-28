@@ -1,5 +1,6 @@
 package com.jyp.feature_add_place.data
 
+import com.jyp.core.search_place.domain.KakaoLocalRetrofit
 import com.jyp.core.search_place.domain.SearchPlaceApi
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.feature_add_place.data.mapper.toDataModelList
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 
 class SearchPlaceRepositoryImpl @Inject constructor(
-    private val searchPlaceApi: SearchPlaceApi
+    @KakaoLocalRetrofit private val searchPlaceApi: SearchPlaceApi
 ) : SearchPlaceRepositoryInterface() {
 
     override fun getSearchPlaceResult(

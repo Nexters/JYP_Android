@@ -15,7 +15,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object SearchPlaceModule {
 
-
     @Provides
     fun provideGetSearchPlaceUseCase(
         searchPlaceRepositoryInterface: SearchPlaceRepositoryInterface
