@@ -15,7 +15,6 @@
         <activity
             android:name="com.jyp.journeypiki.presentation.splash.SplashActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.JYPAndroid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +27,12 @@
             android:exported="false" />
         <activity
             android:name="com.jyp.journeypiki.presentation.sign_in.SignInActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <data android:host="oauth"
+                    android:scheme="kakao${KAKAO_NATIVE_APP_KEY}" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

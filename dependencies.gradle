@@ -13,6 +13,7 @@ ext {
             accompanist_pager_version                  : "0.23.1",
             landscapist_version                        : "1.4.9",
             lottie_version                             : "5.2.0",
+            kakao_sign_in                              : "2.11.1"
     ]
 
     composeDependencies = [
@@ -29,6 +30,12 @@ ext {
             ],
             debugImplementation: [
                     compose_tooling                    : "androidx.compose.ui:ui-tooling:$versions.compose_version",
+            ]
+    ]
+
+    kakaoSignInDependencies = [
+            implementation: [
+                    kakao_sign_in:  "com.kakao.sdk:v2-user:$versions.kakao_sign_in"
             ]
     ]
 
