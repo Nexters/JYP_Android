@@ -1,4 +1,4 @@
-package com.jyp.feature_sign_in
+package com.jyp.feature_sign_in.presentation.sign_in
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,5 +18,5 @@ class SignInActivity : ComponentActivity() {
 
 @Composable
 private fun Screen() {
-
+    SignInContent()
 }
