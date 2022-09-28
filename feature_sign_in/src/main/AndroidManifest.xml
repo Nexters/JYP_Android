@@ -4,9 +4,11 @@
 
     <application>
         <activity
-            android:name=".SignInActivity"
+            android:name=".presentation.onboarding.OnboardingActivity"
             android:exported="false" />
-        <activity android:name=".OnboardingActivity" />
+        <activity
+            android:name=".presentation.sign_in.SignInActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
