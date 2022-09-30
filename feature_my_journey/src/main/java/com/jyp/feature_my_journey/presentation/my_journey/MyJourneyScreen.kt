@@ -389,13 +389,20 @@ internal fun JourneyItem(
 ) {
     Box(
             modifier = Modifier
-                    .clip(shape = RoundedCornerShape(16.dp))
                     .width(276.dp)
                     .fillMaxHeight()
                     .padding(vertical = 24.dp)
+                    .let {
+                        if (themeType == ThemeType.DEFAULT) {
+                            it.shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
+                        } else {
+                            it
+                        }
+                    }
                     .background(
                             color = themeType.backgroundColor,
-                            shape = RoundedCornerShape(16.dp)),
+                            shape = RoundedCornerShape(16.dp)
+                    ),
     ) {
         Image(
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -443,7 +450,6 @@ internal fun JourneyItem(
                         type = TextType.TAG_2,
                         color = JypColors.Text_white,
                 )
-
                 Image(
                         modifier = Modifier
                                 .clip(CircleShape)
@@ -454,7 +460,7 @@ internal fun JourneyItem(
                                 ),
                         painter = painterResource(id = R.drawable.ic_more_menu),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(JypColors.Text_white)
+                        colorFilter = ColorFilter.tint(JypColors.Text_white),
                 )
             }
             Spacer(modifier = Modifier.padding(top = 16.dp))
@@ -462,13 +468,13 @@ internal fun JourneyItem(
                     text = journeyName,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 22.sp,
-                    color = JypColors.Text_white
+                    color = themeType.textColor,
             )
             Text(
                     text = "$startDay - $endDay",
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
-                    color = JypColors.Text_white,
+                    color = themeType.textColor,
             )
         }
     }
