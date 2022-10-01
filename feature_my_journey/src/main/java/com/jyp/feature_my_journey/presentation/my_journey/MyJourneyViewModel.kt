@@ -1,10 +1,10 @@
 package com.jyp.feature_my_journey.presentation.my_journey
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.*
-import com.jyp.feature_my_journey.domain.GetUserUseCase
-import com.jyp.feature_my_journey.domain.Journey
+import com.jyp.feature_my_journey.domain.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyJourneyViewModel @Inject constructor(
         private val getUserUseCase: GetUserUseCase,
+        private val getJourneysUseCase: GetJourneysUseCase,
 ) : ViewModel() {
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String>
@@ -50,6 +51,8 @@ class MyJourneyViewModel @Inject constructor(
     @Inject
     fun fetchJourneyList() {
         viewModelScope.launch {
+            Log.d("TAGTAGTAG", "${getJourneysUseCase()}")
+
             _plannedJourneys.value = listOf(
                     Journey(
                             dDay = "D-3",
