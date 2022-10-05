@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetSearchPlaceUseCase @Inject constructor(
     private val searchPlaceRepositoryInterface: SearchPlaceRepositoryInterface
 ) {
-    fun getSearchPlaceResult(
+    operator fun invoke(
         placeName: String
     ): Flow<Result<List<SearchPlaceResultModel>>> {
         return searchPlaceRepositoryInterface.getSearchPlaceResult(placeName)
