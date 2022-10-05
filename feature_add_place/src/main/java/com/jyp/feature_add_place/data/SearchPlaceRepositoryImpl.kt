@@ -3,7 +3,7 @@ package com.jyp.feature_add_place.data
 import com.jyp.core.search_place.domain.KakaoLocalRetrofit
 import com.jyp.core.search_place.domain.KakaoLocalApi
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
-import com.jyp.feature_add_place.data.mapper.toSearchPlaceResultModelList
+import com.jyp.feature_add_place.data.mapper.toSearchPlaceResultModel
 import com.jyp.feature_add_place.domain.SearchPlaceRepositoryInterface
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
@@ -25,7 +25,7 @@ class SearchPlaceRepositoryImpl @Inject constructor(
             delay(300L)
             emit(resultOf {
                 kakaoLocalApi.getKakaoLocalSearchResult(placeName).documents.map {
-                    it.toSearchPlaceResultModelList()
+                    it.toSearchPlaceResultModel()
                 }
             })
         }

@@ -5,7 +5,7 @@ import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.feature_add_place.util.getJourneyPikiPlaceCategoryEnum
 
 
-fun KakaoLocalResponseModel.Place.toSearchPlaceResultModelList() = SearchPlaceResultModel(
+fun KakaoLocalResponseModel.Place.toSearchPlaceResultModel() = SearchPlaceResultModel(
     name = this.place_name,
     address = this.address_name,
     categoryEnum = this.category_group_name.getJourneyPikiPlaceCategoryEnum(),
