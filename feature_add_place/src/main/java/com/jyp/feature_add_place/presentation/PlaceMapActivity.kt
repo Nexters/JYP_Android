@@ -21,17 +21,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.jyp.feature_add_place.R
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
-import com.jyp.jyp_design.R
 import com.jyp.feature_add_place.databinding.ActivityPlaceMapBinding
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.SEARCH_PLACE_RESULT
+import com.jyp.feature_add_place.util.showToast
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
 import com.jyp.jyp_design.ui.button.ButtonType
 import com.jyp.jyp_design.ui.button.JypTextButton
 import com.jyp.jyp_design.ui.text.JypText
-import com.jyp.jyp_design.ui.text_input.JypTextInput
-import com.jyp.jyp_design.ui.text_input.TextInputType
 import com.jyp.jyp_design.ui.typography.type.TextType
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -52,8 +51,16 @@ class PlaceMapActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
 
-        initComposeView()
-        initKakaoMapView()
+        when (searchPlaceResultModel == null) {
+            true -> {
+                showToast(R.string.search_place_error)
+                this.finish()
+            }
+            false -> {
+                initComposeView()
+                initKakaoMapView()
+            }
+        }
     }
 
     private fun initComposeView() {
@@ -71,6 +78,7 @@ class PlaceMapActivity : ComponentActivity() {
                         )
                     }
                 )
+
             }
         }
         viewBinding.composeViewMapMarker.apply {
@@ -112,7 +120,8 @@ class PlaceMapActivity : ComponentActivity() {
                     searchPlaceResultModel?.x ?: 0.0,
                     searchPlaceResultModel?.y ?: 0.0
                 ),
-                true)
+                true
+            )
         }
     }
 }
@@ -143,7 +152,7 @@ private fun ComposableAppBar(
             onClick = { onClickBackButton() }
         ) {
             Icon(
-                painter = painterResource(R.drawable.icon_left_arrow),
+                painter = painterResource(com.jyp.jyp_design.R.drawable.icon_left_arrow),
                 contentDescription = null,
                 modifier = Modifier.padding(
                     vertical = 16.dp,
@@ -180,7 +189,7 @@ private fun ComposableAppBar(
             )
             Spacer(modifier = Modifier.size(12.dp))
             Image(
-                painter = painterResource(id = R.drawable.ic_text_delete),
+                painter = painterResource(id = com.jyp.jyp_design.R.drawable.ic_text_delete),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(vertical = 8.dp)
