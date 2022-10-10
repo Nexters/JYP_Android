@@ -20,10 +20,13 @@ class PlaceInfoActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            when (searchPlaceResultModel == null) {
-                true -> showToast(R.string.search_place_empty)
-                false -> Screen(
+        when (searchPlaceResultModel == null) {
+            true -> {
+                showToast(R.string.search_place_error)
+                this.finish()
+            }
+            false -> setContent {
+                Screen(
                     searchPlaceResult = searchPlaceResultModel!!,
                     onClickCloseButton = { this.finish() }
                 )
