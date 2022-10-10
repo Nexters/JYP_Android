@@ -22,7 +22,6 @@ class SearchPlaceActivity : ComponentActivity() {
     private val viewModel by viewModels<SearchPlaceViewModel>()
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -46,7 +45,6 @@ class SearchPlaceActivity : ComponentActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 private fun Screen(
     context: Context,
