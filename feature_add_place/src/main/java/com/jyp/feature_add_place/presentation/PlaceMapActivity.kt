@@ -39,24 +39,21 @@ import net.daum.mf.map.api.MapView
 
 class PlaceMapActivity : ComponentActivity() {
 
-    private var _viewBinding: ActivityPlaceMapBinding? = null
-    private val viewBinding get() = _viewBinding!!
-
+    private val viewBinding: ActivityPlaceMapBinding by lazy {
+        ActivityPlaceMapBinding.inflate(layoutInflater)
+    }
     private lateinit var mapView: MapView
     private val searchPlaceResultModel: SearchPlaceResultModel? by lazy {
         intent.getParcelableExtra(SEARCH_PLACE_RESULT)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initViewBinding()
+        setContentView(viewBinding.root)
+
         initComposeView()
         initKakaoMapView()
-    }
-
-    private fun initViewBinding() {
-        _viewBinding = ActivityPlaceMapBinding.inflate(layoutInflater)
-        setContentView(viewBinding.root)
     }
 
     private fun initComposeView() {
