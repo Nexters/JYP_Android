@@ -9,8 +9,8 @@
 
     <application>
         <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="${kakao_native_app_key}" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${google_map_api_key}" />
 
         <activity
             android:name=".presentation.SearchPlaceActivity"
