@@ -2,6 +2,7 @@ package com.jyp.feature_planner.presentation.create_planner
 
 import androidx.lifecycle.ViewModel
 import com.jyp.feature_planner.domain.Tag
+import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.ui.tag.TagState
 import com.jyp.jyp_design.ui.tag.TagType
 import dagger.hilt.android.lifecycle.HiltViewModel
