@@ -109,8 +109,8 @@ internal fun PlaceInfoScreenPreview() {
             name = "",
             address = "",
             categoryEnum = JourneyPikiPlaceCategoryEnum.CAFE,
-            x = 0.0,
-            y = 0.0,
+            latitude = 0.0,
+            longitude = 0.0,
             infoUrl = "https://place.map.kakao.com/m/2115731103"
         ),
         onClickCloseButton = {}

@@ -9,7 +9,7 @@ fun KakaoLocalResponseModel.Place.toSearchPlaceResultModel() = SearchPlaceResult
     name = this.place_name,
     address = this.address_name,
     categoryEnum = this.category_group_name.getJourneyPikiPlaceCategoryEnum(),
-    x = this.x.toDouble(),
-    y = this.y.toDouble(),
+    latitude = this.y.toDouble(),
+    longitude = this.x.toDouble(),
     infoUrl = this.place_url
 )

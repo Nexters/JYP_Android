@@ -10,7 +10,7 @@ data class SearchPlaceResultModel(
     val name: String,
     val address: String,
     val categoryEnum: JourneyPikiPlaceCategoryEnum,
-    val x: Double,
-    val y: Double,
+    val latitude: Double,
+    val longitude: Double,
     val infoUrl: String
 ): Parcelable
