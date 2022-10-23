@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class SearchPlaceRepositoryImpl @Inject constructor(
     @KakaoLocalRetrofit private val kakaoLocalApi: KakaoLocalApi
-) : SearchPlaceRepository() {
+) : SearchPlaceRepository {
 
     override fun getSearchPlaceResult(
         placeName: String
