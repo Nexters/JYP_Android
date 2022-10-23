@@ -2,6 +2,8 @@ package com.jyp.feature_planner.presentation.planner
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -46,36 +48,47 @@ internal fun PlannerJourneyPlanScreen(
                 ),
         ),
 ) {
-    Column(
+    LazyColumn(
             modifier = Modifier
                     .padding(horizontal = 20.dp),
     ) {
-        Spacer(modifier = Modifier.size(30.dp))
+        item {
+            Spacer(modifier = Modifier.size(30.dp))
+        }
+
         planItems.forEachIndexed { index, planItem ->
             if (planItem.pikis.isEmpty()) {
-                PlanGroupItem(
-                        day = planItem.day,
-                )
-                if (index != planItems.lastIndex) {
-                    Spacer(modifier = Modifier.size(12.dp))
+                item {
+                    PlanGroupItem(
+                            day = planItem.day,
+                    )
+                    if (index != planItems.lastIndex) {
+                        Spacer(modifier = Modifier.size(12.dp))
+                    }
                 }
             } else {
                 if (index > 0 && planItems[index].pikis.isNotEmpty() && planItems[index - 1].pikis.isEmpty()) {
-                    Spacer(modifier = Modifier.size(36.dp))
+                    item {
+                        Spacer(modifier = Modifier.size(36.dp))
+                    }
                 }
-                
-                PlanEachTitle(
-                        day = planItem.day,
-                )
-                Spacer(modifier = Modifier.size(26.dp))
-                planItem.pikis.forEachIndexed { pikisIndex, pikis ->
-                    PlanEachItem(
-                            order = pikisIndex + 1,
+
+                item {
+                    PlanEachTitle(
+                            day = planItem.day,
                     )
-                    if (pikisIndex != planItem.pikis.lastIndex) {
-                        PlanEachContentDivider()
-                    } else {
-                        Spacer(modifier = Modifier.size(48.dp))
+                    Spacer(modifier = Modifier.size(26.dp))
+                }
+                planItem.pikis.forEachIndexed { pikisIndex, pikis ->
+                    item {
+                        PlanEachItem(
+                                order = pikisIndex + 1,
+                        )
+                        if (pikisIndex != planItem.pikis.lastIndex) {
+                            PlanEachContentDivider()
+                        } else {
+                            Spacer(modifier = Modifier.size(48.dp))
+                        }
                     }
                 }
             }
