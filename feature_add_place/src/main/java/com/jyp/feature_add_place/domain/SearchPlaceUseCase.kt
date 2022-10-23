@@ -6,11 +6,11 @@ import javax.inject.Inject
 
 
 class GetSearchPlaceUseCase @Inject constructor(
-    private val searchPlaceRepositoryInterface: SearchPlaceRepositoryInterface
+    private val searchPlaceRepository: SearchPlaceRepository
 ) {
     operator fun invoke(
         placeName: String
     ): Flow<Result<List<SearchPlaceResultModel>>> {
-        return searchPlaceRepositoryInterface.getSearchPlaceResult(placeName)
+        return searchPlaceRepository.getSearchPlaceResult(placeName)
     }
 }
