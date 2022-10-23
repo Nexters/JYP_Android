@@ -15,6 +15,8 @@ ext {
             accompanist_pager_version                  : "0.23.1",
             landscapist_version                        : "1.4.9",
             lottie_version                             : "5.2.0",
+            google_maps_version                        : "2.5.3",
+            google_play_services_maps_version          : "18.0.2"
     ]
 
     composeDependencies = [
@@ -64,6 +66,13 @@ ext {
     lottieDependencies = [
             implementation: [
                     lottie_compose: "com.airbnb.android:lottie-compose:$versions.lottie_version",
+            ]
+    ]
+
+    googleMapsDependencies = [
+            implementation: [
+                    google_maps_compose: "com.google.maps.android:maps-compose:$versions.google_maps_version",
+                    google_play_services: "com.google.android.gms:play-services-maps:$versions.google_play_services_maps_version"
             ]
     ]
 }

@@ -9,7 +9,7 @@ plugins {
 
 Properties localProperties = new Properties()
 localProperties.load(rootProject.file('local.properties').newDataInputStream())
-String kakao_native_app_key = localProperties.getProperty('kakao_native_app_key')
+String google_map_api_key = localProperties.getProperty('google_map_api_key')
 
 android {
     compileSdk 32
@@ -22,7 +22,7 @@ android {
         consumerProguardFiles "consumer-rules.pro"
 
         manifestPlaceholders = [
-                kakao_native_app_key: kakao_native_app_key
+                google_map_api_key: google_map_api_key
         ]
     }
 
@@ -41,7 +41,6 @@ android {
     }
     buildFeatures {
         compose true
-        viewBinding true
     }
     composeOptions {
         kotlinCompilerExtensionVersion versions.compose_version
@@ -65,4 +64,6 @@ dependencies {
 
     implementation hiltDependencies.implementation.values()
     kapt hiltDependencies.kapt.values()
+
+    implementation googleMapsDependencies.implementation.values()
 }
