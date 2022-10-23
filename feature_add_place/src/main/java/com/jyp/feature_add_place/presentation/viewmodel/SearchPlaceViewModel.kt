@@ -2,7 +2,7 @@ package com.jyp.feature_add_place.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jyp.feature_add_place.presentation.UiState
+import com.jyp.feature_add_place.presentation.ApiState
 import com.jyp.feature_add_place.domain.GetSearchPlaceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +17,8 @@ class SearchPlaceViewModel @Inject constructor(
     private val getSearchPlaceUseCase: GetSearchPlaceUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState = _uiState.asStateFlow()
+    private val _apiState = MutableStateFlow<ApiState>(ApiState.Loading)
+    val apiState = _apiState.asStateFlow()
 
     private var searchPlaceJob: Job? = null
 
@@ -27,15 +27,15 @@ class SearchPlaceViewModel @Inject constructor(
         searchPlaceJob?.cancel()
         searchPlaceJob = viewModelScope.launch(Dispatchers.IO) {
             getSearchPlaceUseCase(placeName)
-                .onStart { _uiState.emit(UiState.Loading) }
+                .onStart { _apiState.emit(ApiState.Loading) }
                 .cancellable()
                 .collect { result ->
                     result
                         .onSuccess { searchPlaceResult ->
-                            _uiState.emit(UiState.Success(searchPlaceResult))
+                            _apiState.emit(ApiState.Success(searchPlaceResult))
                         }
                         .onFailure { throwable ->
-                            _uiState.emit(UiState.Failure(throwable.stackTrace.toString()))
+                            _apiState.emit(ApiState.Failure(throwable.stackTrace.toString()))
                         }
                 }
         }

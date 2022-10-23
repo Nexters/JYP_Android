@@ -31,7 +31,7 @@ import kotlinx.coroutines.Job
 
 @Composable
 fun SearchPlaceScreen(
-    uiState: UiState,
+    apiState: ApiState,
     onPlaceNameChanged: (String) -> Unit,
     onClickPlaceItem: (SearchPlaceResultModel) -> Unit,
     onClickBackButton: () -> Unit
@@ -54,7 +54,7 @@ fun SearchPlaceScreen(
         when (placeName.isBlank()) {
             true -> RequestSearchPlaceView()
             false -> SearchPlaceResultView(
-                uiState,
+                apiState,
                 onClickPlaceItem
             )
         }
@@ -129,21 +129,21 @@ fun RequestSearchPlaceView() {
 
 @Composable
 fun SearchPlaceResultView(
-    uiState: UiState,
+    apiState: ApiState,
     onClickPlaceItem: (SearchPlaceResultModel) -> Unit,
 ) {
-    when (uiState) {
-        is UiState.Loading -> return
-        is UiState.Success -> {
-            when (uiState.searchPlaceResult.isEmpty()) {
+    when (apiState) {
+        is ApiState.Loading -> return
+        is ApiState.Success -> {
+            when (apiState.searchPlaceResult.isEmpty()) {
                 true -> SearchPlaceEmptyView()
                 false -> SearchPlaceListView(
-                    uiState.searchPlaceResult,
+                    apiState.searchPlaceResult,
                     onClickPlaceItem
                 )
             }
         }
-        is UiState.Failure -> SearchPlaceEmptyView()
+        is ApiState.Failure -> SearchPlaceEmptyView()
     }
 }
 
@@ -258,7 +258,7 @@ fun SearchPlaceResultItem(
 @Composable
 fun SearchPlaceScreenPreview() {
     SearchPlaceScreen(
-        uiState = UiState.Success(emptyList()),
+        apiState = ApiState.Success(emptyList()),
         onPlaceNameChanged = { Job() },
         onClickPlaceItem = {},
         onClickBackButton = {}

@@ -51,7 +51,7 @@ private fun Screen(
     onClickBackButton: () -> Unit
 ) {
     SearchPlaceScreen(
-        uiState = searchPlaceViewModel.uiState.collectAsState().value,
+        apiState = searchPlaceViewModel.apiState.collectAsState().value,
         onPlaceNameChanged = { placeName ->
             context.checkNetworkStatus(
                 isActivated = { searchPlaceViewModel.getSearchPlaceResult(placeName) },
