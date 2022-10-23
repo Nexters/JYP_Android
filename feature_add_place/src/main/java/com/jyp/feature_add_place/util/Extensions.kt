@@ -46,9 +46,14 @@ inline fun Context.checkNetworkStatus(
 
 @RequiresApi(Build.VERSION_CODES.M)
 fun isNetworkActivated(context: Context): Boolean {
-    val networkStatus = (context.getSystemService(CONNECTIVITY_SERVICE)
-            as ConnectivityManager).activeNetwork
-    return networkStatus != null
+    val connectivityManager = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+    return when (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        true -> connectivityManager.activeNetwork != null
+        false -> {
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
+        }
+    }
 }
 
 private var toast: Toast? = null
