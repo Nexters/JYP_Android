@@ -2,12 +2,10 @@ package com.jyp.feature_add_place.presentation
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
