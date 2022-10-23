@@ -29,4 +29,8 @@ object JypPainter {
     val searchPlaceEmpty: Painter
         @Composable
         get() = painterResource(id = R.drawable.image_search_place_empty)
+
+    val CulturalInstitution: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.icon_cultural_institution)
 }
