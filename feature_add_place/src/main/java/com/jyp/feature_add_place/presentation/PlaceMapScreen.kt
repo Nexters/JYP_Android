@@ -20,6 +20,7 @@ import com.google.maps.android.compose.*
 import com.jyp.feature_add_place.R
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
 import com.jyp.jyp_design.ui.button.ButtonType
 import com.jyp.jyp_design.ui.button.JypTextButton
@@ -216,7 +217,7 @@ private fun ComposablePlaceInfoBottomSheet(
                 contentPadding = PaddingValues(horizontal = 8.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.icon_eyes),
+                    painter = JypPainter.eyes,
                     contentDescription = null,
                     modifier = Modifier.padding(all = 0.dp)
                 )

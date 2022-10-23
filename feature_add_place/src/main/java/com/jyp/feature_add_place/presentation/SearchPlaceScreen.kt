@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.text_input.JypTextInput
 import com.jyp.jyp_design.ui.text_input.TextInputType
@@ -52,7 +53,7 @@ fun SearchPlaceScreen(
             onClickBackButton = onClickBackButton,
         )
         when (placeName.isBlank()) {
-            true -> RequestSearchPlaceView()
+            true -> SearchPlaceGuideView()
             false -> SearchPlaceResultView(
                 apiState,
                 onClickPlaceItem
@@ -106,14 +107,14 @@ fun SearchPlaceHeader(
 }
 
 @Composable
-fun RequestSearchPlaceView() {
+fun SearchPlaceGuideView() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(com.jyp.feature_add_place.R.drawable.icon_search_place),
+            painter = JypPainter.searchPlaceGuide,
             contentDescription = null,
             modifier = Modifier
                 .height(100.dp)
@@ -155,7 +156,7 @@ fun SearchPlaceEmptyView() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(com.jyp.feature_add_place.R.drawable.icon_search_place_empty),
+            painter = JypPainter.searchPlaceEmpty,
             contentDescription = null,
             modifier = Modifier
                 .height(108.dp)

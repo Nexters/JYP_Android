@@ -20,6 +20,7 @@ import com.jyp.feature_add_place.R
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.feature_add_place.util.JourneyPikiPlaceCategoryEnum
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
@@ -44,7 +45,7 @@ internal fun PlaceInfoScreen(
                 onClick = { onClickCloseButton() }
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.icon_close_app_bar),
+                    painter = JypPainter.closeSharp,
                     contentDescription = null,
                     modifier = Modifier.padding(
                         vertical = 16.dp,
