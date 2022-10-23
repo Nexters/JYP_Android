@@ -108,11 +108,6 @@ private fun ComposableAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(JypColors.Background_white100)
-            .clip(RoundedCornerShape(6.dp))
-            .border(
-                border = BorderStroke(1.dp, JypColors.Border_grey),
-                shape = RoundedCornerShape(6.dp)
-            )
             .padding(
                 horizontal = 12.dp,
                 vertical = 6.dp,
