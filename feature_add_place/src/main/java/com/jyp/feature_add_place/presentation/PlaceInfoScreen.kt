@@ -44,7 +44,7 @@ internal fun PlaceInfoScreen(
                 onClick = { onClickCloseButton() }
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.icon_close),
+                    painter = painterResource(R.drawable.icon_close_app_bar),
                     contentDescription = null,
                     modifier = Modifier.padding(
                         vertical = 16.dp,
