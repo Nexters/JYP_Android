@@ -69,9 +69,14 @@ internal fun PlaceInfoScreen(
 
             }
         }
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(1.dp)
+            .background(color = JypColors.Black10)
+        )
 
-        var backEnabled by remember { mutableStateOf(false) }
         var webView: WebView? = null
+        var isWebViewBackEventEnable by remember { mutableStateOf(false) }
 
         AndroidView(
             modifier = Modifier.fillMaxSize(),
@@ -83,7 +88,7 @@ internal fun PlaceInfoScreen(
                     )
                     webViewClient = object : WebViewClient() {
                         override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                            backEnabled = view.canGoBack()
+                            isWebViewBackEventEnable = view.canGoBack()
                         }
                     }
                     settings.javaScriptEnabled = true
@@ -95,7 +100,7 @@ internal fun PlaceInfoScreen(
                 webView = it
             })
 
-        BackHandler(enabled = backEnabled) {
+        BackHandler(enabled = isWebViewBackEventEnable) {
             webView?.goBack()
         }
     }
