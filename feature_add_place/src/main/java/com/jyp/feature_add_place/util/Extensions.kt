@@ -3,9 +3,7 @@ package com.jyp.feature_add_place.util
 import android.content.Context
 import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import com.jyp.feature_add_place.R
 
 
@@ -30,7 +28,6 @@ fun String.getJourneyPikiPlaceCategoryEnum(): JourneyPikiPlaceCategoryEnum {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
 inline fun Context.checkNetworkStatus(
     isActivated: () -> Unit,
     isInactivated: (() -> Unit) = { }
@@ -44,16 +41,9 @@ inline fun Context.checkNetworkStatus(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
 fun isNetworkActivated(context: Context): Boolean {
     val connectivityManager = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-    return when (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        true -> connectivityManager.activeNetwork != null
-        false -> {
-            val activeNetworkInfo = connectivityManager.activeNetworkInfo
-            activeNetworkInfo != null && activeNetworkInfo.isConnected
-        }
-    }
+    return connectivityManager.activeNetwork != null
 }
 
 private var toast: Toast? = null
