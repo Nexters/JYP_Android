@@ -32,7 +32,7 @@ inline fun Context.checkNetworkStatus(
     isActivated: () -> Unit,
     isInactivated: (() -> Unit) = { }
 ) {
-    when (isNetworkActivated(this)) {
+    when (isNetworkActivated()) {
         true -> isActivated()
         false -> {
             isInactivated()
@@ -41,8 +41,8 @@ inline fun Context.checkNetworkStatus(
     }
 }
 
-fun isNetworkActivated(context: Context): Boolean {
-    val connectivityManager = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+fun Context.isNetworkActivated(): Boolean {
+    val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
     return connectivityManager.activeNetwork != null
 }
 
