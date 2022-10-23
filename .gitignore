@@ -257,3 +257,6 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,macos,kotlin,java,windows
+
+# Exclude library related files
+!feature_add_place/libs/libDaumMapAndroid.jar
