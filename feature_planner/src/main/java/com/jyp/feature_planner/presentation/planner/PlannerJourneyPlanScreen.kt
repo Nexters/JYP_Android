@@ -47,6 +47,7 @@ internal fun PlannerJourneyPlanScreen(
                         ),
                 ),
         ),
+        onClickEditRoute: () -> Unit,
 ) {
     LazyColumn(
             modifier = Modifier
@@ -61,6 +62,7 @@ internal fun PlannerJourneyPlanScreen(
                 item {
                     PlanGroupItem(
                             day = planItem.day,
+                            onClickEditRoute = onClickEditRoute,
                     )
                     if (index != planItems.lastIndex) {
                         Spacer(modifier = Modifier.size(12.dp))
@@ -99,6 +101,7 @@ internal fun PlannerJourneyPlanScreen(
 @Composable
 private fun PlanGroupItem(
         day: Int,
+        onClickEditRoute: () -> Unit
 ) {
     Row(
             modifier = Modifier
@@ -110,7 +113,8 @@ private fun PlanGroupItem(
                             color = JypColors.Black10,
                             shape = RoundedCornerShape(size = 12.dp),
                     )
-                    .padding(horizontal = 20.dp),
+                    .padding(horizontal = 20.dp)
+                    .clickable(onClick = onClickEditRoute),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -273,6 +277,6 @@ private fun PlanEachContentDivider() {
 @Preview(showBackground = true)
 private fun PlannerJourneyPlanScreenPreview() {
     PlannerJourneyPlanScreen(
-
+            onClickEditRoute = {},
     )
 }

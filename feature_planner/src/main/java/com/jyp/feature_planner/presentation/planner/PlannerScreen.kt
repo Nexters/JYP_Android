@@ -37,6 +37,7 @@ internal fun PlannerScreen(
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
         newPikMeClick: () -> Unit,
+        onClickEditRoute: () -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -69,6 +70,7 @@ internal fun PlannerScreen(
                         tags = tags,
                         tagClick = tagClick,
                         newPikMeClick = newPikMeClick,
+                        onClickEditRoute = onClickEditRoute,
                 )
             },
             backLayerBackgroundColor = JypColors.Background_grey300,
@@ -120,6 +122,7 @@ private fun PlannerContent(
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
         newPikMeClick: () -> Unit,
+        onClickEditRoute: () -> Unit,
 ) {
     Column(
             modifier = Modifier
@@ -148,7 +151,7 @@ private fun PlannerContent(
                     newPikMeClick = newPikMeClick,
             )
             1 -> PlannerJourneyPlanScreen(
-
+                    onClickEditRoute = onClickEditRoute,
             )
         }
     }
@@ -223,5 +226,6 @@ internal fun PlannerScreenPreview() {
             tags = emptyList(),
             tagClick = {},
             newPikMeClick = {},
+            onClickEditRoute = {},
     )
 }

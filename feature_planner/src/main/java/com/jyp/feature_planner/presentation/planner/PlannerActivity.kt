@@ -1,5 +1,6 @@
 package com.jyp.feature_planner.presentation.planner
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -26,6 +28,9 @@ class PlannerActivity : ComponentActivity() {
         setContent {
             Screen(
                     viewModel = viewModel,
+                    onClickEditRoute = {
+                        startActivity(Intent(this, AddPlannerRouteActivity::class.java))
+                    }
             )
         }
     }
@@ -33,7 +38,10 @@ class PlannerActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun Screen(viewModel: PlannerViewModel) {
+private fun Screen(
+        viewModel: PlannerViewModel,
+        onClickEditRoute: () -> Unit,
+) {
     val pikMes by viewModel.pikMes.collectAsState()
     val tags by viewModel.tags.collectAsState()
 
@@ -76,7 +84,8 @@ private fun Screen(viewModel: PlannerViewModel) {
                     },
                     newPikMeClick = {
                         viewModel.fetchPikMes()
-                    }
+                    },
+                    onClickEditRoute = onClickEditRoute,
             )
         }
     }
