@@ -1,16 +1,21 @@
 package com.jyp.feature_planner.presentation.create_planner
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jyp.feature_planner.domain.CreatePlannerUseCase
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.ui.tag.TagState
 import com.jyp.jyp_design.ui.tag.TagType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreatePlannerViewModel @Inject constructor() : ViewModel() {
+class CreatePlannerViewModel @Inject constructor(
+        private val createPlannerUseCase: CreatePlannerUseCase,
+) : ViewModel() {
     private val _startDateMillis = MutableStateFlow(0L)
     val startDateMillis: StateFlow<Long>
         get() = _startDateMillis
@@ -78,5 +83,23 @@ class CreatePlannerViewModel @Inject constructor() : ViewModel() {
         }
 
         _tags.value = newList
+    }
+
+    fun createPlanner(
+            title: String,
+            themeType: String,
+            startMillis: Long,
+            endMillis: Long,
+            tags: List<Tag>
+    ) {
+        viewModelScope.launch {
+            createPlannerUseCase.invoke(
+                    title,
+                    startMillis / 1000,
+                    endMillis / 1000,
+                    themeType,
+                    tags,
+            )
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.jyp.feature_my_journey.data
 
 import com.jyp.core_network.jyp.JypApi
-import com.jyp.core_network.jyp.response.UserResponse
+import com.jyp.core_network.jyp.model.response.UserResponse
 import javax.inject.Inject
 
 class UserDataSource @Inject constructor(

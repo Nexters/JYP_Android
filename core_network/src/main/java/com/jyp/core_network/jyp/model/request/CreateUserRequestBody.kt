@@ -1,6 +1,6 @@
-package com.jyp.core_network.jyp.request
+package com.jyp.core_network.jyp.model.request
 
-import com.jyp.core_network.jyp.enumerate.PersonalityId
+import com.jyp.core_network.jyp.model.enumerate.PersonalityId
 
 data class CreateUserRequestBody(
         val authVendor: String,

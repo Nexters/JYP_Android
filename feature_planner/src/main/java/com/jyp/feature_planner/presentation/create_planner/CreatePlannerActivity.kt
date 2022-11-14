@@ -61,11 +61,20 @@ class CreatePlannerActivity : AppCompatActivity() {
                                 Intent(this, CreatePlannerActivity::class.java).apply {
                                     putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
                                     putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
+                                    putExtra(EXTRA_CREATE_PLANNER_THEME_TYPE, themeType)
                                     putExtra(EXTRA_CREATE_PLANNER_DATE, startMillis to endMillis)
                                 }
                         )
                     },
-                    submitOnTaste = {
+                    submitOnTaste = { tags ->
+                        viewModel.createPlanner(
+                                title ?: return@Screen,
+                                themeType?.imagePath ?: return@Screen,
+                                date?.first ?: return@Screen,
+                                date?.second ?: return@Screen,
+                                tags,
+                        )
+
                         finishAffinity()
                     }
             )

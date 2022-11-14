@@ -1,4 +1,4 @@
-package com.jyp.core_network.jyp.enumerate
+package com.jyp.core_network.jyp.model.enumerate
 
 enum class PersonalityId {
     // 꼼꼼한 탐험가

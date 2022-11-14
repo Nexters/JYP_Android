@@ -1,6 +1,6 @@
 package com.jyp.feature_my_journey.data
 
-import com.jyp.core_network.jyp.response.UserResponse
+import com.jyp.core_network.jyp.model.response.UserResponse
 import com.jyp.feature_my_journey.domain.UserRepository
 import javax.inject.Inject
 

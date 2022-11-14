@@ -53,9 +53,8 @@ class MainActivity : ComponentActivity() {
         myJourneyViewModel.fetchUser()
     }
 
-    // TODO : 제거해야함
-    override fun onRestart() {
-        super.onRestart()
+    override fun onResume() {
+        super.onResume()
         myJourneyViewModel.fetchJourneyList()
     }
 }

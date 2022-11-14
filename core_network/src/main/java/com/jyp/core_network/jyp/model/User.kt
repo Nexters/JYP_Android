@@ -1,8 +1,4 @@
-package com.jyp.core_network.jyp.response
-
-import com.jyp.core_network.jyp.JypBaseResponse
-
-class UserResponse : JypBaseResponse<User>()
+package com.jyp.core_network.jyp.model
 
 data class User(
         val id: String,
