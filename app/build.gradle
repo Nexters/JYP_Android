@@ -74,6 +74,9 @@ dependencies {
     implementation project(':core_network')
     implementation project(':core_ui')
     implementation project(':feature_main')
+    implementation project(':feature_onboarding')
+    implementation project(':feature_add_place')
+    implementation project(':feature_planner')
 
     // module dependencies
 

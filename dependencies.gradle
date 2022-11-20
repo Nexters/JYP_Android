@@ -10,9 +10,12 @@ ext {
             compose_customview_version                 : "1.1.0",
             compose_customview_poolingcontainer_version: "1.0.0",
             compose_flowlayout_version                 : "0.25.0",
+            compose_constrintlayout_version            : "1.0.1",
             accompanist_pager_version                  : "0.23.1",
             landscapist_version                        : "1.4.9",
             lottie_version                             : "5.2.0",
+            google_maps_version                        : "2.5.3",
+            google_play_services_maps_version          : "18.0.2"
             kakao_sign_in                              : "2.11.1"
     ]
 
@@ -24,6 +27,7 @@ ext {
                     compose_live_data                  : "androidx.compose.runtime:runtime-livedata:$versions.compose_version",
                     compose_activity                   : "androidx.activity:activity-compose:$versions.compose_activity_version",
                     compose_navigation                 : "androidx.navigation:navigation-compose:$versions.compose_navigation_version",
+                    compose_constrintlayout            : "androidx.constraintlayout:constraintlayout-compose:$versions.compose_constrintlayout_version",
                     compose_flowlayout                 : "com.google.accompanist:accompanist-flowlayout:$versions.compose_flowlayout_version",
                     compose_pager                      : "com.google.accompanist:accompanist-pager:$versions.accompanist_pager_version",
                     compose_pager_indicators           : "com.google.accompanist:accompanist-pager-indicators:$versions.accompanist_pager_version"
@@ -67,6 +71,13 @@ ext {
     lottieDependencies = [
             implementation: [
                     lottie_compose: "com.airbnb.android:lottie-compose:$versions.lottie_version",
+            ]
+    ]
+
+    googleMapsDependencies = [
+            implementation: [
+                    google_maps_compose: "com.google.maps.android:maps-compose:$versions.google_maps_version",
+                    google_play_services: "com.google.android.gms:play-services-maps:$versions.google_play_services_maps_version"
             ]
     ]
 }
