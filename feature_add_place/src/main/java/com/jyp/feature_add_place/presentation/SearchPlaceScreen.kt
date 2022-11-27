@@ -249,7 +249,7 @@ fun SearchPlaceResultItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            color = JypColors.Black10,
+            color = JypColors.Black15,
             thickness = 1.dp
         )
     }
