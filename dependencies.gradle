@@ -15,8 +15,8 @@ ext {
             landscapist_version                        : "1.4.9",
             lottie_version                             : "5.2.0",
             google_maps_version                        : "2.5.3",
-            google_play_services_maps_version          : "18.0.2"
-            kakao_sign_in                              : "2.11.1"
+            google_play_services_maps_version          : "18.0.2",
+            kakao_sign_in                              : "2.11.2"
     ]
 
     composeDependencies = [
