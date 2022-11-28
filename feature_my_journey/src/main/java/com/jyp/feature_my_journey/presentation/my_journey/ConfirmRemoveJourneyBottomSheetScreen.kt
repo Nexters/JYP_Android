@@ -7,6 +7,7 @@ import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_my_journey.domain.Journey
+import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.text.JypText
@@ -58,5 +59,5 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
 @Composable
 @Preview(showBackground = true)
 private fun ConfirmRemoveJourneyBottomSheetScreenPreview() {
-    ConfirmRemoveJourneyBottomSheetScreen(Journey("", "qwdqwd", 0, "", "", emptyList()))
+    ConfirmRemoveJourneyBottomSheetScreen(Journey("", "qwdqwd", ThemeType.DEFAULT, "", "", emptyList()))
 }

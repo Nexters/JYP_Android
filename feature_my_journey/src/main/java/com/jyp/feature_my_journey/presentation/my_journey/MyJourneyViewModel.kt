@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
 import com.jyp.feature_my_journey.domain.*
+import com.jyp.jyp_design.enumerate.ThemeType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -54,21 +55,26 @@ class MyJourneyViewModel @Inject constructor(
         viewModelScope.launch {
             getJourneysUseCase()
                     .onSuccess {
-                        _plannedJourneys.value = it.journeys.map {
+                        _plannedJourneys.value = it.journeys.map { journey ->
                             val startDay = SimpleDateFormat("d", Locale.getDefault())
-                                    .format(Date(it.startDate * 1000))
+                                    .format(Date(journey.startDate * 1000))
                                     .toInt()
 
                             val today = SimpleDateFormat("d", Locale.getDefault())
                                     .format(Date(System.currentTimeMillis()))
                                     .toInt()
 
+                            val dDay = (startDay - today).takeIf { gap ->
+                                gap > 0
+                            } ?: "day"
+
                             Journey(
-                                    dDay = "D-${startDay - today}",
-                                    title = it.name,
-                                    theme = 0,
-                                    startDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(Date(it.startDate * 1000)),
-                                    endDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(Date(it.endDate * 1000)),
+                                    dDay = "D-$dDay",
+                                    title = journey.name,
+                                    themeType = ThemeType.values().firstOrNull { themeType -> themeType.imagePath == journey.themePath }
+                                            ?: ThemeType.DEFAULT,
+                                    startDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(Date(journey.startDate * 1000)),
+                                    endDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(Date(journey.endDate * 1000)),
                                     profileUrls = listOf(),
                             )
                         }

@@ -228,7 +228,7 @@ internal fun PlannedJourney(
                             startDay = journey.startDay,
                             endDay = journey.endDay,
                             onClickPlanner = onClickPlanner,
-                            themeType = ThemeType.values()[journey.theme],
+                            themeType = journey.themeType,
                             profileUrls = journey.profileUrls,
                             onClickMore = {
                                 onClickMore.invoke(journey)
@@ -319,7 +319,7 @@ internal fun PastJourney(
                             startDay = journey.startDay,
                             endDay = journey.endDay,
                             onClickPlanner = onClickPlanner,
-                            themeType = ThemeType.values()[journey.theme],
+                            themeType = journey.themeType,
                             profileUrls = journey.profileUrls,
                             onClickMore = {
                                 onClickMore.invoke(journey)
@@ -505,7 +505,7 @@ internal fun MyJourneyScreenPreview() {
                     Journey(
                             dDay = "D-3",
                             title = "강릉여행기",
-                            theme = 0,
+                            themeType = ThemeType.DEFAULT,
                             startDay = "8월 23일",
                             endDay = "8월 25일",
                             profileUrls = emptyList()
@@ -513,7 +513,7 @@ internal fun MyJourneyScreenPreview() {
                     Journey(
                             dDay = "D-8",
                             title = "즐거운여행기",
-                            theme = 1,
+                            themeType = ThemeType.CITY,
                             startDay = "8월 28일",
                             endDay = "8월 30일",
                             profileUrls = emptyList()
