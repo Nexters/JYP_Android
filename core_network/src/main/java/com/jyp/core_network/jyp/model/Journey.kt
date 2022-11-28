@@ -5,4 +5,5 @@ data class Journey(
         val themePath: String,
         val startDate: Long,
         val endDate: Long,
+        val users: List<User>,
 )

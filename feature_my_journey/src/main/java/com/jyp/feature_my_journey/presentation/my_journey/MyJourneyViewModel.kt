@@ -1,5 +1,6 @@
 package com.jyp.feature_my_journey.presentation.my_journey
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.onFailure
@@ -54,8 +55,8 @@ class MyJourneyViewModel @Inject constructor(
     fun fetchJourneyList() {
         viewModelScope.launch {
             getJourneysUseCase()
-                    .onSuccess {
-                        _plannedJourneys.value = it.journeys.map { journey ->
+                    .onSuccess { response ->
+                        _plannedJourneys.value = response.journeys.map { journey ->
                             val startDay = SimpleDateFormat("d", Locale.getDefault())
                                     .format(Date(journey.startDate * 1000))
                                     .toInt()
@@ -75,7 +76,7 @@ class MyJourneyViewModel @Inject constructor(
                                             ?: ThemeType.DEFAULT,
                                     startDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(Date(journey.startDate * 1000)),
                                     endDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(Date(journey.endDate * 1000)),
-                                    profileUrls = listOf(),
+                                    profileUrls = journey.users.map { it.profileImagePath },
                             )
                         }
                     }
