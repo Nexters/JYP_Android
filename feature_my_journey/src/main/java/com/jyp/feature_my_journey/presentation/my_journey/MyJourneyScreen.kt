@@ -405,9 +405,15 @@ internal fun JourneyItem(
                             shape = RoundedCornerShape(16.dp)
                     ),
     ) {
+        val painter = painterResource(themeType.imageRes)
+        val imageRatio = painter.intrinsicSize.width / painter.intrinsicSize.height
+
         Image(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                painter = painterResource(id = themeType.imageRes),
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(imageRatio)
+                        .align(Alignment.BottomCenter),
+                painter = painter,
                 contentDescription = null,
         )
 
