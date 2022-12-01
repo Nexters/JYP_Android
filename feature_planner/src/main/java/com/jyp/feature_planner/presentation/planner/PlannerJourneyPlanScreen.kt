@@ -1,23 +1,26 @@
 package com.jyp.feature_planner.presentation.planner
 
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jyp.feature_planner.R
 import com.jyp.feature_planner.domain.Pikis
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
@@ -78,6 +81,7 @@ internal fun PlannerJourneyPlanScreen(
                 item {
                     PlanEachTitle(
                             day = planItem.day,
+                            onClickEditRoute = onClickEditRoute,
                     )
                     Spacer(modifier = Modifier.size(26.dp))
                 }
@@ -101,7 +105,7 @@ internal fun PlannerJourneyPlanScreen(
 @Composable
 private fun PlanGroupItem(
         day: Int,
-        onClickEditRoute: () -> Unit
+        onClickEditRoute: () -> Unit,
 ) {
     Row(
             modifier = Modifier
@@ -143,18 +147,35 @@ private fun PlanGroupItem(
 @Composable
 private fun PlanEachTitle(
         day: Int,
+        onClickEditRoute: () -> Unit,
 ) {
-    Row {
-        JypText(
-                text = "Day $day",
-                type = TextType.TITLE_6,
-                color = JypColors.Text80,
-        )
-        Spacer(modifier = Modifier.size(14.dp))
-        JypText(
-                text = "mm월 dd일",
-                type = TextType.BODY_1,
-                color = JypColors.Text40,
+    Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Row {
+            JypText(
+                    text = "Day $day",
+                    type = TextType.TITLE_6,
+                    color = JypColors.Text80,
+            )
+            Spacer(modifier = Modifier.size(14.dp))
+            JypText(
+                    text = "mm월 dd일",
+                    type = TextType.BODY_1,
+                    color = JypColors.Text40,
+            )
+        }
+        Image(
+                modifier = Modifier
+                        .size(24.dp)
+                        .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = onClickEditRoute,
+                        ),
+                painter = painterResource(id = R.drawable.icon_pencil),
+                contentDescription = null,
         )
     }
 }
