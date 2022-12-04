@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_my_journey.R
 import com.jyp.feature_my_journey.domain.Journey
+import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.avatar.AvatarList
@@ -227,7 +228,7 @@ internal fun PlannedJourney(
                             startDay = journey.startDay,
                             endDay = journey.endDay,
                             onClickPlanner = onClickPlanner,
-                            themeType = ThemeType.values()[journey.theme],
+                            themeType = journey.themeType,
                             profileUrls = journey.profileUrls,
                             onClickMore = {
                                 onClickMore.invoke(journey)
@@ -318,7 +319,7 @@ internal fun PastJourney(
                             startDay = journey.startDay,
                             endDay = journey.endDay,
                             onClickPlanner = onClickPlanner,
-                            themeType = ThemeType.values()[journey.theme],
+                            themeType = journey.themeType,
                             profileUrls = journey.profileUrls,
                             onClickMore = {
                                 onClickMore.invoke(journey)
@@ -389,17 +390,30 @@ internal fun JourneyItem(
 ) {
     Box(
             modifier = Modifier
-                    .clip(shape = RoundedCornerShape(16.dp))
                     .width(276.dp)
                     .fillMaxHeight()
                     .padding(vertical = 24.dp)
+                    .let {
+                        if (themeType == ThemeType.DEFAULT) {
+                            it.shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
+                        } else {
+                            it
+                        }
+                    }
                     .background(
                             color = themeType.backgroundColor,
-                            shape = RoundedCornerShape(16.dp)),
+                            shape = RoundedCornerShape(16.dp)
+                    ),
     ) {
+        val painter = painterResource(themeType.imageRes)
+        val imageRatio = painter.intrinsicSize.width / painter.intrinsicSize.height
+
         Image(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                painter = painterResource(id = themeType.imageRes),
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(imageRatio)
+                        .align(Alignment.BottomCenter),
+                painter = painter,
                 contentDescription = null,
         )
 
@@ -443,7 +457,6 @@ internal fun JourneyItem(
                         type = TextType.TAG_2,
                         color = JypColors.Text_white,
                 )
-
                 Image(
                         modifier = Modifier
                                 .clip(CircleShape)
@@ -454,7 +467,7 @@ internal fun JourneyItem(
                                 ),
                         painter = painterResource(id = R.drawable.ic_more_menu),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(JypColors.Text_white)
+                        colorFilter = ColorFilter.tint(JypColors.Text_white),
                 )
             }
             Spacer(modifier = Modifier.padding(top = 16.dp))
@@ -462,13 +475,13 @@ internal fun JourneyItem(
                     text = journeyName,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 22.sp,
-                    color = JypColors.Text_white
+                    color = themeType.textColor,
             )
             Text(
                     text = "$startDay - $endDay",
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
-                    color = JypColors.Text_white,
+                    color = themeType.textColor,
             )
         }
     }
@@ -498,7 +511,7 @@ internal fun MyJourneyScreenPreview() {
                     Journey(
                             dDay = "D-3",
                             title = "강릉여행기",
-                            theme = 0,
+                            themeType = ThemeType.DEFAULT,
                             startDay = "8월 23일",
                             endDay = "8월 25일",
                             profileUrls = emptyList()
@@ -506,7 +519,7 @@ internal fun MyJourneyScreenPreview() {
                     Journey(
                             dDay = "D-8",
                             title = "즐거운여행기",
-                            theme = 1,
+                            themeType = ThemeType.CITY,
                             startDay = "8월 28일",
                             endDay = "8월 30일",
                             profileUrls = emptyList()
