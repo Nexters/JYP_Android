@@ -38,9 +38,9 @@ object JypColors {
 
     val Border_grey = Color(0xFFECECEC)
 
-    val Black10 = Color(0x1A000000)
-    val Black20 = Color(0x33000000)
     val Black10 = Color(0x19000000)
+    val Black15 = Color(0x1A000000)
+    val Black20 = Color(0x33000000)
 
     val Background_grey300 = Color(0xFF353535)
     val Background_white200 = Color(0xFFFAFAFA)

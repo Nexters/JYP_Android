@@ -73,7 +73,7 @@ internal fun PlaceInfoScreen(
         Spacer(modifier = Modifier
             .fillMaxWidth()
             .height(1.dp)
-            .background(color = JypColors.Black10)
+            .background(color = JypColors.Black15)
         )
 
         var webView: WebView? = null

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,11 +49,12 @@ class MainActivity : ComponentActivity() {
                     },
             )
         }
+
+        myJourneyViewModel.fetchUser()
     }
 
-    // TODO : 제거해야함
-    override fun onRestart() {
-        super.onRestart()
+    override fun onResume() {
+        super.onResume()
         myJourneyViewModel.fetchJourneyList()
     }
 }
@@ -130,12 +130,15 @@ private fun Screen(
         )
     }
 
-    SelectProfileScreen(mainViewModel)
+    SelectProfileScreen(myJourneyViewModel)
 }
 
 @Composable
-private fun SelectProfileScreen(mainViewModel: MainViewModel) {
-    val selectedPosition by mainViewModel.profileSelectedPosition.collectAsState()
+private fun SelectProfileScreen(myJourneyViewModel: MyJourneyViewModel) {
+    val selectedPosition by myJourneyViewModel.profileSelectedPosition.collectAsState()
+    val userName by myJourneyViewModel.userName.collectAsState()
+    val personality by myJourneyViewModel.personality.collectAsState()
+
     var isShow by remember {
         mutableStateOf(true)
     }
@@ -150,10 +153,11 @@ private fun SelectProfileScreen(mainViewModel: MainViewModel) {
             ),
     ) {
         SelectProfileScreen(
-                name = "홍길동",
+                name = userName,
+                personality = personality,
                 selectedPosition = selectedPosition,
                 showDim = isShow,
-                onSelectProfile = mainViewModel::selectProfile,
+                onSelectProfile = myJourneyViewModel::selectProfile,
                 submitProfile = {
                     isShow = false
                 }
@@ -171,8 +175,9 @@ private fun createMyJourneyScreenItem(
     return MainScreenItem(
             navItem = BottomNavItem.MY_JOURNEY,
             content = {
-                val journeyPropensity = "자유로운 여행가"
-                val userName = "박진영"
+                val userName by myJourneyViewModel.userName.collectAsState("")
+                val personality by myJourneyViewModel.personality.collectAsState("")
+
                 val plannedJourneys by myJourneyViewModel.plannedJourneys.collectAsState()
                 val pastJourneys by myJourneyViewModel.pastJourneys.collectAsState()
 
@@ -183,7 +188,7 @@ private fun createMyJourneyScreenItem(
                         titleFontWeight = FontWeight.Medium,
                 ) {
                     MyJourneyScreen(
-                            journeyPropensity = journeyPropensity,
+                            journeyPropensity = personality,
                             userName = userName,
                             plannedJourneys = plannedJourneys,
                             pastJourneys = pastJourneys,

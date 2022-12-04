@@ -9,5 +9,6 @@
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         
         <activity android:name=".presentation.planner.PlannerActivity" />
+        <activity android:name=".presentation.add_planner_route.AddPlannerRouteActivity" />
     </application>
 </manifest>
