@@ -5,6 +5,9 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+Properties localProperties = new Properties()
+localProperties.load(rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdk 32
 
@@ -19,6 +22,9 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField "String", "JYP_JWT_MASTER_KEY", localProperties['jyp-jwt-master-key']
+        buildConfigField "String", "JYP_OVERRIDE_ID", localProperties['jyp-override-id']
     }
 
     buildTypes {
@@ -73,4 +79,6 @@ dependencies {
     kapt hiltDependencies.kapt.values()
 
     implementation imageDependencies.implementation.values()
+
+    implementation networkDependencies.implementation.values()
 }
