@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_planner.domain.Tag
-import com.jyp.feature_planner.presentation.planner.TagSelectedBottomSheetScreen
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
 import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout

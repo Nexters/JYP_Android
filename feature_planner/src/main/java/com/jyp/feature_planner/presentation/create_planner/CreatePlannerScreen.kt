@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.jyp.feature_planner.domain.Tag
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.tag.*

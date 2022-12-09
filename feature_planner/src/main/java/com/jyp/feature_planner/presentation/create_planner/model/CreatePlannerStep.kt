@@ -1,4 +1,4 @@
-package com.jyp.feature_planner.presentation.create_planner
+package com.jyp.feature_planner.presentation.create_planner.model
 
 import androidx.annotation.StringRes
 import com.jyp.feature_planner.R
