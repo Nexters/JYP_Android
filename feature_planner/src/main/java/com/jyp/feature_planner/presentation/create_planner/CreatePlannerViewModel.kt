@@ -26,22 +26,22 @@ class CreatePlannerViewModel @Inject constructor(
 
     private val _tags = MutableStateFlow(
             listOf(
-                    Tag(type = TagType.Soso(), content = "모두 찬성"),
-                    Tag(type = TagType.Soso(), content = "상관없어"),
-                    Tag(type = TagType.Like(), content = "고기"),
-                    Tag(type = TagType.Like(), content = "해산물"),
-                    Tag(type = TagType.Like(), content = "쇼핑"),
-                    Tag(type = TagType.Like(), content = "산"),
-                    Tag(type = TagType.Like(), content = "바다"),
-                    Tag(type = TagType.Like(), content = "도시"),
-                    Tag(type = TagType.Like(), content = "핫플레이스"),
-                    Tag(type = TagType.Dislike(), content = "고기"),
-                    Tag(type = TagType.Dislike(), content = "해산물"),
-                    Tag(type = TagType.Dislike(), content = "쇼핑"),
-                    Tag(type = TagType.Dislike(), content = "산"),
-                    Tag(type = TagType.Dislike(), content = "바다"),
-                    Tag(type = TagType.Dislike(), content = "도시"),
-                    Tag(type = TagType.Dislike(), content = "핫플레이스"),
+                    Tag(type = TagType.Soso, content = "모두 찬성"),
+                    Tag(type = TagType.Soso, content = "상관없어"),
+                    Tag(type = TagType.Like, content = "고기"),
+                    Tag(type = TagType.Like, content = "해산물"),
+                    Tag(type = TagType.Like, content = "쇼핑"),
+                    Tag(type = TagType.Like, content = "산"),
+                    Tag(type = TagType.Like, content = "바다"),
+                    Tag(type = TagType.Like, content = "도시"),
+                    Tag(type = TagType.Like, content = "핫플레이스"),
+                    Tag(type = TagType.Dislike, content = "고기"),
+                    Tag(type = TagType.Dislike, content = "해산물"),
+                    Tag(type = TagType.Dislike, content = "쇼핑"),
+                    Tag(type = TagType.Dislike, content = "산"),
+                    Tag(type = TagType.Dislike, content = "바다"),
+                    Tag(type = TagType.Dislike, content = "도시"),
+                    Tag(type = TagType.Dislike, content = "핫플레이스"),
             )
     )
     val tags: StateFlow<List<Tag>>

@@ -336,14 +336,14 @@ private fun CreatePlannerTasteArea(
                 tagCategory = "좋아요 태그",
                 tags = likeTags,
                 tagClick = tagClick,
-                addTagClick = { addTagClick.invoke(TagType.Like()) },
+                addTagClick = { addTagClick.invoke(TagType.Like) },
         )
         Spacer(modifier = Modifier.size(40.dp))
         TastesSection(
                 tagCategory = "싫어요 태그",
                 tags = dislikeTags,
                 tagClick = tagClick,
-                addTagClick = { addTagClick.invoke(TagType.Dislike()) },
+                addTagClick = { addTagClick.invoke(TagType.Dislike) },
         )
     }
 }
