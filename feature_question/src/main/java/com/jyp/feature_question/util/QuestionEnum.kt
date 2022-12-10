@@ -1,4 +1,7 @@
-package com.jyp.feature_question
+package com.jyp.feature_question.util
+
+import com.jyp.feature_question.R
+
 
 enum class QuestionEnum(
     val index: Int,
