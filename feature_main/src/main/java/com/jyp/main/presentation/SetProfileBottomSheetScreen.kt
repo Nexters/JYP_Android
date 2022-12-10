@@ -23,6 +23,7 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun SelectProfileScreen(
         name: String,
+        personality: String,
         selectedPosition: Int?,
         showDim: Boolean,
         onSelectProfile: (Int) -> Unit,
@@ -52,7 +53,10 @@ fun SelectProfileScreen(
                         .padding(horizontal = 24.dp, vertical = 28.dp)
                         .align(Alignment.BottomCenter),
         ) {
-            Header(name = name)
+            Header(
+                    name = name,
+                    personality = personality,
+            )
             Spacer(modifier = Modifier.size(30.dp))
             Content(
                     name = name,
@@ -73,10 +77,13 @@ fun SelectProfileScreen(
 }
 
 @Composable
-private fun Header(name: String) {
+private fun Header(
+        name: String,
+        personality: String,
+) {
     Column {
         JypText(
-                text = "${name}님은\n자유로운 탐험가이군요!",
+                text = "${name}님은\n${personality}이군요!",
                 type = TextType.HEADING_1,
                 color = JypColors.Text90,
         )
@@ -179,6 +186,7 @@ private fun Profile(
 private fun SetProfileBottomSheetPreview() {
     SelectProfileScreen(
             name = "홍길동",
+            personality = "자유로운 탐험가",
             onSelectProfile = {},
             selectedPosition = null,
             submitProfile = {},
@@ -191,6 +199,7 @@ private fun SetProfileBottomSheetPreview() {
 private fun SetProfileBottomSheetOverflowNamePreview() {
     SelectProfileScreen(
             name = "김수완무",
+            personality = "까탈스러운 탐험가",
             onSelectProfile = {},
             selectedPosition = 1,
             submitProfile = {},
