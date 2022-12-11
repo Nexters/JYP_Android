@@ -103,7 +103,7 @@ internal fun QuestionAppBar(
         IconButton(
             onClick = {
                 if (pagerState.currentPage != 0) coroutineScope.launch {
-                    pagerState.scrollToPage(pagerState.currentPage - 1)
+                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
                 }
             },
             enabled = pagerState.currentPage != 0
