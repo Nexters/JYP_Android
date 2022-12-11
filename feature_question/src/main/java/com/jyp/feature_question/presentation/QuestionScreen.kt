@@ -1,10 +1,7 @@
-package com.jyp.feature_question
+package com.jyp.feature_question.presentation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -21,6 +18,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.jyp.feature_question.R
 import com.jyp.feature_question.util.QuestionEnum
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
@@ -55,11 +53,11 @@ internal fun QuestionScreen(
     ) {
         QuestionAppBar(pagerState, coroutineScope)
         QuestionViewPager(
-            pagerState = pagerState,
-            questions = questions,
+            viewPagerCount = questions.size,
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f, false)
+                .weight(1f, false),
+            pagerState = pagerState
         ) { page ->
 
             QuestionScreenItem(
@@ -67,8 +65,7 @@ internal fun QuestionScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
-                    .weight(1f, false)
-                    .selectableGroup(),
+                    .weight(1f, false),
 
                 questionOptionButtons = {
                     QuestionOptionButtons(
@@ -126,18 +123,19 @@ internal fun QuestionAppBar(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 internal fun QuestionViewPager(
-    pagerState: PagerState,
-    questions: List<QuestionEnum>,
+    viewPagerCount: Int,
     modifier: Modifier,
+    pagerState: PagerState,
     content: @Composable (page: Int) -> Unit
 ) {
     HorizontalPager(
-        count = questions.size,
+        count = viewPagerCount,
         modifier = modifier,
         state = pagerState,
         reverseLayout = false,
         itemSpacing = 0.dp,
-        contentPadding = PaddingValues(0.dp)
+        contentPadding = PaddingValues(0.dp),
+        userScrollEnabled = false
     ) { page -> content(page) }
 }
 

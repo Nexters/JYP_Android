@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.jyp.feature_question.QuestionScreen
 import com.jyp.feature_question.presentation.viewmodel.QuestionViewModel
 import com.jyp.main.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint

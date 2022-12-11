@@ -11,7 +11,7 @@ ext {
             compose_customview_poolingcontainer_version: "1.0.0",
             compose_flowlayout_version                 : "0.25.0",
             compose_constrintlayout_version            : "1.0.1",
-            accompanist_pager_version                  : "0.23.1",
+            accompanist_pager_version                  : "0.24.1-alpha",
             landscapist_version                        : "1.4.9",
             lottie_version                             : "5.2.0",
             google_maps_version                        : "2.5.3",
