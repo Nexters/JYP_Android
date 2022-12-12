@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerSubmit
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.button.*
@@ -28,14 +29,12 @@ import java.util.*
 @Composable
 internal fun CreatePlannerScreen(
         step: CreatePlannerStep,
-        submitOnTitle: (String) -> Unit,
         selectDateClick: () -> Unit,
         startDateMillis: Long,
         endDateMillis: Long,
-        submitOnDate: (Long, Long) -> Unit,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
-        submitOnTaste: (List<Tag>) -> Unit,
+        submit: (CreatePlannerSubmit) -> Unit,
 ) {
     var title by remember {
         mutableStateOf("")
@@ -82,9 +81,9 @@ internal fun CreatePlannerScreen(
                     },
                     onClickEnabled = {
                         when (step) {
-                            CreatePlannerStep.TITLE -> submitOnTitle.invoke(title)
-                            CreatePlannerStep.DATE -> submitOnDate.invoke(startDateMillis, endDateMillis)
-                            CreatePlannerStep.TASTE -> submitOnTaste.invoke(tags.filter { it.state == TagState.SELECTED })
+                            CreatePlannerStep.TITLE -> submit.invoke(CreatePlannerSubmit.Title(title))
+                            CreatePlannerStep.DATE -> submit.invoke(CreatePlannerSubmit.Date(startDateMillis, endDateMillis))
+                            CreatePlannerStep.TASTE -> submit.invoke(CreatePlannerSubmit.Taste(tags.filter { it.state == TagState.SELECTED }))
                         }
                     }
             )
@@ -409,14 +408,12 @@ private fun TastesSection(
 internal fun CreatePlannerScreenTitlePreview() {
     CreatePlannerScreen(
             step = CreatePlannerStep.TITLE,
-            submitOnTitle = {},
             selectDateClick = {},
             startDateMillis = 0,
             endDateMillis = 0,
-            submitOnDate = { _, _ -> },
             tags = emptyList(),
             tagClick = {},
-            submitOnTaste = {},
+            submit = {},
     )
 }
 
@@ -425,14 +422,12 @@ internal fun CreatePlannerScreenTitlePreview() {
 internal fun CreatePlannerScreenDatePreview() {
     CreatePlannerScreen(
             step = CreatePlannerStep.DATE,
-            submitOnTitle = {},
             selectDateClick = {},
             startDateMillis = 0,
             endDateMillis = 0,
-            submitOnDate = { _, _ -> },
             tags = emptyList(),
             tagClick = {},
-            submitOnTaste = {},
+            submit = {},
     )
 }
 
@@ -441,13 +436,11 @@ internal fun CreatePlannerScreenDatePreview() {
 internal fun CreatePlannerScreenTastePreview() {
     CreatePlannerScreen(
             step = CreatePlannerStep.TASTE,
-            submitOnTitle = {},
             selectDateClick = {},
             startDateMillis = 0,
             endDateMillis = 0,
-            submitOnDate = { _, _ -> },
             tags = emptyList(),
             tagClick = {},
-            submitOnTaste = {},
+            submit = {},
     )
 }

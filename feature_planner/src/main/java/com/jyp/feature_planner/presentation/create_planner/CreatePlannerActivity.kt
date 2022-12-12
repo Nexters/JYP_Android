@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_planner.domain.Tag
 import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerSubmit
 import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
@@ -128,20 +129,28 @@ private fun Screen(
         ) {
             CreatePlannerScreen(
                     step = step,
-                    submitOnTitle = {
-                        cachedTitle = it
-
-                        coroutineScope.launch {
-                            bottomSheetScaffoldState.show()
-                        }
-                    },
                     selectDateClick = selectDateClick,
                     startDateMillis = startDateMillis,
                     endDateMillis = endDateMillis,
-                    submitOnDate = submitOnDate,
                     tags = tags,
                     tagClick = viewModel::clickTag,
-                    submitOnTaste = submitOnTaste,
+                    submit = { submit ->
+                        when (submit) {
+                            is CreatePlannerSubmit.Title -> {
+                                cachedTitle = submit.title
+
+                                coroutineScope.launch {
+                                    bottomSheetScaffoldState.show()
+                                }
+                            }
+                            is CreatePlannerSubmit.Date -> {
+                                submitOnDate.invoke(submit.from, submit.to)
+                            }
+                            is CreatePlannerSubmit.Taste -> {
+                                submitOnTaste.invoke(submit.tags)
+                            }
+                        }
+                    },
             )
         }
     }
