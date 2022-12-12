@@ -22,6 +22,8 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @Composable
 fun AddTagBottomSheetScreen(
         tagType: TagType,
+        onClickCancel: () -> Unit,
+        onClickSubmit: (TagType, String) -> Unit,
 ) {
     var tagName by remember {
         mutableStateOf("")
@@ -53,6 +55,7 @@ fun AddTagBottomSheetScreen(
                         TagType.Like -> "좋아요 태그 생성"
                         TagType.Soso -> ""
                     },
+                    onClickCancel = onClickCancel,
             )
             Spacer(modifier = Modifier.size(30.dp))
             Content(
@@ -66,7 +69,9 @@ fun AddTagBottomSheetScreen(
                     buttonType = ButtonType.THICK,
                     buttonColorSet = ButtonColorSetType.PINK,
                     enabled = tagName.isNotEmpty(),
-                    onClickEnabled = {},
+                    onClickEnabled = {
+                        onClickSubmit.invoke(tagType, tagName)
+                    },
             )
         }
     }
@@ -75,6 +80,7 @@ fun AddTagBottomSheetScreen(
 @Composable
 private fun Header(
         title: String,
+        onClickCancel: () -> Unit,
 ) {
     Row(
             modifier = Modifier
@@ -89,6 +95,11 @@ private fun Header(
         )
 
         JypText(
+                modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onClickCancel,
+                ),
                 text = "취소",
                 type = TextType.TITLE_4,
                 color = JypColors.Text40,
@@ -135,5 +146,9 @@ private fun Content(
 @Composable
 @Preview(showBackground = true)
 private fun AddTagBottomSheetScreenPreview() {
-    AddTagBottomSheetScreen(TagType.Like)
+    AddTagBottomSheetScreen(
+            tagType = TagType.Like,
+            onClickCancel = {},
+            onClickSubmit = { _, _ -> },
+    )
 }
