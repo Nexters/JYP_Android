@@ -12,11 +12,11 @@ localProperties.load(rootProject.file('local.properties').newDataInputStream())
 String google_map_api_key = localProperties.getProperty('google_map_api_key')
 
 android {
-    compileSdk 32
+    compileSdk project.compileSdkVersion.toInteger()
 
     defaultConfig {
         minSdk 23
-        targetSdk 32
+        targetSdk project.targetSdkVersion.toInteger()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

@@ -2,24 +2,30 @@ package com.jyp.feature_planner.presentation.create_planner
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_planner.domain.Tag
-import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
-import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerSubmit
+import com.jyp.feature_planner.presentation.create_planner.model.*
 import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class CreatePlannerActivity : AppCompatActivity() {
@@ -28,7 +34,7 @@ class CreatePlannerActivity : AppCompatActivity() {
     private val title: String? by lazy {
         intent.getStringExtra(EXTRA_CREATE_PLANNER_TITLE)
     }
-    
+
     private val themeType: ThemeType? by lazy {
         intent.getSerializableExtra(EXTRA_CREATE_PLANNER_THEME_TYPE) as? ThemeType
     }
@@ -104,54 +110,105 @@ private fun Screen(
     val endDateMillis by viewModel.endDateMillis.collectAsState()
     val tags by viewModel.tags.collectAsState()
 
+    var createPlannerBottomSheetType by remember {
+        mutableStateOf<CreatePlannerBottomSheetType>(CreatePlannerBottomSheetType.SelectTheme)
+    }
+
     val bottomSheetScaffoldState = rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
+            skipHalfExpanded = true,
+            confirmStateChange = {
+                createPlannerBottomSheetType !is CreatePlannerBottomSheetType.AddTag
+            }
     )
+
     val coroutineScope = rememberCoroutineScope()
 
     var cachedTitle = ""
 
+    BackHandler(enabled = bottomSheetScaffoldState.isVisible) {
+        coroutineScope.launch {
+            bottomSheetScaffoldState.hide()
+        }
+    }
+
     ModalBottomSheetLayout(
             sheetState = bottomSheetScaffoldState,
             sheetContent = {
-                PlannerThemeSelectBottomSheetScreen { themeType ->
-                    submitOnTitle.invoke(cachedTitle, themeType)
+                when (val type = createPlannerBottomSheetType) {
+                    is CreatePlannerBottomSheetType.AddTag -> {
+                        AddTagBottomSheetScreen(
+                                modifier = Modifier
+                                    .fillMaxHeight(0.9f)
+                                    .pointerInput(Unit) {
+                                        awaitPointerEventScope {
+                                            while (true) {
+                                                awaitPointerEvent(pass = PointerEventPass.Initial).changes.forEach {
+                                                    val offset = it.positionChange()
+                                                    if (abs(offset.y) > 0f) {
+                                                        it.consume()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                tagType = type.tagType,
+                                onClickCancel = { },
+                                onClickSubmit = { _, _ -> },
+                        )
+                    }
+                    CreatePlannerBottomSheetType.SelectTheme -> {
+                        PlannerThemeSelectBottomSheetScreen { themeType ->
+                            submitOnTitle.invoke(cachedTitle, themeType)
+                        }
+                    }
                 }
             },
             sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
-        GlobalNavigationBarLayout(
-                color = GlobalNavigationBarColor.WHITE,
-                title = stringResource(id = step.navigationTitleRes),
-                titleSize = 16.sp,
-                titleFontWeight = FontWeight.Medium,
-                activeBack = true,
-        ) {
-            CreatePlannerScreen(
-                    step = step,
-                    selectDateClick = selectDateClick,
-                    startDateMillis = startDateMillis,
-                    endDateMillis = endDateMillis,
-                    tags = tags,
-                    tagClick = viewModel::clickTag,
-                    submit = { submit ->
-                        when (submit) {
-                            is CreatePlannerSubmit.Title -> {
-                                cachedTitle = submit.title
+        Box {
+            GlobalNavigationBarLayout(
+                    color = GlobalNavigationBarColor.WHITE,
+                    title = stringResource(id = step.navigationTitleRes),
+                    titleSize = 16.sp,
+                    titleFontWeight = FontWeight.Medium,
+                    activeBack = true,
+            ) {
+                CreatePlannerScreen(
+                        step = step,
+                        selectDateClick = selectDateClick,
+                        startDateMillis = startDateMillis,
+                        endDateMillis = endDateMillis,
+                        tags = tags,
+                        tagClick = viewModel::clickTag,
+                        addTagClick = { tagType ->
+                            createPlannerBottomSheetType = CreatePlannerBottomSheetType.AddTag(tagType)
 
-                                coroutineScope.launch {
-                                    bottomSheetScaffoldState.show()
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.show()
+                            }
+                        },
+                        submit = { submit ->
+                            when (submit) {
+                                is CreatePlannerSubmit.Title -> {
+                                    cachedTitle = submit.title
+
+                                    createPlannerBottomSheetType = CreatePlannerBottomSheetType.SelectTheme
+
+                                    coroutineScope.launch {
+                                        bottomSheetScaffoldState.show()
+                                    }
+                                }
+                                is CreatePlannerSubmit.Date -> {
+                                    submitOnDate.invoke(submit.from, submit.to)
+                                }
+                                is CreatePlannerSubmit.Taste -> {
+                                    submitOnTaste.invoke(submit.tags)
                                 }
                             }
-                            is CreatePlannerSubmit.Date -> {
-                                submitOnDate.invoke(submit.from, submit.to)
-                            }
-                            is CreatePlannerSubmit.Taste -> {
-                                submitOnTaste.invoke(submit.tags)
-                            }
-                        }
-                    },
-            )
+                        },
+                )
+            }
         }
     }
 }

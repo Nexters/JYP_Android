@@ -1,11 +1,11 @@
 package com.jyp.jyp_design.ui.tag
 
-import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
+import java.io.Serializable
 
-sealed interface TagType {
+sealed interface TagType : Serializable {
     val iconRes: Int
 
     fun getBackgroundColor(state: TagState): Color

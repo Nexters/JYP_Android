@@ -9,12 +9,12 @@ Properties localProperties = new Properties()
 localProperties.load(rootProject.file('local.properties').newDataInputStream())
 
 android {
-    compileSdk 32
+    compileSdk project.compileSdkVersion.toInteger()
 
     defaultConfig {
         applicationId "com.jyp.journeypiki"
         minSdk 23
-        targetSdk 32
+        targetSdk project.targetSdkVersion.toInteger()
         versionCode 1
         versionName "1.0"
 

@@ -34,6 +34,7 @@ internal fun CreatePlannerScreen(
         endDateMillis: Long,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
+        addTagClick: (TagType) -> Unit,
         submit: (CreatePlannerSubmit) -> Unit,
 ) {
     var title by remember {
@@ -61,6 +62,7 @@ internal fun CreatePlannerScreen(
                     endDateMillis = endDateMillis,
                     tags = tags,
                     tagClick = tagClick,
+                    addTagClick = addTagClick,
             )
 
             JypTextButton(
@@ -126,6 +128,7 @@ private fun CreatePlannerContent(
         endDateMillis: Long,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
+        addTagClick: (TagType) -> Unit,
 ) {
     when (step) {
         CreatePlannerStep.TITLE -> CreatePlannerTitleArea(
@@ -143,7 +146,7 @@ private fun CreatePlannerContent(
                 modifier = modifier,
                 tags = tags,
                 tagClick = tagClick,
-                addTagClick = {},
+                addTagClick = addTagClick,
         )
     }
 }
@@ -413,6 +416,7 @@ internal fun CreatePlannerScreenTitlePreview() {
             endDateMillis = 0,
             tags = emptyList(),
             tagClick = {},
+            addTagClick = {},
             submit = {},
     )
 }
@@ -427,6 +431,7 @@ internal fun CreatePlannerScreenDatePreview() {
             endDateMillis = 0,
             tags = emptyList(),
             tagClick = {},
+            addTagClick = {},
             submit = {},
     )
 }
@@ -441,6 +446,7 @@ internal fun CreatePlannerScreenTastePreview() {
             endDateMillis = 0,
             tags = emptyList(),
             tagClick = {},
+            addTagClick = {},
             submit = {},
     )
 }

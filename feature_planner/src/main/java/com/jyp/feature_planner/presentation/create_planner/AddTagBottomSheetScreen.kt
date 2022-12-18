@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.jyp_design.resource.JypColors
@@ -21,6 +22,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 fun AddTagBottomSheetScreen(
+        modifier: Modifier = Modifier,
         tagType: TagType,
         onClickCancel: () -> Unit,
         onClickSubmit: (TagType, String) -> Unit,
@@ -30,30 +32,20 @@ fun AddTagBottomSheetScreen(
     }
 
     Box(
-            modifier = Modifier
-                    .fillMaxSize()
-                    .background(JypColors.Background_dim)
-                    .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = {}
-                    ),
+            modifier = modifier,
     ) {
         Column(
                 modifier = Modifier
-                        .padding(top = 100.dp)
-                        .fillMaxHeight()
-                        .fillMaxWidth()
                         .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                         .background(JypColors.Background_white100)
-                        .padding(horizontal = 24.dp, vertical = 28.dp)
-                        .align(Alignment.BottomCenter),
+                        .padding(horizontal = 24.dp)
         ) {
+            Spacer(modifier = Modifier.size(28.dp))
             Header(
                     title = when (tagType) {
-                        TagType.Dislike -> "싫어요 태그 생성"
-                        TagType.Like -> "좋아요 태그 생성"
-                        TagType.Soso -> ""
+                        is TagType.Dislike -> "싫어요 태그 생성"
+                        is TagType.Like -> "좋아요 태그 생성"
+                        is TagType.Soso -> ""
                     },
                     onClickCancel = onClickCancel,
             )
@@ -62,18 +54,20 @@ fun AddTagBottomSheetScreen(
                     tagName = tagName,
                     onTagNameChanged = { tagName = it },
             )
-            Spacer(modifier = Modifier.weight(1f))
-            JypTextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "시작하기",
-                    buttonType = ButtonType.THICK,
-                    buttonColorSet = ButtonColorSetType.PINK,
-                    enabled = tagName.isNotEmpty(),
-                    onClickEnabled = {
-                        onClickSubmit.invoke(tagType, tagName)
-                    },
-            )
         }
+        JypTextButton(
+                modifier = Modifier
+                        .padding(bottom = 28.dp)
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth(),
+                text = "시작하기",
+                buttonType = ButtonType.THICK,
+                buttonColorSet = ButtonColorSetType.PINK,
+                enabled = tagName.isNotEmpty(),
+                onClickEnabled = {
+                    onClickSubmit.invoke(tagType, tagName)
+                },
+        )
     }
 }
 
