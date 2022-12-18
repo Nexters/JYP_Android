@@ -66,7 +66,7 @@ fun AddTagBottomSheetScreen(
             text = "추가하기",
             buttonType = ButtonType.THICK,
             buttonColorSet = ButtonColorSetType.PINK,
-            enabled = tagName.isNotEmpty(),
+            enabled = tagName.isNotEmpty() && tagName.length <= 6,
             onClickEnabled = {
                 onClickSubmit.invoke(Tag(tagType, tagName))
 
