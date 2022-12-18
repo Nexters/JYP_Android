@@ -52,6 +52,14 @@ class CreatePlannerViewModel @Inject constructor(
         _endDateMillis.value = endMillis
     }
 
+    fun addTag(tag: Tag) {
+        val newList = tags.value + tag
+
+        updateTagState(newList)
+
+        _tags.value = newList
+    }
+
     fun clickTag(tag: Tag) {
         val clickIndex = tags.value.indexOf(tag)
         val tagState = tag.state
@@ -63,9 +71,14 @@ class CreatePlannerViewModel @Inject constructor(
                 }
         )
 
-        val newList = tags.value.toMutableList()
+        val mutableTags = tags.value.toMutableList()
+        mutableTags[clickIndex] = newTag
 
-        newList[clickIndex] = newTag
+        _tags.value = updateTagState(mutableTags)
+    }
+
+    private fun updateTagState(list: List<Tag>): List<Tag> {
+        val newList = list.toMutableList()
 
         val clickedTagCount = newList.count { it.state == TagState.SELECTED }
         if (clickedTagCount >= 3) {
@@ -82,7 +95,7 @@ class CreatePlannerViewModel @Inject constructor(
             }
         }
 
-        _tags.value = newList
+        return newList
     }
 
     fun createPlanner(

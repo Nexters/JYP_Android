@@ -47,43 +47,44 @@ class CreatePlannerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Screen(
-                    viewModel = viewModel,
-                    step = intent.getSerializableExtra(EXTRA_CREATE_PLANNER_STEP) as? CreatePlannerStep ?: CreatePlannerStep.TITLE,
-                    submitOnTitle = { title, themeType ->
-                        startActivity(
-                                Intent(this, CreatePlannerActivity::class.java).apply {
-                                    putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.DATE)
-                                    putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
-                                    putExtra(EXTRA_CREATE_PLANNER_THEME_TYPE, themeType)
-                                }
-                        )
-                    },
-                    selectDateClick = {
-                        RangeDatePicker().show(supportFragmentManager) { start, end ->
-                            viewModel.updateDate(start, end)
+                viewModel = viewModel,
+                step = intent.getSerializableExtra(EXTRA_CREATE_PLANNER_STEP) as? CreatePlannerStep
+                    ?: CreatePlannerStep.TITLE,
+                submitOnTitle = { title, themeType ->
+                    startActivity(
+                        Intent(this, CreatePlannerActivity::class.java).apply {
+                            putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.DATE)
+                            putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
+                            putExtra(EXTRA_CREATE_PLANNER_THEME_TYPE, themeType)
                         }
-                    },
-                    submitOnDate = { startMillis, endMillis ->
-                        startActivity(
-                                Intent(this, CreatePlannerActivity::class.java).apply {
-                                    putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
-                                    putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
-                                    putExtra(EXTRA_CREATE_PLANNER_THEME_TYPE, themeType)
-                                    putExtra(EXTRA_CREATE_PLANNER_DATE, startMillis to endMillis)
-                                }
-                        )
-                    },
-                    submitOnTaste = { tags ->
-                        viewModel.createPlanner(
-                                title ?: return@Screen,
-                                themeType?.imagePath ?: return@Screen,
-                                date?.first ?: return@Screen,
-                                date?.second ?: return@Screen,
-                                tags,
-                        )
-
-                        finishAffinity()
+                    )
+                },
+                selectDateClick = {
+                    RangeDatePicker().show(supportFragmentManager) { start, end ->
+                        viewModel.updateDate(start, end)
                     }
+                },
+                submitOnDate = { startMillis, endMillis ->
+                    startActivity(
+                        Intent(this, CreatePlannerActivity::class.java).apply {
+                            putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
+                            putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
+                            putExtra(EXTRA_CREATE_PLANNER_THEME_TYPE, themeType)
+                            putExtra(EXTRA_CREATE_PLANNER_DATE, startMillis to endMillis)
+                        }
+                    )
+                },
+                submitOnTaste = { tags ->
+                    viewModel.createPlanner(
+                        title ?: return@Screen,
+                        themeType?.imagePath ?: return@Screen,
+                        date?.first ?: return@Screen,
+                        date?.second ?: return@Screen,
+                        tags,
+                    )
+
+                    finishAffinity()
+                }
             )
         }
     }
@@ -99,12 +100,12 @@ class CreatePlannerActivity : AppCompatActivity() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun Screen(
-        viewModel: CreatePlannerViewModel,
-        step: CreatePlannerStep = CreatePlannerStep.TASTE,
-        submitOnTitle: (String, ThemeType) -> Unit,
-        selectDateClick: () -> Unit,
-        submitOnDate: (Long, Long) -> Unit,
-        submitOnTaste: (List<Tag>) -> Unit,
+    viewModel: CreatePlannerViewModel,
+    step: CreatePlannerStep = CreatePlannerStep.TASTE,
+    submitOnTitle: (String, ThemeType) -> Unit,
+    selectDateClick: () -> Unit,
+    submitOnDate: (Long, Long) -> Unit,
+    submitOnTaste: (List<Tag>) -> Unit,
 ) {
     val startDateMillis by viewModel.startDateMillis.collectAsState()
     val endDateMillis by viewModel.endDateMillis.collectAsState()
@@ -115,11 +116,11 @@ private fun Screen(
     }
 
     val bottomSheetScaffoldState = rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Hidden,
-            skipHalfExpanded = true,
-            confirmStateChange = {
-                createPlannerBottomSheetType !is CreatePlannerBottomSheetType.AddTag
-            }
+        initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = true,
+        confirmStateChange = {
+            createPlannerBottomSheetType !is CreatePlannerBottomSheetType.AddTag
+        }
     )
 
     val coroutineScope = rememberCoroutineScope()
@@ -133,80 +134,79 @@ private fun Screen(
     }
 
     ModalBottomSheetLayout(
-            sheetState = bottomSheetScaffoldState,
-            sheetContent = {
-                when (val type = createPlannerBottomSheetType) {
-                    is CreatePlannerBottomSheetType.AddTag -> {
-                        AddTagBottomSheetScreen(
-                                modifier = Modifier
-                                    .fillMaxHeight(0.9f)
-                                    .pointerInput(Unit) {
-                                        awaitPointerEventScope {
-                                            while (true) {
-                                                awaitPointerEvent(pass = PointerEventPass.Initial).changes.forEach {
-                                                    val offset = it.positionChange()
-                                                    if (abs(offset.y) > 0f) {
-                                                        it.consume()
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                tagType = type.tagType,
-                                onClickCancel = { },
-                                onClickSubmit = { _, _ -> },
-                        )
-                    }
-                    CreatePlannerBottomSheetType.SelectTheme -> {
-                        PlannerThemeSelectBottomSheetScreen { themeType ->
-                            submitOnTitle.invoke(cachedTitle, themeType)
-                        }
+        sheetState = bottomSheetScaffoldState,
+        sheetContent = {
+            when (val type = createPlannerBottomSheetType) {
+                is CreatePlannerBottomSheetType.AddTag -> {
+                    AddTagBottomSheetScreen(
+                        modifier = Modifier
+                            .fillMaxHeight(0.9f),
+                        tagType = type.tagType,
+                        onClickCancel = {
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.hide()
+                            }
+                        },
+                        onClickSubmit = { tag ->
+                            viewModel.addTag(tag)
+
+                            coroutineScope.launch {
+                                bottomSheetScaffoldState.hide()
+                            }
+                        },
+                    )
+                }
+                CreatePlannerBottomSheetType.SelectTheme -> {
+                    PlannerThemeSelectBottomSheetScreen { themeType ->
+                        submitOnTitle.invoke(cachedTitle, themeType)
                     }
                 }
-            },
-            sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+            }
+        },
+        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
         Box {
             GlobalNavigationBarLayout(
-                    color = GlobalNavigationBarColor.WHITE,
-                    title = stringResource(id = step.navigationTitleRes),
-                    titleSize = 16.sp,
-                    titleFontWeight = FontWeight.Medium,
-                    activeBack = true,
+                color = GlobalNavigationBarColor.WHITE,
+                title = stringResource(id = step.navigationTitleRes),
+                titleSize = 16.sp,
+                titleFontWeight = FontWeight.Medium,
+                activeBack = true,
             ) {
                 CreatePlannerScreen(
-                        step = step,
-                        selectDateClick = selectDateClick,
-                        startDateMillis = startDateMillis,
-                        endDateMillis = endDateMillis,
-                        tags = tags,
-                        tagClick = viewModel::clickTag,
-                        addTagClick = { tagType ->
-                            createPlannerBottomSheetType = CreatePlannerBottomSheetType.AddTag(tagType)
+                    step = step,
+                    selectDateClick = selectDateClick,
+                    startDateMillis = startDateMillis,
+                    endDateMillis = endDateMillis,
+                    tags = tags,
+                    tagClick = viewModel::clickTag,
+                    addTagClick = { tagType ->
+                        createPlannerBottomSheetType = CreatePlannerBottomSheetType.AddTag(tagType)
 
-                            coroutineScope.launch {
-                                bottomSheetScaffoldState.show()
-                            }
-                        },
-                        submit = { submit ->
-                            when (submit) {
-                                is CreatePlannerSubmit.Title -> {
-                                    cachedTitle = submit.title
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.show()
+                        }
+                    },
+                    submit = { submit ->
+                        when (submit) {
+                            is CreatePlannerSubmit.Title -> {
+                                cachedTitle = submit.title
 
-                                    createPlannerBottomSheetType = CreatePlannerBottomSheetType.SelectTheme
+                                createPlannerBottomSheetType =
+                                    CreatePlannerBottomSheetType.SelectTheme
 
-                                    coroutineScope.launch {
-                                        bottomSheetScaffoldState.show()
-                                    }
-                                }
-                                is CreatePlannerSubmit.Date -> {
-                                    submitOnDate.invoke(submit.from, submit.to)
-                                }
-                                is CreatePlannerSubmit.Taste -> {
-                                    submitOnTaste.invoke(submit.tags)
+                                coroutineScope.launch {
+                                    bottomSheetScaffoldState.show()
                                 }
                             }
-                        },
+                            is CreatePlannerSubmit.Date -> {
+                                submitOnDate.invoke(submit.from, submit.to)
+                            }
+                            is CreatePlannerSubmit.Taste -> {
+                                submitOnTaste.invoke(submit.tags)
+                            }
+                        }
+                    },
                 )
             }
         }
