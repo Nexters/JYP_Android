@@ -174,7 +174,6 @@ internal fun QuestionOptionButtons(
     onClickQuestionOption: (index: Int, selectedOption: Int) -> Unit
 ) {
     stringArrayResource(id = question.optionsRes).forEachIndexed { index, optionString ->
-        val isSelected = selectedQuestionOption == index
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -209,9 +208,10 @@ internal fun QuestionOptionButtons(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f, true),
-                    color = when (isSelected) {
-                        true -> JypColors.Text80
-                        false -> JypColors.Text80.copy(0.5f)
+                    color = when (selectedQuestionOption) {
+                        index -> JypColors.Text80
+                        null -> JypColors.Text80
+                        else -> JypColors.Text80.copy(0.5f)
                     }
                 )
 
@@ -220,9 +220,10 @@ internal fun QuestionOptionButtons(
                     contentDescription = null,
                     modifier = Modifier.size(36.dp),
                     alignment = Alignment.TopEnd,
-                    alpha = when (isSelected) {
-                        true -> 1f
-                        false -> 0f
+                    alpha = when (selectedQuestionOption) {
+                        index -> 1f
+                        null -> 0f
+                        else -> 0f
                     }
                 )
             }
@@ -235,9 +236,10 @@ internal fun QuestionOptionButtons(
                         bottom = 12.dp,
                         end = 12.dp
                     ),
-                alpha = when (isSelected) {
-                    true -> 1f
-                    false -> 0.5f
+                alpha = when (selectedQuestionOption) {
+                    index -> 1f
+                    null -> 1f
+                    else -> 0.5f
                 }
             )
         }
