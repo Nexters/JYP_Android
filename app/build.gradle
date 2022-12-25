@@ -32,14 +32,14 @@ android {
     buildTypes {
         debug {
             manifestPlaceholders = [
-                    KAKAO_NATIVE_APP_KEY: KAKAO_NATIVE_APP_KEY
+                    KAKAO_NATIVE_APP_KEY: localProperties['kakao_native_app_key']
             ]
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [
-                    KAKAO_NATIVE_APP_KEY: KAKAO_NATIVE_APP_KEY
+                    KAKAO_NATIVE_APP_KEY: localProperties['kakao_native_app_key']
             ]
         }
     }
@@ -73,7 +73,6 @@ dependencies {
     implementation project(':core_network')
     implementation project(':core_ui')
     implementation project(':feature_main')
-    implementation project(':feature_onboarding')
     implementation project(':feature_add_place')
     implementation project(':feature_planner')
 
