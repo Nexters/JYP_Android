@@ -158,7 +158,7 @@ internal fun QuestionScreenItem(
         JypText(
             text = stringResource(question.titleRes),
             type = TextType.TITLE_1,
-            color = JypColors.Text80
+            color = JypColors.Text90
         )
         Spacer(modifier = Modifier.size(88.dp))
         questionOptionButtons()
