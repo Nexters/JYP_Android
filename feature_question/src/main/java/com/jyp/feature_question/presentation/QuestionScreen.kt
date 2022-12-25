@@ -153,7 +153,7 @@ internal fun QuestionScreenItem(
         verticalArrangement = Arrangement.Top
     ) {
         Image(
-            painter = painterResource(R.drawable.icon_question),
+            painter = JypPainter.question,
             contentDescription = null
         )
         Spacer(modifier = Modifier.size(4.dp))
@@ -231,7 +231,7 @@ internal fun QuestionOptionButtons(
                 )
             }
             Image(
-                painter = painterResource(id = question.images[index]),
+                painter = question.getOptionPainterList()[index],
                 contentDescription = null,
                 modifier = Modifier
                     .align(alignment = Alignment.End)
