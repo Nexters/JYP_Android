@@ -17,7 +17,7 @@ class PlannerViewModel @Inject constructor() : ViewModel() {
     private val _tags = MutableStateFlow(
             listOf(
                     Tag(
-                            type = TagType.Like(),
+                            type = TagType.Like,
                             content = "바다",
                             selectPeople = listOf(
                                     Person(
@@ -39,7 +39,7 @@ class PlannerViewModel @Inject constructor() : ViewModel() {
                             )
                     ),
                     Tag(
-                            type = TagType.Like(),
+                            type = TagType.Like,
                             content = "해산물",
                             selectPeople = listOf(
                                     Person(
@@ -57,7 +57,7 @@ class PlannerViewModel @Inject constructor() : ViewModel() {
                             )
                     ),
                     Tag(
-                            type = TagType.Like(),
+                            type = TagType.Like,
                             content = "산",
                             selectPeople = listOf(
                                     Person(
@@ -71,7 +71,7 @@ class PlannerViewModel @Inject constructor() : ViewModel() {
                             )
                     ),
                     Tag(
-                            type = TagType.Dislike(),
+                            type = TagType.Dislike,
                             content = "핫플레이스",
                             selectPeople = listOf(
                                     Person(
@@ -97,7 +97,7 @@ class PlannerViewModel @Inject constructor() : ViewModel() {
                             )
                     ),
                     Tag(
-                            type = TagType.Dislike(),
+                            type = TagType.Dislike,
                             content = "도시",
                             selectPeople = listOf(
                                     Person(
@@ -119,7 +119,7 @@ class PlannerViewModel @Inject constructor() : ViewModel() {
                             )
                     ),
                     Tag(
-                            type = TagType.Soso(),
+                            type = TagType.Soso,
                             content = "상관없어",
                             selectPeople = listOf(
                                     Person(

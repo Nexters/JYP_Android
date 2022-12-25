@@ -1,11 +1,11 @@
 package com.jyp.jyp_design.ui.tag
 
-import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
+import java.io.Serializable
 
-sealed interface TagType {
+sealed interface TagType : Serializable {
     val iconRes: Int
 
     fun getBackgroundColor(state: TagState): Color
@@ -13,7 +13,7 @@ sealed interface TagType {
     fun getIconColor(state: TagState): Color
     fun getIconBackgroundColor(state: TagState): Color
 
-    class Soso : TagType {
+    object Soso : TagType {
         override val iconRes: Int = R.drawable.icon_smile
 
         override fun getBackgroundColor(state: TagState): Color {
@@ -49,7 +49,7 @@ sealed interface TagType {
         }
     }
 
-    class Like : TagType {
+    object Like : TagType {
         override val iconRes: Int = R.drawable.icon_heart
 
         override fun getBackgroundColor(state: TagState): Color {
@@ -85,7 +85,7 @@ sealed interface TagType {
         }
     }
 
-    class Dislike : TagType {
+    object Dislike : TagType {
         override val iconRes: Int = R.drawable.icon_smile
 
         override fun getBackgroundColor(state: TagState): Color {
