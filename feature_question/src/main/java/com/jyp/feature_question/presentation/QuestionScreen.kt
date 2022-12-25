@@ -21,6 +21,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.jyp.feature_question.R
 import com.jyp.feature_question.util.QuestionEnum
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
 import com.jyp.jyp_design.ui.button.ButtonType
 import com.jyp.jyp_design.ui.button.JypTextButton
@@ -215,9 +216,9 @@ internal fun QuestionOptionButtons(
                 )
 
                 Image(
-                    painter = painterResource(id = R.drawable.icon_check),
+                    painter = JypPainter.check,
                     contentDescription = null,
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(36.dp),
                     alignment = Alignment.TopEnd,
                     alpha = when (isSelected) {
                         true -> 1f
