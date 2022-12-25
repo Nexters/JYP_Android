@@ -1,6 +1,7 @@
 package com.jyp.feature_question.presentation
 
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -179,7 +180,9 @@ internal fun QuestionOptionButtons(
                 .fillMaxWidth()
                 .clickable(
                     enabled = true,
-                    onClick = { onClickQuestionOption(question.index, index) }
+                    onClick = { onClickQuestionOption(question.index, index) },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
                 )
                 .shadow(
                     elevation = 32.dp,
