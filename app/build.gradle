@@ -6,17 +6,15 @@ plugins {
 }
 
 Properties localProperties = new Properties()
-localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
-def KAKAO_REST_API_KEY = localProperties.getProperty('kakao_rest_api_key')
-def KAKAO_NATIVE_APP_KEY = localProperties.getProperty('kakao_native_app_key')
+localProperties.load(rootProject.file('local.properties').newDataInputStream())
 
 android {
-    compileSdk 32
+    compileSdk project.compileSdkVersion.toInteger()
 
     defaultConfig {
         applicationId "com.jyp.journeypiki"
         minSdk 23
-        targetSdk 32
+        targetSdk project.targetSdkVersion.toInteger()
         versionCode 1
         versionName "1.0"
 
@@ -25,9 +23,10 @@ android {
             useSupportLibrary true
         }
 
-        buildConfigField "String", "KAKAO_REST_API_KEY", KAKAO_REST_API_KEY
-        buildConfigField "String", "KAKAO_NATIVE_APP_KEY", KAKAO_NATIVE_APP_KEY
-
+        buildConfigField "String", "KAKAO_REST_API_KEY", localProperties['kakao_rest_api_key']
+        buildConfigField "String", "KAKAO_NATIVE_APP_KEY", localProperties['kakao_native_app_key']
+        buildConfigField "String", "JYP_JWT_MASTER_KEY", localProperties['jyp-jwt-master-key']
+        buildConfigField "String", "JYP_OVERRIDE_ID", localProperties['jyp-override-id']
     }
 
     buildTypes {
@@ -90,6 +89,7 @@ dependencies {
     kapt hiltDependencies.kapt.values()
 
     implementation imageDependencies.implementation.values()
+
     implementation networkDependencies.implementation.values()
     implementation kakaoSignInDependencies.implementation.values()
 }

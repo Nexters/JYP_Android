@@ -1,7 +1,6 @@
 package com.jyp.feature_planner.presentation.create_planner
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +13,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.jyp.feature_planner.domain.Tag
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerSubmit
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.tag.*
 import com.jyp.jyp_design.ui.text.JypText
@@ -27,14 +29,13 @@ import java.util.*
 @Composable
 internal fun CreatePlannerScreen(
         step: CreatePlannerStep,
-        submitOnTitle: (String) -> Unit,
         selectDateClick: () -> Unit,
         startDateMillis: Long,
         endDateMillis: Long,
-        submitOnDate: (Long, Long) -> Unit,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
-        submitOnTaste: (List<Tag>) -> Unit,
+        addTagClick: (TagType) -> Unit,
+        submit: (CreatePlannerSubmit) -> Unit,
 ) {
     var title by remember {
         mutableStateOf("")
@@ -61,6 +62,7 @@ internal fun CreatePlannerScreen(
                     endDateMillis = endDateMillis,
                     tags = tags,
                     tagClick = tagClick,
+                    addTagClick = addTagClick,
             )
 
             JypTextButton(
@@ -81,9 +83,9 @@ internal fun CreatePlannerScreen(
                     },
                     onClickEnabled = {
                         when (step) {
-                            CreatePlannerStep.TITLE -> submitOnTitle.invoke(title)
-                            CreatePlannerStep.DATE -> submitOnDate.invoke(startDateMillis, endDateMillis)
-                            CreatePlannerStep.TASTE -> submitOnTaste.invoke(tags.filter { it.state == TagState.SELECTED })
+                            CreatePlannerStep.TITLE -> submit.invoke(CreatePlannerSubmit.Title(title))
+                            CreatePlannerStep.DATE -> submit.invoke(CreatePlannerSubmit.Date(startDateMillis, endDateMillis))
+                            CreatePlannerStep.TASTE -> submit.invoke(CreatePlannerSubmit.Taste(tags.filter { it.state == TagState.SELECTED }))
                         }
                     }
             )
@@ -126,6 +128,7 @@ private fun CreatePlannerContent(
         endDateMillis: Long,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
+        addTagClick: (TagType) -> Unit,
 ) {
     when (step) {
         CreatePlannerStep.TITLE -> CreatePlannerTitleArea(
@@ -142,7 +145,8 @@ private fun CreatePlannerContent(
         CreatePlannerStep.TASTE -> CreatePlannerTasteArea(
                 modifier = modifier,
                 tags = tags,
-                tagClick = tagClick
+                tagClick = tagClick,
+                addTagClick = addTagClick,
         )
     }
 }
@@ -315,6 +319,7 @@ private fun CreatePlannerTasteArea(
         modifier: Modifier = Modifier,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
+        addTagClick: (TagType) -> Unit,
 ) {
     val sosoTags = tags.filter { tag -> tag.type is TagType.Soso }
     val likeTags = tags.filter { tag -> tag.type is TagType.Like }
@@ -333,12 +338,14 @@ private fun CreatePlannerTasteArea(
                 tagCategory = "좋아요 태그",
                 tags = likeTags,
                 tagClick = tagClick,
+                addTagClick = { addTagClick.invoke(TagType.Like) },
         )
         Spacer(modifier = Modifier.size(40.dp))
         TastesSection(
                 tagCategory = "싫어요 태그",
                 tags = dislikeTags,
                 tagClick = tagClick,
+                addTagClick = { addTagClick.invoke(TagType.Dislike) },
         )
     }
 }
@@ -348,13 +355,32 @@ private fun TastesSection(
         tagCategory: String,
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
+        addTagClick: (() -> Unit)? = null,
 ) {
     Column {
-        JypText(
-                text = tagCategory,
-                type = TextType.TITLE_6,
-                color = JypColors.Text90,
-        )
+        Row(
+                modifier = Modifier
+                        .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            JypText(
+                    text = tagCategory,
+                    type = TextType.TITLE_6,
+                    color = JypColors.Text90,
+            )
+
+            addTagClick?.let {
+                Image(
+                        modifier = Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = addTagClick,
+                        ),
+                        painter = JypPainter.add,
+                        contentDescription = null,
+                )
+            }
+        }
         Spacer(modifier = Modifier.size(16.dp))
         FlowRow {
             FlowRow(
@@ -382,16 +408,45 @@ private fun TastesSection(
 
 @Composable
 @Preview(showBackground = true)
-internal fun CreatePlannerScreenPreview() {
+internal fun CreatePlannerScreenTitlePreview() {
     CreatePlannerScreen(
             step = CreatePlannerStep.TITLE,
-            submitOnTitle = {},
             selectDateClick = {},
             startDateMillis = 0,
             endDateMillis = 0,
-            submitOnDate = { _, _ -> },
             tags = emptyList(),
             tagClick = {},
-            submitOnTaste = {},
+            addTagClick = {},
+            submit = {},
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+internal fun CreatePlannerScreenDatePreview() {
+    CreatePlannerScreen(
+            step = CreatePlannerStep.DATE,
+            selectDateClick = {},
+            startDateMillis = 0,
+            endDateMillis = 0,
+            tags = emptyList(),
+            tagClick = {},
+            addTagClick = {},
+            submit = {},
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+internal fun CreatePlannerScreenTastePreview() {
+    CreatePlannerScreen(
+            step = CreatePlannerStep.TASTE,
+            selectDateClick = {},
+            startDateMillis = 0,
+            endDateMillis = 0,
+            tags = emptyList(),
+            tagClick = {},
+            addTagClick = {},
+            submit = {},
     )
 }

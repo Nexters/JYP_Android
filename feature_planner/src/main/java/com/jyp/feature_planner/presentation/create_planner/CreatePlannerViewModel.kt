@@ -26,22 +26,22 @@ class CreatePlannerViewModel @Inject constructor(
 
     private val _tags = MutableStateFlow(
             listOf(
-                    Tag(type = TagType.Soso(), content = "모두 찬성"),
-                    Tag(type = TagType.Soso(), content = "상관없어"),
-                    Tag(type = TagType.Like(), content = "고기"),
-                    Tag(type = TagType.Like(), content = "해산물"),
-                    Tag(type = TagType.Like(), content = "쇼핑"),
-                    Tag(type = TagType.Like(), content = "산"),
-                    Tag(type = TagType.Like(), content = "바다"),
-                    Tag(type = TagType.Like(), content = "도시"),
-                    Tag(type = TagType.Like(), content = "핫플레이스"),
-                    Tag(type = TagType.Dislike(), content = "고기"),
-                    Tag(type = TagType.Dislike(), content = "해산물"),
-                    Tag(type = TagType.Dislike(), content = "쇼핑"),
-                    Tag(type = TagType.Dislike(), content = "산"),
-                    Tag(type = TagType.Dislike(), content = "바다"),
-                    Tag(type = TagType.Dislike(), content = "도시"),
-                    Tag(type = TagType.Dislike(), content = "핫플레이스"),
+                    Tag(type = TagType.Soso, content = "모두 찬성"),
+                    Tag(type = TagType.Soso, content = "상관없어"),
+                    Tag(type = TagType.Like, content = "고기"),
+                    Tag(type = TagType.Like, content = "해산물"),
+                    Tag(type = TagType.Like, content = "쇼핑"),
+                    Tag(type = TagType.Like, content = "산"),
+                    Tag(type = TagType.Like, content = "바다"),
+                    Tag(type = TagType.Like, content = "도시"),
+                    Tag(type = TagType.Like, content = "핫플레이스"),
+                    Tag(type = TagType.Dislike, content = "고기"),
+                    Tag(type = TagType.Dislike, content = "해산물"),
+                    Tag(type = TagType.Dislike, content = "쇼핑"),
+                    Tag(type = TagType.Dislike, content = "산"),
+                    Tag(type = TagType.Dislike, content = "바다"),
+                    Tag(type = TagType.Dislike, content = "도시"),
+                    Tag(type = TagType.Dislike, content = "핫플레이스"),
             )
     )
     val tags: StateFlow<List<Tag>>
@@ -50,6 +50,14 @@ class CreatePlannerViewModel @Inject constructor(
     fun updateDate(startMillis: Long, endMillis: Long) {
         _startDateMillis.value = startMillis
         _endDateMillis.value = endMillis
+    }
+
+    fun addTag(tag: Tag) {
+        val newList = tags.value + tag
+
+        updateTagState(newList)
+
+        _tags.value = newList
     }
 
     fun clickTag(tag: Tag) {
@@ -63,9 +71,14 @@ class CreatePlannerViewModel @Inject constructor(
                 }
         )
 
-        val newList = tags.value.toMutableList()
+        val mutableTags = tags.value.toMutableList()
+        mutableTags[clickIndex] = newTag
 
-        newList[clickIndex] = newTag
+        _tags.value = updateTagState(mutableTags)
+    }
+
+    private fun updateTagState(list: List<Tag>): List<Tag> {
+        val newList = list.toMutableList()
 
         val clickedTagCount = newList.count { it.state == TagState.SELECTED }
         if (clickedTagCount >= 3) {
@@ -82,7 +95,7 @@ class CreatePlannerViewModel @Inject constructor(
             }
         }
 
-        _tags.value = newList
+        return newList
     }
 
     fun createPlanner(

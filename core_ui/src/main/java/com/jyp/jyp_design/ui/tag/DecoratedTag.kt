@@ -84,7 +84,7 @@ private fun DecoratedTagIcon(
 @Preview
 internal fun DecoratedTagSosoPreview() {
     DecoratedTag(
-            tagType = TagType.Soso(),
+            tagType = TagType.Soso,
             tagState = TagState.DEFAULT,
             content = "상관없어",
             tagCount = 3,
@@ -95,7 +95,7 @@ internal fun DecoratedTagSosoPreview() {
 @Preview
 internal fun DecoratedTagLikePreview() {
     DecoratedTag(
-            tagType = TagType.Like(),
+            tagType = TagType.Like,
             tagState = TagState.DEFAULT,
             content = "좋아용",
             tagCount = 2,
@@ -106,7 +106,7 @@ internal fun DecoratedTagLikePreview() {
 @Preview
 internal fun DecoratedTagDisLikePreview() {
     DecoratedTag(
-            tagType = TagType.Dislike(),
+            tagType = TagType.Dislike,
             tagState = TagState.DEFAULT,
             content = "좋지않아",
             tagCount = 0,
