@@ -162,7 +162,7 @@ internal fun QuestionScreenItem(
             type = TextType.TITLE_1,
             color = JypColors.Text90
         )
-        Spacer(modifier = Modifier.size(88.dp))
+        Spacer(modifier = Modifier.weight(1.0f))
         questionOptionButtons()
         Spacer(modifier = Modifier.size(44.dp))
     }
