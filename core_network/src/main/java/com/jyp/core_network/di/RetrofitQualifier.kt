@@ -1,4 +1,4 @@
-package com.jyp.core.di
+package com.jyp.core_network.di
 
 import javax.inject.Qualifier
 
@@ -9,4 +9,4 @@ annotation class JourneyPikiRetrofit
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class KakaoSearchRetrofit
+annotation class KakaoLocalRetrofit
