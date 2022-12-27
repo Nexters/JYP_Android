@@ -1,6 +1,6 @@
 package com.jyp.feature_add_place.data.mapper
 
-import com.jyp.core.search_place.domain.model.KakaoLocalResponseModel
+import com.jyp.core_network.kakao.response.KakaoLocalResponseModel
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.feature_add_place.util.getJourneyPikiPlaceCategoryEnum
 

@@ -1,7 +1,6 @@
-package com.jyp.core
+package com.jyp.core_network.di
 
-import com.jyp.core.search_place.domain.KakaoLocalRetrofit
-import com.jyp.core.search_place.domain.KakaoLocalApi
+import com.jyp.core_network.kakao.KakaoLocalApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object KakaoApiModule {
 
     @Provides
     @Singleton

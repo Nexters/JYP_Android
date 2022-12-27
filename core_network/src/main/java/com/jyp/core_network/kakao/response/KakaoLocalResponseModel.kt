@@ -1,4 +1,4 @@
-package com.jyp.core.search_place.domain.model
+package com.jyp.core_network.kakao.response
 
 
 data class KakaoLocalResponseModel(

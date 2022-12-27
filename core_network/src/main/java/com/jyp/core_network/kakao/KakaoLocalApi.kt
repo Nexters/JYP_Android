@@ -1,7 +1,7 @@
-package com.jyp.core.search_place.domain
+package com.jyp.core_network.kakao
 
 import com.jyp.core.BuildConfig
-import com.jyp.core.search_place.domain.model.KakaoLocalResponseModel
+import com.jyp.core_network.kakao.response.KakaoLocalResponseModel
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
