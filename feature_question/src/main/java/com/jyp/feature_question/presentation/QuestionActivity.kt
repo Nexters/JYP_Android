@@ -1,4 +1,4 @@
-package com.jyp.feature_question
+package com.jyp.feature_question.presentation
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import com.jyp.feature_question.presentation.viewmodel.QuestionViewModel
 import com.jyp.main.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +23,7 @@ class QuestionActivity : ComponentActivity() {
         setContent {
             Screen(
                 viewModel = viewModel,
-                onQuestionFinished = {
+                onClickDoneQuestion = {
                     startActivity(Intent(this, MainActivity::class.java))
                 }
             )
@@ -34,16 +34,13 @@ class QuestionActivity : ComponentActivity() {
 @Composable
 private fun Screen(
     viewModel: QuestionViewModel,
-    onQuestionFinished: () -> Unit
+    onClickDoneQuestion: () -> Unit
 ) {
-    val selectedQuestionOptions: MutableList<Int?>
-            by viewModel.selectedQuestionOptions.observeAsState(mutableListOf())
+    val selectedQuestionOptions = remember { viewModel.selectedQuestionOptions }
 
     QuestionScreen(
         selectedQuestionOptions = selectedQuestionOptions,
-        onQuestionOptionSelected = { index: Int, selectedOption: Int ->
-            viewModel.setSelectedQuestionOptions(index, selectedOption)
-        },
-        onQuestionFinished = onQuestionFinished
+        onClickQuestionOption = viewModel::setSelectedQuestionOptions,
+        onClickDoneQuestion = onClickDoneQuestion
     )
 }

@@ -1,27 +1,28 @@
-package com.jyp.feature_question
+package com.jyp.feature_question.presentation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.jyp.feature_question.R
+import com.jyp.feature_question.util.QuestionEnum
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
 import com.jyp.jyp_design.ui.button.ButtonType
 import com.jyp.jyp_design.ui.button.JypTextButton
@@ -35,8 +36,8 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun QuestionScreen(
     selectedQuestionOptions: List<Int?>,
-    onQuestionOptionSelected: (index: Int, selectedOption: Int) -> Unit,
-    onQuestionFinished: () -> Unit
+    onClickQuestionOption: (index: Int, selectedOption: Int) -> Unit,
+    onClickDoneQuestion: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
@@ -45,15 +46,6 @@ internal fun QuestionScreen(
         QuestionEnum.QUESTION_02,
         QuestionEnum.QUESTION_03
     )
-    val isLastQuestion by remember {
-        mutableStateOf(pagerState.currentPage == questions.size - 1)
-    }
-    val isOptionSelected by remember {
-        mutableStateOf(
-            selectedQuestionOptions.isNotEmpty() &&
-                    selectedQuestionOptions[pagerState.currentPage] != null
-        )
-    }
 
     Column(
         modifier = Modifier
@@ -63,11 +55,11 @@ internal fun QuestionScreen(
     ) {
         QuestionAppBar(pagerState, coroutineScope)
         QuestionViewPager(
-            pagerState = pagerState,
-            questions = questions,
+            viewPagerCount = questions.size,
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f, false)
+                .weight(1f, false),
+            pagerState = pagerState
         ) { page ->
 
             QuestionScreenItem(
@@ -75,14 +67,13 @@ internal fun QuestionScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
-                    .weight(1f, false)
-                    .selectableGroup(),
+                    .weight(1f, false),
 
                 questionOptionButtons = {
                     QuestionOptionButtons(
                         question = questions[page],
-                        isOptionSelected = isOptionSelected,
-                        onQuestionOptionSelected = onQuestionOptionSelected
+                        selectedQuestionOption = selectedQuestionOptions[pagerState.currentPage],
+                        onClickQuestionOption = onClickQuestionOption
                     )
                 }
             )
@@ -90,9 +81,9 @@ internal fun QuestionScreen(
         QuestionDoneButton(
             pagerState = pagerState,
             coroutineScope = coroutineScope,
-            isLastQuestion = isLastQuestion,
-            isOptionSelected = isOptionSelected,
-            onQuestionFinished = onQuestionFinished
+            isLastQuestion = pagerState.currentPage == questions.size - 1,
+            isOptionSelected = selectedQuestionOptions[pagerState.currentPage] != null,
+            onClickDoneQuestion = onClickDoneQuestion
         )
     }
 }
@@ -114,7 +105,7 @@ internal fun QuestionAppBar(
         IconButton(
             onClick = {
                 if (pagerState.currentPage != 0) coroutineScope.launch {
-                    pagerState.scrollToPage(pagerState.currentPage - 1)
+                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
                 }
             },
             enabled = pagerState.currentPage != 0
@@ -134,18 +125,19 @@ internal fun QuestionAppBar(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 internal fun QuestionViewPager(
-    pagerState: PagerState,
-    questions: List<QuestionEnum>,
+    viewPagerCount: Int,
     modifier: Modifier,
+    pagerState: PagerState,
     content: @Composable (page: Int) -> Unit
 ) {
     HorizontalPager(
-        count = questions.size,
+        count = viewPagerCount,
         modifier = modifier,
         state = pagerState,
         reverseLayout = false,
         itemSpacing = 0.dp,
-        contentPadding = PaddingValues(0.dp)
+        contentPadding = PaddingValues(0.dp),
+        userScrollEnabled = false
     ) { page -> content(page) }
 }
 
@@ -161,39 +153,41 @@ internal fun QuestionScreenItem(
         verticalArrangement = Arrangement.Top
     ) {
         Image(
-            painter = painterResource(R.drawable.icon_question),
+            painter = JypPainter.question,
             contentDescription = null
         )
         Spacer(modifier = Modifier.size(4.dp))
         JypText(
             text = stringResource(question.titleRes),
             type = TextType.TITLE_1,
-            color = JypColors.Text80
+            color = JypColors.Text90
         )
-        Spacer(modifier = Modifier.size(88.dp))
+        Spacer(modifier = Modifier.weight(1.0f))
         questionOptionButtons()
         Spacer(modifier = Modifier.size(44.dp))
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 internal fun QuestionOptionButtons(
     question: QuestionEnum,
-    isOptionSelected: Boolean,
-    onQuestionOptionSelected: (index: Int, selectedOption: Int) -> Unit
+    selectedQuestionOption: Int?,
+    onClickQuestionOption: (index: Int, selectedOption: Int) -> Unit
 ) {
     stringArrayResource(id = question.optionsRes).forEachIndexed { index, optionString ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .selectable(
-                    selected = isOptionSelected,
+                .clickable(
                     enabled = true,
-                    role = Role.RadioButton,
-                    onClick = {
-                        onQuestionOptionSelected(question.index, index)
-                    }
+                    onClick = { onClickQuestionOption(question.index, index) },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                )
+                .shadow(
+                    elevation = 32.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    spotColor = JypColors.Border_grey
                 )
                 .background(
                     color = JypColors.Background_white100,
@@ -217,24 +211,27 @@ internal fun QuestionOptionButtons(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f, true),
-                    color = when (isOptionSelected) {
-                        true -> JypColors.Text80
-                        false -> JypColors.Text80.copy(0.5f)
+                    color = when (selectedQuestionOption) {
+                        index -> JypColors.Text80
+                        null -> JypColors.Text80
+                        else -> JypColors.Text80.copy(0.5f)
                     }
                 )
+
                 Image(
-                    painter = painterResource(id = R.drawable.icon_check),
+                    painter = JypPainter.check,
                     contentDescription = null,
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(36.dp),
                     alignment = Alignment.TopEnd,
-                    alpha = when (isOptionSelected) {
-                        true -> 1f
-                        false -> 0f
+                    alpha = when (selectedQuestionOption) {
+                        index -> 1f
+                        null -> 0f
+                        else -> 0f
                     }
                 )
             }
             Image(
-                painter = painterResource(id = question.images[index]),
+                painter = question.getOptionPainterList()[index],
                 contentDescription = null,
                 modifier = Modifier
                     .align(alignment = Alignment.End)
@@ -242,9 +239,10 @@ internal fun QuestionOptionButtons(
                         bottom = 12.dp,
                         end = 12.dp
                     ),
-                alpha = when (isOptionSelected) {
-                    true -> 1f
-                    false -> 0.5f
+                alpha = when (selectedQuestionOption) {
+                    index -> 1f
+                    null -> 1f
+                    else -> 0.5f
                 }
             )
         }
@@ -259,7 +257,7 @@ internal fun QuestionDoneButton(
     coroutineScope: CoroutineScope,
     isLastQuestion: Boolean,
     isOptionSelected: Boolean,
-    onQuestionFinished: () -> Unit
+    onClickDoneQuestion: () -> Unit
 ) {
     JypTextButton(
         text = stringResource(
@@ -280,9 +278,9 @@ internal fun QuestionDoneButton(
         },
         onClickEnabled = {
             when (isLastQuestion) {
-                true -> onQuestionFinished()
+                true -> onClickDoneQuestion()
                 false -> coroutineScope.launch {
-                    pagerState.scrollToPage(pagerState.currentPage + 1)
+                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
                 }
             }
         },
@@ -295,7 +293,7 @@ internal fun QuestionDoneButton(
 internal fun QuestionScreenPreview() {
     QuestionScreen(
         selectedQuestionOptions = listOf<Int?>(0, 1, 0),
-        onQuestionOptionSelected = { _, _ -> },
-        onQuestionFinished = {}
+        onClickQuestionOption = { _, _ -> },
+        onClickDoneQuestion = {}
     )
 }
