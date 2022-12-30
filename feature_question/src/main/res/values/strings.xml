@@ -19,4 +19,9 @@
 
     <string name="question_next">다음으로</string>
     <string name="question_done">완료하기</string>
+
+    <string name="question_result_me">꼼꼼한 탐험가</string>
+    <string name="question_result_pe">열정왕 탐험가</string>
+    <string name="question_result_rt">낭만적인 여행자</string>
+    <string name="question_result_fw">자유로운 방랑자</string>
 </resources>

@@ -33,4 +33,30 @@ object JypPainter {
     val CulturalInstitution: Painter
         @Composable
         get() = painterResource(id = R.drawable.icon_cultural_institution)
+
+    // Question
+    val question: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.icon_question)
+
+    val question01Illustration01: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.illust_question01_01)
+    val question01Illustration02: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.illust_question01_02)
+
+    val question02Illustration01: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.illust_question02_01)
+    val question02Illustration02: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.illust_question02_02)
+
+    val question03Illustration01: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.illust_question03_01)
+    val question03Illustration02: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.illust_question01_02)
 }
