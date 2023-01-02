@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyJourneyViewModel @Inject constructor(
-        private val getUserUseCase: GetUserUseCase,
-        private val getJourneysUseCase: GetJourneysUseCase,
+    private val getUserUseCase: GetUserUseCase,
+    private val getJourneysUseCase: GetJourneysUseCase,
 ) : ViewModel() {
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String>
@@ -43,43 +43,53 @@ class MyJourneyViewModel @Inject constructor(
     fun fetchUser() {
         viewModelScope.launch {
             getUserUseCase("kakao-556894")
-                    .onSuccess { user ->
-                        _userName.value = user.name
-                        _personality.value = user.personality
-                    }.onFailure {
-                        it.printStackTrace()
-                    }
+                .onSuccess { user ->
+                    _userName.value = user.name
+                    _personality.value = user.personality
+                }.onFailure {
+                    it.printStackTrace()
+                }
         }
     }
 
     fun fetchJourneyList() {
         viewModelScope.launch {
             getJourneysUseCase()
-                    .onSuccess { response ->
-                        _plannedJourneys.value = response.journeys.map { journey ->
-                            val startDay = SimpleDateFormat("d", Locale.getDefault())
-                                    .format(Date(journey.startDate * 1000))
-                                    .toInt()
+                .onSuccess { response ->
+                    _plannedJourneys.value = response.journeys.map { journey ->
+                        val startDay = SimpleDateFormat("d", Locale.getDefault())
+                            .format(Date(journey.startDate * 1000))
+                            .toInt()
 
-                            val today = SimpleDateFormat("d", Locale.getDefault())
-                                    .format(Date(System.currentTimeMillis()))
-                                    .toInt()
+                        val today = SimpleDateFormat("d", Locale.getDefault())
+                            .format(Date(System.currentTimeMillis()))
+                            .toInt()
 
-                            val dDay = (startDay - today).takeIf { gap ->
-                                gap > 0
-                            } ?: "day"
+                        val dDay = (startDay - today).takeIf { gap ->
+                            gap > 0
+                        } ?: "day"
 
-                            Journey(
-                                    dDay = "D-$dDay",
-                                    title = journey.name,
-                                    themeType = ThemeType.values().firstOrNull { themeType -> themeType.imagePath == journey.themePath }
-                                            ?: ThemeType.DEFAULT,
-                                    startDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(Date(journey.startDate * 1000)),
-                                    endDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(Date(journey.endDate * 1000)),
-                                    profileUrls = journey.users.map { it.profileImagePath },
-                            )
-                        }
+                        Journey(
+                            id = journey.id,
+                            dDay = "D-$dDay",
+                            title = journey.name,
+                            themeType = ThemeType.values()
+                                .firstOrNull { themeType -> themeType.imagePath == journey.themePath }
+                                ?: ThemeType.DEFAULT,
+                            startDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(
+                                Date(
+                                    journey.startDate * 1000
+                                )
+                            ),
+                            endDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(
+                                Date(
+                                    journey.endDate * 1000
+                                )
+                            ),
+                            profileUrls = journey.users.map { it.profileImagePath },
+                        )
                     }
+                }
         }
     }
 

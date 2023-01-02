@@ -45,7 +45,11 @@ class MainActivity : ComponentActivity() {
                         startActivity(Intent(this, CreatePlannerActivity::class.java))
                     },
                     onClickPlanner = {
-                        startActivity(Intent(this, PlannerActivity::class.java))
+                        startActivity(
+                            Intent(this, PlannerActivity::class.java).apply {
+                                putExtra("id", it)
+                            }
+                        )
                     },
             )
         }
@@ -65,7 +69,7 @@ private fun Screen(
         mainViewModel: MainViewModel,
         myJourneyViewModel: MyJourneyViewModel,
         onClickNewJourney: () -> Unit,
-        onClickPlanner: () -> Unit,
+        onClickPlanner: (id: String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -80,7 +84,9 @@ private fun Screen(
     val myJourneyScreenItem = createMyJourneyScreenItem(
             myJourneyViewModel = myJourneyViewModel,
             onClickNewJourney = onClickNewJourney,
-            onClickPlanner = onClickPlanner,
+            onClickPlanner = { journey ->
+                onClickPlanner.invoke(journey.id)
+            },
             onClickMore = { journey ->
                 coroutineScope.launch {
                     currentBottomSheetItem = MainBottomSheetItem.JourneyMore(journey)
@@ -169,7 +175,7 @@ private fun SelectProfileScreen(myJourneyViewModel: MyJourneyViewModel) {
 private fun createMyJourneyScreenItem(
         myJourneyViewModel: MyJourneyViewModel,
         onClickNewJourney: () -> Unit,
-        onClickPlanner: () -> Unit,
+        onClickPlanner: (Journey) -> Unit,
         onClickMore: (Journey) -> Unit,
 ): MainScreenItem {
     return MainScreenItem(
