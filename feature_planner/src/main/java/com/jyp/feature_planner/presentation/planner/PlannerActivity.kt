@@ -28,6 +28,9 @@ class PlannerActivity : ComponentActivity() {
         setContent {
             Screen(
                     viewModel = viewModel,
+                    onClickInviteUserButton = {
+                        startActivity(Intent(this, InviteUserActivity::class.java))
+                    },
                     onClickEditRoute = {
                         startActivity(Intent(this, AddPlannerRouteActivity::class.java))
                     }
@@ -40,6 +43,7 @@ class PlannerActivity : ComponentActivity() {
 @Composable
 private fun Screen(
         viewModel: PlannerViewModel,
+        onClickInviteUserButton: () -> Unit,
         onClickEditRoute: () -> Unit,
 ) {
     val pikMes by viewModel.pikMes.collectAsState()
@@ -85,6 +89,7 @@ private fun Screen(
                     newPikMeClick = {
                         viewModel.fetchPikMes()
                     },
+                    onClickInviteUserButton = onClickInviteUserButton,
                     onClickEditRoute = onClickEditRoute,
             )
         }
