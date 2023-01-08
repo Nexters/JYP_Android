@@ -123,7 +123,10 @@ private fun Content(
         Spacer(modifier = Modifier.height(16.dp))
         joinCodeFromClipboard?.let {
             JypText(
-                text = it,
+                text = when (it.length > 8) {
+                    true -> it.substring(0..7) + "…"
+                    false -> it
+                },
                 type = TextType.TAG_1,
                 modifier = Modifier
                     .background(
@@ -146,13 +149,13 @@ private fun Content(
         }
         Spacer(modifier = Modifier.height(420.dp))
 //        if (isWrongJoinCode) {
-            JypText(
-                text = "잘못된 참여 코드에요",
-                type = TextType.BODY_3,
-                modifier = Modifier.fillMaxWidth(1f),
-                textAlign = TextAlign.Center,
-                color = JypColors.Pink
-            )
+        JypText(
+            text = "잘못된 참여 코드에요",
+            type = TextType.BODY_3,
+            modifier = Modifier.fillMaxWidth(1f),
+            textAlign = TextAlign.Center,
+            color = JypColors.Pink
+        )
 //        }
         Spacer(modifier = Modifier.height(12.dp))
         JypTextButton(
