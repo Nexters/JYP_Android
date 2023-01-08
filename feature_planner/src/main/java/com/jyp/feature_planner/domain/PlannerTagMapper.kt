@@ -13,17 +13,19 @@ class PlannerTagMapper {
                 TagOrientation.NO_MATTER -> TagType.Soso
             },
             content = tag.topic,
+            selectPeople = tag.users.map { Person(it.name, it.profileImagePath) }
         )
     }
 
     fun toTag(plannerTag: PlannerTag): Tag {
         return Tag(
-            plannerTag.content,
-            when (plannerTag.type) {
+            topic = plannerTag.content,
+            orientation = when (plannerTag.type) {
                 TagType.Dislike -> TagOrientation.DISLIKE
                 TagType.Like -> TagOrientation.LIKE
                 TagType.Soso -> TagOrientation.NO_MATTER
             },
+            users = emptyList()
         )
     }
 }

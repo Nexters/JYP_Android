@@ -44,10 +44,10 @@ class MainActivity : ComponentActivity() {
                     onClickNewJourney = {
                         startActivity(Intent(this, CreatePlannerActivity::class.java))
                     },
-                    onClickPlanner = {
+                    onClickPlanner = { plannerId ->
                         startActivity(
                             Intent(this, PlannerActivity::class.java).apply {
-                                putExtra("id", it)
+                                putExtra(PlannerActivity.EXTRA_PLANNER_ID, plannerId)
                             }
                         )
                     },
