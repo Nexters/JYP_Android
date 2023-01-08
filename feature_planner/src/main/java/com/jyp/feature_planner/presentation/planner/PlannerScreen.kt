@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_planner.R.*
 import com.jyp.feature_planner.domain.PikMe
-import com.jyp.feature_planner.domain.Tag
+import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.avatar.AvatarList
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBar
@@ -32,12 +32,12 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PlannerScreen(
-        pikMes: List<PikMe>,
-        joinMembers: List<String>,
-        tags: List<Tag>,
-        tagClick: (Tag) -> Unit,
-        newPikMeClick: () -> Unit,
-        onClickEditRoute: () -> Unit,
+    pikMes: List<PikMe>,
+    joinMembers: List<String>,
+    tags: List<PlannerTag>,
+    tagClick: (PlannerTag) -> Unit,
+    newPikMeClick: () -> Unit,
+    onClickEditRoute: () -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -115,14 +115,14 @@ private fun PlannerBackLayer(
 
 @Composable
 private fun PlannerContent(
-        tabTitles: List<String>,
-        selectedTabPosition: Int,
-        tabSelected: (position: Int) -> Unit,
-        pikMes: List<PikMe>,
-        tags: List<Tag>,
-        tagClick: (Tag) -> Unit,
-        newPikMeClick: () -> Unit,
-        onClickEditRoute: () -> Unit,
+    tabTitles: List<String>,
+    selectedTabPosition: Int,
+    tabSelected: (position: Int) -> Unit,
+    pikMes: List<PikMe>,
+    tags: List<PlannerTag>,
+    tagClick: (PlannerTag) -> Unit,
+    newPikMeClick: () -> Unit,
+    onClickEditRoute: () -> Unit,
 ) {
     Column(
             modifier = Modifier

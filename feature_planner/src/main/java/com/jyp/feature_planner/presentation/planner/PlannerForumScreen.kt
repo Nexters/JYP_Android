@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.*
 import com.google.accompanist.flowlayout.FlowRow
 import com.jyp.feature_planner.domain.PikMe
-import com.jyp.feature_planner.domain.Tag
+import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.tag.DecoratedTag
@@ -30,10 +30,10 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 internal fun PlannerForumScreen(
-        pikMes: List<PikMe>,
-        tags: List<Tag>,
-        tagClick: (Tag) -> Unit,
-        newPikMeClick: () -> Unit,
+    pikMes: List<PikMe>,
+    tags: List<PlannerTag>,
+    tagClick: (PlannerTag) -> Unit,
+    newPikMeClick: () -> Unit,
 ) {
     val rememberScrollState = rememberScrollState()
 
@@ -58,8 +58,8 @@ internal fun PlannerForumScreen(
 
 @Composable
 private fun PlannerJourneyTagContent(
-        tags: List<Tag>,
-        tagClick: (Tag) -> Unit,
+    tags: List<PlannerTag>,
+    tagClick: (PlannerTag) -> Unit,
 ) {
     var isCollapsed by remember {
         mutableStateOf(false)
@@ -126,8 +126,8 @@ private fun PlannerJourneyTagContent(
 
 @Composable
 private fun PlannerTagLayout(
-        tags: List<Tag> = emptyList(),
-        tagClick: (Tag) -> Unit,
+    tags: List<PlannerTag> = emptyList(),
+    tagClick: (PlannerTag) -> Unit,
 ) {
     FlowRow(
             crossAxisSpacing = 12.dp,

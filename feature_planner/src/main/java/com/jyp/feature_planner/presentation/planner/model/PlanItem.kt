@@ -1,4 +1,4 @@
-package com.jyp.feature_planner.presentation.planner
+package com.jyp.feature_planner.presentation.planner.model
 
 import com.jyp.feature_planner.domain.Pikis
 

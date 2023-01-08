@@ -23,7 +23,7 @@ class PlannerViewModel @Inject constructor(
 
     private val _tags = MutableStateFlow(
         listOf(
-            Tag(
+            PlannerTag(
                 type = TagType.Like,
                 content = "바다",
                 selectPeople = listOf(
@@ -45,7 +45,7 @@ class PlannerViewModel @Inject constructor(
                     ),
                 )
             ),
-            Tag(
+            PlannerTag(
                 type = TagType.Like,
                 content = "해산물",
                 selectPeople = listOf(
@@ -63,7 +63,7 @@ class PlannerViewModel @Inject constructor(
                     ),
                 )
             ),
-            Tag(
+            PlannerTag(
                 type = TagType.Like,
                 content = "산",
                 selectPeople = listOf(
@@ -77,7 +77,7 @@ class PlannerViewModel @Inject constructor(
                     ),
                 )
             ),
-            Tag(
+            PlannerTag(
                 type = TagType.Dislike,
                 content = "핫플레이스",
                 selectPeople = listOf(
@@ -103,7 +103,7 @@ class PlannerViewModel @Inject constructor(
                     ),
                 )
             ),
-            Tag(
+            PlannerTag(
                 type = TagType.Dislike,
                 content = "도시",
                 selectPeople = listOf(
@@ -125,7 +125,7 @@ class PlannerViewModel @Inject constructor(
                     ),
                 )
             ),
-            Tag(
+            PlannerTag(
                 type = TagType.Soso,
                 content = "상관없어",
                 selectPeople = listOf(
@@ -137,14 +137,14 @@ class PlannerViewModel @Inject constructor(
             ),
         )
     )
-    val tags: StateFlow<List<Tag>>
+    val tags: StateFlow<List<PlannerTag>>
         get() = _tags
 
     fun fetchPlannerData(id: String) {
         viewModelScope.launch {
             getPlannerUseCase.invoke(id)
                 .onSuccess {
-                    Log.d("adsf", "$it")
+
                 }
                 .onFailure {
 

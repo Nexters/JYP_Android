@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_planner.R
 import com.jyp.feature_planner.domain.Pikis
+import com.jyp.feature_planner.presentation.planner.model.PlanItem
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.text.JypText
