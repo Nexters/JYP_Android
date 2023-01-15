@@ -21,18 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="com.jyp.journeypiki.presentation.onboarding.OnboardingActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.jyp.journeypiki.presentation.sign_in.SignInActivity"
-            android:exported="true" >
-            <intent-filter>
-                <data android:host="oauth"
-                    android:scheme="kakao${KAKAO_NATIVE_APP_KEY}" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

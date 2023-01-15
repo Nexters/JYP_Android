@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">JYPAndroid</string>
-
-    <string name="onboarding_title01">나의 여행 취향을\n친구들과 공유하세요!</string>
-    <string name="onboarding_title02">친구들과 방문할\n여행 장소를 선정하세요!</string>
-
-    <string name="sign_in_description">SNS 계정으로 회원가입 및 로그인</string>
-</resources>

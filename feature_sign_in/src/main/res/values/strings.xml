@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">JYPAndroid</string>
+
+    <string name="onboarding_title01">나의 여행 취향을\n친구들과 공유하세요!</string>
+    <string name="onboarding_title02">친구들과 방문할\n여행 장소를 선정하세요!</string>
+
+    <string name="sign_in_description">SNS 계정으로 회원가입 및 로그인</string>
+    <string name="sign_in_error">로그인 및 회원가입에 실패했습니다</string>
+    <string name="sign_in_canceled">로그인 및 회원가입이 취소되었습니다</string>
+
+    <string name="question01">본인이 생각하는 여행이란\n무엇인가요?</string>
+    <string-array name="question01_options">
+        <item>새롭고 많은 것들을\n경험하는 것이라고 생각해요</item>
+        <item>여유롭게 휴식하는 것이라고\n생각해요</item>
+    </string-array>
+
+    <string name="question02">여행 중, 새로운 장소를\n발견하면 어떤 선택을 하실 건가요?</string>
+    <string-array name="question02_options">
+        <item>미리 세운 계획에\n영향이 간다면 방문하지 않아요</item>
+        <item>궁금증을 참지 못하고\n무조건 방문해요</item>
+    </string-array>
+
+    <string name="question03">여행 계획을 세울 때,\n어떤 모습이신가요?</string>
+    <string-array name="question03_options">
+        <item>시간 단위로 꼼꼼하게\n계획해요</item>
+        <item>방문할 지역만 대략 생각하고,\n나의 직관을 믿어요</item>
+    </string-array>
+
+    <string name="question_next">다음으로</string>
+    <string name="question_done">완료하기</string>
+
+    <string name="question_result_me">꼼꼼한 탐험가</string>
+    <string name="question_result_pe">열정왕 탐험가</string>
+    <string name="question_result_rt">낭만적인 여행자</string>
+    <string name="question_result_fw">자유로운 방랑자</string>
+</resources>
