@@ -23,7 +23,6 @@ android {
             useSupportLibrary true
         }
 
-        buildConfigField "String", "KAKAO_REST_API_KEY", localProperties['kakao_rest_api_key']
         buildConfigField "String", "KAKAO_NATIVE_APP_KEY", localProperties['kakao_native_app_key']
         buildConfigField "String", "JYP_JWT_MASTER_KEY", localProperties['jyp-jwt-master-key']
         buildConfigField "String", "JYP_OVERRIDE_ID", localProperties['jyp-override-id']
@@ -64,22 +63,18 @@ android {
 }
 
 dependencies {
+    // module dependencies
+    implementation project(':core_ui')
+    implementation project(':core_network')
+    implementation project(':feature_sign_in')
+    implementation project(':feature_main')
 
+    // dependencies
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation project(':core_network')
-    implementation project(':core_ui')
-    implementation project(':feature_main')
-    implementation project(':feature_add_place')
-    implementation project(':feature_planner')
-
-    // module dependencies
-
-
-    // dependencies
 
     implementation composeDependencies.implementation.values()
     debugImplementation composeDependencies.debugImplementation.values()
