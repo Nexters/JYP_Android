@@ -5,7 +5,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import com.jyp.jyp_design.R
 
+
 object JypPainter {
+    val journeyPikiApp: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.image_journey_piki_app)
+
     val add: Painter
         @Composable
         get() = painterResource(id = R.drawable.icon_add)
