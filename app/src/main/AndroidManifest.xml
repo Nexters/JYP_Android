@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jyp.journeypiki">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name="com.jyp.journeypiki.JypApp"
@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JYPAndroid">
+
         <activity
-            android:name="com.jyp.journeypiki.presentation.splash.SplashActivity"
+            android:name="com.jyp.journeypiki.presentation.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.JYPAndroid">
             <intent-filter>
