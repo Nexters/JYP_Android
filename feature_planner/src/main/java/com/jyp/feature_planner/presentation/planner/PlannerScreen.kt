@@ -37,6 +37,7 @@ internal fun PlannerScreen(
         tags: List<Tag>,
         tagClick: (Tag) -> Unit,
         newPikMeClick: () -> Unit,
+        onClickInviteUserButton: () -> Unit,
         onClickEditRoute: () -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
@@ -56,6 +57,7 @@ internal fun PlannerScreen(
             backLayerContent = {
                 PlannerBackLayer(
                         profileImageUrls = joinMembers,
+                        onClickInviteUserButton = onClickInviteUserButton
                 )
             },
             frontLayerContent = {
@@ -81,6 +83,7 @@ internal fun PlannerScreen(
 @Composable
 private fun PlannerBackLayer(
         profileImageUrls: List<String>,
+        onClickInviteUserButton: () -> Unit
 ) {
     Column(
             modifier = Modifier
@@ -102,7 +105,9 @@ private fun PlannerBackLayer(
                     borderColor = JypColors.Background_grey300,
             ) {
                 Image(
-                        modifier = Modifier.size(52.dp),
+                        modifier = Modifier
+                            .size(52.dp)
+                            .clickable { onClickInviteUserButton() },
                         painter = painterResource(id = drawable.icon_invite_small),
                         contentDescription = null,
                         contentScale = ContentScale.Fit
@@ -226,6 +231,7 @@ internal fun PlannerScreenPreview() {
             tags = emptyList(),
             tagClick = {},
             newPikMeClick = {},
+            onClickInviteUserButton = {},
             onClickEditRoute = {},
     )
 }
