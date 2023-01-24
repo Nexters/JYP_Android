@@ -1,6 +1,6 @@
 package com.jyp.core_network.jyp
 
-import com.jyp.core_network.jyp.model.Planner
+import com.jyp.core_network.jyp.model.request.AddPlaceRequestBody
 import com.jyp.core_network.jyp.model.request.CreatePlannerRequestBody
 import com.jyp.core_network.jyp.model.request.CreateUserRequestBody
 import com.jyp.core_network.jyp.model.response.JourneysResponse
@@ -23,4 +23,10 @@ interface JypApi {
 
     @GET("journeys/{id}")
     suspend fun getPlanner(@Path("id") id: String): PlannerResponse
+
+    @POST("journeys/{id}/pikmis")
+    suspend fun addPikme(
+        @Path("id") plannerId: String,
+        @Body addPlaceRequestBody: AddPlaceRequestBody,
+    ): JypBaseResponse<Any>
 }

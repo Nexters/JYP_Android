@@ -14,6 +14,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.jyp.feature_add_place.presentation.PlaceInfoActivity
+import com.jyp.feature_add_place.presentation.SearchPlaceActivity
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,18 +24,29 @@ import kotlinx.coroutines.launch
 class PlannerActivity : ComponentActivity() {
     private val viewModel: PlannerViewModel by viewModels()
 
+    private val plannerId: String? by lazy {
+        intent.getStringExtra(EXTRA_PLANNER_ID)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Screen(
                 viewModel = viewModel,
+                onNewPikMeClick = {
+                    startActivity(
+                        Intent(this, SearchPlaceActivity::class.java).apply {
+                            putExtra(SearchPlaceActivity.EXTRA_PLANNER_ID, plannerId)
+                        }
+                    )
+                },
                 onClickEditRoute = {
                     startActivity(Intent(this, AddPlannerRouteActivity::class.java))
                 }
             )
         }
 
-        intent.getStringExtra(EXTRA_PLANNER_ID)?.let {
+        plannerId?.let {
             viewModel.fetchPlannerData(it)
         }
     }
@@ -48,6 +61,7 @@ class PlannerActivity : ComponentActivity() {
 private fun Screen(
     viewModel: PlannerViewModel,
     onClickEditRoute: () -> Unit,
+    onNewPikMeClick: () -> Unit,
 ) {
     val plannerDates by viewModel.plannerDates.collectAsState()
     val pikMes by viewModel.pikMes.collectAsState()
@@ -90,9 +104,7 @@ private fun Screen(
                     }
                 },
                 planItems = planItems,
-                newPikMeClick = {
-                    viewModel.fetchPikMes()
-                },
+                newPikMeClick = onNewPikMeClick,
                 onClickEditRoute = onClickEditRoute,
             )
         }

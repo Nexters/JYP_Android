@@ -4,17 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import com.jyp.feature_add_place.R
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.SEARCH_PLACE_RESULT
+import com.jyp.feature_add_place.presentation.viewmodel.PlaceMapViewModel
 import com.jyp.feature_add_place.util.showToast
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class PlaceMapActivity : ComponentActivity() {
+    private val placeMapViewModel: PlaceMapViewModel by viewModels()
 
     private val searchPlaceResultModel: SearchPlaceResultModel? by lazy {
         intent.getParcelableExtra(SEARCH_PLACE_RESULT)
+    }
+
+    private val plannerId: String? by lazy {
+        intent.getStringExtra(SearchPlaceActivity.EXTRA_PLANNER_ID)
     }
 
 
@@ -42,6 +50,15 @@ class PlaceMapActivity : ComponentActivity() {
                                 putExtra(SEARCH_PLACE_RESULT, searchPlaceResultModel)
                             }
                         )
+                    },
+                    onClickAddPlaceButton = {
+                        (plannerId to searchPlaceResultModel).let { (id, model) ->
+                            id ?: return@let
+                            model ?: return@let
+
+                            placeMapViewModel.addPikme(id, model)
+                            finish()
+                        }
                     }
                 )
             }
@@ -54,13 +71,14 @@ private fun Screen(
     searchPlaceResultModel: SearchPlaceResultModel,
     onClickBackButton: () -> Unit,
     onClickClearButton: () -> Unit,
-    onClickInfoButton: () -> Unit
-
+    onClickInfoButton: () -> Unit,
+    onClickAddPlaceButton: () -> Unit,
 ) {
     PlaceMapScreen(
         searchPlaceResultModel,
         onClickBackButton,
         onClickClearButton,
-        onClickInfoButton
+        onClickInfoButton,
+        onClickAddPlaceButton,
     )
 }

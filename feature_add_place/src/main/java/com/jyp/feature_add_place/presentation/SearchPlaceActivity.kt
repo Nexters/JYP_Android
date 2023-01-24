@@ -19,6 +19,9 @@ class SearchPlaceActivity : ComponentActivity() {
 
     private val viewModel by viewModels<SearchPlaceViewModel>()
 
+    private val plannerId: String? by lazy {
+        intent.getStringExtra(EXTRA_PLANNER_ID)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,7 @@ class SearchPlaceActivity : ComponentActivity() {
                     startActivity(
                         Intent(this, PlaceMapActivity::class.java).apply {
                             putExtra(SEARCH_PLACE_RESULT, searchPlaceResultModel)
+                            putExtra(EXTRA_PLANNER_ID, plannerId)
                         }
                     )
                 },
@@ -40,6 +44,7 @@ class SearchPlaceActivity : ComponentActivity() {
 
     companion object {
         const val SEARCH_PLACE_RESULT = "SEARCH_PLACE_RESULT"
+        const val EXTRA_PLANNER_ID = "EXTRA_PLANNER_ID"
     }
 }
 
