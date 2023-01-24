@@ -26,10 +26,10 @@ class PlannerActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Screen(
-                    viewModel = viewModel,
-                    onClickEditRoute = {
-                        startActivity(Intent(this, AddPlannerRouteActivity::class.java))
-                    }
+                viewModel = viewModel,
+                onClickEditRoute = {
+                    startActivity(Intent(this, AddPlannerRouteActivity::class.java))
+                }
             )
         }
 
@@ -46,16 +46,17 @@ class PlannerActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun Screen(
-        viewModel: PlannerViewModel,
-        onClickEditRoute: () -> Unit,
+    viewModel: PlannerViewModel,
+    onClickEditRoute: () -> Unit,
 ) {
+    val plannerDates by viewModel.plannerDates.collectAsState()
     val pikMes by viewModel.pikMes.collectAsState()
     val tags by viewModel.tags.collectAsState()
     val membersProfileUrl by viewModel.membersProfileUrl.collectAsState()
     val planItems by viewModel.planItems.collectAsState()
 
     val bottomSheetScaffoldState = rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Hidden,
+        initialValue = ModalBottomSheetValue.Hidden,
     )
     val coroutineScope = rememberCoroutineScope()
     var selectedTag by remember {
@@ -63,34 +64,36 @@ private fun Screen(
     }
 
     ModalBottomSheetLayout(
-            sheetState = bottomSheetScaffoldState,
-            sheetContent = {
-                selectedTag?.let {
-                    TagSelectedBottomSheetScreen(tag = it)
-                } ?: Spacer(modifier = Modifier.size(1.dp))
-            },
-            sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        sheetState = bottomSheetScaffoldState,
+        sheetContent = {
+            selectedTag?.let {
+                TagSelectedBottomSheetScreen(tag = it)
+            } ?: Spacer(modifier = Modifier.size(1.dp))
+        },
+        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
         Box(
-                modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             PlannerScreen(
-                    pikMes = pikMes,
-                    joinMembers = membersProfileUrl,
-                    tags = tags,
-                    tagClick = {
-                        selectedTag = it
-                        coroutineScope.launch {
-                            if (!bottomSheetScaffoldState.isVisible) {
-                                bottomSheetScaffoldState.show()
-                            }
+                startDate = plannerDates.first,
+                endDate = plannerDates.second,
+                pikMes = pikMes,
+                joinMembers = membersProfileUrl,
+                tags = tags,
+                tagClick = {
+                    selectedTag = it
+                    coroutineScope.launch {
+                        if (!bottomSheetScaffoldState.isVisible) {
+                            bottomSheetScaffoldState.show()
                         }
-                    },
+                    }
+                },
                 planItems = planItems,
-                    newPikMeClick = {
-                        viewModel.fetchPikMes()
-                    },
-                    onClickEditRoute = onClickEditRoute,
+                newPikMeClick = {
+                    viewModel.fetchPikMes()
+                },
+                onClickEditRoute = onClickEditRoute,
             )
         }
     }

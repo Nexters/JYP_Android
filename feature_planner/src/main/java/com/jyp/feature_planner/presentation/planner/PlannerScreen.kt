@@ -33,6 +33,8 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PlannerScreen(
+    startDate: String,
+    endDate: String,
     pikMes: List<PikMe>,
     joinMembers: List<String>,
     tags: List<PlannerTag>,
@@ -57,6 +59,8 @@ internal fun PlannerScreen(
         },
         backLayerContent = {
             PlannerBackLayer(
+                startDate = startDate,
+                endDate = endDate,
                 profileImageUrls = joinMembers,
             )
         },
@@ -83,6 +87,8 @@ internal fun PlannerScreen(
 
 @Composable
 private fun PlannerBackLayer(
+    startDate: String,
+    endDate: String,
     profileImageUrls: List<String>,
 ) {
     Column(
@@ -92,7 +98,7 @@ private fun PlannerBackLayer(
     ) {
         Spacer(modifier = Modifier.size(20.dp))
         JypText(
-            text = "7월 18일 - 7월 20일",
+            text = "$startDate - $endDate",
             type = TextType.BODY_1,
             color = JypColors.Text_white,
         )
@@ -226,6 +232,8 @@ private fun PlannerContentTab(
 @Preview(showBackground = true)
 internal fun PlannerScreenPreview() {
     PlannerScreen(
+        startDate = "7월 22일",
+        endDate = "7월 29일",
         pikMes = emptyList(),
         joinMembers = emptyList(),
         tags = emptyList(),

@@ -10,6 +10,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -33,6 +35,10 @@ class PlannerViewModel @Inject constructor(
     val planItems: StateFlow<List<PlanItem>>
         get() = _planItems
 
+    private val _plannerDates = MutableStateFlow(Pair("", ""))
+    val plannerDates: StateFlow<Pair<String, String>>
+        get() = _plannerDates
+
     fun fetchPlannerData(id: String) {
         viewModelScope.launch {
             getPlannerUseCase.invoke(id)
@@ -46,6 +52,11 @@ class PlannerViewModel @Inject constructor(
                     _planItems.value = planner.pikidays.mapIndexed { index, pikiDay ->
                         PlanItem(index + 1, pikiDay.pikis.map(pikiMapper::toPlannerPiki))
                     }
+
+                    _plannerDates.value = Pair(
+                        SimpleDateFormat("M월 d일", Locale.getDefault()).format(planner.startDate * 1000),
+                        SimpleDateFormat("M월 d일", Locale.getDefault()).format(planner.endDate * 1000),
+                    )
                 }
                 .onFailure { exception ->
                     exception.printStackTrace()
