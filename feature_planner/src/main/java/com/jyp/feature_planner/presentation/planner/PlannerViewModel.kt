@@ -4,14 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
-import com.jyp.feature_planner.domain.GetPlannerUseCase
-import com.jyp.feature_planner.domain.PikMe
-import com.jyp.feature_planner.domain.PlannerTag
-import com.jyp.feature_planner.domain.PlannerTagMapper
+import com.jyp.feature_planner.domain.*
+import com.jyp.feature_planner.presentation.planner.model.PlanItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,17 +29,26 @@ class PlannerViewModel @Inject constructor(
     val membersProfileUrl: StateFlow<List<String>>
         get() = _membersProfileUrl
 
+    private val _planItems = MutableStateFlow<List<PlanItem>>(emptyList())
+    val planItems: StateFlow<List<PlanItem>>
+        get() = _planItems
+
     fun fetchPlannerData(id: String) {
         viewModelScope.launch {
             getPlannerUseCase.invoke(id)
                 .onSuccess { planner ->
                     val tagMapper = PlannerTagMapper()
+                    val pikiMapper = PlannerPikiMapper()
 
                     _tags.value = planner.tags.map(tagMapper::toPlannerTag)
                     _membersProfileUrl.value = planner.users.map { it.profileImagePath }
+
+                    _planItems.value = planner.pikidays.mapIndexed { index, pikiDay ->
+                        PlanItem(index + 1, pikiDay.pikis.map(pikiMapper::toPlannerPiki))
+                    }
                 }
-                .onFailure {
-                    it.printStackTrace()
+                .onFailure { exception ->
+                    exception.printStackTrace()
                 }
         }
     }

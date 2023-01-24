@@ -8,4 +8,5 @@ data class Planner(
     val themePath: String,
     val users: List<User>,
     val tags: List<Tag>,
+    val pikidays: List<Pikis>,
 )

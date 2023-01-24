@@ -52,6 +52,7 @@ private fun Screen(
     val pikMes by viewModel.pikMes.collectAsState()
     val tags by viewModel.tags.collectAsState()
     val membersProfileUrl by viewModel.membersProfileUrl.collectAsState()
+    val planItems by viewModel.planItems.collectAsState()
 
     val bottomSheetScaffoldState = rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -85,6 +86,7 @@ private fun Screen(
                             }
                         }
                     },
+                planItems = planItems,
                     newPikMeClick = {
                         viewModel.fetchPikMes()
                     },
