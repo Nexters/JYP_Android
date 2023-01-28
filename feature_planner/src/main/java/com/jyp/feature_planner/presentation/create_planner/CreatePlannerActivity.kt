@@ -124,7 +124,9 @@ private fun Screen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    var cachedTitle = ""
+    var cachedTitle by remember {
+        mutableStateOf("")
+    }
 
     BackHandler(enabled = bottomSheetScaffoldState.isVisible) {
         coroutineScope.launch {
