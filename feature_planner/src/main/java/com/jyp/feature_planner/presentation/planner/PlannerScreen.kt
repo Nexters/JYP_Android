@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.feature_planner.R.*
-import com.jyp.feature_planner.domain.PikMe
+import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.planner.model.PlanItem
 import com.jyp.jyp_design.resource.JypColors
@@ -35,7 +35,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 internal fun PlannerScreen(
     startDate: String,
     endDate: String,
-    pikMes: List<PikMe>,
+    pikMes: List<PlannerPikme>,
     joinMembers: List<String>,
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
@@ -127,7 +127,7 @@ private fun PlannerContent(
     tabTitles: List<String>,
     selectedTabPosition: Int,
     tabSelected: (position: Int) -> Unit,
-    pikMes: List<PikMe>,
+    pikMes: List<PlannerPikme>,
     planItems: List<PlanItem>,
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,

@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.*
 import com.google.accompanist.flowlayout.FlowRow
-import com.jyp.feature_planner.domain.PikMe
+import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
@@ -30,7 +30,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 internal fun PlannerForumScreen(
-    pikMes: List<PikMe>,
+    pikMes: List<PlannerPikme>,
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
@@ -152,8 +152,8 @@ private fun PlannerTagLayout(
 
 @Composable
 private fun PlannerPikMeContent(
-        pikMes: List<PikMe>,
-        newPikMeClick: () -> Unit,
+    pikMes: List<PlannerPikme>,
+    newPikMeClick: () -> Unit,
 ) {
     Column {
         Row(
@@ -200,7 +200,7 @@ private fun PlannerPikMeContent(
 }
 
 @Composable
-private fun PlannerPikMeCard(pikMe: PikMe) {
+private fun PlannerPikMeCard(pikMe: PlannerPikme) {
     Box(
             modifier = Modifier
                     .fillMaxWidth()

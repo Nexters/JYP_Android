@@ -12,15 +12,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class PlannerViewModel @Inject constructor(
     private val getPlannerUseCase: GetPlannerUseCase,
 ) : ViewModel() {
-    private val _pikMes = MutableStateFlow<List<PikMe>>(emptyList())
-    val pikMes: StateFlow<List<PikMe>>
+    private val _pikMes = MutableStateFlow<List<PlannerPikme>>(emptyList())
+    val pikMes: StateFlow<List<PlannerPikme>>
         get() = _pikMes
 
     private val _tags = MutableStateFlow<List<PlannerTag>>(emptyList())
@@ -45,6 +44,7 @@ class PlannerViewModel @Inject constructor(
                 .onSuccess { planner ->
                     val tagMapper = PlannerTagMapper()
                     val pikiMapper = PlannerPikiMapper()
+                    val pikmeMapper = PlannerPikmeMapper()
 
                     _tags.value = planner.tags.map(tagMapper::toPlannerTag)
                     _membersProfileUrl.value = planner.users.map { it.profileImagePath }
@@ -57,21 +57,12 @@ class PlannerViewModel @Inject constructor(
                         SimpleDateFormat("M월 d일", Locale.getDefault()).format(planner.startDate * 1000),
                         SimpleDateFormat("M월 d일", Locale.getDefault()).format(planner.endDate * 1000),
                     )
+
+                    _pikMes.value = planner.pikmis.map(pikmeMapper::toPlannerPikme)
                 }
                 .onFailure { exception ->
                     exception.printStackTrace()
                 }
         }
-    }
-
-    fun fetchPikMes() {
-        _pikMes.value = listOf(
-            PikMe(
-                title = "아르떼 뮤지엄",
-                address = "강원 강릉시 난설헌로 131",
-                category = "문화시설",
-                likeCount = 0,
-            )
-        )
     }
 }

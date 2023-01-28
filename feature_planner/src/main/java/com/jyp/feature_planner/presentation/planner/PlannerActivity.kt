@@ -45,6 +45,10 @@ class PlannerActivity : ComponentActivity() {
                 }
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         plannerId?.let {
             viewModel.fetchPlannerData(it)
