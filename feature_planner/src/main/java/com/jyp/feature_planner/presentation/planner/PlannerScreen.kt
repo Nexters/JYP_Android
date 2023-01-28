@@ -42,6 +42,7 @@ internal fun PlannerScreen(
     planItems: List<PlanItem>,
     newPikMeClick: () -> Unit,
     onClickEditRoute: () -> Unit,
+    onClickInviteUserButton: () -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -62,6 +63,7 @@ internal fun PlannerScreen(
                 startDate = startDate,
                 endDate = endDate,
                 profileImageUrls = joinMembers,
+                onClickInviteUserButton = onClickInviteUserButton,
             )
         },
         frontLayerContent = {
@@ -90,6 +92,7 @@ private fun PlannerBackLayer(
     startDate: String,
     endDate: String,
     profileImageUrls: List<String>,
+    onClickInviteUserButton: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -111,10 +114,12 @@ private fun PlannerBackLayer(
                 borderColor = JypColors.Background_grey300,
             ) {
                 Image(
-                    modifier = Modifier.size(52.dp),
-                    painter = painterResource(id = drawable.icon_invite_small),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit
+                        modifier = Modifier
+                            .size(52.dp)
+                            .clickable { onClickInviteUserButton() },
+                        painter = painterResource(id = drawable.icon_invite_small),
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit
                 )
             }
         }
@@ -240,6 +245,7 @@ internal fun PlannerScreenPreview() {
         tagClick = {},
         planItems = emptyList(),
         newPikMeClick = {},
+        onClickInviteUserButton = {},
         onClickEditRoute = {},
     )
 }

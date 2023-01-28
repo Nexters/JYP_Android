@@ -32,6 +32,9 @@ class PlannerActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Screen(
+                onClickInviteUserButton = {
+                    startActivity(Intent(this, InviteUserActivity::class.java))
+                },
                 viewModel = viewModel,
                 onNewPikMeClick = {
                     startActivity(
@@ -64,6 +67,7 @@ class PlannerActivity : ComponentActivity() {
 @Composable
 private fun Screen(
     viewModel: PlannerViewModel,
+    onClickInviteUserButton: () -> Unit,
     onClickEditRoute: () -> Unit,
     onNewPikMeClick: () -> Unit,
 ) {
@@ -110,6 +114,7 @@ private fun Screen(
                 planItems = planItems,
                 newPikMeClick = onNewPikMeClick,
                 onClickEditRoute = onClickEditRoute,
+                onClickInviteUserButton = onClickInviteUserButton,
             )
         }
     }
