@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
             Screen(
                     mainViewModel = mainViewModel,
                     myJourneyViewModel = myJourneyViewModel,
-                    onClickNewJourney = {
+                    onClickCreateJourney = {
                         startActivity(Intent(this, CreatePlannerActivity::class.java))
                     },
                     onClickPlanner = {
@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
 private fun Screen(
         mainViewModel: MainViewModel,
         myJourneyViewModel: MyJourneyViewModel,
-        onClickNewJourney: () -> Unit,
+        onClickCreateJourney: () -> Unit,
         onClickPlanner: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -79,7 +79,12 @@ private fun Screen(
 
     val myJourneyScreenItem = createMyJourneyScreenItem(
             myJourneyViewModel = myJourneyViewModel,
-            onClickNewJourney = onClickNewJourney,
+            onClickNewJourney = {
+                coroutineScope.launch {
+                    currentBottomSheetItem = MainBottomSheetItem.NewJourney
+                    modalBottomSheetState.show()
+                }
+            },
             onClickPlanner = onClickPlanner,
             onClickMore = { journey ->
                 coroutineScope.launch {
@@ -100,8 +105,34 @@ private fun Screen(
                     is MainBottomSheetItem.None -> {
                         Box(
                                 modifier = Modifier
-                                        .background(JypColors.Background_grey300)
-                                        .size(1.dp)
+                                    .background(JypColors.Background_grey300)
+                                    .size(1.dp)
+                        )
+                    }
+                    is MainBottomSheetItem.NewJourney -> {
+                        NewJourneyBottomSheetScreen(
+                            onClickCancelButton = {
+                                coroutineScope.launch {
+                                    modalBottomSheetState.hide()
+                                }
+                            },
+                            onClickCreateJourney = onClickCreateJourney,
+                            onClickJoinJourney = {
+                                coroutineScope.launch {
+                                    currentBottomSheetItem = MainBottomSheetItem.JoinJourney
+                                    modalBottomSheetState.show()
+                                }
+                            }
+                        )
+                    }
+                    is MainBottomSheetItem.JoinJourney -> {
+                        JoinJourneyBottomSheetScreen(
+                            onClickCancelButton = {
+                                coroutineScope.launch {
+                                    modalBottomSheetState.hide()
+                                }
+                            },
+
                         )
                     }
                     is MainBottomSheetItem.JourneyMore -> {
