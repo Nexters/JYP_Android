@@ -148,16 +148,8 @@ private fun Content(
             )
         }
         Spacer(modifier = Modifier.height(420.dp))
-//        if (isWrongJoinCode) {
-        JypText(
-            text = "잘못된 참여 코드에요",
-            type = TextType.BODY_3,
-            modifier = Modifier.fillMaxWidth(1f),
-            textAlign = TextAlign.Center,
-            color = JypColors.Pink
-        )
-//        }
         Spacer(modifier = Modifier.height(12.dp))
+
         JypTextButton(
             text = stringResource(id = com.jyp.jyp_design.R.string.button_next),
             buttonType = ButtonType.THICK,
