@@ -30,10 +30,11 @@ import kotlinx.coroutines.*
 @Composable
 fun InviteUserScreen(
     onClickBackButton: () -> Unit,
-    onClickCopyInvitationLinkButton: () -> Unit
+    onClickCopyInvitationCodeButton: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    var isInvitationLinkCopyButtonClicked by remember { mutableStateOf(false) }
+    var isInvitationCodeCopyButtonClicked by remember { mutableStateOf(false) }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         GlobalNavigationBarLayout(
@@ -71,12 +72,12 @@ fun InviteUserScreen(
                     enabled = true,
                     buttonColorSet = ButtonColorSetType.PINK,
                     onClickEnabled = {
-                        onClickCopyInvitationLinkButton()
-                        if (!isInvitationLinkCopyButtonClicked) {
+                        onClickCopyInvitationCodeButton()
+                        if (!isInvitationCodeCopyButtonClicked) {
                             coroutineScope.launch {
-                                isInvitationLinkCopyButtonClicked = true
+                                isInvitationCodeCopyButtonClicked = true
                                 delay(1000)
-                                isInvitationLinkCopyButtonClicked = false
+                                isInvitationCodeCopyButtonClicked = false
                             }
                         }
                     }
@@ -135,6 +136,6 @@ private fun CustomToast(
 private fun InviteUserScreenPreview() {
     InviteUserScreen(
         onClickBackButton = {},
-        onClickCopyInvitationLinkButton = {}
+        onClickCopyInvitationCodeButton = {}
     )
 }
