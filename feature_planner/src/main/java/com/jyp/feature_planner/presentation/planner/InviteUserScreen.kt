@@ -1,5 +1,6 @@
 package com.jyp.feature_planner.presentation.planner
 
+import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -86,7 +87,13 @@ fun InviteUserScreen(
         }
 
         AnimatedVisibility(
-            visible = isInvitationLinkCopyButtonClicked,
+            visible = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                isInvitationCodeCopyButtonClicked
+            } else {
+                // In Android 13 and higher, feedback automatically provided when copying to the clipboard.
+                // https://developer.android.com/develop/ui/views/touch-and-input/copy-paste#Feedback
+                false
+            },
             modifier = Modifier.fillMaxWidth(),
             enter = fadeIn(animationSpec = tween(300)),
             exit = fadeOut(animationSpec = tween(600))
