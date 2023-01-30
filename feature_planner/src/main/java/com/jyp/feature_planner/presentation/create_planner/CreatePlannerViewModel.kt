@@ -3,8 +3,7 @@ package com.jyp.feature_planner.presentation.create_planner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jyp.feature_planner.domain.CreatePlannerUseCase
-import com.jyp.feature_planner.domain.Tag
-import com.jyp.jyp_design.enumerate.ThemeType
+import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.jyp_design.ui.tag.TagState
 import com.jyp.jyp_design.ui.tag.TagType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,25 +25,25 @@ class CreatePlannerViewModel @Inject constructor(
 
     private val _tags = MutableStateFlow(
             listOf(
-                    Tag(type = TagType.Soso, content = "모두 찬성"),
-                    Tag(type = TagType.Soso, content = "상관없어"),
-                    Tag(type = TagType.Like, content = "고기"),
-                    Tag(type = TagType.Like, content = "해산물"),
-                    Tag(type = TagType.Like, content = "쇼핑"),
-                    Tag(type = TagType.Like, content = "산"),
-                    Tag(type = TagType.Like, content = "바다"),
-                    Tag(type = TagType.Like, content = "도시"),
-                    Tag(type = TagType.Like, content = "핫플레이스"),
-                    Tag(type = TagType.Dislike, content = "고기"),
-                    Tag(type = TagType.Dislike, content = "해산물"),
-                    Tag(type = TagType.Dislike, content = "쇼핑"),
-                    Tag(type = TagType.Dislike, content = "산"),
-                    Tag(type = TagType.Dislike, content = "바다"),
-                    Tag(type = TagType.Dislike, content = "도시"),
-                    Tag(type = TagType.Dislike, content = "핫플레이스"),
+                    PlannerTag(type = TagType.Soso, content = "모두 찬성"),
+                    PlannerTag(type = TagType.Soso, content = "상관없어"),
+                    PlannerTag(type = TagType.Like, content = "고기"),
+                    PlannerTag(type = TagType.Like, content = "해산물"),
+                    PlannerTag(type = TagType.Like, content = "쇼핑"),
+                    PlannerTag(type = TagType.Like, content = "산"),
+                    PlannerTag(type = TagType.Like, content = "바다"),
+                    PlannerTag(type = TagType.Like, content = "도시"),
+                    PlannerTag(type = TagType.Like, content = "핫플레이스"),
+                    PlannerTag(type = TagType.Dislike, content = "고기"),
+                    PlannerTag(type = TagType.Dislike, content = "해산물"),
+                    PlannerTag(type = TagType.Dislike, content = "쇼핑"),
+                    PlannerTag(type = TagType.Dislike, content = "산"),
+                    PlannerTag(type = TagType.Dislike, content = "바다"),
+                    PlannerTag(type = TagType.Dislike, content = "도시"),
+                    PlannerTag(type = TagType.Dislike, content = "핫플레이스"),
             )
     )
-    val tags: StateFlow<List<Tag>>
+    val tags: StateFlow<List<PlannerTag>>
         get() = _tags
 
     fun updateDate(startMillis: Long, endMillis: Long) {
@@ -52,7 +51,7 @@ class CreatePlannerViewModel @Inject constructor(
         _endDateMillis.value = endMillis
     }
 
-    fun addTag(tag: Tag) {
+    fun addTag(tag: PlannerTag) {
         val newList = tags.value + tag
 
         updateTagState(newList)
@@ -60,7 +59,7 @@ class CreatePlannerViewModel @Inject constructor(
         _tags.value = newList
     }
 
-    fun clickTag(tag: Tag) {
+    fun clickTag(tag: PlannerTag) {
         val clickIndex = tags.value.indexOf(tag)
         val tagState = tag.state
         val newTag = tag.copy(
@@ -77,7 +76,7 @@ class CreatePlannerViewModel @Inject constructor(
         _tags.value = updateTagState(mutableTags)
     }
 
-    private fun updateTagState(list: List<Tag>): List<Tag> {
+    private fun updateTagState(list: List<PlannerTag>): List<PlannerTag> {
         val newList = list.toMutableList()
 
         val clickedTagCount = newList.count { it.state == TagState.SELECTED }
@@ -103,7 +102,7 @@ class CreatePlannerViewModel @Inject constructor(
             themeType: String,
             startMillis: Long,
             endMillis: Long,
-            tags: List<Tag>
+            tags: List<PlannerTag>
     ) {
         viewModelScope.launch {
             createPlannerUseCase.invoke(

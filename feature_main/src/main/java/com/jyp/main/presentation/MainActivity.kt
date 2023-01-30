@@ -44,8 +44,12 @@ class MainActivity : ComponentActivity() {
                     onClickCreateJourney = {
                         startActivity(Intent(this, CreatePlannerActivity::class.java))
                     },
-                    onClickPlanner = {
-                        startActivity(Intent(this, PlannerActivity::class.java))
+                    onClickPlanner = { plannerId ->
+                        startActivity(
+                            Intent(this, PlannerActivity::class.java).apply {
+                                putExtra(PlannerActivity.EXTRA_PLANNER_ID, plannerId)
+                            }
+                        )
                     },
             )
         }
@@ -64,8 +68,8 @@ class MainActivity : ComponentActivity() {
 private fun Screen(
         mainViewModel: MainViewModel,
         myJourneyViewModel: MyJourneyViewModel,
-        onClickCreateJourney: () -> Unit,
-        onClickPlanner: () -> Unit,
+        onClickNewJourney: () -> Unit,
+        onClickPlanner: (id: String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -79,13 +83,10 @@ private fun Screen(
 
     val myJourneyScreenItem = createMyJourneyScreenItem(
             myJourneyViewModel = myJourneyViewModel,
-            onClickNewJourney = {
-                coroutineScope.launch {
-                    currentBottomSheetItem = MainBottomSheetItem.NewJourney
-                    modalBottomSheetState.show()
-                }
+            onClickNewJourney = onClickNewJourney,
+            onClickPlanner = { journey ->
+                onClickPlanner.invoke(journey.id)
             },
-            onClickPlanner = onClickPlanner,
             onClickMore = { journey ->
                 coroutineScope.launch {
                     currentBottomSheetItem = MainBottomSheetItem.JourneyMore(journey)
@@ -200,7 +201,7 @@ private fun SelectProfileScreen(myJourneyViewModel: MyJourneyViewModel) {
 private fun createMyJourneyScreenItem(
         myJourneyViewModel: MyJourneyViewModel,
         onClickNewJourney: () -> Unit,
-        onClickPlanner: () -> Unit,
+        onClickPlanner: (Journey) -> Unit,
         onClickMore: (Journey) -> Unit,
 ): MainScreenItem {
     return MainScreenItem(

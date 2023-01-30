@@ -59,5 +59,5 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
 @Composable
 @Preview(showBackground = true)
 private fun ConfirmRemoveJourneyBottomSheetScreenPreview() {
-    ConfirmRemoveJourneyBottomSheetScreen(Journey("", "qwdqwd", ThemeType.DEFAULT, "", "", emptyList()))
+    ConfirmRemoveJourneyBottomSheetScreen(Journey("", "", "qwdqwd", ThemeType.DEFAULT, "", "", emptyList()))
 }

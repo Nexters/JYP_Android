@@ -18,14 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jyp.feature_planner.domain.Tag
+import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.create_planner.model.*
 import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 @AndroidEntryPoint
 class CreatePlannerActivity : AppCompatActivity() {
@@ -105,7 +104,7 @@ private fun Screen(
     submitOnTitle: (String, ThemeType) -> Unit,
     selectDateClick: () -> Unit,
     submitOnDate: (Long, Long) -> Unit,
-    submitOnTaste: (List<Tag>) -> Unit,
+    submitOnTaste: (List<PlannerTag>) -> Unit,
 ) {
     val startDateMillis by viewModel.startDateMillis.collectAsState()
     val endDateMillis by viewModel.endDateMillis.collectAsState()
@@ -125,7 +124,9 @@ private fun Screen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    var cachedTitle = ""
+    var cachedTitle by remember {
+        mutableStateOf("")
+    }
 
     BackHandler(enabled = bottomSheetScaffoldState.isVisible) {
         coroutineScope.launch {

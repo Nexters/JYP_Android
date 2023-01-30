@@ -3,14 +3,12 @@ package com.jyp.feature_planner.presentation.planner
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_planner.domain.Person
-import com.jyp.feature_planner.domain.Tag
+import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.avatar.Avatar
 import com.jyp.jyp_design.ui.tag.DecoratedTag
@@ -18,7 +16,7 @@ import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
-internal fun TagSelectedBottomSheetScreen(tag: Tag) {
+internal fun TagSelectedBottomSheetScreen(tag: PlannerTag) {
     Column(
             modifier = Modifier
                     .fillMaxWidth()
