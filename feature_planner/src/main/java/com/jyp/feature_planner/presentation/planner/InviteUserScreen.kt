@@ -65,7 +65,7 @@ fun InviteUserScreen(
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 JypTextButton(
-                    text = "초대링크 복사",
+                    text = "참여코드 복사하기",
                     buttonType = ButtonType.THICK,
                     modifier = Modifier.fillMaxWidth(1f),
                     enabled = true,
