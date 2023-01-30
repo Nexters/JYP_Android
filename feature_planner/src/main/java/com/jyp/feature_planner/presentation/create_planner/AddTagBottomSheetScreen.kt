@@ -9,10 +9,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jyp.feature_planner.domain.Tag
+import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.tag.TagType
@@ -26,7 +25,7 @@ fun AddTagBottomSheetScreen(
     modifier: Modifier = Modifier,
     tagType: TagType,
     onClickCancel: () -> Unit,
-    onClickSubmit: (Tag) -> Unit,
+    onClickSubmit: (PlannerTag) -> Unit,
 ) {
     var tagName by remember {
         mutableStateOf("")
@@ -68,7 +67,7 @@ fun AddTagBottomSheetScreen(
             buttonColorSet = ButtonColorSetType.PINK,
             enabled = tagName.isNotEmpty() && tagName.length <= 6,
             onClickEnabled = {
-                onClickSubmit.invoke(Tag(tagType, tagName))
+                onClickSubmit.invoke(PlannerTag(tagType, tagName))
 
                 tagName = ""
             },

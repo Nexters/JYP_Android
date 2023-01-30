@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
-import com.jyp.feature_planner.domain.Tag
+import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
 import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerSubmit
 import com.jyp.jyp_design.resource.JypColors
@@ -28,14 +28,14 @@ import java.util.*
 
 @Composable
 internal fun CreatePlannerScreen(
-        step: CreatePlannerStep,
-        selectDateClick: () -> Unit,
-        startDateMillis: Long,
-        endDateMillis: Long,
-        tags: List<Tag>,
-        tagClick: (Tag) -> Unit,
-        addTagClick: (TagType) -> Unit,
-        submit: (CreatePlannerSubmit) -> Unit,
+    step: CreatePlannerStep,
+    selectDateClick: () -> Unit,
+    startDateMillis: Long,
+    endDateMillis: Long,
+    tags: List<PlannerTag>,
+    tagClick: (PlannerTag) -> Unit,
+    addTagClick: (TagType) -> Unit,
+    submit: (CreatePlannerSubmit) -> Unit,
 ) {
     var title by remember {
         mutableStateOf("")
@@ -119,16 +119,16 @@ private fun CreatePlannerHeader(
 
 @Composable
 private fun CreatePlannerContent(
-        modifier: Modifier = Modifier,
-        step: CreatePlannerStep,
-        title: String,
-        titleChange: (String) -> Unit,
-        selectDateClick: () -> Unit,
-        startDateMillis: Long,
-        endDateMillis: Long,
-        tags: List<Tag>,
-        tagClick: (Tag) -> Unit,
-        addTagClick: (TagType) -> Unit,
+    modifier: Modifier = Modifier,
+    step: CreatePlannerStep,
+    title: String,
+    titleChange: (String) -> Unit,
+    selectDateClick: () -> Unit,
+    startDateMillis: Long,
+    endDateMillis: Long,
+    tags: List<PlannerTag>,
+    tagClick: (PlannerTag) -> Unit,
+    addTagClick: (TagType) -> Unit,
 ) {
     when (step) {
         CreatePlannerStep.TITLE -> CreatePlannerTitleArea(
@@ -316,10 +316,10 @@ private fun DateFormSeparator() {
 
 @Composable
 private fun CreatePlannerTasteArea(
-        modifier: Modifier = Modifier,
-        tags: List<Tag>,
-        tagClick: (Tag) -> Unit,
-        addTagClick: (TagType) -> Unit,
+    modifier: Modifier = Modifier,
+    tags: List<PlannerTag>,
+    tagClick: (PlannerTag) -> Unit,
+    addTagClick: (TagType) -> Unit,
 ) {
     val sosoTags = tags.filter { tag -> tag.type is TagType.Soso }
     val likeTags = tags.filter { tag -> tag.type is TagType.Like }
@@ -352,10 +352,10 @@ private fun CreatePlannerTasteArea(
 
 @Composable
 private fun TastesSection(
-        tagCategory: String,
-        tags: List<Tag>,
-        tagClick: (Tag) -> Unit,
-        addTagClick: (() -> Unit)? = null,
+    tagCategory: String,
+    tags: List<PlannerTag>,
+    tagClick: (PlannerTag) -> Unit,
+    addTagClick: (() -> Unit)? = null,
 ) {
     Column {
         Row(

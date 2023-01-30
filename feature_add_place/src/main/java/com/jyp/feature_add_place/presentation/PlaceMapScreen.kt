@@ -33,7 +33,8 @@ internal fun PlaceMapScreen(
     searchPlaceResultModel: SearchPlaceResultModel,
     onClickBackButton: () -> Unit,
     onClickClearButton: () -> Unit,
-    onClickInfoButton: () -> Unit
+    onClickInfoButton: () -> Unit,
+    onClickAddPlaceButton: () -> Unit,
 ) {
     val searchPlaceResultLatLng = LatLng(
         searchPlaceResultModel.latitude,
@@ -81,20 +82,22 @@ internal fun PlaceMapScreen(
 //                    , snippet = "Marker in Singapore"
                 )
             }
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(28.dp)
-                .background(
-                    color = JypColors.Background_white100,
-                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-                )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(28.dp)
+                    .background(
+                        color = JypColors.Background_white100,
+                        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                    )
             )
         }
 
         ComposablePlaceInfoBottomSheet(
             placeName = searchPlaceResultModel.name,
             placeAddress = searchPlaceResultModel.address,
-            onClickInfoButton = { onClickInfoButton() }
+            onClickInfoButton = { onClickInfoButton() },
+            onClickAddPlaceButton = onClickAddPlaceButton,
         )
     }
 }
@@ -173,7 +176,8 @@ private fun ComposableAppBar(
 private fun ComposablePlaceInfoBottomSheet(
     placeName: String,
     placeAddress: String,
-    onClickInfoButton: () -> Unit
+    onClickInfoButton: () -> Unit,
+    onClickAddPlaceButton: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -237,7 +241,8 @@ private fun ComposablePlaceInfoBottomSheet(
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 28.dp),
             enabled = true,
-            buttonColorSet = ButtonColorSetType.PINK
+            buttonColorSet = ButtonColorSetType.PINK,
+            onClickEnabled = onClickAddPlaceButton,
         )
     }
 }

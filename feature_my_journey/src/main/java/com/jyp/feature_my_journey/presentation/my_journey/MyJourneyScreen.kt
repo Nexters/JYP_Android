@@ -35,98 +35,98 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 fun MyJourneyScreen(
-        journeyPropensity: String,
-        userName: String,
-        plannedJourneys: List<Journey>,
-        pastJourneys: List<Journey>,
-        onClickNewJourney: () -> Unit,
-        onClickPlanner: () -> Unit,
-        onClickMore: (journey: Journey) -> Unit,
+    journeyPropensity: String,
+    userName: String,
+    plannedJourneys: List<Journey>,
+    pastJourneys: List<Journey>,
+    onClickNewJourney: () -> Unit,
+    onClickPlanner: (journey: Journey) -> Unit,
+    onClickMore: (journey: Journey) -> Unit,
 ) {
     Column(
-            modifier = Modifier
-                    .fillMaxSize()
-                    .background(JypColors.Background_white200),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(JypColors.Background_white200),
     ) {
         MyJourneyHeader(
-                journeyPropensity = journeyPropensity,
-                userName = userName,
+            journeyPropensity = journeyPropensity,
+            userName = userName,
         )
 
         MyJourneyContent(
-                plannedJourneys = plannedJourneys,
-                pastJourneys = pastJourneys,
-                onClickNewJourney = onClickNewJourney,
-                onClickPlanner = onClickPlanner,
-                onClickMore = onClickMore,
+            plannedJourneys = plannedJourneys,
+            pastJourneys = pastJourneys,
+            onClickNewJourney = onClickNewJourney,
+            onClickPlanner = onClickPlanner,
+            onClickMore = onClickMore,
         )
     }
 }
 
 @Composable
 internal fun MyJourneyHeader(
-        journeyPropensity: String,
-        userName: String,
+    journeyPropensity: String,
+    userName: String,
 ) {
     Row(
-            modifier = Modifier.padding(top = 8.dp, bottom = 35.dp),
-            verticalAlignment = Alignment.Bottom
+        modifier = Modifier.padding(top = 8.dp, bottom = 35.dp),
+        verticalAlignment = Alignment.Bottom
     ) {
         Text(
-                modifier = Modifier.padding(start = 24.dp),
-                text = stringResource(
-                        id = R.string.my_journey_header,
-                        formatArgs = arrayOf(journeyPropensity, userName),
-                ),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 22.sp,
-                color = JypColors.Text90,
+            modifier = Modifier.padding(start = 24.dp),
+            text = stringResource(
+                id = R.string.my_journey_header,
+                formatArgs = arrayOf(journeyPropensity, userName),
+            ),
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 22.sp,
+            color = JypColors.Text90,
         )
         Image(
-                modifier = Modifier.padding(start = 6.dp),
-                painter = painterResource(id = R.drawable.ic_carrier_blue),
-                contentDescription = null,
+            modifier = Modifier.padding(start = 6.dp),
+            painter = painterResource(id = R.drawable.ic_carrier_blue),
+            contentDescription = null,
         )
     }
 }
 
 @Composable
 internal fun MyJourneyContent(
-        plannedJourneys: List<Journey>,
-        pastJourneys: List<Journey>,
-        onClickNewJourney: () -> Unit,
-        onClickPlanner: () -> Unit,
-        onClickMore: (journey: Journey) -> Unit,
+    plannedJourneys: List<Journey>,
+    pastJourneys: List<Journey>,
+    onClickNewJourney: () -> Unit,
+    onClickPlanner: (journey: Journey) -> Unit,
+    onClickMore: (journey: Journey) -> Unit,
 ) {
     var selectedTabPosition by remember {
         mutableStateOf(0)
     }
 
     Column(
-            modifier = Modifier
-                    .background(JypColors.Background_white100),
+        modifier = Modifier
+            .background(JypColors.Background_white100),
     ) {
         MyJourneyContentTab(
-                tabTitles = listOf(
-                        stringResource(id = R.string.my_journey_planned_journey),
-                        stringResource(id = R.string.my_journey_past_journey),
-                ),
-                selectedTabPosition = selectedTabPosition,
-                tabSelected = { selectedTabPosition = it },
-                onClickNewJourney = onClickNewJourney,
+            tabTitles = listOf(
+                stringResource(id = R.string.my_journey_planned_journey),
+                stringResource(id = R.string.my_journey_past_journey),
+            ),
+            selectedTabPosition = selectedTabPosition,
+            tabSelected = { selectedTabPosition = it },
+            onClickNewJourney = onClickNewJourney,
         )
 
         when (selectedTabPosition) {
             0 -> PlannedJourney(
-                    journeys = plannedJourneys,
-                    onClickNewJourney = onClickNewJourney,
-                    onClickPlanner = onClickPlanner,
-                    onClickMore = onClickMore,
+                journeys = plannedJourneys,
+                onClickNewJourney = onClickNewJourney,
+                onClickPlanner = onClickPlanner,
+                onClickMore = onClickMore,
             )
             1 -> PastJourney(
-                    journeys = pastJourneys,
-                    onClickPlanner = onClickPlanner,
-                    onClickMore = onClickMore,
+                journeys = pastJourneys,
+                onClickPlanner = onClickPlanner,
+                onClickMore = onClickMore,
             )
         }
 
@@ -135,104 +135,106 @@ internal fun MyJourneyContent(
 
 @Composable
 internal fun MyJourneyContentTab(
-        tabTitles: List<String>,
-        selectedTabPosition: Int,
-        tabSelected: (position: Int) -> Unit,
-        onClickNewJourney: () -> Unit,
+    tabTitles: List<String>,
+    selectedTabPosition: Int,
+    tabSelected: (position: Int) -> Unit,
+    onClickNewJourney: () -> Unit,
 ) {
     Row(
-            modifier = Modifier
-                    .fillMaxWidth()
-                    .drawBehind {
-                        drawLine(
-                                color = JypColors.Background_white200,
-                                start = Offset(0f, size.height + 1.5.dp.toPx()),
-                                end = Offset(size.width, size.height + 1.5.dp.toPx()),
-                                strokeWidth = 2.dp.toPx()
-                        )
-                    }
-                    .padding(top = 24.dp, start = 24.dp, end = 20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .drawBehind {
+                drawLine(
+                    color = JypColors.Background_white200,
+                    start = Offset(0f, size.height + 1.5.dp.toPx()),
+                    end = Offset(size.width, size.height + 1.5.dp.toPx()),
+                    strokeWidth = 2.dp.toPx()
+                )
+            }
+            .padding(top = 24.dp, start = 24.dp, end = 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row {
             tabTitles.forEachIndexed { index, tabTitle ->
                 val selected = selectedTabPosition == index
                 Text(
-                        modifier = Modifier
-                                .let { modifier ->
-                                    if (index > 0) {
-                                        modifier.padding(start = 28.dp)
-                                    } else {
-                                        modifier
-                                    }
-                                }
-                                .drawWithContent {
-                                    drawContent()
-                                    if (selected) {
-                                        drawRoundRect(
-                                                color = JypColors.Text80,
-                                                topLeft = Offset(0f, size.height + 3.dp.toPx()),
-                                                cornerRadius = CornerRadius(x = 16.dp.toPx(), y = 16.dp.toPx()),
-                                        )
-                                    }
-                                }
-                                .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = rememberRipple()
-                                ) {
-                                    tabSelected.invoke(index)
-                                }
-                                .padding(vertical = 6.dp),
-                        text = tabTitle,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = if (selected) {
-                            JypColors.Text80
-                        } else {
-                            JypColors.Text40
-                        },
+                    modifier = Modifier
+                        .let { modifier ->
+                            if (index > 0) {
+                                modifier.padding(start = 28.dp)
+                            } else {
+                                modifier
+                            }
+                        }
+                        .drawWithContent {
+                            drawContent()
+                            if (selected) {
+                                drawRoundRect(
+                                    color = JypColors.Text80,
+                                    topLeft = Offset(0f, size.height + 3.dp.toPx()),
+                                    cornerRadius = CornerRadius(x = 16.dp.toPx(), y = 16.dp.toPx()),
+                                )
+                            }
+                        }
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple()
+                        ) {
+                            tabSelected.invoke(index)
+                        }
+                        .padding(vertical = 6.dp),
+                    text = tabTitle,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (selected) {
+                        JypColors.Text80
+                    } else {
+                        JypColors.Text40
+                    },
                 )
             }
         }
         Image(
-                modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable(onClick = onClickNewJourney)
-                        .align(Alignment.Bottom)
-                        .padding(bottom = 7.dp),
-                painter = JypPainter.add,
-                contentDescription = null,
+            modifier = Modifier
+                .clip(CircleShape)
+                .clickable(onClick = onClickNewJourney)
+                .align(Alignment.Bottom)
+                .padding(bottom = 7.dp),
+            painter = JypPainter.add,
+            contentDescription = null,
         )
     }
 }
 
 @Composable
 internal fun PlannedJourney(
-        journeys: List<Journey>,
-        onClickNewJourney: () -> Unit,
-        onClickPlanner: () -> Unit,
-        onClickMore: (journey: Journey) -> Unit,
+    journeys: List<Journey>,
+    onClickNewJourney: () -> Unit,
+    onClickPlanner: (journey: Journey) -> Unit,
+    onClickMore: (journey: Journey) -> Unit,
 ) {
     if (journeys.isEmpty()) {
         PlannedJourneyEmptyScreen(onClickNewJourney = onClickNewJourney)
     } else {
         LazyRow(
-                contentPadding = PaddingValues(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             journeys.forEach { journey ->
                 item {
                     JourneyItem(
-                            journeyName = journey.title,
-                            dDay = journey.dDay,
-                            startDay = journey.startDay,
-                            endDay = journey.endDay,
-                            onClickPlanner = onClickPlanner,
-                            themeType = journey.themeType,
-                            profileUrls = journey.profileUrls,
-                            onClickMore = {
-                                onClickMore.invoke(journey)
-                            }
+                        journeyName = journey.title,
+                        dDay = journey.dDay,
+                        startDay = journey.startDay,
+                        endDay = journey.endDay,
+                        onClickPlanner = {
+                            onClickPlanner.invoke(journey)
+                        },
+                        themeType = journey.themeType,
+                        profileUrls = journey.profileUrls,
+                        onClickMore = {
+                            onClickMore.invoke(journey)
+                        }
                     )
                 }
             }
@@ -242,57 +244,57 @@ internal fun PlannedJourney(
 
 @Composable
 internal fun PlannedJourneyEmptyScreen(
-        onClickNewJourney: () -> Unit,
+    onClickNewJourney: () -> Unit,
 ) {
     Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
         Column(
-                modifier = Modifier
-                        .padding(vertical = 24.dp)
-                        .width(width = 276.dp)
-                        .fillMaxHeight()
-                        .drawShadow(
-                                color = JypColors.Border_grey,
-                                borderRadius = 16.dp,
-                        )
-                        .clip(shape = RoundedCornerShape(16.dp))
-                        .background(
-                                color = JypColors.Background_white100,
-                                shape = RoundedCornerShape(16.dp),
-                        )
-                        .padding(20.dp),
+            modifier = Modifier
+                .padding(vertical = 24.dp)
+                .width(width = 276.dp)
+                .fillMaxHeight()
+                .drawShadow(
+                    color = JypColors.Border_grey,
+                    borderRadius = 16.dp,
+                )
+                .clip(shape = RoundedCornerShape(16.dp))
+                .background(
+                    color = JypColors.Background_white100,
+                    shape = RoundedCornerShape(16.dp),
+                )
+                .padding(20.dp),
         ) {
             Column(
-                    modifier = Modifier
-                            .weight(1f)
-                            .align(Alignment.CenterHorizontally),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterHorizontally),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
             ) {
                 Image(
-                        painter = painterResource(id = R.drawable.ic_planned_journey_empty),
-                        contentDescription = null,
+                    painter = painterResource(id = R.drawable.ic_planned_journey_empty),
+                    contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
                 Text(
-                        text = stringResource(id = R.string.my_journey_empty_description_planned_journey),
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp,
-                        color = JypColors.Text75,
-                        textAlign = TextAlign.Center
+                    text = stringResource(id = R.string.my_journey_empty_description_planned_journey),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp,
+                    color = JypColors.Text75,
+                    textAlign = TextAlign.Center
                 )
             }
 
             JypTextButton(
-                    modifier = Modifier
-                            .fillMaxWidth(),
-                    text = "후보 장소 추가하기",
-                    buttonType = ButtonType.MEDIUM,
-                    buttonColorSet = ButtonColorSetType.BLACK,
-                    onClickEnabled = onClickNewJourney,
-                    enabled = true,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = "후보 장소 추가하기",
+                buttonType = ButtonType.MEDIUM,
+                buttonColorSet = ButtonColorSetType.BLACK,
+                onClickEnabled = onClickNewJourney,
+                enabled = true,
             )
         }
     }
@@ -300,30 +302,32 @@ internal fun PlannedJourneyEmptyScreen(
 
 @Composable
 internal fun PastJourney(
-        journeys: List<Journey>,
-        onClickPlanner: () -> Unit,
-        onClickMore: (journey: Journey) -> Unit,
+    journeys: List<Journey>,
+    onClickPlanner: (journey: Journey) -> Unit,
+    onClickMore: (journey: Journey) -> Unit,
 ) {
     if (journeys.isEmpty()) {
         PastJourneyEmptyScreen()
     } else {
         LazyRow(
-                contentPadding = PaddingValues(start = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(start = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             journeys.forEach { journey ->
                 item {
                     JourneyItem(
-                            journeyName = journey.title,
-                            dDay = journey.dDay,
-                            startDay = journey.startDay,
-                            endDay = journey.endDay,
-                            onClickPlanner = onClickPlanner,
-                            themeType = journey.themeType,
-                            profileUrls = journey.profileUrls,
-                            onClickMore = {
-                                onClickMore.invoke(journey)
-                            }
+                        journeyName = journey.title,
+                        dDay = journey.dDay,
+                        startDay = journey.startDay,
+                        endDay = journey.endDay,
+                        onClickPlanner = {
+                            onClickPlanner.invoke(journey)
+                        },
+                        themeType = journey.themeType,
+                        profileUrls = journey.profileUrls,
+                        onClickMore = {
+                            onClickMore.invoke(journey)
+                        }
                     )
                 }
             }
@@ -334,43 +338,43 @@ internal fun PastJourney(
 @Composable
 internal fun PastJourneyEmptyScreen() {
     Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
         Column(
-                modifier = Modifier
-                        .padding(vertical = 24.dp)
-                        .width(width = 276.dp)
-                        .fillMaxHeight()
-                        .drawShadow(
-                                color = JypColors.Border_grey,
-                                borderRadius = 16.dp,
-                        )
-                        .clip(shape = RoundedCornerShape(16.dp))
-                        .background(
-                                color = JypColors.Background_white100,
-                                shape = RoundedCornerShape(16.dp),
-                        )
-                        .padding(20.dp),
+            modifier = Modifier
+                .padding(vertical = 24.dp)
+                .width(width = 276.dp)
+                .fillMaxHeight()
+                .drawShadow(
+                    color = JypColors.Border_grey,
+                    borderRadius = 16.dp,
+                )
+                .clip(shape = RoundedCornerShape(16.dp))
+                .background(
+                    color = JypColors.Background_white100,
+                    shape = RoundedCornerShape(16.dp),
+                )
+                .padding(20.dp),
         ) {
             Column(
-                    modifier = Modifier
-                            .weight(1f)
-                            .align(Alignment.CenterHorizontally),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterHorizontally),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
             ) {
                 Image(
-                        painter = painterResource(id = R.drawable.ic_past_journey_empty),
-                        contentDescription = null,
+                    painter = painterResource(id = R.drawable.ic_past_journey_empty),
+                    contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
                 Text(
-                        text = stringResource(id = R.string.my_journey_empty_description_past_journey),
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp,
-                        color = JypColors.Text75,
-                        textAlign = TextAlign.Center
+                    text = stringResource(id = R.string.my_journey_empty_description_past_journey),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp,
+                    color = JypColors.Text75,
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -379,109 +383,109 @@ internal fun PastJourneyEmptyScreen() {
 
 @Composable
 internal fun JourneyItem(
-        journeyName: String,
-        dDay: String,
-        startDay: String,
-        endDay: String,
-        themeType: ThemeType,
-        profileUrls: List<String>,
-        onClickPlanner: () -> Unit,
-        onClickMore: () -> Unit,
+    journeyName: String,
+    dDay: String,
+    startDay: String,
+    endDay: String,
+    themeType: ThemeType,
+    profileUrls: List<String>,
+    onClickPlanner: () -> Unit,
+    onClickMore: () -> Unit,
 ) {
     Box(
-            modifier = Modifier
-                    .width(276.dp)
-                    .fillMaxHeight()
-                    .padding(vertical = 24.dp)
-                    .let {
-                        if (themeType == ThemeType.DEFAULT) {
-                            it.shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
-                        } else {
-                            it
-                        }
-                    }
-                    .background(
-                            color = themeType.backgroundColor,
-                            shape = RoundedCornerShape(16.dp)
-                    ),
+        modifier = Modifier
+            .width(276.dp)
+            .fillMaxHeight()
+            .padding(vertical = 24.dp)
+            .let {
+                if (themeType == ThemeType.DEFAULT) {
+                    it.shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
+                } else {
+                    it
+                }
+            }
+            .background(
+                color = themeType.backgroundColor,
+                shape = RoundedCornerShape(16.dp)
+            ),
     ) {
         val painter = painterResource(themeType.imageRes)
         val imageRatio = painter.intrinsicSize.width / painter.intrinsicSize.height
 
         Image(
-                modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(imageRatio)
-                        .align(Alignment.BottomCenter),
-                painter = painter,
-                contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(imageRatio)
+                .align(Alignment.BottomCenter),
+            painter = painter,
+            contentDescription = null,
         )
 
         AvatarList(
-                modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(20.dp),
-                profileImageUrls = profileUrls,
-                width = 44.dp,
-                height = 44.dp,
-                borderColor = themeType.profileBorderColor,
-                limitListCount = 4
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(20.dp),
+            profileImageUrls = profileUrls,
+            width = 44.dp,
+            height = 44.dp,
+            borderColor = themeType.profileBorderColor,
+            limitListCount = 4
         )
 
         Column(
-                modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp)
-                        .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = onClickPlanner
-                        ),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onClickPlanner
+                ),
         ) {
             Row(
-                    modifier = Modifier
-                            .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 JypText(
-                        modifier = Modifier
-                                .background(
-                                        color = JypColors.Sub_black,
-                                        shape = RoundedCornerShape(6.dp)
-                                )
-                                .padding(
-                                        vertical = 4.dp,
-                                        horizontal = 9.dp,
-                                ),
-                        text = dDay,
-                        type = TextType.TAG_2,
-                        color = JypColors.Text_white,
+                    modifier = Modifier
+                        .background(
+                            color = JypColors.Sub_black,
+                            shape = RoundedCornerShape(6.dp)
+                        )
+                        .padding(
+                            vertical = 4.dp,
+                            horizontal = 9.dp,
+                        ),
+                    text = dDay,
+                    type = TextType.TAG_2,
+                    color = JypColors.Text_white,
                 )
                 Image(
-                        modifier = Modifier
-                                .clip(CircleShape)
-                                .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = rememberRipple(),
-                                        onClick = onClickMore,
-                                ),
-                        painter = painterResource(id = R.drawable.ic_more_menu),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(JypColors.Text_white),
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(),
+                            onClick = onClickMore,
+                        ),
+                    painter = painterResource(id = R.drawable.ic_more_menu),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(JypColors.Text_white),
                 )
             }
             Spacer(modifier = Modifier.padding(top = 16.dp))
             Text(
-                    text = journeyName,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 22.sp,
-                    color = themeType.textColor,
+                text = journeyName,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 22.sp,
+                color = themeType.textColor,
             )
             Text(
-                    text = "$startDay - $endDay",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    color = themeType.textColor,
+                text = "$startDay - $endDay",
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp,
+                color = themeType.textColor,
             )
         }
     }
@@ -491,13 +495,13 @@ internal fun JourneyItem(
 @Preview(showBackground = true)
 internal fun MyJourneyScreenEmptyPreview() {
     MyJourneyScreen(
-            journeyPropensity = "자유로운 탐험가",
-            userName = "다정",
-            plannedJourneys = emptyList(),
-            pastJourneys = emptyList(),
-            onClickNewJourney = {},
-            onClickPlanner = {},
-            onClickMore = {}
+        journeyPropensity = "자유로운 탐험가",
+        userName = "다정",
+        plannedJourneys = emptyList(),
+        pastJourneys = emptyList(),
+        onClickNewJourney = {},
+        onClickPlanner = {},
+        onClickMore = {}
     )
 }
 
@@ -505,29 +509,31 @@ internal fun MyJourneyScreenEmptyPreview() {
 @Preview(showBackground = true)
 internal fun MyJourneyScreenPreview() {
     MyJourneyScreen(
-            journeyPropensity = "자유로운 탐험가",
-            userName = "다정",
-            plannedJourneys = listOf(
-                    Journey(
-                            dDay = "D-3",
-                            title = "강릉여행기",
-                            themeType = ThemeType.DEFAULT,
-                            startDay = "8월 23일",
-                            endDay = "8월 25일",
-                            profileUrls = emptyList()
-                    ),
-                    Journey(
-                            dDay = "D-8",
-                            title = "즐거운여행기",
-                            themeType = ThemeType.CITY,
-                            startDay = "8월 28일",
-                            endDay = "8월 30일",
-                            profileUrls = emptyList()
-                    ),
+        journeyPropensity = "자유로운 탐험가",
+        userName = "다정",
+        plannedJourneys = listOf(
+            Journey(
+                id = "",
+                dDay = "D-3",
+                title = "강릉여행기",
+                themeType = ThemeType.DEFAULT,
+                startDay = "8월 23일",
+                endDay = "8월 25일",
+                profileUrls = emptyList()
             ),
-            pastJourneys = emptyList(),
-            onClickNewJourney = {},
-            onClickPlanner = {},
-            onClickMore = {}
+            Journey(
+                id = "",
+                dDay = "D-8",
+                title = "즐거운여행기",
+                themeType = ThemeType.CITY,
+                startDay = "8월 28일",
+                endDay = "8월 30일",
+                profileUrls = emptyList()
+            ),
+        ),
+        pastJourneys = emptyList(),
+        onClickNewJourney = {},
+        onClickPlanner = {},
+        onClickMore = {}
     )
 }
