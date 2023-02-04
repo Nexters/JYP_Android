@@ -70,29 +70,31 @@ private fun CandidatePikis(
                     color = JypColors.Text80,
             )
             Spacer(modifier = Modifier.size(12.dp))
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f),
+            ) {
                 items(pikmis) { pikme ->
                     Spacer(modifier = Modifier.size(12.dp))
                     CandidatePikiItem(pikme = pikme)
                 }
-            }
-            Spacer(modifier = Modifier.size(12.dp))
-        }
 
-        JypTextButton(
+                item {
+                    Spacer(modifier = Modifier.size(12.dp))
+                }
+            }
+
+            JypTextButton(
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                                bottom = 28.dp,
-                                start = 24.dp,
-                                end = 24.dp,
-                        )
-                        .align(Alignment.BottomCenter),
+                    .fillMaxWidth()
+                    .padding(bottom = 4.dp)
+                    .align(Alignment.CenterHorizontally),
                 text = "완료하기",
                 buttonType = ButtonType.THICK,
                 buttonColorSet = ButtonColorSetType.PINK,
                 enabled = true,
-        )
+            )
+        }
     }
 }
 
