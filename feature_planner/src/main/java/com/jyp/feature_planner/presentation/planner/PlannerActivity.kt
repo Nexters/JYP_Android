@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_add_place.presentation.PlaceInfoActivity
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity
+import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,7 +45,14 @@ class PlannerActivity : ComponentActivity() {
                     )
                 },
                 onClickEditRoute = {
-                    startActivity(Intent(this, AddPlannerRouteActivity::class.java))
+                    startActivity(
+                        Intent(this, AddPlannerRouteActivity::class.java).apply {
+                            putExtra(
+                                AddPlannerRouteActivity.EXTRA_PIKMIS,
+                                arrayListOf(viewModel.pikMes.value)
+                            )
+                        }
+                    )
                 }
             )
         }
@@ -68,7 +76,7 @@ class PlannerActivity : ComponentActivity() {
 private fun Screen(
     viewModel: PlannerViewModel,
     onClickInviteUserButton: () -> Unit,
-    onClickEditRoute: () -> Unit,
+    onClickEditRoute: (day: Int) -> Unit,
     onNewPikMeClick: () -> Unit,
 ) {
     val plannerDates by viewModel.plannerDates.collectAsState()

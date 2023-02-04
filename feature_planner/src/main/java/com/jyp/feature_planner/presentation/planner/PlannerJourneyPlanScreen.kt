@@ -31,7 +31,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @Composable
 internal fun PlannerJourneyPlanScreen(
     planItems: List<PlanItem>,
-    onClickEditRoute: () -> Unit,
+    onClickEditRoute: (day: Int) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -46,7 +46,9 @@ internal fun PlannerJourneyPlanScreen(
                 item {
                     PlanGroupItem(
                         day = planItem.day,
-                        onClickEditRoute = onClickEditRoute,
+                        onClickEditRoute = {
+                            onClickEditRoute.invoke(index)
+                        },
                     )
                     if (index != planItems.lastIndex) {
                         Spacer(modifier = Modifier.size(12.dp))
@@ -62,7 +64,9 @@ internal fun PlannerJourneyPlanScreen(
                 item {
                     PlanEachTitle(
                         day = planItem.day,
-                        onClickEditRoute = onClickEditRoute,
+                        onClickEditRoute = {
+                            onClickEditRoute.invoke(index)
+                        },
                     )
                     Spacer(modifier = Modifier.size(26.dp))
                 }
