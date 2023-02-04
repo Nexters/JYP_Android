@@ -42,12 +42,17 @@ class PlannerActivity : ComponentActivity() {
                         }
                     )
                 },
-                onClickEditRoute = {
+                onClickEditRoute = { index ->
                     startActivity(
                         Intent(this, AddPlannerRouteActivity::class.java).apply {
                             putExtra(
                                 AddPlannerRouteActivity.EXTRA_PIKMIS,
                                 ArrayList(viewModel.pikmis.value)
+                            )
+
+                            putExtra(
+                                AddPlannerRouteActivity.EXTRA_PIKIS,
+                                ArrayList(viewModel.planItems.value[index].pikis)
                             )
                         }
                     )

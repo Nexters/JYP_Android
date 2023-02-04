@@ -10,6 +10,9 @@ class PlannerPikmeMapper {
             address = pikme.address,
             category = pikme.category.toName(),
             likeCount = 0,
+            longitude = pikme.longitude,
+            latitude = pikme.latitude,
+            link = pikme.link,
         )
     }
 }

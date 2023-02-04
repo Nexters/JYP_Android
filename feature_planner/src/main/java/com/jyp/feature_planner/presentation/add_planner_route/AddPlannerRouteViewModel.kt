@@ -3,6 +3,7 @@ package com.jyp.feature_planner.presentation.add_planner_route
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.jyp.core_network.jyp.model.enumerate.toPlaceCategory
 import com.jyp.feature_planner.domain.PlannerPiki
 import com.jyp.feature_planner.domain.PlannerPikme
 import dagger.assisted.AssistedFactory
@@ -26,4 +27,16 @@ class AddPlannerRouteViewModel @Inject constructor(
 
     val pikis: StateFlow<List<PlannerPiki>>
         get() = _pikis
+
+    fun addPiki(pikme: PlannerPikme) {
+        _pikis.value = pikis.value + PlannerPiki(
+            id = null,
+            name = pikme.title,
+            address = pikme.address,
+            category = pikme.category,
+            longitude = pikme.longitude,
+            latitude = pikme.latitude,
+            link = pikme.link,
+        )
+    }
 }

@@ -26,8 +26,6 @@ class AddPlannerRouteActivity : ComponentActivity() {
                 viewModel = viewModel,
             )
         }
-
-        viewModel.hashCode()
     }
 
     companion object {
@@ -41,6 +39,7 @@ private fun Screen(
     viewModel: AddPlannerRouteViewModel,
 ) {
     val pikmis by viewModel.pikmis.collectAsState()
+    val pikis by viewModel.pikis.collectAsState()
 
     GlobalNavigationBarLayout(
             color = GlobalNavigationBarColor.WHITE,
@@ -53,6 +52,8 @@ private fun Screen(
     ) {
         AddPlannerRouteScreen(
             pikmis = pikmis,
+            pikis = pikis,
+            onSelectPikme = viewModel::addPiki,
         )
     }
 }

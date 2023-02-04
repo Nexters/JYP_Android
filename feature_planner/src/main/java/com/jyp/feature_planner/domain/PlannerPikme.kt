@@ -9,4 +9,7 @@ data class PlannerPikme(
         val address: String,
         val category: String,
         val likeCount: Int,
+        val longitude: Double,
+        val latitude: Double,
+        val link: String,
 ): Parcelable

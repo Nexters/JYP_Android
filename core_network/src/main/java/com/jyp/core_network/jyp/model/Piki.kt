@@ -11,7 +11,7 @@ data class Piki(
     val name: String,
     val address: String,
     val category: PlaceCategory,
-    val longitude: Long,
-    val latitude: Long,
+    val longitude: Double,
+    val latitude: Double,
     val link: String,
 )
