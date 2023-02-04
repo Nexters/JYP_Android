@@ -54,6 +54,9 @@ class PlannerActivity : ComponentActivity() {
                                 AddPlannerRouteActivity.EXTRA_PIKIS,
                                 ArrayList(viewModel.planItems.value[index].pikis)
                             )
+
+                            putExtra(AddPlannerRouteActivity.EXTRA_JOURNEY_ID, plannerId)
+                            putExtra(AddPlannerRouteActivity.EXTRA_DAY_INDEX, index)
                         }
                     )
                 }

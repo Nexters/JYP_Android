@@ -31,6 +31,7 @@ internal fun AddPlannerRouteScreen(
     pikmis: List<PlannerPikme>,
     pikis: List<PlannerPiki>,
     onSelectPikme: (PlannerPikme) -> Unit,
+    onSubmitPikis: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -39,8 +40,25 @@ internal fun AddPlannerRouteScreen(
             pikis = pikis,
         )
         CandidatePikis(
+            modifier = Modifier.weight(1f),
             pikmis = pikmis,
             onSelectPikme = onSelectPikme,
+        )
+
+        JypTextButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    bottom = 28.dp,
+                    start = 24.dp,
+                    end = 24.dp,
+                )
+                .align(Alignment.CenterHorizontally),
+            text = "완료하기",
+            buttonType = ButtonType.THICK,
+            buttonColorSet = ButtonColorSetType.PINK,
+            enabled = true,
+            onClickEnabled = onSubmitPikis,
         )
     }
 }
@@ -67,9 +85,10 @@ private fun SelectedPikis(
 private fun CandidatePikis(
     pikmis: List<PlannerPikme>,
     onSelectPikme: (PlannerPikme) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(JypColors.Background_white100)
     ) {
@@ -84,10 +103,7 @@ private fun CandidatePikis(
                 color = JypColors.Text80,
             )
             Spacer(modifier = Modifier.size(12.dp))
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f),
-            ) {
+            LazyColumn {
                 items(pikmis) { pikme ->
                     Spacer(modifier = Modifier.size(12.dp))
                     CandidatePikiItem(
@@ -100,17 +116,6 @@ private fun CandidatePikis(
                     Spacer(modifier = Modifier.size(12.dp))
                 }
             }
-
-            JypTextButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp)
-                    .align(Alignment.CenterHorizontally),
-                text = "완료하기",
-                buttonType = ButtonType.THICK,
-                buttonColorSet = ButtonColorSetType.PINK,
-                enabled = true,
-            )
         }
     }
 }
@@ -226,5 +231,6 @@ private fun AddPlannerRouteScreenPreview() {
         ),
         pikis = listOf(),
         onSelectPikme = {},
+        onSubmitPikis = {},
     )
 }

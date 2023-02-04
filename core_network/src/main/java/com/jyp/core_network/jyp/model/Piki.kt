@@ -7,7 +7,7 @@ data class Pikis(
 )
 
 data class Piki(
-    val id: String,
+    val id: String?,
     val name: String,
     val address: String,
     val category: PlaceCategory,

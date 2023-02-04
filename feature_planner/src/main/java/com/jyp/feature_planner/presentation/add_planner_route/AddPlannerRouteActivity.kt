@@ -29,8 +29,10 @@ class AddPlannerRouteActivity : ComponentActivity() {
     }
 
     companion object {
-        const val EXTRA_PIKMIS = "extra_pikmis"
-        const val EXTRA_PIKIS = "extra_pikis"
+        const val EXTRA_JOURNEY_ID = "EXTRA_JOURNEY_ID"
+        const val EXTRA_DAY_INDEX = "EXTRA_DAY_INDEX"
+        const val EXTRA_PIKMIS = "EXTRA_PIKMIS"
+        const val EXTRA_PIKIS = "EXTRA_PIKIS"
     }
 }
 
@@ -54,6 +56,7 @@ private fun Screen(
             pikmis = pikmis,
             pikis = pikis,
             onSelectPikme = viewModel::addPiki,
+            onSubmitPikis = viewModel::setPikis,
         )
     }
 }
