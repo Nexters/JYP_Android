@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,18 +15,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_planner.R
+import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
-internal fun AddPlannerRouteScreen() {
+internal fun AddPlannerRouteScreen(
+    pikmis: List<PlannerPikme>,
+) {
     Column(
             modifier = Modifier.fillMaxSize()
     ) {
         SelectedPikis()
-        CandidatePikis()
+        CandidatePikis(
+            pikmis = pikmis
+        )
     }
 }
 
@@ -45,7 +51,9 @@ private fun SelectedPikis() {
 }
 
 @Composable
-private fun CandidatePikis() {
+private fun CandidatePikis(
+    pikmis: List<PlannerPikme>
+) {
     Box(
             modifier = Modifier
                     .fillMaxSize()
@@ -61,18 +69,14 @@ private fun CandidatePikis() {
                     type = TextType.TITLE_6,
                     color = JypColors.Text80,
             )
-
+            Spacer(modifier = Modifier.size(12.dp))
             LazyColumn {
-                item {
-                    Spacer(modifier = Modifier.size(24.dp))
-                    CandidatePikiItem()
+                items(pikmis) { pikme ->
                     Spacer(modifier = Modifier.size(12.dp))
-                    CandidatePikiItem()
-                    Spacer(modifier = Modifier.size(12.dp))
-                    CandidatePikiItem()
-                    Spacer(modifier = Modifier.size(12.dp))
+                    CandidatePikiItem(pikme = pikme)
                 }
             }
+            Spacer(modifier = Modifier.size(12.dp))
         }
 
         JypTextButton(
@@ -140,7 +144,9 @@ private fun SelectedPikiItemDivider() {
 }
 
 @Composable
-private fun CandidatePikiItem() {
+private fun CandidatePikiItem(
+    pikme: PlannerPikme,
+) {
     Row(
             modifier = Modifier
                     .shadow(
@@ -159,13 +165,13 @@ private fun CandidatePikiItem() {
                         .padding(vertical = 11.dp),
         ) {
             JypText(
-                    text = "아르떼 뮤지엄",
+                    text = pikme.title,
                     type = TextType.TITLE_5,
                     color = JypColors.Text80,
             )
             Spacer(modifier = Modifier.size(5.dp))
             JypText(
-                    text = "강원 강릉시 난설헌로 131",
+                    text = pikme.address,
                     type = TextType.BODY_4,
                     color = JypColors.Tag_grey200,
             )
@@ -178,7 +184,7 @@ private fun CandidatePikiItem() {
                     contentDescription = null,
             )
             JypText(
-                    text = "박물관",
+                    text = pikme.category,
                     type = TextType.BODY_4,
                     color = JypColors.Text40,
             )
@@ -190,6 +196,9 @@ private fun CandidatePikiItem() {
 @Composable
 private fun AddPlannerRouteScreenPreview() {
     AddPlannerRouteScreen(
-
+        pikmis = listOf(
+            PlannerPikme("아르떼 뮤지엄", "대한민국", "박물관", 3),
+            PlannerPikme("아르떼 뮤지엄", "대한민국", "박물관", 3),
+        )
     )
 }

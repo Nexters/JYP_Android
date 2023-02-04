@@ -49,7 +49,7 @@ class PlannerActivity : ComponentActivity() {
                         Intent(this, AddPlannerRouteActivity::class.java).apply {
                             putExtra(
                                 AddPlannerRouteActivity.EXTRA_PIKMIS,
-                                arrayListOf(viewModel.pikMes.value)
+                                ArrayList(viewModel.pikMes.value)
                             )
                         }
                     )

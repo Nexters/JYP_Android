@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
@@ -20,7 +22,9 @@ class AddPlannerRouteActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Screen()
+            Screen(
+                viewModel = viewModel,
+            )
         }
 
         viewModel.hashCode()
@@ -33,7 +37,11 @@ class AddPlannerRouteActivity : ComponentActivity() {
 }
 
 @Composable
-private fun Screen() {
+private fun Screen(
+    viewModel: AddPlannerRouteViewModel,
+) {
+    val pikmis by viewModel.pikmis.collectAsState()
+
     GlobalNavigationBarLayout(
             color = GlobalNavigationBarColor.WHITE,
             title = "Day1",
@@ -43,6 +51,8 @@ private fun Screen() {
             backAction = {},
             activeBack = true,
     ) {
-        AddPlannerRouteScreen()
+        AddPlannerRouteScreen(
+            pikmis = pikmis,
+        )
     }
 }
