@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 private fun Screen(
         mainViewModel: MainViewModel,
         myJourneyViewModel: MyJourneyViewModel,
-        onClickNewJourney: () -> Unit,
+        onClickCreateJourney: () -> Unit,
         onClickPlanner: (id: String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -83,7 +83,12 @@ private fun Screen(
 
     val myJourneyScreenItem = createMyJourneyScreenItem(
             myJourneyViewModel = myJourneyViewModel,
-            onClickNewJourney = onClickNewJourney,
+            onClickNewJourney = {
+                coroutineScope.launch {
+                    currentBottomSheetItem = MainBottomSheetItem.NewJourney
+                    modalBottomSheetState.show()
+                }
+            },
             onClickPlanner = { journey ->
                 onClickPlanner.invoke(journey.id)
             },
@@ -133,7 +138,6 @@ private fun Screen(
                                     modalBottomSheetState.hide()
                                 }
                             },
-
                         )
                     }
                     is MainBottomSheetItem.JourneyMore -> {
