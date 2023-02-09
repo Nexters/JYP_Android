@@ -1,4 +1,4 @@
-package com.jyp.feature_sign_in.util
+package com.jyp.core_network.di
 
 import com.jyp.core_network.jyp.JypApi
 import dagger.Module
@@ -38,8 +38,6 @@ class JypNetworkModule {
                 })
                 .addInterceptor { chain ->
                     chain.request().newBuilder()
-                            .addHeader("Authorization", String.format("Bearer %s", MySharedPreferences.getAccessToken))
-                            .addHeader("Content-Type", "application/json")
                             .build()
                             .let(chain::proceed)
                 }
