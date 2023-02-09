@@ -9,9 +9,11 @@ import javax.inject.Inject
 class SignInUseCase @Inject constructor(
     private val signInRepository: SignInRepository
 ) {
-    suspend fun signInWithKakao(): ApiResult<KakaoSignIn> {
+    suspend fun signInWithKakao(
+        token: String
+    ): ApiResult<KakaoSignIn> {
         return apiResult {
-            signInRepository.signInWithKakao()
+            signInRepository.signInWithKakao(token)
         }
     }
 }

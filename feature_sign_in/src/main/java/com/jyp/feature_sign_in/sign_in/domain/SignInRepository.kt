@@ -4,5 +4,7 @@ import com.jyp.core_network.jyp.model.response.KakaoSignInResponse
 
 
 interface SignInRepository {
-    suspend fun signInWithKakao(): KakaoSignInResponse
+    suspend fun signInWithKakao(
+        token: String
+    ): KakaoSignInResponse
 }

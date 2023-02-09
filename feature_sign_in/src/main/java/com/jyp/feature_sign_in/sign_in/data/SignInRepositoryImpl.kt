@@ -9,7 +9,9 @@ class SignInRepositoryImpl @Inject constructor(
     private val signInDataSource: SignInDataSource
 ): SignInRepository {
 
-    override suspend fun signInWithKakao(): KakaoSignInResponse {
-        return signInDataSource.signInWithKakao()
+    override suspend fun signInWithKakao(
+        token: String
+    ): KakaoSignInResponse {
+        return signInDataSource.signInWithKakao(token)
     }
 }

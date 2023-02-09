@@ -6,12 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
+import com.jyp.core_network.jyp.TOKEN
 import com.jyp.core_network.jyp.model.KakaoSignIn
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity
 import com.jyp.feature_sign_in.R
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity.Companion.PROFILE_IMAGE_PATH
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity.Companion.USER_NAME
-import com.jyp.feature_sign_in.util.MySharedPreferences
 import com.jyp.feature_sign_in.util.UiState
 import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.feature_sign_in.util.showToast
@@ -54,14 +54,12 @@ class SignInActivity : ComponentActivity() {
     }
 
     private val kakaoSignInCallback: (OAuthToken?, Throwable?) -> Unit = { oAuthToken, error ->
-        oAuthToken?.let { it ->
-            MySharedPreferences.setAccessToken(it.accessToken)
-
-            it.idToken?.let { _ ->
+        oAuthToken?.let { kakaoToken ->
+            kakaoToken.idToken?.let { _ ->
                 UserApiClient.instance.me { user, error ->
                     error?.let { showToast(R.string.sign_in_error) }
                     user?.kakaoAccount?.profile?.let {
-                        viewModel.signInWithKakao()
+                        viewModel.signInWithKakao(kakaoToken.accessToken)
                     }
                 }
             }
@@ -81,14 +79,12 @@ class SignInActivity : ComponentActivity() {
                     is UiState.Loading -> {}
                     is UiState.Success -> (uiState.result as KakaoSignIn).apply {
                         when (kakaoAccount == null) {
-                            true -> setIntentTo(MainActivity())
-                            false -> setIntentTo(
-                                QuestionActivity(),
-                                mapOf(
-                                    USER_NAME to properties.nickName,
-                                    PROFILE_IMAGE_PATH to properties.profileImage
-                                )
-                            )
+                            true -> setIntentTo(MainActivity::class.java)
+                            false -> setIntentTo(QuestionActivity::class.java) {
+                                putString(TOKEN, token)
+                                putString(USER_NAME, properties.nickname)
+                                putString(PROFILE_IMAGE_PATH, properties.profileImage)
+                            }
                         }
                     }
                     is UiState.Failure -> showToast(uiState.message)
