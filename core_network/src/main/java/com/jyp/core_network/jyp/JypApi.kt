@@ -12,10 +12,13 @@ import retrofit2.http.*
 interface JypApi {
     @GET("auth/kakao/login")
     suspend fun signInWithKakao(
+        @Header("Authorization") token: String
     ): KakaoSignInResponse
 
     @POST("users")
+    @Headers("Content-Type: application/json")
     suspend fun createUserAccount(
+        @Header("Authorization") token: String,
         @Body body: CreateUserRequestBody
     ): UserResponse
 
