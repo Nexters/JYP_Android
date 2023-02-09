@@ -15,7 +15,7 @@ class OnboardingActivity : ComponentActivity() {
         setContent {
             Screen(
                 onBackPressed = { this.finish() },
-                onOnboardingFinished = { setIntentTo(SignInActivity()) }
+                onOnboardingFinished = { setIntentTo(SignInActivity::class.java) }
             )
         }
     }
