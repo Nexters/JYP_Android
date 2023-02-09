@@ -9,7 +9,10 @@ class QuestionRepositoryImpl @Inject constructor(
     private val questionDataSource: QuestionDataSource
 ): QuestionRepository {
 
-    override suspend fun createUserAccount(body: CreateUserRequestBody): UserResponse {
-        return questionDataSource.createUserAccount(body)
+    override suspend fun createUserAccount(
+        token: String,
+        body: CreateUserRequestBody
+    ): UserResponse {
+        return questionDataSource.createUserAccount(token, body)
     }
 }

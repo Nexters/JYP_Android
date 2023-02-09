@@ -1,6 +1,5 @@
 package com.jyp.feature_sign_in.questions.presentation
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.*
 import com.jyp.core_network.jyp.model.request.CreateUserRequestBody
@@ -36,11 +35,8 @@ class QuestionViewModel @Inject constructor(
     }
 
     fun getSelectedQuestionOptionsAsEnum(): QuestionResultEnum {
-        Log.d("TAG", "getSelectedQuestionOptionsAsEnum: $_selectedQuestionOptions")
-        Log.d("TAG", "getSelectedQuestionOptionsAsEnum: ${_selectedQuestionOptions.toList()}")
         val selectedQuestionOptionsString = _selectedQuestionOptions.toList().joinToString(separator = "")
-        Log.d("TAG", "getSelectedQuestionOptionsAsEnum: $selectedQuestionOptionsString")
-        return selectedQuestionOptionsString.run { // Todo: Check if list.toString() is equals with append().
+        return selectedQuestionOptionsString.run {
             when {
                 QuestionResultEnum.ME.serialNumbers.contains(this) -> QuestionResultEnum.ME
                 QuestionResultEnum.PE.serialNumbers.contains(this) -> QuestionResultEnum.PE
@@ -51,12 +47,13 @@ class QuestionViewModel @Inject constructor(
     }
 
     fun createUserAccount(
+        token: String,
         body: CreateUserRequestBody
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            questionUseCase.createUserAccount(body)
-                .onSuccess { user ->
-                    _createUserAccountUiState.value = UiState.Success(user)
+            questionUseCase.createUserAccount(token, body)
+                .onSuccess {
+                    _createUserAccountUiState.value = UiState.Success(token)
                 }
                 .onFailure { throwable ->
                     throwable.localizedMessage?.let {

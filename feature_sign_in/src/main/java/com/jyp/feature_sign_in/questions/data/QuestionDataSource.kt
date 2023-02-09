@@ -9,7 +9,11 @@ import javax.inject.Inject
 class QuestionDataSource @Inject constructor(
     private val jypApi: JypApi
 ) {
-    suspend fun createUserAccount(body: CreateUserRequestBody): UserResponse {
-        return jypApi.createUserAccount(body)
+    suspend fun createUserAccount(
+        token: String,
+        body: CreateUserRequestBody
+    ): UserResponse {
+        val bearerToken = String.format("Bearer %s", token)
+        return jypApi.createUserAccount(bearerToken, body)
     }
 }

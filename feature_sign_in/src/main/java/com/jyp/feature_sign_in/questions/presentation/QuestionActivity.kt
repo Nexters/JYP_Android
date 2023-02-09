@@ -7,9 +7,9 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.lifecycleScope
-import com.jyp.core_network.jyp.model.User
+import com.jyp.core_network.jyp.TOKEN
 import com.jyp.core_network.jyp.model.request.CreateUserRequestBody
-import com.jyp.feature_sign_in.util.MySharedPreferences
+import com.jyp.feature_sign_in.R
 import com.jyp.feature_sign_in.util.UiState
 import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.feature_sign_in.util.showToast
@@ -21,7 +21,15 @@ import dagger.hilt.android.AndroidEntryPoint
 class QuestionActivity : ComponentActivity() {
 
     private val viewModel: QuestionViewModel by viewModels()
-
+    private val token: String? by lazy {
+        intent.getStringExtra(TOKEN)
+    }
+    private val userName: String? by lazy {
+        intent.getStringExtra(USER_NAME)
+    }
+    private val profileImagePath: String? by lazy {
+        intent.getStringExtra(PROFILE_IMAGE_PATH)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +37,15 @@ class QuestionActivity : ComponentActivity() {
             Screen(
                 viewModel = viewModel,
                 onClickDoneQuestion = {
+                    if (token.isNullOrBlank()) showToast(R.string.sign_in_error)
+                    if (userName.isNullOrBlank()) showToast(R.string.sign_in_error)
+                    if (profileImagePath.isNullOrBlank()) showToast(R.string.sign_in_error)
+
                     viewModel.createUserAccount(
+                        token!!,
                         CreateUserRequestBody(
-                            name = intent.getStringExtra(USER_NAME) ?: "",
-                            profileImagePath = intent.getStringExtra(PROFILE_IMAGE_PATH) ?: "",
+                            name = userName!!,
+                            profileImagePath = profileImagePath!!,
                             personalityId = viewModel.getSelectedQuestionOptionsAsEnum().name
                         )
                     )
@@ -49,9 +62,10 @@ class QuestionActivity : ComponentActivity() {
                 when (uiState) {
                     is UiState.Loading -> {}
                     is UiState.Success -> {
-                        val result = uiState.result as User
-                        MySharedPreferences.setUserId(result.id)
-                        setIntentTo(MainActivity())
+                        val token = uiState.result as String
+                        setIntentTo(MainActivity::class.java) {
+                            putString(TOKEN, token)
+                        }
                     }
                     is UiState.Failure -> showToast(uiState.message)
                 }
