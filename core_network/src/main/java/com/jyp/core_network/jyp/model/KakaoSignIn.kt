@@ -2,13 +2,13 @@ package com.jyp.core_network.jyp.model
 
 data class KakaoSignIn(
     val token: String,
-    val id: String,
+    val id: Long,
     val connectedAt: String,
     val properties: UserProperties,
     val kakaoAccount: KakaoAccount?
 ) {
     data class UserProperties(
-        val nickName: String,
+        val nickname: String,
         val profileImage: String,
         val thumbnailImage: String
     )
