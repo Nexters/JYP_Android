@@ -77,12 +77,17 @@ private fun SelectedPikis(
             .background(JypColors.Background_white200),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        items(pikis) { piki ->
+        items(pikis.size) { idx ->
             SelectedPikiItem(
-                piki = piki,
+                piki = pikis[idx],
                 onRemovePiki = onRemovePiki,
             )
-            SelectedPikiItemDivider()
+
+            if (idx != pikis.lastIndex) {
+                SelectedPikiItemDivider()
+            } else {
+                Spacer(modifier = Modifier.size(6.dp))
+            }
         }
     }
 }
