@@ -10,6 +10,7 @@ data class PlannerPiki(
         val name: String,
         val address: String,
         val category: String,
+        val categoryIconRes: Int = 0,
         val longitude: Double,
         val latitude: Double,
         val link: String,
