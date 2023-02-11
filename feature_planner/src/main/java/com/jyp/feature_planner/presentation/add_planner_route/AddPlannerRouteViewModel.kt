@@ -46,6 +46,10 @@ class AddPlannerRouteViewModel @Inject constructor(
         )
     }
 
+    fun removePiki(piki: PlannerPiki) {
+        _pikis.value -= piki
+    }
+
     fun setPikis() {
         viewModelScope.launch {
             setPikisUseCase.invoke(

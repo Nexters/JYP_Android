@@ -31,6 +31,7 @@ internal fun AddPlannerRouteScreen(
     pikmis: List<PlannerPikme>,
     pikis: List<PlannerPiki>,
     onSelectPikme: (PlannerPikme) -> Unit,
+    onRemovePiki: (PlannerPiki) -> Unit,
     onSubmitPikis: () -> Unit,
 ) {
     Column(
@@ -38,6 +39,7 @@ internal fun AddPlannerRouteScreen(
     ) {
         SelectedPikis(
             pikis = pikis,
+            onRemovePiki = onRemovePiki,
         )
         CandidatePikis(
             modifier = Modifier.weight(1f),
@@ -66,6 +68,7 @@ internal fun AddPlannerRouteScreen(
 @Composable
 private fun SelectedPikis(
     pikis: List<PlannerPiki>,
+    onRemovePiki: (PlannerPiki) -> Unit,
 ) {
     LazyRow(
         modifier = Modifier
@@ -75,7 +78,10 @@ private fun SelectedPikis(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         items(pikis) { piki ->
-            SelectedPikiItem(piki = piki)
+            SelectedPikiItem(
+                piki = piki,
+                onRemovePiki = onRemovePiki,
+            )
             SelectedPikiItemDivider()
         }
     }
@@ -121,7 +127,10 @@ private fun CandidatePikis(
 }
 
 @Composable
-private fun SelectedPikiItem(piki: PlannerPiki) {
+private fun SelectedPikiItem(
+    piki: PlannerPiki,
+    onRemovePiki: (PlannerPiki) -> Unit,
+) {
     Box {
         Column(
             modifier = Modifier
@@ -150,7 +159,12 @@ private fun SelectedPikiItem(piki: PlannerPiki) {
             modifier = Modifier
                 .size(24.dp)
                 .offset(x = 6.dp, y = (-7).dp)
-                .align(Alignment.TopEnd),
+                .align(Alignment.TopEnd)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = { onRemovePiki.invoke(piki) },
+                ),
             painter = painterResource(id = R.drawable.icon_delete_journey_route),
             contentDescription = null,
         )
@@ -231,6 +245,7 @@ private fun AddPlannerRouteScreenPreview() {
         ),
         pikis = listOf(),
         onSelectPikme = {},
+        onRemovePiki = {},
         onSubmitPikis = {},
     )
 }

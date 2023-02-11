@@ -56,6 +56,7 @@ private fun Screen(
             pikmis = pikmis,
             pikis = pikis,
             onSelectPikme = viewModel::addPiki,
+            onRemovePiki = viewModel::removePiki,
             onSubmitPikis = viewModel::setPikis,
         )
     }
