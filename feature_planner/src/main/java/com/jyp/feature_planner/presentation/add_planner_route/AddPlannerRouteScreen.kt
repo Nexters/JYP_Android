@@ -248,7 +248,11 @@ private fun AddPlannerRouteScreenPreview() {
             PlannerPikme("아르떼 뮤지엄", "대한민국", "박물관", 3, 0.0, 0.0, ""),
             PlannerPikme("아르떼 뮤지엄", "대한민국", "박물관", 3, 0.0, 0.0, ""),
         ),
-        pikis = listOf(),
+        pikis = listOf(
+            PlannerPiki(null, "아르떼 뮤지엄", "대한민국", "박물관", 0, 0.0, 0.0, ""),
+            PlannerPiki(null, "아르떼 뮤지엄", "대한민국", "박물관", 0, 0.0, 0.0, ""),
+            PlannerPiki(null, "아르떼 뮤지엄", "대한민국", "박물관", 0, 0.0, 0.0, ""),
+        ),
         onSelectPikme = {},
         onRemovePiki = {},
         onSubmitPikis = {},
