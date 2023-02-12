@@ -40,9 +40,11 @@ class MyJourneyViewModel @Inject constructor(
     val profileSelectedPosition: StateFlow<Int?>
         get() = _profileSelectedPosition
 
-    fun fetchUser() {
+    fun fetchUser(
+        userId: String
+    ) {
         viewModelScope.launch {
-            getUserUseCase("kakao-556894")
+            getUserUseCase(userId)
                 .onSuccess { user ->
                     _userName.value = user.name
                     _personality.value = user.personality
