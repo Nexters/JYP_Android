@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
-import com.jyp.core_network.jyp.TOKEN
+import com.jyp.core_network.di.JypSessionManager
 import com.jyp.core_network.jyp.model.KakaoSignIn
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity
 import com.jyp.feature_sign_in.R
@@ -21,11 +21,14 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class SignInActivity : ComponentActivity() {
 
+    @Inject
+    lateinit var sessionManager: JypSessionManager
     private val viewModel by viewModels<SignInViewModel>()
 
 
@@ -59,7 +62,8 @@ class SignInActivity : ComponentActivity() {
                 UserApiClient.instance.me { user, error ->
                     error?.let { showToast(R.string.sign_in_error) }
                     user?.kakaoAccount?.profile?.let {
-                        viewModel.signInWithKakao(kakaoToken.accessToken)
+                        sessionManager.bearerToken = kakaoToken.accessToken
+                        viewModel.signInWithKakao()
                     }
                 }
             }
@@ -79,11 +83,18 @@ class SignInActivity : ComponentActivity() {
                     is UiState.Loading -> {}
                     is UiState.Success -> (uiState.result as KakaoSignIn).apply {
                         when (kakaoAccount == null) {
-                            true -> setIntentTo(MainActivity::class.java)
-                            false -> setIntentTo(QuestionActivity::class.java) {
-                                putString(TOKEN, token)
-                                putString(USER_NAME, properties.nickname)
-                                putString(PROFILE_IMAGE_PATH, properties.profileImage)
+                            true -> {
+                                sessionManager.bearerToken = token
+                                setIntentTo(MainActivity::class.java) {
+                                    // Todo: Decode JWT for userId.
+                                    // putString(USER_ID, token.userId)
+                                }
+                            }
+                            false -> {
+                                setIntentTo(QuestionActivity::class.java) {
+                                    putString(USER_NAME, properties.nickname)
+                                    putString(PROFILE_IMAGE_PATH, properties.profileImage)
+                                }
                             }
                         }
                     }

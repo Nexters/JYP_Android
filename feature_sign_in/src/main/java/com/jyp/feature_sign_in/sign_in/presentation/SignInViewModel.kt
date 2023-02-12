@@ -23,11 +23,9 @@ class SignInViewModel @Inject constructor(
         get() = _signInWithKakaoUiState
 
 
-    fun signInWithKakao(
-        token: String
-    ) {
+    fun signInWithKakao() {
         viewModelScope.launch {
-            signInUseCase.signInWithKakao(token)
+            signInUseCase.signInWithKakao()
                 .onSuccess { signInInfo ->
                     _signInWithKakaoUiState.value = UiState.Success(signInInfo)
                 }
