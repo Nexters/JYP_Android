@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,28 +20,47 @@ class JypNetworkModule {
 
     @Provides
     @Singleton
-    fun provideJypApi(): JypApi {
-        return getRetrofit().create()
+    fun provideJypApi(
+        jypNetworkInterceptor: JypNetworkInterceptor
+    ): JypApi {
+        return getRetrofit(jypNetworkInterceptor).create()
     }
 
-    private fun getRetrofit(): Retrofit {
+    @Provides
+    @Singleton
+    @JourneyPikiRetrofit
+    fun getRetrofit(
+        jypNetworkInterceptor: JypNetworkInterceptor
+    ): Retrofit {
         return Retrofit.Builder()
                 .baseUrl("https://journeypiki.duckdns.org/")
-                .client(getOkHttpClient())
+                .client(getOkHttpClient(jypNetworkInterceptor))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
     }
 
-    private fun getOkHttpClient(): OkHttpClient {
+    @Provides
+    @Singleton
+    @JourneyPikiRetrofit
+    fun getOkHttpClient(
+        jypNetworkInterceptor: JypNetworkInterceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 })
                 .addInterceptor { chain ->
-                    chain.request().newBuilder()
-                            .build()
-                            .let(chain::proceed)
+                    jypNetworkInterceptor.intercept(chain)
                 }
                 .build()
+    }
+
+    @Provides
+    @Singleton
+    @JourneyPikiRetrofit
+    fun provideOkhttpInterceptor(
+        jypNetworkInterceptor: JypNetworkInterceptor
+    ): JypNetworkInterceptor {
+        return jypNetworkInterceptor
     }
 }
