@@ -10,10 +10,8 @@ class QuestionDataSource @Inject constructor(
     private val jypApi: JypApi
 ) {
     suspend fun createUserAccount(
-        token: String,
         body: CreateUserRequestBody
     ): UserResponse {
-        val bearerToken = String.format("Bearer %s", token)
-        return jypApi.createUserAccount(bearerToken, body)
+        return jypApi.createUserAccount(body)
     }
 }

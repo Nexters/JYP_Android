@@ -47,13 +47,12 @@ class QuestionViewModel @Inject constructor(
     }
 
     fun createUserAccount(
-        token: String,
         body: CreateUserRequestBody
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            questionUseCase.createUserAccount(token, body)
+            questionUseCase.createUserAccount(body)
                 .onSuccess {
-                    _createUserAccountUiState.value = UiState.Success(token)
+                    _createUserAccountUiState.value = UiState.Success(it)
                 }
                 .onFailure { throwable ->
                     throwable.localizedMessage?.let {

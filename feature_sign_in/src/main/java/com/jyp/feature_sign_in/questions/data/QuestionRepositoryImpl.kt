@@ -10,9 +10,8 @@ class QuestionRepositoryImpl @Inject constructor(
 ): QuestionRepository {
 
     override suspend fun createUserAccount(
-        token: String,
         body: CreateUserRequestBody
     ): UserResponse {
-        return questionDataSource.createUserAccount(token, body)
+        return questionDataSource.createUserAccount(body)
     }
 }

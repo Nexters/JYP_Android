@@ -12,11 +12,10 @@ class QuestionUseCase @Inject constructor(
     private val questionRepository: QuestionRepository
 ) {
     suspend fun createUserAccount(
-        token: String,
         body: CreateUserRequestBody
     ): ApiResult<User> {
         return apiResult {
-            questionRepository.createUserAccount(token, body)
+            questionRepository.createUserAccount(body)
         }
     }
 }

@@ -7,7 +7,9 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.lifecycleScope
-import com.jyp.core_network.jyp.TOKEN
+import com.jyp.core_network.di.JypSessionManager
+import com.jyp.core_network.jyp.USER_ID
+import com.jyp.core_network.jyp.model.User
 import com.jyp.core_network.jyp.model.request.CreateUserRequestBody
 import com.jyp.feature_sign_in.R
 import com.jyp.feature_sign_in.util.UiState
@@ -15,15 +17,16 @@ import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.feature_sign_in.util.showToast
 import com.jyp.main.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class QuestionActivity : ComponentActivity() {
 
+    @Inject
+    lateinit var sessionManager: JypSessionManager
     private val viewModel: QuestionViewModel by viewModels()
-    private val token: String? by lazy {
-        intent.getStringExtra(TOKEN)
-    }
+
     private val userName: String? by lazy {
         intent.getStringExtra(USER_NAME)
     }
@@ -31,18 +34,17 @@ class QuestionActivity : ComponentActivity() {
         intent.getStringExtra(PROFILE_IMAGE_PATH)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Screen(
                 viewModel = viewModel,
                 onClickDoneQuestion = {
-                    if (token.isNullOrBlank()) showToast(R.string.sign_in_error)
                     if (userName.isNullOrBlank()) showToast(R.string.sign_in_error)
                     if (profileImagePath.isNullOrBlank()) showToast(R.string.sign_in_error)
 
                     viewModel.createUserAccount(
-                        token!!,
                         CreateUserRequestBody(
                             name = userName!!,
                             profileImagePath = profileImagePath!!,
@@ -61,10 +63,9 @@ class QuestionActivity : ComponentActivity() {
             viewModel.createUserAccountUiState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {}
-                    is UiState.Success -> {
-                        val token = uiState.result as String
-                        setIntentTo(MainActivity::class.java) {
-                            putString(TOKEN, token)
+                    is UiState.Success -> (uiState.result as User).apply {
+                        setIntentTo(MainActivity::class.java)  {
+                             putString(USER_ID, id)
                         }
                     }
                     is UiState.Failure -> showToast(uiState.message)

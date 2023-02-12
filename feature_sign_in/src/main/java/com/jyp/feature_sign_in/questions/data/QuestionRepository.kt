@@ -6,7 +6,6 @@ import com.jyp.core_network.jyp.model.response.UserResponse
 
 interface QuestionRepository {
     suspend fun createUserAccount(
-        token: String,
         body: CreateUserRequestBody
     ): UserResponse
 }
