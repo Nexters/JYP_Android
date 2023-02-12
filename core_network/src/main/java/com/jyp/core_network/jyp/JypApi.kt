@@ -3,6 +3,7 @@ package com.jyp.core_network.jyp
 import com.jyp.core_network.jyp.model.request.AddPlaceRequestBody
 import com.jyp.core_network.jyp.model.request.CreatePlannerRequestBody
 import com.jyp.core_network.jyp.model.request.CreateUserRequestBody
+import com.jyp.core_network.jyp.model.request.SetPikiRequestBody
 import com.jyp.core_network.jyp.model.response.*
 import retrofit2.http.*
 
@@ -34,5 +35,11 @@ interface JypApi {
     suspend fun addPikme(
         @Path("id") plannerId: String,
         @Body addPlaceRequestBody: AddPlaceRequestBody,
+    ): JypBaseResponse<Any>
+
+    @POST("journeys/{id}/pikis")
+    suspend fun setPikis(
+        @Path("id") journeyId: String,
+        @Body setPikiRequestBody: SetPikiRequestBody,
     ): JypBaseResponse<Any>
 }
