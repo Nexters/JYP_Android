@@ -18,9 +18,9 @@ import javax.inject.Inject
 class PlannerViewModel @Inject constructor(
     private val getPlannerUseCase: GetPlannerUseCase,
 ) : ViewModel() {
-    private val _pikMes = MutableStateFlow<List<PlannerPikme>>(emptyList())
-    val pikMes: StateFlow<List<PlannerPikme>>
-        get() = _pikMes
+    private val _pikmis = MutableStateFlow<List<PlannerPikme>>(emptyList())
+    val pikmis: StateFlow<List<PlannerPikme>>
+        get() = _pikmis
 
     private val _tags = MutableStateFlow<List<PlannerTag>>(emptyList())
     val tags: StateFlow<List<PlannerTag>>
@@ -58,7 +58,7 @@ class PlannerViewModel @Inject constructor(
                         SimpleDateFormat("M월 d일", Locale.getDefault()).format(planner.endDate * 1000),
                     )
 
-                    _pikMes.value = planner.pikmis.map(pikmeMapper::toPlannerPikme)
+                    _pikmis.value = planner.pikmis.map(pikmeMapper::toPlannerPikme)
                 }
                 .onFailure { exception ->
                     exception.printStackTrace()
