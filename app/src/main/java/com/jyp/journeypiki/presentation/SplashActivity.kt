@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
-import com.jyp.core_network.jyp.TOKEN
+import com.jyp.core_network.di.JypSessionManager
 import com.jyp.core_network.jyp.model.KakaoSignIn
 import com.jyp.feature_sign_in.onboarding.OnboardingActivity
 import com.jyp.feature_sign_in.util.UiState
@@ -16,6 +16,7 @@ import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.main.presentation.MainActivity
 import com.kakao.sdk.auth.AuthApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @ExperimentalMaterialApi
@@ -23,7 +24,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SplashActivity : ComponentActivity() {
 
+    @Inject
+    lateinit var sessionManager: JypSessionManager
     private val viewModel by viewModels<SplashViewModel>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +42,10 @@ class SplashActivity : ComponentActivity() {
         val kakaoToken = AuthApiClient.instance.tokenManagerProvider.manager.getToken()
         when (kakaoToken == null) {
             true -> setIntentTo(OnboardingActivity::class.java)
-            false -> viewModel.signInWithKakao(kakaoToken.accessToken)
+            false -> {
+                sessionManager.bearerToken = kakaoToken.accessToken
+                viewModel.signInWithKakao()
+            }
         }
     }
 
@@ -50,8 +57,12 @@ class SplashActivity : ComponentActivity() {
                     is UiState.Success -> (uiState.result as KakaoSignIn).apply {
                         when (kakaoAccount != null) {
                             true -> setIntentTo(OnboardingActivity::class.java)
-                            false -> setIntentTo(MainActivity::class.java) {
-                                putString(TOKEN, token)
+                            false -> {
+                                sessionManager.bearerToken = token
+                                setIntentTo(MainActivity::class.java) {
+                                    // Todo: Decode JWT for userId.
+                                    // putString(USER_ID, token.userId)
+                                }
                             }
                         }
                     }

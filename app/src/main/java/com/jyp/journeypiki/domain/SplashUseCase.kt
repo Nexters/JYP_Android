@@ -9,11 +9,9 @@ import javax.inject.Inject
 class SplashUseCase @Inject constructor(
     private val splashRepository: SplashRepository
 ) {
-    suspend fun signInWithKakao(
-        token: String
-    ): ApiResult<KakaoSignIn> {
+    suspend fun signInWithKakao(): ApiResult<KakaoSignIn> {
         return apiResult {
-            splashRepository.signInWithKakao(token)
+            splashRepository.signInWithKakao()
         }
     }
 }

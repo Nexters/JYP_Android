@@ -23,11 +23,9 @@ class SplashViewModel @Inject constructor(
         get() = _signInWithKakaoUiState
 
 
-    fun signInWithKakao(
-        token: String
-    ) {
+    fun signInWithKakao() {
         viewModelScope.launch {
-            splashUseCase.signInWithKakao(token)
+            splashUseCase.signInWithKakao()
                 .onSuccess { signInInfo ->
                     _signInWithKakaoUiState.value = UiState.Success(signInInfo)
                 }

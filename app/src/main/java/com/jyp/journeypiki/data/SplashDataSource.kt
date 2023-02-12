@@ -8,10 +8,7 @@ import javax.inject.Inject
 class SplashDataSource @Inject constructor(
     private val jypApi: JypApi
 ) {
-    suspend fun signInWithKakao(
-        token: String
-    ): KakaoSignInResponse {
-        val bearerToken = String.format("Bearer %s", token)
-        return jypApi.signInWithKakao(bearerToken)
+    suspend fun signInWithKakao(): KakaoSignInResponse {
+        return jypApi.signInWithKakao()
     }
 }

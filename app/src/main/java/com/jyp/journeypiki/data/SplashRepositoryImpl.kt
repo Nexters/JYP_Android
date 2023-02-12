@@ -9,9 +9,7 @@ class SplashRepositoryImpl @Inject constructor(
     private val splashDataSource: SplashDataSource
 ): SplashRepository {
 
-    override suspend fun signInWithKakao(
-        token: String
-    ): KakaoSignInResponse {
-        return splashDataSource.signInWithKakao(token)
+    override suspend fun signInWithKakao(): KakaoSignInResponse {
+        return splashDataSource.signInWithKakao()
     }
 }
