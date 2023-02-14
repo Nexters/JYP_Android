@@ -82,11 +82,6 @@ internal fun MyJourneyHeader(
             fontSize = 22.sp,
             color = JypColors.Text90,
         )
-        Image(
-            modifier = Modifier.padding(start = 6.dp),
-            painter = painterResource(id = R.drawable.ic_carrier_blue),
-            contentDescription = null,
-        )
     }
 }
 

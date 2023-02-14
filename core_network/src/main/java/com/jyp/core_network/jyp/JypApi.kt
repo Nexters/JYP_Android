@@ -22,6 +22,9 @@ interface JypApi {
         @Path("id") userId: String
     ): UserResponse
 
+    @GET("users/me")
+    suspend fun getMe(): UserResponse
+
     @GET("journeys")
     suspend fun getJourneys(): JourneysResponse
 
