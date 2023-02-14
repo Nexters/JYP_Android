@@ -59,10 +59,7 @@ class SplashActivity : ComponentActivity() {
                             true -> setIntentTo(OnboardingActivity::class.java)
                             false -> {
                                 sessionManager.bearerToken = token
-                                setIntentTo(MainActivity::class.java) {
-                                    // Todo: Decode JWT for userId.
-                                    // putString(USER_ID, token.userId)
-                                }
+                                setIntentTo(MainActivity::class.java)
                             }
                         }
                     }

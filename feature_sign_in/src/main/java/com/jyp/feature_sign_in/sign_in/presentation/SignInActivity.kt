@@ -85,10 +85,7 @@ class SignInActivity : ComponentActivity() {
                         when (kakaoAccount == null) {
                             true -> {
                                 sessionManager.bearerToken = token
-                                setIntentTo(MainActivity::class.java) {
-                                    // Todo: Decode JWT for userId.
-                                    // putString(USER_ID, token.userId)
-                                }
+                                setIntentTo(MainActivity::class.java)
                             }
                             false -> {
                                 setIntentTo(QuestionActivity::class.java) {
