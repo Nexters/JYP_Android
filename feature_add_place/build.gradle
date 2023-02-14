@@ -9,7 +9,6 @@ plugins {
 
 Properties localProperties = new Properties()
 localProperties.load(rootProject.file('local.properties').newDataInputStream())
-String google_map_api_key = localProperties.getProperty('google_map_api_key')
 
 android {
     compileSdk project.compileSdkVersion.toInteger()
@@ -22,7 +21,7 @@ android {
         consumerProguardFiles "consumer-rules.pro"
 
         manifestPlaceholders = [
-                google_map_api_key: google_map_api_key
+                google_map_api_key: localProperties['google_map_api_key']
         ]
     }
 

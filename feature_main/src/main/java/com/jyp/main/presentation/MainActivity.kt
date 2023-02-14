@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jyp.core_network.jyp.USER_ID
 import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.feature_my_journey.presentation.my_journey.*
@@ -33,6 +34,10 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     private val myJourneyViewModel: MyJourneyViewModel by viewModels()
+
+    private val userId: String? by lazy {
+        intent.getStringExtra(USER_ID)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +59,9 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-        myJourneyViewModel.fetchUser()
+        userId?.let {
+            myJourneyViewModel.fetchUser(it)
+        }
     }
 
     override fun onResume() {
