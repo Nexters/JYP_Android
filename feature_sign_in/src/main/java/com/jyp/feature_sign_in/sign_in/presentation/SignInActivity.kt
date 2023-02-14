@@ -81,16 +81,17 @@ class SignInActivity : ComponentActivity() {
             viewModel.signInWithKakaoUiState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {}
-                    is UiState.Success -> (uiState.result as KakaoSignIn).apply {
-                        when (kakaoAccount == null) {
+                    is UiState.Success -> (uiState.result as KakaoSignIn).let { signIn ->
+                        sessionManager.bearerToken = signIn.token
+
+                        when (signIn.kakaoAccount == null) {
                             true -> {
-                                sessionManager.bearerToken = token
                                 setIntentTo(MainActivity::class.java)
                             }
                             false -> {
                                 setIntentTo(QuestionActivity::class.java) {
-                                    putString(USER_NAME, properties.nickname)
-                                    putString(PROFILE_IMAGE_PATH, properties.profileImage)
+                                    putString(USER_NAME, signIn.properties.nickname)
+                                    putString(PROFILE_IMAGE_PATH, signIn.properties.profileImage)
                                 }
                             }
                         }
