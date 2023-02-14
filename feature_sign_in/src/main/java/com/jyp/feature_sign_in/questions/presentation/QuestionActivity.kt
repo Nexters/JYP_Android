@@ -64,9 +64,7 @@ class QuestionActivity : ComponentActivity() {
                 when (uiState) {
                     is UiState.Loading -> {}
                     is UiState.Success -> (uiState.result as User).apply {
-                        setIntentTo(MainActivity::class.java)  {
-                             putString(USER_ID, id)
-                        }
+                        setIntentTo(MainActivity::class.java)
                     }
                     is UiState.Failure -> showToast(uiState.message)
                 }

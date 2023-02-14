@@ -7,7 +7,7 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
         private val userDataSource: UserDataSource,
 ) : UserRepository {
-    override suspend fun getUser(userId: String): UserResponse {
-        return userDataSource.getUser(userId)
+    override suspend fun getMe(): UserResponse {
+        return userDataSource.getMe()
     }
 }

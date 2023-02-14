@@ -35,10 +35,6 @@ class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     private val myJourneyViewModel: MyJourneyViewModel by viewModels()
 
-    private val userId: String? by lazy {
-        intent.getStringExtra(USER_ID)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,9 +55,7 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-        userId?.let {
-            myJourneyViewModel.fetchUser(it)
-        }
+        myJourneyViewModel.fetchUser()
     }
 
     override fun onResume() {
