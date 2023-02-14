@@ -54,16 +54,22 @@ class SplashActivity : ComponentActivity() {
             viewModel.signInWithKakaoUiState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {}
-                    is UiState.Success -> (uiState.result as KakaoSignIn).apply {
-                        when (kakaoAccount != null) {
+                    is UiState.Success -> (uiState.result as KakaoSignIn).let { signIn ->
+                        when (signIn.kakaoAccount != null) {
                             true -> setIntentTo(OnboardingActivity::class.java)
                             false -> {
-                                sessionManager.bearerToken = token
+                                sessionManager.bearerToken = signIn.token
                                 setIntentTo(MainActivity::class.java)
                             }
                         }
+
+                        finish()
                     }
-                    is UiState.Failure -> setIntentTo(OnboardingActivity::class.java)
+                    is UiState.Failure -> {
+                        setIntentTo(OnboardingActivity::class.java)
+
+                        finish()
+                    }
                 }
             }
         }
