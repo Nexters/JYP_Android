@@ -2,9 +2,11 @@ package com.jyp.feature_my_journey.presentation.my_journey
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
 import com.jyp.feature_my_journey.domain.GetJourneysUseCase
+import com.jyp.feature_my_journey.domain.LeaveJourneyUseCase
 import com.jyp.feature_my_journey.domain.GetMeUseCase
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.enumerate.ThemeType
@@ -20,6 +22,7 @@ import javax.inject.Inject
 class MyJourneyViewModel @Inject constructor(
     private val getMeUseCase: GetMeUseCase,
     private val getJourneysUseCase: GetJourneysUseCase,
+    private val leaveJourneyUseCase: LeaveJourneyUseCase
 ) : ViewModel() {
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String>
@@ -40,6 +43,11 @@ class MyJourneyViewModel @Inject constructor(
     private val _profileSelectedPosition = MutableStateFlow<Int?>(null)
     val profileSelectedPosition: StateFlow<Int?>
         get() = _profileSelectedPosition
+
+    private val _leaveJourneyUiState = MutableStateFlow<UiState<*>>(UiState.Loading)
+    val leaveJourneyUiState: StateFlow<UiState<*>>
+        get() = _leaveJourneyUiState
+
 
     fun fetchUser() {
         viewModelScope.launch {
@@ -96,5 +104,17 @@ class MyJourneyViewModel @Inject constructor(
 
     fun selectProfile(position: Int) {
         _profileSelectedPosition.value = position
+    }
+
+    fun leaveJourney(journeyId: String) {
+        viewModelScope.launch {
+            leaveJourneyUseCase.invoke(journeyId)
+                .onSuccess { signInInfo ->
+                    _leaveJourneyUiState.value = UiState.Success(signInInfo)
+                }
+                .onFailure { throwable ->
+                    _leaveJourneyUiState.value = UiState.Failure(throwable)
+                }
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.jyp.feature_my_journey.presentation.my_journey
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_my_journey.domain.Journey
@@ -15,12 +14,13 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 fun ConfirmRemoveJourneyBottomSheetScreen(
-        journey: Journey,
+    journey: Journey,
+    onClickLeaveJourney: () -> Unit
 ) {
     Column(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 28.dp, bottom = 28.dp)
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 28.dp, bottom = 28.dp)
     ) {
         JypText(
                 text = "${journey.title}에서\n정말 나가시나요?",
@@ -51,6 +51,7 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
                     buttonType = ButtonType.THICK,
                     buttonColorSet = ButtonColorSetType.PINK,
                     enabled = true,
+                    onClickEnabled = onClickLeaveJourney
             )
         }
     }
@@ -59,5 +60,8 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
 @Composable
 @Preview(showBackground = true)
 private fun ConfirmRemoveJourneyBottomSheetScreenPreview() {
-    ConfirmRemoveJourneyBottomSheetScreen(Journey("", "", "qwdqwd", ThemeType.DEFAULT, "", "", emptyList()))
+    ConfirmRemoveJourneyBottomSheetScreen(
+        Journey("", "", "qwdqwd", ThemeType.DEFAULT, "", "", emptyList()),
+        onClickLeaveJourney = {}
+    )
 }

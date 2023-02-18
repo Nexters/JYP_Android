@@ -2,6 +2,7 @@ package com.jyp.main.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -17,7 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jyp.core_network.jyp.USER_ID
+import androidx.lifecycle.lifecycleScope
+import com.jyp.core_network.jyp.UiState
+import com.jyp.core_network.jyp.model.User
 import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.feature_my_journey.presentation.my_journey.*
@@ -152,6 +155,9 @@ private fun Screen(
                     is MainBottomSheetItem.ConfirmRemoveJourney -> {
                         ConfirmRemoveJourneyBottomSheetScreen(
                                 journey = bottomSheetItem.journey,
+                                onClickLeaveJourney = {
+                                    myJourneyViewModel.leaveJourney(bottomSheetItem.journey.id)
+                                }
                         )
                     }
                 }
