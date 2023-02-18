@@ -94,6 +94,9 @@ class MyJourneyViewModel @Inject constructor(
                         )
                     }
                 }
+                .onFailure { e ->
+                    e.printStackTrace()
+                }
         }
     }
 
