@@ -1,4 +1,4 @@
-package com.jyp.feature_my_journey.data
+package com.jyp.main.data
 
 import com.jyp.core_network.jyp.JypApi
 import com.jyp.core_network.jyp.model.response.UserResponse

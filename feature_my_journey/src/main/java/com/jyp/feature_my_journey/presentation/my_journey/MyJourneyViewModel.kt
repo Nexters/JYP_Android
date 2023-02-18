@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
 import com.jyp.feature_my_journey.domain.GetJourneysUseCase
-import com.jyp.feature_my_journey.domain.GetMeUseCase
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.enumerate.ThemeType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,17 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyJourneyViewModel @Inject constructor(
-    private val getMeUseCase: GetMeUseCase,
     private val getJourneysUseCase: GetJourneysUseCase,
 ) : ViewModel() {
-    private val _userName = MutableStateFlow("")
-    val userName: StateFlow<String>
-        get() = _userName
-
-    private val _personality = MutableStateFlow("")
-    val personality: StateFlow<String>
-        get() = _personality
-
     private val _plannedJourneys = MutableStateFlow(listOf<Journey>())
     val plannedJourneys: StateFlow<List<Journey>>
         get() = _plannedJourneys
@@ -36,22 +26,6 @@ class MyJourneyViewModel @Inject constructor(
     private val _pastJourneys = MutableStateFlow(listOf<Journey>())
     val pastJourneys: StateFlow<List<Journey>>
         get() = _pastJourneys
-
-    private val _profileSelectedPosition = MutableStateFlow<Int?>(null)
-    val profileSelectedPosition: StateFlow<Int?>
-        get() = _profileSelectedPosition
-
-    fun fetchUser() {
-        viewModelScope.launch {
-            getMeUseCase.invoke()
-                .onSuccess { user ->
-                    _userName.value = user.name
-                    _personality.value = user.personality
-                }.onFailure {
-                    it.printStackTrace()
-                }
-        }
-    }
 
     fun fetchJourneyList() {
         viewModelScope.launch {
@@ -92,9 +66,5 @@ class MyJourneyViewModel @Inject constructor(
                     }
                 }
         }
-    }
-
-    fun selectProfile(position: Int) {
-        _profileSelectedPosition.value = position
     }
 }

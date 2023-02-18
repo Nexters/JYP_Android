@@ -1,4 +1,4 @@
-package com.jyp.feature_my_journey.domain
+package com.jyp.main.domain
 
 import com.jyp.core_network.jyp.model.response.UserResponse
 

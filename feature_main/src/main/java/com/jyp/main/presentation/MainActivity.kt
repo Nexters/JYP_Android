@@ -40,22 +40,22 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Screen(
-                    mainViewModel = mainViewModel,
-                    myJourneyViewModel = myJourneyViewModel,
-                    onClickCreateJourney = {
-                        startActivity(Intent(this, CreatePlannerActivity::class.java))
-                    },
-                    onClickPlanner = { plannerId ->
-                        startActivity(
-                            Intent(this, PlannerActivity::class.java).apply {
-                                putExtra(PlannerActivity.EXTRA_PLANNER_ID, plannerId)
-                            }
-                        )
-                    },
+                mainViewModel = mainViewModel,
+                myJourneyViewModel = myJourneyViewModel,
+                onClickCreateJourney = {
+                    startActivity(Intent(this, CreatePlannerActivity::class.java))
+                },
+                onClickPlanner = { plannerId ->
+                    startActivity(
+                        Intent(this, PlannerActivity::class.java).apply {
+                            putExtra(PlannerActivity.EXTRA_PLANNER_ID, plannerId)
+                        }
+                    )
+                },
             )
         }
 
-        myJourneyViewModel.fetchUser()
+        mainViewModel.fetchUser()
     }
 
     override fun onResume() {
@@ -67,10 +67,10 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun Screen(
-        mainViewModel: MainViewModel,
-        myJourneyViewModel: MyJourneyViewModel,
-        onClickCreateJourney: () -> Unit,
-        onClickPlanner: (id: String) -> Unit
+    mainViewModel: MainViewModel,
+    myJourneyViewModel: MyJourneyViewModel,
+    onClickCreateJourney: () -> Unit,
+    onClickPlanner: (id: String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -79,196 +79,198 @@ private fun Screen(
     }
 
     val modalBottomSheetState = rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Hidden,
+        initialValue = ModalBottomSheetValue.Hidden,
     )
 
     val myJourneyScreenItem = createMyJourneyScreenItem(
-            myJourneyViewModel = myJourneyViewModel,
-            onClickNewJourney = {
-                coroutineScope.launch {
-                    currentBottomSheetItem = MainBottomSheetItem.NewJourney
-                    modalBottomSheetState.show()
-                }
-            },
-            onClickPlanner = { journey ->
-                onClickPlanner.invoke(journey.id)
-            },
-            onClickMore = { journey ->
-                coroutineScope.launch {
-                    currentBottomSheetItem = MainBottomSheetItem.JourneyMore(journey)
-
-                    modalBottomSheetState.show()
-                }
+        mainViewModel = mainViewModel,
+        myJourneyViewModel = myJourneyViewModel,
+        onClickNewJourney = {
+            coroutineScope.launch {
+                currentBottomSheetItem = MainBottomSheetItem.NewJourney
+                modalBottomSheetState.show()
             }
+        },
+        onClickPlanner = { journey ->
+            onClickPlanner.invoke(journey.id)
+        },
+        onClickMore = { journey ->
+            coroutineScope.launch {
+                currentBottomSheetItem = MainBottomSheetItem.JourneyMore(journey)
+
+                modalBottomSheetState.show()
+            }
+        }
     )
 
     val anotherJourneyScreenItem = createAnotherJourneyScreenItem()
     val myPageScreenItem = createMyPageScreenItem()
 
     ModalBottomSheetLayout(
-            sheetState = modalBottomSheetState,
-            sheetContent = {
-                when (val bottomSheetItem = currentBottomSheetItem) {
-                    is MainBottomSheetItem.None -> {
-                        Box(
-                                modifier = Modifier
-                                    .background(JypColors.Background_grey300)
-                                    .size(1.dp)
-                        )
-                    }
-                    is MainBottomSheetItem.NewJourney -> {
-                        NewJourneyBottomSheetScreen(
-                            onClickCancelButton = {
-                                coroutineScope.launch {
-                                    modalBottomSheetState.hide()
-                                }
-                            },
-                            onClickCreateJourney = onClickCreateJourney,
-                            onClickJoinJourney = {
-                                coroutineScope.launch {
-                                    currentBottomSheetItem = MainBottomSheetItem.JoinJourney
-                                    modalBottomSheetState.show()
-                                }
-                            }
-                        )
-                    }
-                    is MainBottomSheetItem.JoinJourney -> {
-                        JoinJourneyBottomSheetScreen(
-                            onClickCancelButton = {
-                                coroutineScope.launch {
-                                    modalBottomSheetState.hide()
-                                }
-                            },
-                        )
-                    }
-                    is MainBottomSheetItem.JourneyMore -> {
-                        JourneyMoreBottomSheetScreen(
-                                journey = bottomSheetItem.journey,
-                                onClickRemove = { journey ->
-                                    currentBottomSheetItem = MainBottomSheetItem.ConfirmRemoveJourney(journey)
-                                },
-                        )
-                    }
-                    is MainBottomSheetItem.ConfirmRemoveJourney -> {
-                        ConfirmRemoveJourneyBottomSheetScreen(
-                                journey = bottomSheetItem.journey,
-                        )
-                    }
+        sheetState = modalBottomSheetState,
+        sheetContent = {
+            when (val bottomSheetItem = currentBottomSheetItem) {
+                is MainBottomSheetItem.None -> {
+                    Box(
+                        modifier = Modifier
+                            .background(JypColors.Background_grey300)
+                            .size(1.dp)
+                    )
                 }
-            },
-            sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                is MainBottomSheetItem.NewJourney -> {
+                    NewJourneyBottomSheetScreen(
+                        onClickCancelButton = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
+                            }
+                        },
+                        onClickCreateJourney = onClickCreateJourney,
+                        onClickJoinJourney = {
+                            coroutineScope.launch {
+                                currentBottomSheetItem = MainBottomSheetItem.JoinJourney
+                                modalBottomSheetState.show()
+                            }
+                        }
+                    )
+                }
+                is MainBottomSheetItem.JoinJourney -> {
+                    JoinJourneyBottomSheetScreen(
+                        onClickCancelButton = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
+                            }
+                        },
+                    )
+                }
+                is MainBottomSheetItem.JourneyMore -> {
+                    JourneyMoreBottomSheetScreen(
+                        journey = bottomSheetItem.journey,
+                        onClickRemove = { journey ->
+                            currentBottomSheetItem =
+                                MainBottomSheetItem.ConfirmRemoveJourney(journey)
+                        },
+                    )
+                }
+                is MainBottomSheetItem.ConfirmRemoveJourney -> {
+                    ConfirmRemoveJourneyBottomSheetScreen(
+                        journey = bottomSheetItem.journey,
+                    )
+                }
+            }
+        },
+        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
         MainScreen(
-                listOf(
-                        myJourneyScreenItem,
-                        anotherJourneyScreenItem,
-                        myPageScreenItem,
-                )
+            listOf(
+                myJourneyScreenItem,
+                anotherJourneyScreenItem,
+                myPageScreenItem,
+            )
         )
     }
 
-    SelectProfileScreen(myJourneyViewModel)
+    SelectProfileScreen(mainViewModel)
 }
 
 @Composable
-private fun SelectProfileScreen(myJourneyViewModel: MyJourneyViewModel) {
-    val selectedPosition by myJourneyViewModel.profileSelectedPosition.collectAsState()
-    val userName by myJourneyViewModel.userName.collectAsState()
-    val personality by myJourneyViewModel.personality.collectAsState()
+private fun SelectProfileScreen(mainViewModel: MainViewModel) {
+    val selectedPosition by mainViewModel.profileSelectedPosition.collectAsState()
+    val userName by mainViewModel.userName.collectAsState()
+    val personality by mainViewModel.personality.collectAsState()
 
     var isShow by remember {
         mutableStateOf(true)
     }
 
     AnimatedVisibility(
-            visible = isShow,
-            exit = slideOutVertically(
-                    targetOffsetY = { it },
-                    animationSpec = keyframes {
-                        durationMillis = 400
-                    }
-            ),
+        visible = isShow,
+        exit = slideOutVertically(
+            targetOffsetY = { it },
+            animationSpec = keyframes {
+                durationMillis = 400
+            }
+        ),
     ) {
         SelectProfileScreen(
-                name = userName,
-                personality = personality,
-                selectedPosition = selectedPosition,
-                showDim = isShow,
-                onSelectProfile = myJourneyViewModel::selectProfile,
-                submitProfile = {
-                    isShow = false
-                }
+            name = userName,
+            personality = personality,
+            selectedPosition = selectedPosition,
+            showDim = isShow,
+            onSelectProfile = mainViewModel::selectProfile,
+            submitProfile = {
+                isShow = false
+            }
         )
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 private fun createMyJourneyScreenItem(
-        myJourneyViewModel: MyJourneyViewModel,
-        onClickNewJourney: () -> Unit,
-        onClickPlanner: (Journey) -> Unit,
-        onClickMore: (Journey) -> Unit,
+    mainViewModel: MainViewModel,
+    myJourneyViewModel: MyJourneyViewModel,
+    onClickNewJourney: () -> Unit,
+    onClickPlanner: (Journey) -> Unit,
+    onClickMore: (Journey) -> Unit,
 ): MainScreenItem {
     return MainScreenItem(
-            navItem = BottomNavItem.MY_JOURNEY,
-            content = {
-                val userName by myJourneyViewModel.userName.collectAsState("")
-                val personality by myJourneyViewModel.personality.collectAsState("")
+        navItem = BottomNavItem.MY_JOURNEY,
+        content = {
+            val userName by mainViewModel.userName.collectAsState("")
+            val personality by mainViewModel.personality.collectAsState("")
 
-                val plannedJourneys by myJourneyViewModel.plannedJourneys.collectAsState()
-                val pastJourneys by myJourneyViewModel.pastJourneys.collectAsState()
+            val plannedJourneys by myJourneyViewModel.plannedJourneys.collectAsState()
+            val pastJourneys by myJourneyViewModel.pastJourneys.collectAsState()
 
-                GlobalNavigationBarLayout(
-                        color = GlobalNavigationBarColor.GREY,
-                        title = stringResource(id = BottomNavItem.MY_JOURNEY.labelRes),
-                        titleSize = 16.sp,
-                        titleFontWeight = FontWeight.Medium,
-                ) {
-                    MyJourneyScreen(
-                            journeyPropensity = personality,
-                            userName = userName,
-                            plannedJourneys = plannedJourneys,
-                            pastJourneys = pastJourneys,
-                            onClickNewJourney = onClickNewJourney,
-                            onClickPlanner = onClickPlanner,
-                            onClickMore = onClickMore,
-                    )
-                }
-
+            GlobalNavigationBarLayout(
+                color = GlobalNavigationBarColor.GREY,
+                title = stringResource(id = BottomNavItem.MY_JOURNEY.labelRes),
+                titleSize = 16.sp,
+                titleFontWeight = FontWeight.Medium,
+            ) {
+                MyJourneyScreen(
+                    journeyPropensity = personality,
+                    userName = userName,
+                    plannedJourneys = plannedJourneys,
+                    pastJourneys = pastJourneys,
+                    onClickNewJourney = onClickNewJourney,
+                    onClickPlanner = onClickPlanner,
+                    onClickMore = onClickMore,
+                )
             }
+
+        }
     )
 }
 
 private fun createAnotherJourneyScreenItem(): MainScreenItem {
     return MainScreenItem(
-            navItem = BottomNavItem.ANOTHER_JOURNEY,
-            content = {
-                GlobalNavigationBarLayout(
-                        color = GlobalNavigationBarColor.WHITE,
-                        title = stringResource(id = BottomNavItem.ANOTHER_JOURNEY.labelRes),
-                        titleSize = 16.sp,
-                        titleFontWeight = FontWeight.Medium,
-                ) {
-                    AnotherJourneyScreen()
-                }
+        navItem = BottomNavItem.ANOTHER_JOURNEY,
+        content = {
+            GlobalNavigationBarLayout(
+                color = GlobalNavigationBarColor.WHITE,
+                title = stringResource(id = BottomNavItem.ANOTHER_JOURNEY.labelRes),
+                titleSize = 16.sp,
+                titleFontWeight = FontWeight.Medium,
+            ) {
+                AnotherJourneyScreen()
             }
+        }
     )
 }
 
 private fun createMyPageScreenItem(): MainScreenItem {
     return MainScreenItem(
-            navItem = BottomNavItem.MY_PAGE,
-            content = {
-                GlobalNavigationBarLayout(
-                        color = GlobalNavigationBarColor.GREY,
-                        title = stringResource(id = BottomNavItem.MY_PAGE.labelRes),
-                        titleSize = 16.sp,
-                        titleFontWeight = FontWeight.Medium,
-                ) {
-                    MyPageScreen(
-                            journeyPropensity = "자유로운 탐험가",
-                    )
-                }
+        navItem = BottomNavItem.MY_PAGE,
+        content = {
+            GlobalNavigationBarLayout(
+                color = GlobalNavigationBarColor.GREY,
+                title = stringResource(id = BottomNavItem.MY_PAGE.labelRes),
+                titleSize = 16.sp,
+                titleFontWeight = FontWeight.Medium,
+            ) {
+                MyPageScreen(
+                    journeyPropensity = "자유로운 탐험가",
+                )
             }
+        }
     )
 }
