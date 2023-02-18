@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
 import com.jyp.main.domain.GetMeUseCase
+import com.jyp.main.domain.SetMyProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getMeUseCase: GetMeUseCase,
+    private val setMyProfileUseCase: SetMyProfileUseCase,
 ) : ViewModel() {
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String>
@@ -62,5 +64,19 @@ class MainViewModel @Inject constructor(
 
     fun selectProfile(position: Int) {
         _profileSelectedPosition.value = position
+    }
+
+    fun updateSelectedProfile() {
+        viewModelScope.launch {
+            when (profileSelectedPosition.value) {
+                0 -> setMyProfileUseCase.invoke(profileImagePath.value)
+                1 -> setMyProfileUseCase.invoke(personalityImagePath.value)
+                else -> return@launch
+            }
+                .onSuccess {  }
+                .onFailure {
+                    it.printStackTrace()
+                }
+        }
     }
 }

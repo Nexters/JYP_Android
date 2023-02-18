@@ -10,4 +10,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getMe(): UserResponse {
         return userDataSource.getMe()
     }
+
+    override suspend fun updateUserProfile(id: String, profileImagePath: String): UserResponse {
+        return userDataSource.updateUserProfile(id, profileImagePath)
+    }
 }

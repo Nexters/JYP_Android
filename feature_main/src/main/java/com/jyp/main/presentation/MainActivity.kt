@@ -203,6 +203,7 @@ private fun SelectProfileScreen(mainViewModel: MainViewModel) {
             onSelectProfile = mainViewModel::selectProfile,
             submitProfile = {
                 isShow = false
+                mainViewModel.updateSelectedProfile()
             }
         )
     }
