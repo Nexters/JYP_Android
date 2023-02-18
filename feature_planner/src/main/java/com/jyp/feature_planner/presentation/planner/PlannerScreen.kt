@@ -41,7 +41,7 @@ internal fun PlannerScreen(
     tagClick: (PlannerTag) -> Unit,
     planItems: List<PlanItem>,
     newPikMeClick: () -> Unit,
-    onClickEditRoute: () -> Unit,
+    onClickEditRoute: (day: Int) -> Unit,
     onClickInviteUserButton: () -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
@@ -137,7 +137,7 @@ private fun PlannerContent(
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
-    onClickEditRoute: () -> Unit,
+    onClickEditRoute: (day: Int) -> Unit,
 ) {
     Column(
         modifier = Modifier

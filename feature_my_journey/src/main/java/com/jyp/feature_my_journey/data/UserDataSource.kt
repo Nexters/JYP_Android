@@ -7,7 +7,7 @@ import javax.inject.Inject
 class UserDataSource @Inject constructor(
         private val jypApi: JypApi,
 ) {
-    suspend fun getUser(userId: String): UserResponse {
-        return jypApi.getUser(userId)
+    suspend fun getMe(): UserResponse {
+        return jypApi.getMe()
     }
 }

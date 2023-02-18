@@ -20,6 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jyp.core_network.jyp.model.enumerate.PlaceCategory
+import com.jyp.core_network.jyp.model.enumerate.getDrawableResourceId
 import com.jyp.feature_planner.R
 import com.jyp.feature_planner.domain.PlannerPiki
 import com.jyp.feature_planner.presentation.planner.model.PlanItem
@@ -31,7 +33,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @Composable
 internal fun PlannerJourneyPlanScreen(
     planItems: List<PlanItem>,
-    onClickEditRoute: () -> Unit,
+    onClickEditRoute: (day: Int) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -46,7 +48,9 @@ internal fun PlannerJourneyPlanScreen(
                 item {
                     PlanGroupItem(
                         day = planItem.day,
-                        onClickEditRoute = onClickEditRoute,
+                        onClickEditRoute = {
+                            onClickEditRoute.invoke(index)
+                        },
                     )
                     if (index != planItems.lastIndex) {
                         Spacer(modifier = Modifier.size(12.dp))
@@ -62,14 +66,17 @@ internal fun PlannerJourneyPlanScreen(
                 item {
                     PlanEachTitle(
                         day = planItem.day,
-                        onClickEditRoute = onClickEditRoute,
+                        onClickEditRoute = {
+                            onClickEditRoute.invoke(index)
+                        },
                     )
                     Spacer(modifier = Modifier.size(26.dp))
                 }
-                planItem.pikis.forEachIndexed { pikisIndex, pikis ->
+                planItem.pikis.forEachIndexed { pikisIndex, piki ->
                     item {
                         PlanEachItem(
                             order = pikisIndex + 1,
+                            piki = piki,
                         )
                         if (pikisIndex != planItem.pikis.lastIndex) {
                             PlanEachContentDivider()
@@ -164,6 +171,7 @@ private fun PlanEachTitle(
 @Composable
 private fun PlanEachItem(
     order: Int,
+    piki: PlannerPiki,
 ) {
     Row(
         modifier = Modifier
@@ -173,7 +181,9 @@ private fun PlanEachItem(
             order = order,
         )
         Spacer(modifier = Modifier.size(12.dp))
-        PlanEachContent()
+        PlanEachContent(
+            piki = piki
+        )
     }
 }
 
@@ -208,7 +218,9 @@ private fun PlanEachOrder(
 }
 
 @Composable
-private fun PlanEachContent() {
+private fun PlanEachContent(
+    piki: PlannerPiki,
+) {
     Row(
         modifier = Modifier
             .padding(end = 4.dp)
@@ -227,13 +239,13 @@ private fun PlanEachContent() {
     ) {
         Column {
             JypText(
-                text = "아르떼 뮤지엄",
+                text = piki.name,
                 type = TextType.TITLE_5,
                 color = JypColors.Text80,
             )
             Spacer(modifier = Modifier.size(4.dp))
             JypText(
-                text = "강원 강릉시 난설헌로 131",
+                text = piki.address,
                 type = TextType.BODY_4,
                 color = JypColors.Tag_grey200,
             )
@@ -243,12 +255,12 @@ private fun PlanEachContent() {
         ) {
             Image(
                 modifier = Modifier.size(35.dp),
-                painter = JypPainter.CulturalInstitution,
+                painter = painterResource(id = piki.categoryIconRes),
                 contentDescription = null,
             )
             Spacer(modifier = Modifier.size(4.dp))
             JypText(
-                text = "문화시설",
+                text = piki.category,
                 type = TextType.BODY_4,
                 color = JypColors.Tag_grey200,
             )
@@ -283,9 +295,36 @@ private fun PlannerJourneyPlanScreenPreview() {
             PlanItem(
                 day = 1,
                 pikis = listOf(
-                    PlannerPiki("아르떼", "우리집"),
-                    PlannerPiki("아르떼", "우리집"),
-                    PlannerPiki("아르떼", "우리집"),
+                    PlannerPiki(
+                        "아르떼",
+                        "우리집",
+                        "주소주소",
+                        "문화문화",
+                        PlaceCategory.R.getDrawableResourceId(),
+                        0.0,
+                        0.0,
+                        ""
+                    ),
+                    PlannerPiki(
+                        "아르떼",
+                        "우리집",
+                        "주소주소",
+                        "문화문화",
+                        PlaceCategory.R.getDrawableResourceId(),
+                        0.0,
+                        0.0,
+                        ""
+                    ),
+                    PlannerPiki(
+                        "아르떼",
+                        "우리집",
+                        "주소주소",
+                        "문화문화",
+                        PlaceCategory.R.getDrawableResourceId(),
+                        0.0,
+                        0.0,
+                        ""
+                    ),
                 ),
             ),
             PlanItem(
@@ -295,8 +334,26 @@ private fun PlannerJourneyPlanScreenPreview() {
             PlanItem(
                 day = 3,
                 pikis = listOf(
-                    PlannerPiki("아르떼", "우리집"),
-                    PlannerPiki("아르떼", "우리집"),
+                    PlannerPiki(
+                        "아르떼",
+                        "우리집",
+                        "주소주소",
+                        "문화문화",
+                        PlaceCategory.R.getDrawableResourceId(),
+                        0.0,
+                        0.0,
+                        ""
+                    ),
+                    PlannerPiki(
+                        "아르떼",
+                        "우리집",
+                        "주소주소",
+                        "문화문화",
+                        PlaceCategory.R.getDrawableResourceId(),
+                        0.0,
+                        0.0,
+                        ""
+                    ),
                 ),
             ),
         ),

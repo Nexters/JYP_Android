@@ -47,8 +47,23 @@ class PlannerActivity : ComponentActivity() {
                         }
                     )
                 },
-                onClickEditRoute = {
-                    startActivity(Intent(this, AddPlannerRouteActivity::class.java))
+                onClickEditRoute = { index ->
+                    startActivity(
+                        Intent(this, AddPlannerRouteActivity::class.java).apply {
+                            putExtra(
+                                AddPlannerRouteActivity.EXTRA_PIKMIS,
+                                ArrayList(viewModel.pikmis.value)
+                            )
+
+                            putExtra(
+                                AddPlannerRouteActivity.EXTRA_PIKIS,
+                                ArrayList(viewModel.planItems.value[index].pikis)
+                            )
+
+                            putExtra(AddPlannerRouteActivity.EXTRA_JOURNEY_ID, plannerId)
+                            putExtra(AddPlannerRouteActivity.EXTRA_DAY_INDEX, index)
+                        }
+                    )
                 }
             )
         }
@@ -72,11 +87,11 @@ class PlannerActivity : ComponentActivity() {
 private fun Screen(
     viewModel: PlannerViewModel,
     onClickInviteUserButton: () -> Unit,
-    onClickEditRoute: () -> Unit,
+    onClickEditRoute: (day: Int) -> Unit,
     onNewPikMeClick: () -> Unit,
 ) {
     val plannerDates by viewModel.plannerDates.collectAsState()
-    val pikMes by viewModel.pikMes.collectAsState()
+    val pikMes by viewModel.pikmis.collectAsState()
     val tags by viewModel.tags.collectAsState()
     val membersProfileUrl by viewModel.membersProfileUrl.collectAsState()
     val planItems by viewModel.planItems.collectAsState()

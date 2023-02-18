@@ -1,11 +1,12 @@
 package com.jyp.feature_my_journey.presentation.my_journey
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
-import com.jyp.feature_my_journey.domain.*
+import com.jyp.feature_my_journey.domain.GetJourneysUseCase
+import com.jyp.feature_my_journey.domain.GetMeUseCase
+import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.enumerate.ThemeType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyJourneyViewModel @Inject constructor(
-    private val getUserUseCase: GetUserUseCase,
+    private val getMeUseCase: GetMeUseCase,
     private val getJourneysUseCase: GetJourneysUseCase,
 ) : ViewModel() {
     private val _userName = MutableStateFlow("")
@@ -42,7 +43,7 @@ class MyJourneyViewModel @Inject constructor(
 
     fun fetchUser() {
         viewModelScope.launch {
-            getUserUseCase("kakao-556894")
+            getMeUseCase.invoke()
                 .onSuccess { user ->
                     _userName.value = user.name
                     _personality.value = user.personality
