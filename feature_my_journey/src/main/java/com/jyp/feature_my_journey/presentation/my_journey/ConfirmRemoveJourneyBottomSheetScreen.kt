@@ -15,6 +15,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @Composable
 fun ConfirmRemoveJourneyBottomSheetScreen(
     journey: Journey,
+    onClickCancelButton: () -> Unit,
     onClickLeaveJourney: () -> Unit
 ) {
     Column(
@@ -43,6 +44,7 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
                     buttonType = ButtonType.THICK,
                     buttonColorSet = ButtonColorSetType.GRAY,
                     enabled = true,
+                    onClickEnabled = onClickCancelButton
             )
             Spacer(modifier = Modifier.size(13.dp))
             JypTextButton(
@@ -51,7 +53,10 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
                     buttonType = ButtonType.THICK,
                     buttonColorSet = ButtonColorSetType.PINK,
                     enabled = true,
-                    onClickEnabled = onClickLeaveJourney
+                    onClickEnabled = {
+                        onClickLeaveJourney()
+                        onClickCancelButton()
+                    }
             )
         }
     }
@@ -62,6 +67,7 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
 private fun ConfirmRemoveJourneyBottomSheetScreenPreview() {
     ConfirmRemoveJourneyBottomSheetScreen(
         Journey("", "", "qwdqwd", ThemeType.DEFAULT, "", "", emptyList()),
+        onClickCancelButton = {},
         onClickLeaveJourney = {}
     )
 }
