@@ -23,13 +23,13 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
                     .padding(start = 24.dp, end = 24.dp, top = 28.dp, bottom = 28.dp)
     ) {
         JypText(
-                text = "${journey.title}를\n정말 삭제하시나요?",
+                text = "${journey.title}에서\n정말 나가시나요?",
                 type = TextType.TITLE_2,
                 color = JypColors.Text80,
         )
         Spacer(modifier = Modifier.size(8.dp))
         JypText(
-                text = "삭제한 플래너는 다시 확인할 수 없어요",
+                text = "나간 플래너는 다시 확인할 수 없어요",
                 type = TextType.BODY_2,
                 color = JypColors.Text75,
         )
