@@ -176,7 +176,9 @@ private fun Screen(
 private fun SelectProfileScreen(mainViewModel: MainViewModel) {
     val selectedPosition by mainViewModel.profileSelectedPosition.collectAsState()
     val userName by mainViewModel.userName.collectAsState()
+    val profileImagePath by mainViewModel.profileImagePath.collectAsState()
     val personality by mainViewModel.personality.collectAsState()
+    val personalityImagePath by mainViewModel.personalityImagePath.collectAsState()
 
     var isShow by remember {
         mutableStateOf(true)
@@ -193,7 +195,9 @@ private fun SelectProfileScreen(mainViewModel: MainViewModel) {
     ) {
         SelectProfileScreen(
             name = userName,
+            profileImagePath = profileImagePath,
             personality = personality,
+            personalityImagePath = personalityImagePath,
             selectedPosition = selectedPosition,
             showDim = isShow,
             onSelectProfile = mainViewModel::selectProfile,

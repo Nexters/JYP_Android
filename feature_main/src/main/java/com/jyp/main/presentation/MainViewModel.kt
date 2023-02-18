@@ -19,9 +19,17 @@ class MainViewModel @Inject constructor(
     val userName: StateFlow<String>
         get() = _userName
 
+    private val _profileImagePath = MutableStateFlow("")
+    val profileImagePath: StateFlow<String>
+        get() = _profileImagePath
+
     private val _personality = MutableStateFlow("")
     val personality: StateFlow<String>
         get() = _personality
+
+    private val _personalityImagePath = MutableStateFlow("")
+    val personalityImagePath: StateFlow<String>
+        get() = _personalityImagePath
 
     private val _profileSelectedPosition = MutableStateFlow<Int?>(null)
     val profileSelectedPosition: StateFlow<Int?>
@@ -32,10 +40,23 @@ class MainViewModel @Inject constructor(
             getMeUseCase.invoke()
                 .onSuccess { user ->
                     _userName.value = user.name
+                    _profileImagePath.value = user.profileImagePath
                     _personality.value = user.personality
+                    _personalityImagePath.value = user.personality.toPersonalityImagePath()
                 }.onFailure {
                     it.printStackTrace()
                 }
+        }
+    }
+
+    private fun String.toPersonalityImagePath(): String {
+        return when (this) {
+            "꼼꼼한 탐험가" -> "https://journeypiki.duckdns.org/static/profile_me.png"
+            "열정왕 탐험가" -> "https://journeypiki.duckdns.org/static/profile_pe.png"
+            "낭만적인 여행자" -> "https://journeypiki.duckdns.org/static/profile_rt.png"
+            "자유로운 방랑자" -> "https://journeypiki.duckdns.org/static/profile_fw.png"
+
+            else -> ""
         }
     }
 
