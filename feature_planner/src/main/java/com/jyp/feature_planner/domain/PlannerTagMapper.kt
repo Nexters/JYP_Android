@@ -2,6 +2,7 @@ package com.jyp.feature_planner.domain
 
 import com.jyp.core_network.jyp.model.Tag
 import com.jyp.core_network.jyp.model.enumerate.TagOrientation
+import com.jyp.core_network.jyp.model.request.JoinPlannerRequestBody
 import com.jyp.jyp_design.ui.tag.TagType
 
 class PlannerTagMapper {
@@ -14,6 +15,17 @@ class PlannerTagMapper {
             },
             content = tag.topic,
             selectPeople = tag.users.map { Person(it.name, it.profileImagePath) }
+        )
+    }
+
+    fun toJoinTag(plannerTag: PlannerTag): JoinPlannerRequestBody.Tag {
+        return JoinPlannerRequestBody.Tag(
+            topic = plannerTag.content,
+            orientation = when (plannerTag.type) {
+                TagType.Dislike -> TagOrientation.DISLIKE
+                TagType.Like -> TagOrientation.LIKE
+                TagType.Soso -> TagOrientation.NO_MATTER
+            }
         )
     }
 
