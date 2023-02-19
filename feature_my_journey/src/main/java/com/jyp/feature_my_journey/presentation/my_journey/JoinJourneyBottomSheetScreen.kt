@@ -26,12 +26,14 @@ import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.text_input.JypTextInput
 import com.jyp.jyp_design.ui.text_input.TextInputType
 import com.jyp.jyp_design.ui.typography.type.TextType
+import kotlinx.coroutines.coroutineScope
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun JoinJourneyBottomSheetScreen(
-    onClickCancelButton: () -> Unit
+    onClickCancelButton: () -> Unit,
+    onClickNextButton: (String) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     var joinCodeFromTextInput by remember { mutableStateOf("") }
@@ -65,7 +67,8 @@ fun JoinJourneyBottomSheetScreen(
                     keyboard?.show()
                 }
             },
-            onClickJoinCodeFromClipboard = { joinCodeFromTextInput = it }
+            onClickJoinCodeFromClipboard = { joinCodeFromTextInput = it },
+            onClickNextButton = { onClickNextButton(joinCodeFromTextInput) }
         )
     }
 }
@@ -102,7 +105,8 @@ private fun Content(
     focusRequester: FocusRequester,
     joinCodeFromTextInput: String,
     onJoinCodeChanged: (String) -> Unit,
-    onClickJoinCodeFromClipboard: (String) -> Unit
+    onClickJoinCodeFromClipboard: (String) -> Unit,
+    onClickNextButton: () -> Unit
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val joinCodeFromClipboard = clipboardManager.getText()?.text
@@ -159,7 +163,8 @@ private fun Content(
             buttonType = ButtonType.THICK,
             modifier = Modifier.fillMaxWidth(),
             buttonColorSet = ButtonColorSetType.PINK,
-            enabled = joinCodeFromTextInput.isNotBlank()
+            enabled = joinCodeFromTextInput.isNotBlank(),
+            onClickEnabled = onClickNextButton
         )
     }
 
@@ -173,6 +178,7 @@ private fun Content(
 @Composable
 fun JoinJourneyBottomSheetScreenPreview() {
     JoinJourneyBottomSheetScreen(
-        onClickCancelButton = {}
+        onClickCancelButton = {},
+        onClickNextButton = {}
     )
 }

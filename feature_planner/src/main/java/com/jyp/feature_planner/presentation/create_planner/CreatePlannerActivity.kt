@@ -18,8 +18,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.jyp.feature_planner.domain.UiState
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.create_planner.model.*
+import com.jyp.feature_planner.presentation.planner.PlannerActivity
+import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EXTRA_PLANNER_ID
 import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
@@ -42,8 +48,13 @@ class CreatePlannerActivity : AppCompatActivity() {
         intent.getSerializableExtra(EXTRA_CREATE_PLANNER_DATE) as? Pair<Long, Long>
     }
 
+    private val plannerId: String? by lazy {
+        intent.getStringExtra(EXTRA_PLANNER_ID)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initStateFlowCollector()
         setContent {
             Screen(
                 viewModel = viewModel,
@@ -74,21 +85,55 @@ class CreatePlannerActivity : AppCompatActivity() {
                     )
                 },
                 submitOnTaste = { tags ->
-                    viewModel.createPlanner(
-                        title ?: return@Screen,
-                        themeType?.imagePath ?: return@Screen,
-                        date?.first ?: return@Screen,
-                        date?.second ?: return@Screen,
-                        tags,
-                    )
-
+                    when (plannerId.isNullOrBlank()) {
+                        true -> viewModel.createPlanner(
+                            title ?: return@Screen,
+                            themeType?.imagePath ?: return@Screen,
+                            date?.first ?: return@Screen,
+                            date?.second ?: return@Screen,
+                            tags,
+                        )
+                        false -> viewModel.joinPlanner(
+                            plannerId ?: "",
+                            tags
+                        )
+                    }
                     finishAffinity()
                 }
             )
         }
     }
 
+    private fun initStateFlowCollector() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.joinPlannerUiState.collect { it ->
+                    when (it) {
+                        is UiState.Loading -> {}
+                        is UiState.Success -> startActivity(
+                            Intent(this@CreatePlannerActivity, PlannerActivity::class.java).apply {
+                                putExtra(EXTRA_PLANNER_ID, plannerId)
+                            }
+                        )
+                        is UiState.Failure -> { // Todo: Show bottom sheet.
+                            Intent().let { intent -> // Todo: Pass data back to main activity.
+                                intent.setClassName(this@CreatePlannerActivity.packageName, "com.jyp.main.presentation.MainActivity")
+                                intent.putExtra(JOIN_PLANNER_ERROR_TITLE, it.throwable.message)
+                                intent.putExtra(JOIN_PLANNER_ERROR_BODY, it.throwable.localizedMessage)
+                                setResult(RESULT_OK, intent)
+//                                finish()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
+        const val JOIN_PLANNER_ERROR_TITLE = "JOIN_PLANNER_ERROR_TITLE"
+        const val JOIN_PLANNER_ERROR_BODY = "JOIN_PLANNER_ERROR_BODY"
+
         const val EXTRA_CREATE_PLANNER_STEP = "EXTRA_CREATE_PLANNER_STEP"
         const val EXTRA_CREATE_PLANNER_TITLE = "EXTRA_CREATE_PLANNER_TITLE"
         const val EXTRA_CREATE_PLANNER_THEME_TYPE = "EXTRA_CREATE_PLANNER_THEME_TYPE"

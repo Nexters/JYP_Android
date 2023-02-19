@@ -8,12 +8,6 @@ sealed class UiState {
         ) : UiState()
 
     data class Failure(
-        val joinPlannerFailure: JoinPlannerFailure
-    ) : UiState() {
-
-        data class JoinPlannerFailure (
-            val title: String,
-            val body: String
-        ): java.io.Serializable
-    }
+        val throwable: Throwable
+    ) : UiState()
 }
