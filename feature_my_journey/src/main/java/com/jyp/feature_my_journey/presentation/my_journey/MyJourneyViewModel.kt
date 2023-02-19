@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
 import com.jyp.feature_my_journey.domain.GetJourneysUseCase
+import com.jyp.feature_my_journey.domain.LeaveJourneyUseCase
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.jyp_design.enumerate.ThemeType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyJourneyViewModel @Inject constructor(
     private val getJourneysUseCase: GetJourneysUseCase,
+    private val leaveJourneyUseCase: LeaveJourneyUseCase
 ) : ViewModel() {
     private val _plannedJourneys = MutableStateFlow(listOf<Journey>())
     val plannedJourneys: StateFlow<List<Journey>>
@@ -64,6 +66,21 @@ class MyJourneyViewModel @Inject constructor(
                             profileUrls = journey.users.map { it.profileImagePath },
                         )
                     }
+                }
+                .onFailure { e ->
+                    e.printStackTrace()
+                }
+        }
+    }
+
+    fun leaveJourney(journeyId: String) {
+        viewModelScope.launch {
+            leaveJourneyUseCase.invoke(journeyId)
+                .onSuccess { _ ->
+                    fetchJourneyList()
+                }
+                .onFailure { throwable ->
+                    throwable.printStackTrace()
                 }
         }
     }

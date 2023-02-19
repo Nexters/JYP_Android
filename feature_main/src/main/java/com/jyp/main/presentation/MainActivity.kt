@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jyp.core_network.jyp.USER_ID
 import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.feature_my_journey.presentation.my_journey.*
@@ -107,58 +106,65 @@ private fun Screen(
     val myPageScreenItem = createMyPageScreenItem()
 
     ModalBottomSheetLayout(
-        sheetState = modalBottomSheetState,
-        sheetContent = {
-            when (val bottomSheetItem = currentBottomSheetItem) {
-                is MainBottomSheetItem.None -> {
-                    Box(
-                        modifier = Modifier
-                            .background(JypColors.Background_grey300)
-                            .size(1.dp)
-                    )
-                }
-                is MainBottomSheetItem.NewJourney -> {
-                    NewJourneyBottomSheetScreen(
-                        onClickCancelButton = {
-                            coroutineScope.launch {
-                                modalBottomSheetState.hide()
+            sheetState = modalBottomSheetState,
+            sheetContent = {
+                when (val bottomSheetItem = currentBottomSheetItem) {
+                    is MainBottomSheetItem.None -> {
+                        Box(
+                                modifier = Modifier
+                                    .background(JypColors.Background_grey300)
+                                    .size(1.dp)
+                        )
+                    }
+                    is MainBottomSheetItem.NewJourney -> {
+                        NewJourneyBottomSheetScreen(
+                            onClickCancelButton = {
+                                coroutineScope.launch {
+                                    modalBottomSheetState.hide()
+                                }
+                            },
+                            onClickCreateJourney = onClickCreateJourney,
+                            onClickJoinJourney = {
+                                coroutineScope.launch {
+                                    currentBottomSheetItem = MainBottomSheetItem.JoinJourney
+                                    modalBottomSheetState.show()
+                                }
                             }
-                        },
-                        onClickCreateJourney = onClickCreateJourney,
-                        onClickJoinJourney = {
-                            coroutineScope.launch {
-                                currentBottomSheetItem = MainBottomSheetItem.JoinJourney
-                                modalBottomSheetState.show()
-                            }
-                        }
-                    )
+                        )
+                    }
+                    is MainBottomSheetItem.JoinJourney -> {
+                        JoinJourneyBottomSheetScreen(
+                            onClickCancelButton = {
+                                coroutineScope.launch {
+                                    modalBottomSheetState.hide()
+                                }
+                            },
+                        )
+                    }
+                    is MainBottomSheetItem.JourneyMore -> {
+                        JourneyMoreBottomSheetScreen(
+                                journey = bottomSheetItem.journey,
+                                onClickRemove = { journey ->
+                                    currentBottomSheetItem = MainBottomSheetItem.ConfirmRemoveJourney(journey)
+                                },
+                        )
+                    }
+                    is MainBottomSheetItem.ConfirmRemoveJourney -> {
+                        ConfirmRemoveJourneyBottomSheetScreen(
+                                journey = bottomSheetItem.journey,
+                                onClickCancelButton = {
+                                    coroutineScope.launch {
+                                        modalBottomSheetState.hide()
+                                    }
+                                },
+                                onClickLeaveJourney = {
+                                    myJourneyViewModel.leaveJourney(bottomSheetItem.journey.id)
+                                }
+                        )
+                    }
                 }
-                is MainBottomSheetItem.JoinJourney -> {
-                    JoinJourneyBottomSheetScreen(
-                        onClickCancelButton = {
-                            coroutineScope.launch {
-                                modalBottomSheetState.hide()
-                            }
-                        },
-                    )
-                }
-                is MainBottomSheetItem.JourneyMore -> {
-                    JourneyMoreBottomSheetScreen(
-                        journey = bottomSheetItem.journey,
-                        onClickRemove = { journey ->
-                            currentBottomSheetItem =
-                                MainBottomSheetItem.ConfirmRemoveJourney(journey)
-                        },
-                    )
-                }
-                is MainBottomSheetItem.ConfirmRemoveJourney -> {
-                    ConfirmRemoveJourneyBottomSheetScreen(
-                        journey = bottomSheetItem.journey,
-                    )
-                }
-            }
-        },
-        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+            },
+            sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
         MainScreen(
             listOf(

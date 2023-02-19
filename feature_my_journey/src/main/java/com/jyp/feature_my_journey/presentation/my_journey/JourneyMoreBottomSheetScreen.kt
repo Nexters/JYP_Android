@@ -30,7 +30,7 @@ fun JourneyMoreBottomSheetScreen(
                 options = listOf(
                         MyJourneyMoreOption(
                                 icon = painterResource(id = R.drawable.ic_delete),
-                                title = "삭제하기",
+                                title = "나가기",
                                 onClickOption = {
                                     onClickRemove.invoke(journey)
                                 }

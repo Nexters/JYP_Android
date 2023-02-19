@@ -37,6 +37,11 @@ interface JypApi {
     @GET("journeys/{id}")
     suspend fun getPlanner(@Path("id") id: String): PlannerResponse
 
+    @POST("/journeys/{id}/drop")
+    suspend fun leaveJourney(
+        @Path("id") id: String
+    ): JypBaseResponse<Any>
+
     @POST("journeys/{id}/pikmis")
     suspend fun addPikme(
         @Path("id") plannerId: String,
