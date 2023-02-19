@@ -26,7 +26,6 @@ import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.text_input.JypTextInput
 import com.jyp.jyp_design.ui.text_input.TextInputType
 import com.jyp.jyp_design.ui.typography.type.TextType
-import kotlinx.coroutines.coroutineScope
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -44,6 +43,7 @@ fun JoinJourneyBottomSheetScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .fillMaxHeight(0.9f)
             .padding(
                 start = 24.dp,
                 end = 24.dp,
@@ -57,6 +57,7 @@ fun JoinJourneyBottomSheetScreen(
         })
         Spacer(modifier = Modifier.size(32.dp))
         Content(
+            modifier = Modifier.weight(1f),
             keyboard = keyboard,
             focusRequester = focusRequester,
             joinCodeFromTextInput = joinCodeFromTextInput,
@@ -68,7 +69,14 @@ fun JoinJourneyBottomSheetScreen(
                 }
             },
             onClickJoinCodeFromClipboard = { joinCodeFromTextInput = it },
-            onClickNextButton = { onClickNextButton(joinCodeFromTextInput) }
+        )
+        JypTextButton(
+            text = stringResource(id = com.jyp.jyp_design.R.string.button_next),
+            buttonType = ButtonType.THICK,
+            modifier = Modifier.fillMaxWidth(),
+            buttonColorSet = ButtonColorSetType.PINK,
+            enabled = joinCodeFromTextInput.isNotBlank(),
+            onClickEnabled = { onClickNextButton(joinCodeFromTextInput) }
         )
     }
 }
@@ -101,18 +109,20 @@ private fun Header(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Content(
+    modifier: Modifier,
     keyboard: SoftwareKeyboardController?,
     focusRequester: FocusRequester,
     joinCodeFromTextInput: String,
     onJoinCodeChanged: (String) -> Unit,
-    onClickJoinCodeFromClipboard: (String) -> Unit,
-    onClickNextButton: () -> Unit
+    onClickJoinCodeFromClipboard: (String) -> Unit
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val joinCodeFromClipboard = clipboardManager.getText()?.text
 
 
-    Column(modifier = Modifier.fillMaxWidth(1f)) {
+    Column(
+        modifier = modifier
+    ) {
         JypText(
             text = "참여 코드",
             type = TextType.BODY_3,
@@ -155,17 +165,6 @@ private fun Content(
                 color = JypColors.Sub_blue300
             )
         }
-        Spacer(modifier = Modifier.height(420.dp))
-        Spacer(modifier = Modifier.height(12.dp))
-
-        JypTextButton(
-            text = stringResource(id = com.jyp.jyp_design.R.string.button_next),
-            buttonType = ButtonType.THICK,
-            modifier = Modifier.fillMaxWidth(),
-            buttonColorSet = ButtonColorSetType.PINK,
-            enabled = joinCodeFromTextInput.isNotBlank(),
-            onClickEnabled = onClickNextButton
-        )
     }
 
     LaunchedEffect(Unit) {
