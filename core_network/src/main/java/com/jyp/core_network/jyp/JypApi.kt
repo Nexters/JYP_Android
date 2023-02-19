@@ -22,6 +22,12 @@ interface JypApi {
     @GET("users/me")
     suspend fun getMe(): UserResponse
 
+    @PATCH("users/{id}")
+    suspend fun updateUserProfile(
+        @Path("id") id: String,
+        @Body setProfileRequestBody: SetProfileRequestBody,
+    ): UserResponse
+
     @GET("journeys")
     suspend fun getJourneys(): JourneysResponse
 
@@ -36,6 +42,11 @@ interface JypApi {
 
     @GET("journeys/{id}")
     suspend fun getPlanner(@Path("id") id: String): PlannerResponse
+
+    @POST("/journeys/{id}/drop")
+    suspend fun leaveJourney(
+        @Path("id") id: String
+    ): JypBaseResponse<Any>
 
     @POST("journeys/{id}/pikmis")
     suspend fun addPikme(
