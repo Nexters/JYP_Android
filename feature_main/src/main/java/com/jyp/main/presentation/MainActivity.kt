@@ -164,7 +164,12 @@ private fun Screen(
                                     modalBottomSheetState.hide()
                                 }
                             },
-                            onClickCreateJourney = onClickCreateJourney,
+                            onClickCreateJourney = {
+                                onClickCreateJourney()
+                                coroutineScope.launch {
+                                    modalBottomSheetState.hide()
+                                }
+                            },
                             onClickJoinJourney = {
                                 coroutineScope.launch {
                                     currentBottomSheetItem = MainBottomSheetItem.JoinJourney
