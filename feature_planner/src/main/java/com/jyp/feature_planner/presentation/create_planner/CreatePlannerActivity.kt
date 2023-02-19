@@ -86,19 +86,21 @@ class CreatePlannerActivity : AppCompatActivity() {
                 },
                 submitOnTaste = { tags ->
                     when (plannerId.isNullOrBlank()) {
-                        true -> viewModel.createPlanner(
-                            title ?: return@Screen,
-                            themeType?.imagePath ?: return@Screen,
-                            date?.first ?: return@Screen,
-                            date?.second ?: return@Screen,
-                            tags,
-                        )
+                        true -> {
+                            viewModel.createPlanner(
+                                title ?: return@Screen,
+                                themeType?.imagePath ?: return@Screen,
+                                date?.first ?: return@Screen,
+                                date?.second ?: return@Screen,
+                                tags,
+                            )
+                            finish()
+                        }
                         false -> viewModel.joinPlanner(
                             plannerId ?: "",
                             tags
                         )
                     }
-                    finishAffinity()
                 }
             )
         }
@@ -115,13 +117,13 @@ class CreatePlannerActivity : AppCompatActivity() {
                                 putExtra(EXTRA_PLANNER_ID, plannerId)
                             }
                         )
-                        is UiState.Failure -> { // Todo: Show bottom sheet.
-                            Intent().let { intent -> // Todo: Pass data back to main activity.
+                        is UiState.Failure -> {
+                            Intent().let { intent ->
                                 intent.setClassName(this@CreatePlannerActivity.packageName, "com.jyp.main.presentation.MainActivity")
                                 intent.putExtra(JOIN_PLANNER_ERROR_TITLE, it.throwable.message)
                                 intent.putExtra(JOIN_PLANNER_ERROR_BODY, it.throwable.localizedMessage)
-                                setResult(RESULT_OK, intent)
-//                                finish()
+                                setResult(RESULT_CODE_JOIN_PLANNER_FAILURE, intent)
+                                finish()
                             }
                         }
                     }
@@ -131,6 +133,8 @@ class CreatePlannerActivity : AppCompatActivity() {
     }
 
     companion object {
+        const val RESULT_CODE_JOIN_PLANNER_FAILURE = 1000
+
         const val JOIN_PLANNER_ERROR_TITLE = "JOIN_PLANNER_ERROR_TITLE"
         const val JOIN_PLANNER_ERROR_BODY = "JOIN_PLANNER_ERROR_BODY"
 
