@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jyp.core_network.jyp.USER_ID
 import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.feature_my_journey.presentation.my_journey.*
@@ -152,6 +151,14 @@ private fun Screen(
                     is MainBottomSheetItem.ConfirmRemoveJourney -> {
                         ConfirmRemoveJourneyBottomSheetScreen(
                                 journey = bottomSheetItem.journey,
+                                onClickCancelButton = {
+                                    coroutineScope.launch {
+                                        modalBottomSheetState.hide()
+                                    }
+                                },
+                                onClickLeaveJourney = {
+                                    myJourneyViewModel.leaveJourney(bottomSheetItem.journey.id)
+                                }
                         )
                     }
                 }

@@ -3,7 +3,6 @@ package com.jyp.feature_my_journey.presentation.my_journey
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_my_journey.domain.Journey
@@ -15,21 +14,23 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 fun ConfirmRemoveJourneyBottomSheetScreen(
-        journey: Journey,
+    journey: Journey,
+    onClickCancelButton: () -> Unit,
+    onClickLeaveJourney: () -> Unit
 ) {
     Column(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 28.dp, bottom = 28.dp)
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 28.dp, bottom = 28.dp)
     ) {
         JypText(
-                text = "${journey.title}를\n정말 삭제하시나요?",
+                text = "${journey.title}에서\n정말 나가시나요?",
                 type = TextType.TITLE_2,
                 color = JypColors.Text80,
         )
         Spacer(modifier = Modifier.size(8.dp))
         JypText(
-                text = "삭제한 플래너는 다시 확인할 수 없어요",
+                text = "나간 플래너는 다시 확인할 수 없어요",
                 type = TextType.BODY_2,
                 color = JypColors.Text75,
         )
@@ -43,6 +44,7 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
                     buttonType = ButtonType.THICK,
                     buttonColorSet = ButtonColorSetType.GRAY,
                     enabled = true,
+                    onClickEnabled = onClickCancelButton
             )
             Spacer(modifier = Modifier.size(13.dp))
             JypTextButton(
@@ -51,6 +53,10 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
                     buttonType = ButtonType.THICK,
                     buttonColorSet = ButtonColorSetType.PINK,
                     enabled = true,
+                    onClickEnabled = {
+                        onClickLeaveJourney()
+                        onClickCancelButton()
+                    }
             )
         }
     }
@@ -59,5 +65,9 @@ fun ConfirmRemoveJourneyBottomSheetScreen(
 @Composable
 @Preview(showBackground = true)
 private fun ConfirmRemoveJourneyBottomSheetScreenPreview() {
-    ConfirmRemoveJourneyBottomSheetScreen(Journey("", "", "qwdqwd", ThemeType.DEFAULT, "", "", emptyList()))
+    ConfirmRemoveJourneyBottomSheetScreen(
+        Journey("", "", "qwdqwd", ThemeType.DEFAULT, "", "", emptyList()),
+        onClickCancelButton = {},
+        onClickLeaveJourney = {}
+    )
 }
