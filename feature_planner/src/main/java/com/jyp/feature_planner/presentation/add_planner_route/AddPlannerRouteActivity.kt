@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.sp
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddPlannerRouteActivity : ComponentActivity() {
@@ -27,6 +26,7 @@ class AddPlannerRouteActivity : ComponentActivity() {
         setContent {
             Screen(
                 viewModel = viewModel,
+                onClickBackAction = this::finish
             )
         }
     }
@@ -42,6 +42,7 @@ class AddPlannerRouteActivity : ComponentActivity() {
 @Composable
 private fun Screen(
     viewModel: AddPlannerRouteViewModel,
+    onClickBackAction: () -> Unit,
 ) {
     val pikmis by viewModel.pikmis.collectAsState()
     val pikis by viewModel.pikis.collectAsState()
@@ -52,7 +53,7 @@ private fun Screen(
         titleFontWeight = FontWeight.SemiBold,
         titleSize = 20.sp,
         description = "7월 18일",
-        backAction = {},
+        backAction = onClickBackAction,
         activeBack = true,
     ) {
         val activity = LocalContext.current as? Activity

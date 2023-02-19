@@ -83,7 +83,8 @@ class CreatePlannerActivity : AppCompatActivity() {
                     )
 
                     finishAffinity()
-                }
+                },
+                onClickBackAction = this::finish
             )
         }
     }
@@ -105,6 +106,7 @@ private fun Screen(
     selectDateClick: () -> Unit,
     submitOnDate: (Long, Long) -> Unit,
     submitOnTaste: (List<PlannerTag>) -> Unit,
+    onClickBackAction: () -> Unit,
 ) {
     val startDateMillis by viewModel.startDateMillis.collectAsState()
     val endDateMillis by viewModel.endDateMillis.collectAsState()
@@ -173,6 +175,7 @@ private fun Screen(
                 titleSize = 16.sp,
                 titleFontWeight = FontWeight.Medium,
                 activeBack = true,
+                backAction = onClickBackAction,
             ) {
                 CreatePlannerScreen(
                     step = step,
