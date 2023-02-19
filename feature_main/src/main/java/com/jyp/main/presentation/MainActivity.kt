@@ -71,14 +71,14 @@ class MainActivity : ComponentActivity() {
                 onClickCreateJourney = {
                     startActivity(Intent(this, CreatePlannerActivity::class.java))
                 },
-                    onClickJoinJourneyNextButton = { plannerId ->
-                        joinJourneyResult.launch(
-                            Intent(this, CreatePlannerActivity::class.java).apply {
-                                putExtra(EXTRA_PLANNER_ID, plannerId)
-                                putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
-                            }
-                        )
-                    },
+                onClickJoinJourneyNextButton = { plannerId ->
+                    joinJourneyResult.launch(
+                        Intent(this, CreatePlannerActivity::class.java).apply {
+                            putExtra(EXTRA_PLANNER_ID, plannerId)
+                            putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
+                        }
+                    )
+                },
                 onClickPlanner = { plannerId ->
                     startActivity(
                         Intent(this, PlannerActivity::class.java).apply {
@@ -86,8 +86,8 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 },
-                    joinPlannerFailureTitle = joinPlannerErrorTitle,
-                    joinPlannerFailureBody = joinPlannerErrorBody
+                joinPlannerFailureTitle = joinPlannerErrorTitle,
+                joinPlannerFailureBody = joinPlannerErrorBody
             )
         }
 
@@ -119,7 +119,7 @@ private fun Screen(
     }
 
     val modalBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
+        initialValue = ModalBottomSheetValue.Hidden
     )
 
     val myJourneyScreenItem = createMyJourneyScreenItem(
@@ -137,7 +137,6 @@ private fun Screen(
         onClickMore = { journey ->
             coroutineScope.launch {
                 currentBottomSheetItem = MainBottomSheetItem.JourneyMore(journey)
-
                 modalBottomSheetState.show()
             }
         }
@@ -147,91 +146,91 @@ private fun Screen(
     val myPageScreenItem = createMyPageScreenItem()
 
     ModalBottomSheetLayout(
-            sheetState = modalBottomSheetState,
-            sheetContent = {
-                when (val bottomSheetItem = currentBottomSheetItem) {
-                    is MainBottomSheetItem.None -> {
-                        Box(
-                                modifier = Modifier
-                                    .background(JypColors.Background_grey300)
-                                    .size(1.dp)
-                        )
-                    }
-                    is MainBottomSheetItem.NewJourney -> {
-                        NewJourneyBottomSheetScreen(
-                            onClickCancelButton = {
-                                coroutineScope.launch {
-                                    modalBottomSheetState.hide()
-                                }
-                            },
-                            onClickCreateJourney = {
-                                onClickCreateJourney()
-                                coroutineScope.launch {
-                                    modalBottomSheetState.hide()
-                                }
-                            },
-                            onClickJoinJourney = {
-                                coroutineScope.launch {
-                                    currentBottomSheetItem = MainBottomSheetItem.JoinJourney
-                                    modalBottomSheetState.show()
-                                }
+        sheetState = modalBottomSheetState,
+        sheetContent = {
+            when (val bottomSheetItem = currentBottomSheetItem) {
+                is MainBottomSheetItem.None -> {
+                    Box(
+                        modifier = Modifier
+                            .background(JypColors.Background_grey300)
+                            .size(1.dp)
+                    )
+                }
+                is MainBottomSheetItem.NewJourney -> {
+                    NewJourneyBottomSheetScreen(
+                        onClickCancelButton = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
                             }
-                        )
-                    }
-                    is MainBottomSheetItem.JoinJourney -> {
-                        JoinJourneyBottomSheetScreen(
-                            onClickCancelButton = {
-                                coroutineScope.launch {
-                                    modalBottomSheetState.hide()
-                                }
-                            },
-                            onClickNextButton = { plannerId ->
-                                onClickJoinJourneyNextButton(plannerId)
-                                coroutineScope.launch {
-                                    modalBottomSheetState.hide()
-                                }
+                        },
+                        onClickCreateJourney = {
+                            onClickCreateJourney()
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
                             }
-                        )
-                    }
-                    is MainBottomSheetItem.FailToJoinJourney -> {
-                        joinPlannerFailureTitle?.let { title ->
-                            joinPlannerFailureBody?.let { body ->
-                                FailToJoinJourneyBottomSheetScreen(
-                                    failToJoinJourneyTitle = title,
-                                    failToJoinJourneyBody = body,
-                                    onClickConfirmButton = {
-                                        coroutineScope.launch {
-                                            modalBottomSheetState.hide()
-                                        }
-                                    }
-                                )
+                        },
+                        onClickJoinJourney = {
+                            coroutineScope.launch {
+                                currentBottomSheetItem = MainBottomSheetItem.JoinJourney
+                                modalBottomSheetState.show()
                             }
                         }
-                    }
-                    is MainBottomSheetItem.JourneyMore -> {
-                        JourneyMoreBottomSheetScreen(
-                                journey = bottomSheetItem.journey,
-                                onClickRemove = { journey ->
-                                    currentBottomSheetItem = MainBottomSheetItem.ConfirmRemoveJourney(journey)
-                                },
-                        )
-                    }
-                    is MainBottomSheetItem.ConfirmRemoveJourney -> {
-                        ConfirmRemoveJourneyBottomSheetScreen(
-                                journey = bottomSheetItem.journey,
-                                onClickCancelButton = {
+                    )
+                }
+                is MainBottomSheetItem.JoinJourney -> {
+                    JoinJourneyBottomSheetScreen(
+                        onClickCancelButton = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
+                            }
+                        },
+                        onClickNextButton = { plannerId ->
+                            onClickJoinJourneyNextButton(plannerId)
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
+                            }
+                        }
+                    )
+                }
+                is MainBottomSheetItem.FailToJoinJourney -> {
+                    joinPlannerFailureTitle?.let { title ->
+                        joinPlannerFailureBody?.let { body ->
+                            FailToJoinJourneyBottomSheetScreen(
+                                failToJoinJourneyTitle = title,
+                                failToJoinJourneyBody = body,
+                                onClickConfirmButton = {
                                     coroutineScope.launch {
                                         modalBottomSheetState.hide()
                                     }
-                                },
-                                onClickLeaveJourney = {
-                                    myJourneyViewModel.leaveJourney(bottomSheetItem.journey.id)
                                 }
-                        )
+                            )
+                        }
                     }
                 }
-            },
-            sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                is MainBottomSheetItem.JourneyMore -> {
+                    JourneyMoreBottomSheetScreen(
+                        journey = bottomSheetItem.journey,
+                        onClickRemove = { journey ->
+                            currentBottomSheetItem = MainBottomSheetItem.ConfirmRemoveJourney(journey)
+                        },
+                    )
+                }
+                is MainBottomSheetItem.ConfirmRemoveJourney -> {
+                    ConfirmRemoveJourneyBottomSheetScreen(
+                        journey = bottomSheetItem.journey,
+                        onClickCancelButton = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
+                            }
+                        },
+                        onClickLeaveJourney = {
+                            myJourneyViewModel.leaveJourney(bottomSheetItem.journey.id)
+                        }
+                    )
+                }
+            }
+        },
+        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     ) {
         MainScreen(
             listOf(
@@ -294,7 +293,6 @@ private fun createMyJourneyScreenItem(
         content = {
             val userName by mainViewModel.userName.collectAsState("")
             val personality by mainViewModel.personality.collectAsState("")
-
             val plannedJourneys by myJourneyViewModel.plannedJourneys.collectAsState()
             val pastJourneys by myJourneyViewModel.pastJourneys.collectAsState()
 
@@ -314,7 +312,6 @@ private fun createMyJourneyScreenItem(
                     onClickMore = onClickMore,
                 )
             }
-
         }
     )
 }
