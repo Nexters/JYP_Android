@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.jyp.feature_planner.domain.UiState
 import com.jyp.feature_planner.domain.PlannerTag
+import com.jyp.feature_planner.domain.UiState
 import com.jyp.feature_planner.presentation.create_planner.model.*
 import com.jyp.feature_planner.presentation.planner.PlannerActivity
 import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EXTRA_PLANNER_ID
@@ -31,6 +31,7 @@ import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class CreatePlannerActivity : AppCompatActivity() {
@@ -94,14 +95,15 @@ class CreatePlannerActivity : AppCompatActivity() {
                                 date?.second ?: return@Screen,
                                 tags,
                             )
-                            finish()
+                            finishAffinity()
                         }
                         false -> viewModel.joinPlanner(
                             plannerId ?: "",
                             tags
                         )
                     }
-                }
+                },
+                onClickBackAction = this::finish
             )
         }
     }
@@ -154,6 +156,7 @@ private fun Screen(
     selectDateClick: () -> Unit,
     submitOnDate: (Long, Long) -> Unit,
     submitOnTaste: (List<PlannerTag>) -> Unit,
+    onClickBackAction: () -> Unit,
 ) {
     val startDateMillis by viewModel.startDateMillis.collectAsState()
     val endDateMillis by viewModel.endDateMillis.collectAsState()
@@ -222,6 +225,7 @@ private fun Screen(
                 titleSize = 16.sp,
                 titleFontWeight = FontWeight.Medium,
                 activeBack = true,
+                backAction = onClickBackAction,
             ) {
                 CreatePlannerScreen(
                     step = step,

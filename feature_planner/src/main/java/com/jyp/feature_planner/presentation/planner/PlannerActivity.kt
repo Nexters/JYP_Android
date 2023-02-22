@@ -64,7 +64,8 @@ class PlannerActivity : ComponentActivity() {
                             putExtra(AddPlannerRouteActivity.EXTRA_DAY_INDEX, index)
                         }
                     )
-                }
+                },
+                onClickBackButton = this::finish
             )
         }
     }
@@ -89,6 +90,7 @@ private fun Screen(
     onClickInviteUserButton: () -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
     onNewPikMeClick: () -> Unit,
+    onClickBackButton: () -> Unit,
 ) {
     val plannerDates by viewModel.plannerDates.collectAsState()
     val pikMes by viewModel.pikmis.collectAsState()
@@ -134,6 +136,7 @@ private fun Screen(
                 newPikMeClick = onNewPikMeClick,
                 onClickEditRoute = onClickEditRoute,
                 onClickInviteUserButton = onClickInviteUserButton,
+                onClickBackButton = onClickBackButton,
             )
         }
     }
