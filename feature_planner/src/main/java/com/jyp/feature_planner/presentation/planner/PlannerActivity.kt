@@ -62,9 +62,9 @@ class PlannerActivity : ComponentActivity() {
                     )
                 },
                 onClickBackButton = this::finish,
-                onClickLike = { plannerPikme, isLike ->
+                onClickLike = { plannerPikme ->
                     plannerId?.let {
-                        viewModel.setPikmeLike(it, plannerPikme.id, isLike)
+                        viewModel.switchPikmeLike(it, plannerPikme)
                     }
                 }
             )
@@ -92,7 +92,7 @@ private fun Screen(
     onClickEditRoute: (day: Int) -> Unit,
     onNewPikMeClick: () -> Unit,
     onClickBackButton: () -> Unit,
-    onClickLike: (PlannerPikme, Boolean) -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     val plannerDates by viewModel.plannerDates.collectAsState()
     val pikMes by viewModel.pikmis.collectAsState()

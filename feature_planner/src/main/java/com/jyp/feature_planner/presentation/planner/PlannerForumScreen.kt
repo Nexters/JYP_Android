@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
@@ -34,7 +35,7 @@ internal fun PlannerForumScreen(
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
-    onClickLike: (PlannerPikme, Boolean) -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     val rememberScrollState = rememberScrollState()
 
@@ -156,7 +157,7 @@ private fun PlannerTagLayout(
 private fun PlannerPikMeContent(
     pikMes: List<PlannerPikme>,
     newPikMeClick: () -> Unit,
-    onClickLike: (PlannerPikme, Boolean) -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     Column {
         Row(
@@ -208,7 +209,7 @@ private fun PlannerPikMeContent(
 @Composable
 private fun PlannerPikMeCard(
     pikMe: PlannerPikme,
-    onClickLike: (PlannerPikme, Boolean) -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -221,15 +222,21 @@ private fun PlannerPikMeCard(
             .background(JypColors.Background_white100)
             .padding(20.dp),
     ) {
-        var isLike by remember {
-            mutableStateOf(false)
+        var initialLiked by rememberSaveable {
+            mutableStateOf(pikMe.liked)
         }
+
         val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(com.jyp.feature_planner.R.raw.like_alone_alpha))
         val lottieAnimatable = rememberLottieAnimatable()
 
-        LaunchedEffect(isLike) {
-            if (isLike) {
-                lottieAnimatable.animate(composition)
+        LaunchedEffect(pikMe.liked) {
+            if (pikMe.liked) {
+                if (initialLiked) {
+                    lottieAnimatable.snapTo(composition, 1f)
+                    initialLiked = false
+                } else {
+                    lottieAnimatable.animate(composition)
+                }
             } else {
                 lottieAnimatable.snapTo(composition, 0f)
             }
@@ -241,8 +248,7 @@ private fun PlannerPikMeCard(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
                     onClick = {
-                        isLike = !isLike
-                        onClickLike.invoke(pikMe, isLike)
+                        onClickLike.invoke(pikMe)
                     }
                 )
                 .size(62.dp)
@@ -260,12 +266,12 @@ private fun PlannerPikMeCard(
                 progress = { lottieAnimatable.progress },
             )
 
-            if (isLike) {
+            if (pikMe.liked) {
                 Text(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 8.dp),
-                    text = (pikMe.likeCount + 1).toString(),
+                    text = pikMe.likeCount.toString(),
                     color = JypColors.Pink,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -365,6 +371,6 @@ private fun PlannerForumScreenPreview() {
         tags = emptyList(),
         tagClick = {},
         newPikMeClick = {},
-        onClickLike = { _, _ -> },
+        onClickLike = {},
     )
 }

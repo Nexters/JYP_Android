@@ -10,6 +10,7 @@ data class PlannerPikme(
         val address: String,
         val category: String,
         val likeCount: Int,
+        val liked: Boolean,
         val longitude: Double,
         val latitude: Double,
         val link: String,

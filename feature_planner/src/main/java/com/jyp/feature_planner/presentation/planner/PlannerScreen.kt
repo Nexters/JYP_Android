@@ -44,7 +44,7 @@ internal fun PlannerScreen(
     onClickEditRoute: (day: Int) -> Unit,
     onClickInviteUserButton: () -> Unit,
     onClickBackButton: () -> Unit,
-    onClickLike: (PlannerPikme, Boolean) -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -142,7 +142,7 @@ private fun PlannerContent(
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
-    onClickLike: (PlannerPikme, Boolean) -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -254,6 +254,6 @@ internal fun PlannerScreenPreview() {
         onClickInviteUserButton = {},
         onClickEditRoute = {},
         onClickBackButton = {},
-        onClickLike = { _, _ -> },
+        onClickLike = {},
     )
 }
