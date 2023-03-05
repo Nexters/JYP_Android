@@ -1,10 +1,12 @@
 package com.jyp.main.presentation
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.animation.*
@@ -15,18 +17,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jyp.core_network.jyp.model.enumerate.JoinJourneyFailure
 import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.feature_my_journey.presentation.my_journey.*
 import com.jyp.feature_my_page.presentation.MyPageScreen
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.EXTRA_CREATE_PLANNER_STEP
-import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.JOIN_PLANNER_ERROR_BODY
-import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.JOIN_PLANNER_ERROR_TITLE
+import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.JOIN_PLANNER_ERROR_CODE
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.RESULT_CODE_JOIN_PLANNER_FAILURE
 import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
 import com.jyp.feature_planner.presentation.planner.PlannerActivity
@@ -37,30 +40,16 @@ import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     private val mainViewModel: MainViewModel by viewModels()
     private val myJourneyViewModel: MyJourneyViewModel by viewModels()
-
-    private lateinit var joinJourneyResult: ActivityResultLauncher<Intent>
-
-    private lateinit var joinPlannerErrorTitle: String
-    private lateinit var joinPlannerErrorBody: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        joinJourneyResult = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode != RESULT_CODE_JOIN_PLANNER_FAILURE) {
-                result.data?.let {
-                    joinPlannerErrorTitle = it.getStringExtra(JOIN_PLANNER_ERROR_TITLE) ?: ""
-                    joinPlannerErrorBody = it.getStringExtra(JOIN_PLANNER_ERROR_BODY) ?: ""
-                }
-            }
-        }
 
         setContent {
             Screen(
@@ -69,23 +58,13 @@ class MainActivity : ComponentActivity() {
                 onClickCreateJourney = {
                     startActivity(Intent(this, CreatePlannerActivity::class.java))
                 },
-                onClickJoinJourneyNextButton = { plannerId ->
-                    joinJourneyResult.launch(
-                        Intent(this, CreatePlannerActivity::class.java).apply {
-                            putExtra(EXTRA_PLANNER_ID, plannerId)
-                            putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
-                        }
-                    )
-                },
                 onClickPlanner = { plannerId ->
                     startActivity(
                         Intent(this, PlannerActivity::class.java).apply {
                             putExtra(EXTRA_PLANNER_ID, plannerId)
                         }
                     )
-                },
-                joinPlannerFailureTitle = joinPlannerErrorTitle,
-                joinPlannerFailureBody = joinPlannerErrorBody
+                }
             )
         }
 
@@ -104,10 +83,7 @@ private fun Screen(
     mainViewModel: MainViewModel,
     myJourneyViewModel: MyJourneyViewModel,
     onClickCreateJourney: () -> Unit,
-    onClickJoinJourneyNextButton: (String) -> Unit,
     onClickPlanner: (id: String) -> Unit,
-    joinPlannerFailureTitle: String,
-    joinPlannerFailureBody: String
 ) {
     val coroutineScope = rememberCoroutineScope()
     var currentBottomSheetItem by remember {
@@ -142,6 +118,21 @@ private fun Screen(
 
     val anotherJourneyScreenItem = createAnotherJourneyScreenItem()
     val myPageScreenItem = createMyPageScreenItem()
+
+    val context = LocalContext.current
+    var joinPlannerErrorCode by remember { mutableStateOf("") }
+    val joinJourneyResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if (result.resultCode != RESULT_CODE_JOIN_PLANNER_FAILURE) return@rememberLauncherForActivityResult
+        result.data?.let {
+            joinPlannerErrorCode = it.getStringExtra(JOIN_PLANNER_ERROR_CODE) ?: ""
+            coroutineScope.launch {
+                currentBottomSheetItem = MainBottomSheetItem.FailToJoinJourney
+                modalBottomSheetState.show()
+            }
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
@@ -183,7 +174,18 @@ private fun Screen(
                             }
                         },
                         onClickNextButton = { plannerId ->
-                            onClickJoinJourneyNextButton(plannerId)
+                            val joinJourneyPendingIntent = PendingIntent.getActivity(
+                                context,
+                                0,
+                                Intent(context, CreatePlannerActivity::class.java)
+                                    .putExtra(EXTRA_PLANNER_ID, plannerId)
+                                    .putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE),
+                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                            )
+
+                            joinJourneyResultLauncher.launch(
+                                IntentSenderRequest.Builder(joinJourneyPendingIntent).build()
+                            )
                             coroutineScope.launch {
                                 modalBottomSheetState.hide()
                             }
@@ -191,17 +193,17 @@ private fun Screen(
                     )
                 }
                 is MainBottomSheetItem.FailToJoinJourney -> {
-                    if (joinPlannerFailureTitle.isBlank()) return@ModalBottomSheetLayout
-                    if (joinPlannerFailureBody.isBlank()) return@ModalBottomSheetLayout
-                    FailToJoinJourneyBottomSheetScreen(
-                        failToJoinJourneyTitle = joinPlannerFailureTitle,
-                        failToJoinJourneyBody = joinPlannerFailureBody,
-                        onClickConfirmButton = {
-                            coroutineScope.launch {
-                                modalBottomSheetState.hide()
+                    if (joinPlannerErrorCode.isBlank()) return@ModalBottomSheetLayout
+                    JoinJourneyFailure.getEnumBy(joinPlannerErrorCode)?.let {
+                        FailToJoinJourneyBottomSheetScreen(
+                            joinJourneyFailure = it,
+                            onClickConfirmButton = {
+                                coroutineScope.launch {
+                                    modalBottomSheetState.hide()
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
                 is MainBottomSheetItem.JourneyMore -> {
                     JourneyMoreBottomSheetScreen(

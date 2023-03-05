@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jyp.core_network.jyp.model.enumerate.JoinJourneyFailure
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.text.JypText
@@ -13,8 +14,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 fun FailToJoinJourneyBottomSheetScreen(
-    failToJoinJourneyTitle: String,
-    failToJoinJourneyBody: String,
+    joinJourneyFailure: JoinJourneyFailure,
     onClickConfirmButton: () -> Unit
 ) {
     Column(
@@ -28,13 +28,13 @@ fun FailToJoinJourneyBottomSheetScreen(
             )
     ) {
         JypText(
-            text = failToJoinJourneyTitle,
+            text = joinJourneyFailure.title,
             type = TextType.TITLE_2,
             color = JypColors.Text80
         )
         Spacer(modifier = Modifier.size(8.dp))
         JypText(
-            text = failToJoinJourneyBody,
+            text = joinJourneyFailure.body,
             type = TextType.BODY_2,
             color = JypColors.Text75
         )
@@ -58,8 +58,7 @@ fun FailToJoinJourneyBottomSheetScreen(
 @Preview(showBackground = true)
 private fun FailToJoinJourneyBottomSheetScreenPreview() {
     FailToJoinJourneyBottomSheetScreen(
-        failToJoinJourneyTitle = "이미 비행기가 떠났어요!",
-        failToJoinJourneyBody = "아쉽지만 다음에 함께해요",
+        joinJourneyFailure = JoinJourneyFailure.JOURNEY_JOINED_FULL,
         onClickConfirmButton = {}
     )
 }

@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.jyp.core_network.jyp.UiState
 import com.jyp.feature_planner.domain.PlannerTag
-import com.jyp.feature_planner.domain.UiState
 import com.jyp.feature_planner.presentation.create_planner.model.*
 import com.jyp.feature_planner.presentation.planner.PlannerActivity
 import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EXTRA_PLANNER_ID
@@ -111,8 +111,8 @@ class CreatePlannerActivity : AppCompatActivity() {
     private fun initStateFlowCollector() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.joinPlannerUiState.collect { it ->
-                    when (it) {
+                viewModel.joinPlannerUiState.collect { uiState ->
+                    when (uiState) {
                         is UiState.Loading -> {}
                         is UiState.Success -> startActivity(
                             Intent(this@CreatePlannerActivity, PlannerActivity::class.java).apply {
@@ -120,13 +120,13 @@ class CreatePlannerActivity : AppCompatActivity() {
                             }
                         )
                         is UiState.Failure -> {
-                            Intent().let { intent ->
-                                intent.setClassName(this@CreatePlannerActivity.packageName, "com.jyp.main.presentation.MainActivity")
-                                intent.putExtra(JOIN_PLANNER_ERROR_TITLE, it.throwable.message)
-                                intent.putExtra(JOIN_PLANNER_ERROR_BODY, it.throwable.localizedMessage)
-                                setResult(RESULT_CODE_JOIN_PLANNER_FAILURE, intent)
-                                finish()
-                            }
+                            setResult(
+                                RESULT_CODE_JOIN_PLANNER_FAILURE,
+                                Intent()
+                                    .setClassName(this@CreatePlannerActivity, "com.jyp.main.presentation.MainActivity")
+                                    .putExtra(JOIN_PLANNER_ERROR_CODE, uiState.failure.code)
+                            )
+                            finish()
                         }
                     }
                 }
@@ -136,9 +136,7 @@ class CreatePlannerActivity : AppCompatActivity() {
 
     companion object {
         const val RESULT_CODE_JOIN_PLANNER_FAILURE = 1000
-
-        const val JOIN_PLANNER_ERROR_TITLE = "JOIN_PLANNER_ERROR_TITLE"
-        const val JOIN_PLANNER_ERROR_BODY = "JOIN_PLANNER_ERROR_BODY"
+        const val JOIN_PLANNER_ERROR_CODE = "JOIN_PLANNER_ERROR_CODE"
 
         const val EXTRA_CREATE_PLANNER_STEP = "EXTRA_CREATE_PLANNER_STEP"
         const val EXTRA_CREATE_PLANNER_TITLE = "EXTRA_CREATE_PLANNER_TITLE"
