@@ -44,6 +44,7 @@ internal fun PlannerScreen(
     onClickEditRoute: (day: Int) -> Unit,
     onClickInviteUserButton: () -> Unit,
     onClickBackButton: () -> Unit,
+    onClickLike: (PlannerPikme, Boolean) -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -82,6 +83,7 @@ internal fun PlannerScreen(
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
                 onClickEditRoute = onClickEditRoute,
+                onClickLike = onClickLike,
             )
         },
         backLayerBackgroundColor = JypColors.Background_grey300,
@@ -116,12 +118,12 @@ private fun PlannerBackLayer(
                 borderColor = JypColors.Background_grey300,
             ) {
                 Image(
-                        modifier = Modifier
-                            .size(52.dp)
-                            .clickable { onClickInviteUserButton() },
-                        painter = painterResource(id = drawable.icon_invite_small),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit
+                    modifier = Modifier
+                        .size(52.dp)
+                        .clickable { onClickInviteUserButton() },
+                    painter = painterResource(id = drawable.icon_invite_small),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit
                 )
             }
         }
@@ -140,6 +142,7 @@ private fun PlannerContent(
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
+    onClickLike: (PlannerPikme, Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -166,6 +169,7 @@ private fun PlannerContent(
                 tags = tags,
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
+                onClickLike = onClickLike,
             )
             1 -> PlannerJourneyPlanScreen(
                 planItems = planItems,
@@ -250,5 +254,6 @@ internal fun PlannerScreenPreview() {
         onClickInviteUserButton = {},
         onClickEditRoute = {},
         onClickBackButton = {},
+        onClickLike = { _, _ -> },
     )
 }

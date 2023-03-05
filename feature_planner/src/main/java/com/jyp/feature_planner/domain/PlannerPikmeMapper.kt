@@ -6,6 +6,7 @@ import com.jyp.core_network.jyp.model.enumerate.toName
 class PlannerPikmeMapper {
     fun toPlannerPikme(pikme: Pikme): PlannerPikme {
         return PlannerPikme(
+            id = pikme.id,
             title = pikme.name,
             address = pikme.address,
             category = pikme.category.toName(),

@@ -17,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlannerViewModel @Inject constructor(
     private val getPlannerUseCase: GetPlannerUseCase,
+    private val setPikmeLikeUseCase: SetPikmeLikeUseCase,
 ) : ViewModel() {
     private val _pikmis = MutableStateFlow<List<PlannerPikme>>(emptyList())
     val pikmis: StateFlow<List<PlannerPikme>>
@@ -62,6 +63,18 @@ class PlannerViewModel @Inject constructor(
                 }
                 .onFailure { exception ->
                     exception.printStackTrace()
+                }
+        }
+    }
+
+    fun setPikmeLike(plannerId: String, pikmeId: String, isLike: Boolean) {
+        viewModelScope.launch {
+            setPikmeLikeUseCase.invoke(plannerId, pikmeId, isLike)
+                .onSuccess {
+
+                }
+                .onFailure {
+                    it.printStackTrace()
                 }
         }
     }
