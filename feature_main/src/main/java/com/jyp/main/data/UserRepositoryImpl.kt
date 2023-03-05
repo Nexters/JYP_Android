@@ -1,7 +1,7 @@
-package com.jyp.feature_my_journey.data
+package com.jyp.main.data
 
 import com.jyp.core_network.jyp.model.response.UserResponse
-import com.jyp.feature_my_journey.domain.UserRepository
+import com.jyp.main.domain.UserRepository
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -9,5 +9,9 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     override suspend fun getMe(): UserResponse {
         return userDataSource.getMe()
+    }
+
+    override suspend fun updateUserProfile(id: String, profileImagePath: String): UserResponse {
+        return userDataSource.updateUserProfile(id, profileImagePath)
     }
 }

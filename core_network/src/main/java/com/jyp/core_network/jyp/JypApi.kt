@@ -1,9 +1,6 @@
 package com.jyp.core_network.jyp
 
-import com.jyp.core_network.jyp.model.request.AddPlaceRequestBody
-import com.jyp.core_network.jyp.model.request.CreatePlannerRequestBody
-import com.jyp.core_network.jyp.model.request.CreateUserRequestBody
-import com.jyp.core_network.jyp.model.request.SetPikiRequestBody
+import com.jyp.core_network.jyp.model.request.*
 import com.jyp.core_network.jyp.model.response.*
 import retrofit2.http.*
 
@@ -25,6 +22,12 @@ interface JypApi {
     @GET("users/me")
     suspend fun getMe(): UserResponse
 
+    @PATCH("users/{id}")
+    suspend fun updateUserProfile(
+        @Path("id") id: String,
+        @Body setProfileRequestBody: SetProfileRequestBody,
+    ): UserResponse
+
     @GET("journeys")
     suspend fun getJourneys(): JourneysResponse
 
@@ -33,6 +36,11 @@ interface JypApi {
 
     @GET("journeys/{id}")
     suspend fun getPlanner(@Path("id") id: String): PlannerResponse
+
+    @POST("/journeys/{id}/drop")
+    suspend fun leaveJourney(
+        @Path("id") id: String
+    ): JypBaseResponse<Any>
 
     @POST("journeys/{id}/pikmis")
     suspend fun addPikme(

@@ -43,6 +43,7 @@ internal fun PlannerScreen(
     newPikMeClick: () -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
     onClickInviteUserButton: () -> Unit,
+    onClickBackButton: () -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -56,6 +57,7 @@ internal fun PlannerScreen(
                 color = GlobalNavigationBarColor.BLACK,
                 title = "강릉 여행기",
                 activeBack = true,
+                backAction = onClickBackButton,
             )
         },
         backLayerContent = {
@@ -247,5 +249,6 @@ internal fun PlannerScreenPreview() {
         newPikMeClick = {},
         onClickInviteUserButton = {},
         onClickEditRoute = {},
+        onClickBackButton = {},
     )
 }

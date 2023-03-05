@@ -22,55 +22,59 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun SelectProfileScreen(
-        name: String,
-        personality: String,
-        selectedPosition: Int?,
-        showDim: Boolean,
-        onSelectProfile: (Int) -> Unit,
-        submitProfile: () -> Unit,
+    name: String,
+    profileImagePath: String,
+    personality: String,
+    personalityImagePath: String,
+    selectedPosition: Int?,
+    showDim: Boolean,
+    onSelectProfile: (Int) -> Unit,
+    submitProfile: () -> Unit,
 ) {
     Box(
-            modifier = Modifier
-                    .fillMaxSize()
-                    .let {
-                        if (showDim) {
-                            it.background(JypColors.Background_dim)
-                        } else {
-                            it
-                        }
-                    }
-                    .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = {}
-                    ),
+        modifier = Modifier
+            .fillMaxSize()
+            .let {
+                if (showDim) {
+                    it.background(JypColors.Background_dim)
+                } else {
+                    it
+                }
+            }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {}
+            ),
     ) {
         Column(
-                modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                        .background(JypColors.Background_white100)
-                        .padding(horizontal = 24.dp, vertical = 28.dp)
-                        .align(Alignment.BottomCenter),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                .background(JypColors.Background_white100)
+                .padding(horizontal = 24.dp, vertical = 28.dp)
+                .align(Alignment.BottomCenter),
         ) {
             Header(
-                    name = name,
-                    personality = personality,
+                name = name,
+                personality = personality,
             )
             Spacer(modifier = Modifier.size(30.dp))
             Content(
-                    name = name,
-                    selectedPosition = selectedPosition,
-                    onSelectProfile = onSelectProfile,
+                name = name,
+                profileImagePath = profileImagePath,
+                personalityImagePath = personalityImagePath,
+                selectedPosition = selectedPosition,
+                onSelectProfile = onSelectProfile,
             )
             Spacer(modifier = Modifier.size(35.dp))
             JypTextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "시작하기",
-                    buttonType = ButtonType.THICK,
-                    buttonColorSet = ButtonColorSetType.PINK,
-                    enabled = selectedPosition != null,
-                    onClickEnabled = submitProfile,
+                modifier = Modifier.fillMaxWidth(),
+                text = "시작하기",
+                buttonType = ButtonType.THICK,
+                buttonColorSet = ButtonColorSetType.PINK,
+                enabled = selectedPosition != null,
+                onClickEnabled = submitProfile,
             )
         }
     }
@@ -78,104 +82,109 @@ fun SelectProfileScreen(
 
 @Composable
 private fun Header(
-        name: String,
-        personality: String,
+    name: String,
+    personality: String,
 ) {
     Column {
         JypText(
-                text = "${name}님은\n${personality}이군요!",
-                type = TextType.HEADING_1,
-                color = JypColors.Text90,
+            text = "${name}님은\n${personality}이군요!",
+            type = TextType.HEADING_1,
+            color = JypColors.Text90,
         )
         Spacer(modifier = Modifier.size(8.dp))
         JypText(
-                text = "사용할 프로필을 선택해주세요",
-                type = TextType.BODY_2,
-                color = JypColors.Text40,
+            text = "사용할 프로필을 선택해주세요",
+            type = TextType.BODY_2,
+            color = JypColors.Text40,
         )
     }
 }
 
 @Composable
 private fun Content(
-        name: String,
-        selectedPosition: Int?,
-        onSelectProfile: (Int) -> Unit,
+    name: String,
+    profileImagePath: String,
+    personalityImagePath: String,
+    selectedPosition: Int?,
+    onSelectProfile: (Int) -> Unit,
 ) {
     Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
     ) {
         Profile(
-                name = name,
-                onSelectProfile = onSelectProfile,
-                index = 0,
-                isSelected = selectedPosition == 0,
+            name = name,
+            profileImagePath = profileImagePath,
+            onSelectProfile = onSelectProfile,
+            index = 0,
+            isSelected = selectedPosition == 0,
         )
         Spacer(modifier = Modifier.size(64.dp))
         Profile(
-                name = name,
-                onSelectProfile = onSelectProfile,
-                index = 1,
-                isSelected = selectedPosition == 1,
+            name = name,
+            profileImagePath = personalityImagePath,
+            onSelectProfile = onSelectProfile,
+            index = 1,
+            isSelected = selectedPosition == 1,
         )
     }
 }
 
 @Composable
 private fun Profile(
-        name: String,
-        onSelectProfile: (Int) -> Unit,
-        index: Int,
-        isSelected: Boolean,
+    name: String,
+    profileImagePath: String,
+    onSelectProfile: (Int) -> Unit,
+    index: Int,
+    isSelected: Boolean,
 ) {
     Box(
-            modifier = Modifier
-                    .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = {
-                                onSelectProfile.invoke(index)
-                            },
-                    ),
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {
+                    onSelectProfile.invoke(index)
+                },
+            ),
     ) {
         Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (index == 0) {
                 GlideImage(
-                        modifier = Modifier
-                                .padding(top = 12.dp, start = 11.dp, end = 11.dp)
-                                .size(70.dp)
-                                .clip(RoundedCornerShape(20.dp)),
-                        imageModel = "https://m.sleepnsleepmall.com/web/product/medium/202207/be10cef08bff16ef03355be34c8b73e6.jpg",
-                        previewPlaceholder = R.drawable.group,
+                    modifier = Modifier
+                        .padding(top = 12.dp, start = 11.dp, end = 11.dp)
+                        .size(70.dp)
+                        .clip(RoundedCornerShape(20.dp)),
+                    imageModel = profileImagePath,
+                    previewPlaceholder = R.drawable.group,
                 )
             } else {
-                Image(
-                        modifier = Modifier
-                                .padding(top = 12.dp, start = 11.dp, end = 11.dp)
-                                .size(70.dp)
-                                .clip(RoundedCornerShape(20.dp)),
-                        painter = painterResource(id = R.drawable.group),
-                        contentDescription = null,
+                GlideImage(
+                    modifier = Modifier
+                        .padding(top = 12.dp, start = 11.dp, end = 11.dp)
+                        .size(70.dp)
+                        .clip(RoundedCornerShape(20.dp)),
+                    imageModel = profileImagePath,
+                    previewPlaceholder = R.drawable.group,
                 )
             }
             Spacer(modifier = Modifier.size(4.dp))
             JypText(
-                    text = name.takeIf { it.length >= 4 }
-                            ?.let { "${it.substring(0..2)}..." }
-                            ?: name,
-                    type = TextType.BODY_3,
-                    color = JypColors.Text75,
+                text = name.takeIf { it.length >= 4 }
+                    ?.let { "${it.substring(0..2)}..." }
+                    ?: name,
+                type = TextType.BODY_3,
+                color = JypColors.Text75,
             )
         }
         if (isSelected) {
             Image(
-                    modifier = Modifier
-                            .align(Alignment.TopEnd),
-                    painter = JypPainter.check,
-                    contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.TopEnd),
+                painter = JypPainter.check,
+                contentDescription = null,
             )
         }
     }
@@ -185,12 +194,14 @@ private fun Profile(
 @Preview(showBackground = true)
 private fun SetProfileBottomSheetPreview() {
     SelectProfileScreen(
-            name = "홍길동",
-            personality = "자유로운 탐험가",
-            onSelectProfile = {},
-            selectedPosition = null,
-            submitProfile = {},
-            showDim = true,
+        name = "홍길동",
+        profileImagePath = "",
+        personality = "자유로운 탐험가",
+        personalityImagePath = "",
+        onSelectProfile = {},
+        selectedPosition = null,
+        submitProfile = {},
+        showDim = true,
     )
 }
 
@@ -198,11 +209,13 @@ private fun SetProfileBottomSheetPreview() {
 @Preview(showBackground = true)
 private fun SetProfileBottomSheetOverflowNamePreview() {
     SelectProfileScreen(
-            name = "김수완무",
-            personality = "까탈스러운 탐험가",
-            onSelectProfile = {},
-            selectedPosition = 1,
-            submitProfile = {},
-            showDim = true,
+        name = "김수완무",
+        profileImagePath = "",
+        personality = "까탈스러운 탐험가",
+        personalityImagePath = "",
+        onSelectProfile = {},
+        selectedPosition = 1,
+        submitProfile = {},
+        showDim = true,
     )
 }
