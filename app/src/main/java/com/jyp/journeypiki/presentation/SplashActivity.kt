@@ -9,9 +9,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
 import com.jyp.core_network.di.JypSessionManager
+import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.KakaoSignIn
 import com.jyp.feature_sign_in.onboarding.OnboardingActivity
-import com.jyp.feature_sign_in.util.UiState
 import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.main.presentation.MainActivity
 import com.kakao.sdk.auth.AuthApiClient
@@ -54,7 +54,7 @@ class SplashActivity : ComponentActivity() {
             viewModel.signInWithKakaoUiState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {}
-                    is UiState.Success -> (uiState.result as KakaoSignIn).let { signIn ->
+                    is UiState.Success<*> -> (uiState.data as KakaoSignIn).let { signIn ->
                         when (signIn.kakaoAccount != null) {
                             true -> setIntentTo(OnboardingActivity::class.java)
                             false -> {
@@ -67,7 +67,6 @@ class SplashActivity : ComponentActivity() {
                     }
                     is UiState.Failure -> {
                         setIntentTo(OnboardingActivity::class.java)
-
                         finish()
                     }
                 }

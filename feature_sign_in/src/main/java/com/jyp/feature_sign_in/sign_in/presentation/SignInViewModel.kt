@@ -2,9 +2,9 @@ package com.jyp.feature_sign_in.sign_in.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
-import com.jyp.feature_sign_in.util.UiState
 import com.jyp.feature_sign_in.sign_in.domain.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +18,8 @@ class SignInViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase
 ) : ViewModel() {
 
-    private val _signInWithKakaoUiState = MutableStateFlow<UiState>(UiState.Loading)
-    val signInWithKakaoUiState: StateFlow<UiState>
+    private val _signInWithKakaoUiState = MutableStateFlow<UiState<*>>(UiState.Loading)
+    val signInWithKakaoUiState: StateFlow<UiState<*>>
         get() = _signInWithKakaoUiState
 
 
@@ -29,10 +29,8 @@ class SignInViewModel @Inject constructor(
                 .onSuccess { signInInfo ->
                     _signInWithKakaoUiState.value = UiState.Success(signInInfo)
                 }
-                .onFailure { throwable ->
-                    throwable.localizedMessage?.let {
-                        _signInWithKakaoUiState.value = UiState.Failure(it)
-                    }
+                .onFailure { failure ->
+                    _signInWithKakaoUiState.value = UiState.Failure(failure)
                 }
         }
     }

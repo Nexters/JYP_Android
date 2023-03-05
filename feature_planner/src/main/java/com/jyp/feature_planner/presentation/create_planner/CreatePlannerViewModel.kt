@@ -2,10 +2,10 @@ package com.jyp.feature_planner.presentation.create_planner
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
 import com.jyp.feature_planner.domain.CreatePlannerUseCase
-import com.jyp.feature_planner.domain.UiState
 import com.jyp.feature_planner.domain.JoinPlannerUseCase
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.jyp_design.ui.tag.TagState
@@ -29,7 +29,7 @@ class CreatePlannerViewModel @Inject constructor(
     val endDateMillis: StateFlow<Long>
         get() = _endDateMillis
 
-    private val _joinPlannerUiState = MutableStateFlow<UiState>(UiState.Loading)
+    private val _joinPlannerUiState = MutableStateFlow<UiState<*>>(UiState.Loading)
     val joinPlannerUiState = _joinPlannerUiState.asStateFlow()
 
     private val _tags = MutableStateFlow(
@@ -133,8 +133,8 @@ class CreatePlannerViewModel @Inject constructor(
                 .onSuccess { journeys ->
                     _joinPlannerUiState.value = UiState.Success(journeys)
                 }
-                .onFailure { e ->
-                    _joinPlannerUiState.value = UiState.Failure(e)
+                .onFailure { failure ->
+                    _joinPlannerUiState.value = UiState.Failure(failure)
                 }
         }
     }

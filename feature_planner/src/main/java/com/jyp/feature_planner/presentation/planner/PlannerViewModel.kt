@@ -60,8 +60,8 @@ class PlannerViewModel @Inject constructor(
 
                     _pikmis.value = planner.pikmis.map(pikmeMapper::toPlannerPikme)
                 }
-                .onFailure { exception ->
-                    exception.printStackTrace()
+                .onFailure { failure ->
+//                    exception.printStackTrace()
                 }
         }
     }

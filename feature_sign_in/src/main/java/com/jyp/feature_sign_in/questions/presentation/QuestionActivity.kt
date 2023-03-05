@@ -8,11 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.lifecycleScope
 import com.jyp.core_network.di.JypSessionManager
-import com.jyp.core_network.jyp.USER_ID
+import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.User
 import com.jyp.core_network.jyp.model.request.CreateUserRequestBody
 import com.jyp.feature_sign_in.R
-import com.jyp.feature_sign_in.util.UiState
 import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.feature_sign_in.util.showToast
 import com.jyp.main.presentation.MainActivity
@@ -63,10 +62,10 @@ class QuestionActivity : ComponentActivity() {
             viewModel.createUserAccountUiState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {}
-                    is UiState.Success -> (uiState.result as User).apply {
+                    is UiState.Success<*> -> (uiState.data as User).apply {
                         setIntentTo(MainActivity::class.java)
                     }
-                    is UiState.Failure -> showToast(uiState.message)
+                    is UiState.Failure -> showToast(uiState.failure.message)
                 }
             }
         }

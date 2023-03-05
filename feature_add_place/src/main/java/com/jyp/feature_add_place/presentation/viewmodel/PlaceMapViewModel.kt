@@ -21,8 +21,8 @@ class PlaceMapViewModel @Inject constructor(
                 .onSuccess { response ->
                     Log.d("addPikMe", response.toString())
                 }
-                .onFailure { e ->
-                    e.printStackTrace()
+                .onFailure { failure ->
+//                    e.printStackTrace()
                 }
         }
     }
