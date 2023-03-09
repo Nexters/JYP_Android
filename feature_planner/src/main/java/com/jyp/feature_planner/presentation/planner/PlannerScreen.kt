@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jyp.core_util.extensions.secondToDate
 import com.jyp.feature_planner.R.*
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.domain.PlannerTag
@@ -34,8 +35,8 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @Composable
 internal fun PlannerScreen(
     plannerTitle: String,
-    startDate: String,
-    endDate: String,
+    startDate: Long,
+    endDate: Long,
     pikMes: List<PlannerPikme>,
     joinMembers: List<String>,
     tags: List<PlannerTag>,
@@ -75,6 +76,7 @@ internal fun PlannerScreen(
                     stringResource(id = string.planner_tab_forum),
                     stringResource(id = string.planner_tab_piki),
                 ),
+                startDate = startDate,
                 selectedTabPosition = selectedTabPosition,
                 tabSelected = { selectedTabPosition = it },
                 pikMes = pikMes,
@@ -92,8 +94,8 @@ internal fun PlannerScreen(
 
 @Composable
 private fun PlannerBackLayer(
-    startDate: String,
-    endDate: String,
+    startDate: Long,
+    endDate: Long,
     profileImageUrls: List<String>,
     onClickInviteUserButton: () -> Unit,
 ) {
@@ -104,7 +106,7 @@ private fun PlannerBackLayer(
     ) {
         Spacer(modifier = Modifier.size(20.dp))
         JypText(
-            text = "$startDate - $endDate",
+            text = "${startDate.secondToDate("M월 d일")} - ${endDate.secondToDate("M월 d일")}",
             type = TextType.BODY_1,
             color = JypColors.Text_white,
         )
@@ -133,6 +135,7 @@ private fun PlannerBackLayer(
 @Composable
 private fun PlannerContent(
     tabTitles: List<String>,
+    startDate: Long,
     selectedTabPosition: Int,
     tabSelected: (position: Int) -> Unit,
     pikMes: List<PlannerPikme>,
@@ -170,6 +173,7 @@ private fun PlannerContent(
             )
             1 -> PlannerJourneyPlanScreen(
                 planItems = planItems,
+                startDate = startDate,
                 onClickEditRoute = onClickEditRoute,
             )
         }
@@ -241,8 +245,8 @@ private fun PlannerContentTab(
 internal fun PlannerScreenPreview() {
     PlannerScreen(
         plannerTitle = "무슨 무슨 여행기~",
-        startDate = "7월 22일",
-        endDate = "7월 29일",
+        startDate = 21312412L,
+        endDate = 21312412L,
         pikMes = emptyList(),
         joinMembers = emptyList(),
         tags = emptyList(),

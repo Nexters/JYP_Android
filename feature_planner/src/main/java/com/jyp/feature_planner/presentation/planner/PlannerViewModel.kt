@@ -38,8 +38,8 @@ class PlannerViewModel @Inject constructor(
     val planItems: StateFlow<List<PlanItem>>
         get() = _planItems
 
-    private val _plannerDates = MutableStateFlow(Pair("", ""))
-    val plannerDates: StateFlow<Pair<String, String>>
+    private val _plannerDates = MutableStateFlow(Pair(0L, 0L))
+    val plannerDates: StateFlow<Pair<Long, Long>>
         get() = _plannerDates
 
     fun fetchPlannerData(id: String) {
@@ -60,8 +60,8 @@ class PlannerViewModel @Inject constructor(
                     }
 
                     _plannerDates.value = Pair(
-                        SimpleDateFormat("M월 d일", Locale.getDefault()).format(planner.startDate * 1000),
-                        SimpleDateFormat("M월 d일", Locale.getDefault()).format(planner.endDate * 1000),
+                        planner.startDate,
+                        planner.endDate,
                     )
 
                     _pikmis.value = planner.pikmis.map(pikmeMapper::toPlannerPikme)
