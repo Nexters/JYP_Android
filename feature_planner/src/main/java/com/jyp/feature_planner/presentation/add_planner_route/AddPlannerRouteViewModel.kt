@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +20,9 @@ class AddPlannerRouteViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val setPikisUseCase: SetPikisUseCase,
 ) : ViewModel() {
+    private val journeyId: String? = savedStateHandle[AddPlannerRouteActivity.EXTRA_JOURNEY_ID]
+    private val dayIndex: Int = savedStateHandle[AddPlannerRouteActivity.EXTRA_DAY_INDEX] ?: 0
+
     private val _pikmis: MutableStateFlow<List<PlannerPikme>> =
         MutableStateFlow(savedStateHandle[AddPlannerRouteActivity.EXTRA_PIKMIS] ?: emptyList())
 
@@ -31,8 +35,15 @@ class AddPlannerRouteViewModel @Inject constructor(
     val pikis: StateFlow<List<PlannerPiki>>
         get() = _pikis
 
-    private val journeyId: String? = savedStateHandle[AddPlannerRouteActivity.EXTRA_JOURNEY_ID]
-    private val dayIndex: Int? = savedStateHandle[AddPlannerRouteActivity.EXTRA_DAY_INDEX]
+    private val _currentDate =
+        MutableStateFlow(
+            (savedStateHandle.get<Long>(
+                AddPlannerRouteActivity.EXTRA_START_DATE
+            ) ?: 0) + TimeUnit.DAYS.toSeconds(dayIndex.toLong())
+        )
+
+    val currentDate: StateFlow<Long>
+        get() = _currentDate
 
     fun addPiki(pikme: PlannerPikme) {
         _pikis.value = pikis.value + PlannerPiki(

@@ -57,6 +57,7 @@ class PlannerActivity : ComponentActivity() {
 
                             putExtra(AddPlannerRouteActivity.EXTRA_JOURNEY_ID, plannerId)
                             putExtra(AddPlannerRouteActivity.EXTRA_DAY_INDEX, index)
+                            putExtra(AddPlannerRouteActivity.EXTRA_START_DATE, viewModel.plannerDates.value.first)
                         }
                     )
                 },
