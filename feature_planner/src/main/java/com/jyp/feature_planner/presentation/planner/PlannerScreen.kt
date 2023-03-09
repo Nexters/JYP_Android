@@ -33,6 +33,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PlannerScreen(
+    plannerTitle: String,
     startDate: String,
     endDate: String,
     pikMes: List<PlannerPikme>,
@@ -55,7 +56,7 @@ internal fun PlannerScreen(
         appBar = {
             GlobalNavigationBar(
                 color = GlobalNavigationBarColor.BLACK,
-                title = "강릉 여행기",
+                title = plannerTitle,
                 activeBack = true,
                 backAction = onClickBackButton,
             )
@@ -239,6 +240,7 @@ private fun PlannerContentTab(
 @Preview(showBackground = true)
 internal fun PlannerScreenPreview() {
     PlannerScreen(
+        plannerTitle = "무슨 무슨 여행기~",
         startDate = "7월 22일",
         endDate = "7월 29일",
         pikMes = emptyList(),

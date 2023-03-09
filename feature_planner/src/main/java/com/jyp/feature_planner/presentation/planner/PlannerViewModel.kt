@@ -18,6 +18,10 @@ import javax.inject.Inject
 class PlannerViewModel @Inject constructor(
     private val getPlannerUseCase: GetPlannerUseCase,
 ) : ViewModel() {
+    private val _plannerTitle = MutableStateFlow("")
+    val plannerTitle: StateFlow<String>
+        get() = _plannerTitle
+
     private val _pikmis = MutableStateFlow<List<PlannerPikme>>(emptyList())
     val pikmis: StateFlow<List<PlannerPikme>>
         get() = _pikmis
@@ -45,6 +49,8 @@ class PlannerViewModel @Inject constructor(
                     val tagMapper = PlannerTagMapper()
                     val pikiMapper = PlannerPikiMapper()
                     val pikmeMapper = PlannerPikmeMapper()
+
+                    _plannerTitle.value = planner.name
 
                     _tags.value = planner.tags.map(tagMapper::toPlannerTag)
                     _membersProfileUrl.value = planner.users.map { it.profileImagePath }

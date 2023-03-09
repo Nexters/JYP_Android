@@ -87,6 +87,7 @@ private fun Screen(
     onNewPikMeClick: () -> Unit,
     onClickBackButton: () -> Unit,
 ) {
+    val plannerTitle by viewModel.plannerTitle.collectAsState()
     val plannerDates by viewModel.plannerDates.collectAsState()
     val pikMes by viewModel.pikmis.collectAsState()
     val tags by viewModel.tags.collectAsState()
@@ -114,6 +115,7 @@ private fun Screen(
             modifier = Modifier.fillMaxSize()
         ) {
             PlannerScreen(
+                plannerTitle = plannerTitle,
                 startDate = plannerDates.first,
                 endDate = plannerDates.second,
                 pikMes = pikMes,
