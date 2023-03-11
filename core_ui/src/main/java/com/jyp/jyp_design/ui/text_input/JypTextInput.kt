@@ -32,6 +32,7 @@ fun JypTextInput(
     hint: String = "",
     trailingImage: Painter? = null,
     maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
 ) {
     when (type) {
         TextInputType.FIELD -> {
@@ -42,6 +43,7 @@ fun JypTextInput(
                 hint = hint,
                 trailingImage = trailingImage,
                 maxLines = maxLines,
+                singleLine = singleLine,
             )
         }
         TextInputType.BOX -> {
@@ -51,7 +53,8 @@ fun JypTextInput(
                 valueChange = valueChange,
                 hint = hint,
                 trailingImage = trailingImage,
-                maxLines = maxLines
+                maxLines = maxLines,
+                singleLine = singleLine,
             )
         }
     }
@@ -65,6 +68,7 @@ internal fun TextInputField(
     hint: String,
     trailingImage: Painter? = null,
     maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
 ) {
     val textFieldFocus = remember {
         mutableStateOf(false)
@@ -100,6 +104,7 @@ internal fun TextInputField(
                 textFieldFocus.value = it
             },
             maxLines = maxLines,
+            singleLine = singleLine,
         )
 
         if (text.isEmpty() || (text.isNotEmpty() && !textFieldFocus.value)) {
@@ -121,6 +126,7 @@ internal fun TextInputBox(
     hint: String,
     trailingImage: Painter? = null,
     maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
 ) {
     val textFieldFocus = remember {
         mutableStateOf(false)
@@ -154,6 +160,7 @@ internal fun TextInputBox(
                 textFieldFocus.value = it
             },
             maxLines = maxLines,
+            singleLine = singleLine,
         )
 
         if (text.isEmpty() || (text.isNotEmpty() && !textFieldFocus.value)) {
@@ -177,6 +184,7 @@ internal fun TextInputContent(
     textFieldFocus: Boolean,
     textFieldFocusChange: (Boolean) -> Unit = {},
     maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
 ) {
     Row(
         modifier = modifier,
@@ -209,6 +217,7 @@ internal fun TextInputContent(
                 innerTextField()
             },
             maxLines = maxLines,
+            singleLine = singleLine,
         )
 
         if (text.isNotEmpty() && textFieldFocus) {
