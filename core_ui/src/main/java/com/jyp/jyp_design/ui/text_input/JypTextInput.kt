@@ -31,6 +31,7 @@ fun JypTextInput(
         valueChange: (String) -> Unit = {},
         hint: String = "",
         trailingImage: Painter? = null,
+        maxLines: Int = Int.MAX_VALUE,
 ) {
     when (type) {
         TextInputType.FIELD -> {
@@ -40,6 +41,7 @@ fun JypTextInput(
                     valueChange = valueChange,
                     hint = hint,
                     trailingImage = trailingImage,
+                maxLines = maxLines,
             )
         }
         TextInputType.BOX -> {
@@ -49,6 +51,7 @@ fun JypTextInput(
                     valueChange = valueChange,
                     hint = hint,
                     trailingImage = trailingImage,
+                maxLines = maxLines
             )
         }
     }
@@ -61,6 +64,7 @@ internal fun TextInputField(
         valueChange: (String) -> Unit,
         hint: String,
         trailingImage: Painter? = null,
+        maxLines: Int = Int.MAX_VALUE,
 ) {
     val textFieldFocus = remember {
         mutableStateOf(false)
@@ -94,7 +98,8 @@ internal fun TextInputField(
                 textFieldFocus = textFieldFocus.value,
                 textFieldFocusChange = {
                     textFieldFocus.value = it
-                }
+                },
+            maxLines = maxLines,
         )
 
         if (text.isEmpty() || (text.isNotEmpty() && !textFieldFocus.value)) {
@@ -115,6 +120,7 @@ internal fun TextInputBox(
         valueChange: (String) -> Unit,
         hint: String,
         trailingImage: Painter? = null,
+        maxLines: Int = Int.MAX_VALUE,
 ) {
     val textFieldFocus = remember {
         mutableStateOf(false)
@@ -146,7 +152,8 @@ internal fun TextInputBox(
                 textFieldFocus = textFieldFocus.value,
                 textFieldFocusChange = {
                     textFieldFocus.value = it
-                }
+                },
+            maxLines = maxLines,
         )
 
         if (text.isEmpty() || (text.isNotEmpty() && !textFieldFocus.value)) {
@@ -169,6 +176,7 @@ internal fun TextInputContent(
         fontSize: TextUnit,
         textFieldFocus: Boolean,
         textFieldFocusChange: (Boolean) -> Unit = {},
+        maxLines: Int = Int.MAX_VALUE,
 ) {
     Row(
             modifier = modifier,
@@ -199,7 +207,8 @@ internal fun TextInputContent(
                     }
 
                     innerTextField()
-                }
+                },
+            maxLines = maxLines,
         )
 
         if (text.isNotEmpty() && textFieldFocus) {
