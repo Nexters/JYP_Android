@@ -54,8 +54,8 @@ class QuestionViewModel @Inject constructor(
                 .onSuccess {
                     _createUserAccountUiState.value = UiState.Success(it)
                 }
-                .onFailure { failure ->
-                    _createUserAccountUiState.value = UiState.Failure(failure)
+                .onFailure { throwable ->
+                    _createUserAccountUiState.value = UiState.Failure(throwable)
                 }
         }
     }

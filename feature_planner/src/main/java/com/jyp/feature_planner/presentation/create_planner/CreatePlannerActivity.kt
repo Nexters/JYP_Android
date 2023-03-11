@@ -22,6 +22,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.jyp.core_network.jyp.UiState
+import com.jyp.core_network.util.toJypApiFailure
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.create_planner.model.*
 import com.jyp.feature_planner.presentation.planner.PlannerActivity
@@ -120,13 +121,16 @@ class CreatePlannerActivity : AppCompatActivity() {
                             }
                         )
                         is UiState.Failure -> {
-                            setResult(
-                                RESULT_CODE_JOIN_PLANNER_FAILURE,
-                                Intent()
-                                    .setClassName(this@CreatePlannerActivity, "com.jyp.main.presentation.MainActivity")
-                                    .putExtra(JOIN_PLANNER_ERROR_CODE, uiState.failure.code)
-                            )
-                            finish()
+                            uiState.throwable.printStackTrace()
+                            uiState.throwable.toJypApiFailure()?.let {
+                                setResult(
+                                    RESULT_CODE_JOIN_PLANNER_FAILURE,
+                                    Intent()
+                                        .setClassName(this@CreatePlannerActivity, "com.jyp.main.presentation.MainActivity")
+                                        .putExtra(JOIN_PLANNER_ERROR_CODE, it.code)
+                                )
+                                finish()
+                            }
                         }
                     }
                 }

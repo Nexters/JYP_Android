@@ -133,8 +133,8 @@ class CreatePlannerViewModel @Inject constructor(
                 .onSuccess { journeys ->
                     _joinPlannerUiState.value = UiState.Success(journeys)
                 }
-                .onFailure { failure ->
-                    _joinPlannerUiState.value = UiState.Failure(failure)
+                .onFailure { throwable ->
+                    _joinPlannerUiState.value = UiState.Failure(throwable)
                 }
         }
     }

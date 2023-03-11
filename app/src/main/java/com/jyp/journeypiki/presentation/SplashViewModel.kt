@@ -29,8 +29,8 @@ class SplashViewModel @Inject constructor(
                 .onSuccess { signInInfo ->
                     _signInWithKakaoUiState.value = UiState.Success(signInInfo)
                 }
-                .onFailure { failure ->
-                    _signInWithKakaoUiState.value = UiState.Failure(failure)
+                .onFailure { throwable ->
+                    _signInWithKakaoUiState.value = UiState.Failure(throwable)
                 }
         }
     }

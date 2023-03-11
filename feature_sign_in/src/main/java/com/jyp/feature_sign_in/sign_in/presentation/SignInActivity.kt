@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.jyp.core_network.di.JypSessionManager
 import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.KakaoSignIn
+import com.jyp.core_network.util.toJypApiFailure
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity
 import com.jyp.feature_sign_in.R
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity.Companion.PROFILE_IMAGE_PATH
@@ -96,7 +97,12 @@ class SignInActivity : ComponentActivity() {
                             }
                         }
                     }
-                    is UiState.Failure -> showToast(uiState.failure.message)
+                    is UiState.Failure -> {
+                        uiState.throwable.printStackTrace()
+                        uiState.throwable.toJypApiFailure()?.let {
+                            showToast(it.message)
+                        }
+                    }
                 }
             }
         }

@@ -46,8 +46,8 @@ class MainViewModel @Inject constructor(
                     _personality.value = user.personality
                     _personalityImagePath.value = user.personality.toPersonalityImagePath()
 
-                }.onFailure { failure ->
-//                    it.printStackTrace()
+                }.onFailure { throwable ->
+                    throwable.printStackTrace()
                 }
         }
     }
@@ -75,8 +75,8 @@ class MainViewModel @Inject constructor(
                 else -> return@launch
             }
                 .onSuccess {  }
-                .onFailure { failure ->
-//                    it.printStackTrace()
+                .onFailure { throwable ->
+                    throwable.printStackTrace()
                 }
         }
     }
