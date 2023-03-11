@@ -275,7 +275,7 @@ internal fun PlannedJourneyEmptyScreen(
                 Spacer(modifier = Modifier.size(16.dp))
                 JypText(
                     text = stringResource(id = R.string.my_journey_empty_description_planned_journey),
-                    type = TextType.BODY_2,
+                    type = TextType.BODY_1,
                     color = JypColors.Text75,
                     textAlign = TextAlign.Center
                 )
@@ -365,7 +365,7 @@ internal fun PastJourneyEmptyScreen() {
                 Spacer(modifier = Modifier.size(16.dp))
                 JypText(
                     text = stringResource(id = R.string.my_journey_empty_description_past_journey),
-                    type = TextType.BODY_2,
+                    type = TextType.BODY_1,
                     color = JypColors.Text75,
                     textAlign = TextAlign.Center
                 )
