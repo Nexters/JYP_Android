@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
@@ -34,23 +35,25 @@ internal fun PlannerForumScreen(
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     val rememberScrollState = rememberScrollState()
 
     Column(
-            modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .verticalScroll(rememberScrollState)
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
+            .verticalScroll(rememberScrollState)
     ) {
         Spacer(modifier = Modifier.size(24.dp))
         PlannerJourneyTagContent(
-                tags = tags,
-                tagClick = tagClick,
+            tags = tags,
+            tagClick = tagClick,
         )
         Spacer(modifier = Modifier.size(48.dp))
         PlannerPikMeContent(
-                pikMes = pikMes,
-                newPikMeClick = newPikMeClick,
+            pikMes = pikMes,
+            newPikMeClick = newPikMeClick,
+            onClickLike = onClickLike,
         )
         Spacer(modifier = Modifier.size(20.dp))
     }
@@ -66,58 +69,58 @@ private fun PlannerJourneyTagContent(
     }
 
     val rotateAnimate by animateFloatAsState(
-            targetValue = if (isCollapsed) {
-                180f
-            } else {
-                0f
-            }
+        targetValue = if (isCollapsed) {
+            180f
+        } else {
+            0f
+        }
     )
 
     Column {
         Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             JypText(
-                    text = stringResource(id = com.jyp.feature_planner.R.string.planner_journey_tags_title),
-                    type = TextType.TITLE_6,
-                    color = JypColors.Text80,
+                text = stringResource(id = com.jyp.feature_planner.R.string.planner_journey_tags_title),
+                type = TextType.TITLE_6,
+                color = JypColors.Text80,
             )
 
             Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Image(
-                        painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_pencil),
-                        contentDescription = null,
+                    painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_pencil),
+                    contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
                 Image(
-                        modifier = Modifier
-                                .clip(CircleShape)
-                                .rotate(rotateAnimate)
-                                .clickable { isCollapsed = !isCollapsed },
-                        painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_arrow_top),
-                        contentDescription = null,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .rotate(rotateAnimate)
+                        .clickable { isCollapsed = !isCollapsed },
+                    painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_arrow_top),
+                    contentDescription = null,
                 )
             }
         }
         Spacer(modifier = Modifier.size(6.dp))
         JypText(
-                text = stringResource(id = com.jyp.feature_planner.R.string.planner_journey_tags_description),
-                type = TextType.BODY_3,
-                color = JypColors.Text40,
+            text = stringResource(id = com.jyp.feature_planner.R.string.planner_journey_tags_description),
+            type = TextType.BODY_3,
+            color = JypColors.Text40,
         )
         AnimatedVisibility(
-                visible = !isCollapsed,
-                enter = expandVertically(),
-                exit = shrinkVertically(),
+            visible = !isCollapsed,
+            enter = expandVertically(),
+            exit = shrinkVertically(),
         ) {
             Column {
                 Spacer(modifier = Modifier.size(16.dp))
                 PlannerTagLayout(
-                        tags = tags,
-                        tagClick = tagClick,
+                    tags = tags,
+                    tagClick = tagClick,
                 )
             }
         }
@@ -130,21 +133,21 @@ private fun PlannerTagLayout(
     tagClick: (PlannerTag) -> Unit,
 ) {
     FlowRow(
-            crossAxisSpacing = 12.dp,
-            mainAxisSpacing = 8.dp,
+        crossAxisSpacing = 12.dp,
+        mainAxisSpacing = 8.dp,
     ) {
         tags.forEach { tag ->
             DecoratedTag(
-                    modifier = Modifier
-                            .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null,
-                                    onClick = { tagClick.invoke(tag) }
-                            ),
-                    tagType = tag.type,
-                    tagState = tag.state,
-                    content = tag.content,
-                    tagCount = tag.selectPeople.size,
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = { tagClick.invoke(tag) }
+                    ),
+                tagType = tag.type,
+                tagState = tag.state,
+                content = tag.content,
+                tagCount = tag.selectPeople.size,
             )
         }
     }
@@ -154,45 +157,49 @@ private fun PlannerTagLayout(
 private fun PlannerPikMeContent(
     pikMes: List<PlannerPikme>,
     newPikMeClick: () -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     Column {
         Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             JypText(
-                    text = stringResource(id = com.jyp.feature_planner.R.string.planner_pik_me_title),
-                    type = TextType.TITLE_6,
-                    color = JypColors.Text80,
+                text = stringResource(id = com.jyp.feature_planner.R.string.planner_pik_me_title),
+                type = TextType.TITLE_6,
+                color = JypColors.Text80,
             )
 
             Image(
-                    modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null,
-                                    onClick = newPikMeClick
-                            ),
-                    painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_add),
-                    contentDescription = null,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = newPikMeClick
+                    ),
+                painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_add),
+                contentDescription = null,
             )
         }
         Spacer(modifier = Modifier.size(6.dp))
         JypText(
-                text = stringResource(id = com.jyp.feature_planner.R.string.planner_pik_me_description),
-                type = TextType.BODY_3,
-                color = JypColors.Text40,
+            text = stringResource(id = com.jyp.feature_planner.R.string.planner_pik_me_description),
+            type = TextType.BODY_3,
+            color = JypColors.Text40,
         )
         Spacer(modifier = Modifier.size(20.dp))
 
         if (pikMes.isEmpty()) {
             PlannerPikMeEmptyCard(
-                    newPikMeClick = newPikMeClick,
+                newPikMeClick = newPikMeClick,
             )
         } else {
             pikMes.forEach { pikMe ->
-                PlannerPikMeCard(pikMe = pikMe)
+                PlannerPikMeCard(
+                    pikMe = pikMe,
+                    onClickLike = onClickLike,
+                )
                 Spacer(modifier = Modifier.size(20.dp))
             }
         }
@@ -200,102 +207,121 @@ private fun PlannerPikMeContent(
 }
 
 @Composable
-private fun PlannerPikMeCard(pikMe: PlannerPikme) {
+private fun PlannerPikMeCard(
+    pikMe: PlannerPikme,
+    onClickLike: (PlannerPikme) -> Unit,
+) {
     Box(
-            modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(
-                            elevation = 2.dp,
-                            shape = RoundedCornerShape(12.dp),
-                    )
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(JypColors.Background_white100)
-                    .padding(20.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(12.dp),
+            )
+            .clip(RoundedCornerShape(12.dp))
+            .background(JypColors.Background_white100)
+            .padding(20.dp),
     ) {
-        var isPlaying by remember {
-            mutableStateOf(false)
+        var initialLiked by rememberSaveable {
+            mutableStateOf(pikMe.liked)
         }
+
+        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(com.jyp.feature_planner.R.raw.like_alone_alpha))
+        val lottieAnimatable = rememberLottieAnimatable()
+
+        LaunchedEffect(pikMe.liked) {
+            if (pikMe.liked) {
+                if (initialLiked) {
+                    lottieAnimatable.snapTo(composition, 1f)
+                    initialLiked = false
+                } else {
+                    lottieAnimatable.animate(composition)
+                }
+            } else {
+                lottieAnimatable.snapTo(composition, 0f)
+            }
+        }
+
         Box(
-                modifier = Modifier
-                        .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = { isPlaying = true }
-                        )
-                        .size(62.dp)
-                        .shadow(
-                                elevation = 2.dp,
-                                shape = CircleShape,
-                        )
-                        .clip(CircleShape)
-                        .align(Alignment.BottomEnd)
-                        .background(JypColors.Background_white100),
-                contentAlignment = Alignment.Center,
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = {
+                        onClickLike.invoke(pikMe)
+                    }
+                )
+                .size(62.dp)
+                .shadow(
+                    elevation = 2.dp,
+                    shape = CircleShape,
+                )
+                .clip(CircleShape)
+                .align(Alignment.BottomEnd)
+                .background(JypColors.Background_white100),
+            contentAlignment = Alignment.Center,
         ) {
-            val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(com.jyp.feature_planner.R.raw.like_alone_alpha))
             LottieAnimation(
-                    composition = composition,
-                    isPlaying = isPlaying,
+                composition = composition,
+                progress = { lottieAnimatable.progress },
             )
 
-            if (isPlaying) {
+            if (pikMe.liked) {
                 Text(
-                        modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(bottom = 8.dp),
-                        text = "1",
-                        color = JypColors.Pink,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 8.dp),
+                    text = pikMe.likeCount.toString(),
+                    color = JypColors.Pink,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
         }
         Column {
             JypText(
-                    text = pikMe.category,
-                    type = TextType.BODY_4,
-                    color = JypColors.Tag_grey200,
+                text = pikMe.category,
+                type = TextType.BODY_4,
+                color = JypColors.Tag_grey200,
             )
             Spacer(modifier = Modifier.size(7.dp))
             JypText(
-                    text = pikMe.title,
-                    type = TextType.HEADING_2,
-                    color = JypColors.Text80,
+                text = pikMe.title,
+                type = TextType.HEADING_2,
+                color = JypColors.Text80,
             )
             JypText(
-                    text = pikMe.address,
-                    type = TextType.BODY_4,
-                    color = JypColors.Tag_grey200,
+                text = pikMe.address,
+                type = TextType.BODY_4,
+                color = JypColors.Tag_grey200,
             )
             Spacer(modifier = Modifier.size(14.dp))
             Row(
-                    modifier = Modifier
-                            .shadow(
-                                    elevation = 2.dp,
-                                    shape = RoundedCornerShape(8.dp),
-                            )
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(JypColors.Background_white100)
-                            .padding(2.dp),
+                modifier = Modifier
+                    .shadow(
+                        elevation = 2.dp,
+                        shape = RoundedCornerShape(8.dp),
+                    )
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(JypColors.Background_white100)
+                    .padding(2.dp),
             ) {
                 Spacer(modifier = Modifier.size(2.dp))
                 Image(
-                        modifier = Modifier.size(36.dp),
-                        painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_eyes),
-                        contentDescription = null,
+                    modifier = Modifier.size(36.dp),
+                    painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_eyes),
+                    contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(3.dp))
                 JypText(
-                        modifier = Modifier.padding(
-                                top = 6.dp,
-                                end = 6.dp,
-                                bottom = 6.dp,
-                        ),
-                        text = "정보 보기",
-                        type = TextType.BODY_1,
-                        color = JypColors.Text80,
+                    modifier = Modifier.padding(
+                        top = 6.dp,
+                        end = 6.dp,
+                        bottom = 6.dp,
+                    ),
+                    text = "정보 보기",
+                    type = TextType.BODY_1,
+                    color = JypColors.Text80,
                 )
             }
         }
@@ -304,34 +330,34 @@ private fun PlannerPikMeCard(pikMe: PlannerPikme) {
 
 @Composable
 private fun PlannerPikMeEmptyCard(
-        newPikMeClick: () -> Unit,
+    newPikMeClick: () -> Unit,
 ) {
     Column(
-            modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(
-                            elevation = 2.dp,
-                            shape = RoundedCornerShape(16.dp),
-                    )
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(JypColors.Background_white100),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(16.dp),
+            )
+            .clip(RoundedCornerShape(16.dp))
+            .background(JypColors.Background_white100),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.size(32.dp))
         Image(
-                painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_pik_me_empty),
-                contentDescription = null,
+            painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_pik_me_empty),
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.size(24.dp))
         JypTextButton(
-                modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                text = "후보 장소 추가하기",
-                buttonType = ButtonType.MEDIUM,
-                buttonColorSet = ButtonColorSetType.BLACK,
-                enabled = true,
-                onClickEnabled = newPikMeClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            text = "후보 장소 추가하기",
+            buttonType = ButtonType.MEDIUM,
+            buttonColorSet = ButtonColorSetType.BLACK,
+            enabled = true,
+            onClickEnabled = newPikMeClick,
         )
         Spacer(modifier = Modifier.size(20.dp))
     }
@@ -341,9 +367,10 @@ private fun PlannerPikMeEmptyCard(
 @Preview
 private fun PlannerForumScreenPreview() {
     PlannerForumScreen(
-            pikMes = emptyList(),
-            tags = emptyList(),
-            tagClick = {},
-            newPikMeClick = {},
+        pikMes = emptyList(),
+        tags = emptyList(),
+        tagClick = {},
+        newPikMeClick = {},
+        onClickLike = {},
     )
 }

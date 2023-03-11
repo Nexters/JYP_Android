@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity
+import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -60,7 +61,12 @@ class PlannerActivity : ComponentActivity() {
                         }
                     )
                 },
-                onClickBackButton = this::finish
+                onClickBackButton = this::finish,
+                onClickLike = { plannerPikme ->
+                    plannerId?.let {
+                        viewModel.switchPikmeLike(it, plannerPikme)
+                    }
+                }
             )
         }
     }
@@ -86,6 +92,7 @@ private fun Screen(
     onClickEditRoute: (day: Int) -> Unit,
     onNewPikMeClick: () -> Unit,
     onClickBackButton: () -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     val plannerDates by viewModel.plannerDates.collectAsState()
     val pikMes by viewModel.pikmis.collectAsState()
@@ -132,6 +139,7 @@ private fun Screen(
                 onClickEditRoute = onClickEditRoute,
                 onClickInviteUserButton = onClickInviteUserButton,
                 onClickBackButton = onClickBackButton,
+                onClickLike = onClickLike,
             )
         }
     }

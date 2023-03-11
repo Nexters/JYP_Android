@@ -2,6 +2,7 @@ package com.jyp.feature_planner.presentation.planner
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jyp.core_network.jyp.model.Pikme
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
 import com.jyp.feature_planner.domain.*
@@ -16,7 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlannerViewModel @Inject constructor(
+    private val getMeUseCase: GetMeUseCase,
     private val getPlannerUseCase: GetPlannerUseCase,
+    private val setPikmeLikeUseCase: SetPikmeLikeUseCase,
 ) : ViewModel() {
     private val _pikmis = MutableStateFlow<List<PlannerPikme>>(emptyList())
     val pikmis: StateFlow<List<PlannerPikme>>
@@ -40,11 +43,12 @@ class PlannerViewModel @Inject constructor(
 
     fun fetchPlannerData(id: String) {
         viewModelScope.launch {
+            var pikmis: List<Pikme> = emptyList()
+
             getPlannerUseCase.invoke(id)
                 .onSuccess { planner ->
                     val tagMapper = PlannerTagMapper()
                     val pikiMapper = PlannerPikiMapper()
-                    val pikmeMapper = PlannerPikmeMapper()
 
                     _tags.value = planner.tags.map(tagMapper::toPlannerTag)
                     _membersProfileUrl.value = planner.users.map { it.profileImagePath }
@@ -54,14 +58,64 @@ class PlannerViewModel @Inject constructor(
                     }
 
                     _plannerDates.value = Pair(
-                        SimpleDateFormat("M월 d일", Locale.getDefault()).format(planner.startDate * 1000),
-                        SimpleDateFormat("M월 d일", Locale.getDefault()).format(planner.endDate * 1000),
+                        SimpleDateFormat(
+                            "M월 d일",
+                            Locale.getDefault()
+                        ).format(planner.startDate * 1000),
+                        SimpleDateFormat(
+                            "M월 d일",
+                            Locale.getDefault()
+                        ).format(planner.endDate * 1000),
                     )
 
-                    _pikmis.value = planner.pikmis.map(pikmeMapper::toPlannerPikme)
+                    pikmis = planner.pikmis
                 }
                 .onFailure { exception ->
                     exception.printStackTrace()
+                }
+
+            val pikmeMapper = PlannerPikmeMapper()
+
+            getMeUseCase.invoke()
+                .onSuccess { user ->
+                    _pikmis.value = pikmis.map { pikme ->
+                        pikmeMapper.toPlannerPikme(pikme, user.id)
+                    }
+                }
+                .onFailure {
+                    it.printStackTrace()
+                }
+        }
+    }
+
+    fun switchPikmeLike(plannerId: String, pikme: PlannerPikme) {
+        viewModelScope.launch {
+            val isLike = !pikme.liked
+
+            setPikmeLikeUseCase.invoke(plannerId, pikme.id, isLike)
+                .onSuccess {
+
+                }
+                .onFailure {
+                    it.printStackTrace()
+                }
+
+            // data 가 null인 케이스를 처리하지 못해서 임시방편으로 onSuccess에 넣지 못했음
+            val pikmeIndex = pikmis.value.indexOf(pikme)
+
+            _pikmis.value = pikmis.value.toMutableList()
+                .apply {
+                    set(
+                        pikmeIndex,
+                        pikme.copy(
+                            likeCount = pikme.likeCount + if (isLike) {
+                                1
+                            } else {
+                                -1
+                            },
+                            liked = isLike,
+                        )
+                    )
                 }
         }
     }
