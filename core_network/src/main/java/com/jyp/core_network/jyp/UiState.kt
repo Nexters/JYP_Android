@@ -8,6 +8,6 @@ sealed class UiState<out T : Any> {
     ) : UiState<T>()
 
     data class Failure(
-        val failure: JypFailureResponse
+        val throwable: Throwable
     ) : UiState<Throwable>()
 }

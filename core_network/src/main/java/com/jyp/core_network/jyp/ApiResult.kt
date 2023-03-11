@@ -1,9 +1,5 @@
 package com.jyp.core_network.jyp
 
-import com.google.gson.Gson
-import retrofit2.HttpException
-
-
 sealed interface ApiResult<T> {
     data class Success<T>(val data: T) : ApiResult<T>
     data class Failure(val throwable: Throwable) : ApiResult<Nothing>
@@ -17,26 +13,11 @@ fun<T> ApiResult<T>.onSuccess(action: (T) -> Unit): ApiResult<T> {
     return this
 }
 
-fun<Nothing> ApiResult<Nothing>.onFailure(action: (JypFailureResponse) -> Unit): ApiResult<Nothing> {
+fun<T> ApiResult<T>.onFailure(action: (Throwable) -> Unit): ApiResult<T> {
     if (this is ApiResult.Failure) {
-        val error = if (this.throwable is HttpException) {
-            val response = this.throwable.response()?.errorBody()?.charStream()
-            when (response != null) {
-                true -> Gson().fromJson(response, JypFailureResponse::class.java)
-                false -> JypFailureResponse(
-                    code = this.throwable.stackTraceToString(),
-                    message = this.throwable.localizedMessage ?: ""
-                )
-            }
-
-        } else {
-            JypFailureResponse(
-                code = this.throwable.stackTraceToString(),
-                message = this.throwable.localizedMessage ?: ""
-            )
-        }
-        action.invoke(error)
+        action.invoke(this.throwable)
     }
+
     return this
 }
 
