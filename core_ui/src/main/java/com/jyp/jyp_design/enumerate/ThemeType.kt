@@ -18,7 +18,7 @@ enum class ThemeType(
         textColor = JypColors.Text80,
         backgroundColor = JypColors.Background_white100,
         profileBorderColor = JypColors.Background_white100,
-        iconColor = JypColors.Text90,
+        iconColor = JypColors.Text80,
         imageRes = R.drawable.bg_journey_theme_default,
         description = "기본",
         imagePath = "https://journeypiki.duckdns.org/static/theme_basic.png",
