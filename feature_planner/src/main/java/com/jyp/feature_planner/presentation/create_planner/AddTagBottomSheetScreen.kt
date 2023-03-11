@@ -137,6 +137,7 @@ private fun Content(
             valueChange = onTagNameChanged,
             type = TextInputType.FIELD,
             hint = "입력해주세요",
+            singleLine = true,
         )
     }
 }

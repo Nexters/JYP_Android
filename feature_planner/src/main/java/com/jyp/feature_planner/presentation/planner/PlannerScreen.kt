@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jyp.core_util.extensions.secondToDate
 import com.jyp.feature_planner.R.*
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.domain.PlannerTag
@@ -33,8 +34,9 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PlannerScreen(
-    startDate: String,
-    endDate: String,
+    plannerTitle: String,
+    startDate: Long,
+    endDate: Long,
     pikMes: List<PlannerPikme>,
     joinMembers: List<String>,
     tags: List<PlannerTag>,
@@ -44,6 +46,7 @@ internal fun PlannerScreen(
     onClickEditRoute: (day: Int) -> Unit,
     onClickInviteUserButton: () -> Unit,
     onClickBackButton: () -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -55,7 +58,7 @@ internal fun PlannerScreen(
         appBar = {
             GlobalNavigationBar(
                 color = GlobalNavigationBarColor.BLACK,
-                title = "강릉 여행기",
+                title = plannerTitle,
                 activeBack = true,
                 backAction = onClickBackButton,
             )
@@ -74,6 +77,7 @@ internal fun PlannerScreen(
                     stringResource(id = string.planner_tab_forum),
                     stringResource(id = string.planner_tab_piki),
                 ),
+                startDate = startDate,
                 selectedTabPosition = selectedTabPosition,
                 tabSelected = { selectedTabPosition = it },
                 pikMes = pikMes,
@@ -82,6 +86,7 @@ internal fun PlannerScreen(
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
                 onClickEditRoute = onClickEditRoute,
+                onClickLike = onClickLike,
             )
         },
         backLayerBackgroundColor = JypColors.Background_grey300,
@@ -91,8 +96,8 @@ internal fun PlannerScreen(
 
 @Composable
 private fun PlannerBackLayer(
-    startDate: String,
-    endDate: String,
+    startDate: Long,
+    endDate: Long,
     profileImageUrls: List<String>,
     onClickInviteUserButton: () -> Unit,
 ) {
@@ -103,7 +108,7 @@ private fun PlannerBackLayer(
     ) {
         Spacer(modifier = Modifier.size(20.dp))
         JypText(
-            text = "$startDate - $endDate",
+            text = "${startDate.secondToDate("M월 d일")} - ${endDate.secondToDate("M월 d일")}",
             type = TextType.BODY_1,
             color = JypColors.Text_white,
         )
@@ -116,12 +121,12 @@ private fun PlannerBackLayer(
                 borderColor = JypColors.Background_grey300,
             ) {
                 Image(
-                        modifier = Modifier
-                            .size(52.dp)
-                            .clickable { onClickInviteUserButton() },
-                        painter = painterResource(id = drawable.icon_invite_small),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit
+                    modifier = Modifier
+                        .size(52.dp)
+                        .clickable { onClickInviteUserButton() },
+                    painter = painterResource(id = drawable.icon_invite_small),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit
                 )
             }
         }
@@ -132,6 +137,7 @@ private fun PlannerBackLayer(
 @Composable
 private fun PlannerContent(
     tabTitles: List<String>,
+    startDate: Long,
     selectedTabPosition: Int,
     tabSelected: (position: Int) -> Unit,
     pikMes: List<PlannerPikme>,
@@ -140,6 +146,7 @@ private fun PlannerContent(
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
+    onClickLike: (PlannerPikme) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -166,9 +173,11 @@ private fun PlannerContent(
                 tags = tags,
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
+                onClickLike = onClickLike,
             )
             1 -> PlannerJourneyPlanScreen(
                 planItems = planItems,
+                startDate = startDate,
                 onClickEditRoute = onClickEditRoute,
             )
         }
@@ -239,8 +248,9 @@ private fun PlannerContentTab(
 @Preview(showBackground = true)
 internal fun PlannerScreenPreview() {
     PlannerScreen(
-        startDate = "7월 22일",
-        endDate = "7월 29일",
+        plannerTitle = "무슨 무슨 여행기~",
+        startDate = 21312412L,
+        endDate = 21312412L,
         pikMes = emptyList(),
         joinMembers = emptyList(),
         tags = emptyList(),
@@ -250,5 +260,6 @@ internal fun PlannerScreenPreview() {
         onClickInviteUserButton = {},
         onClickEditRoute = {},
         onClickBackButton = {},
+        onClickLike = {},
     )
 }

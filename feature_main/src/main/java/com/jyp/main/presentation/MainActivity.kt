@@ -117,7 +117,9 @@ private fun Screen(
     )
 
     val anotherJourneyScreenItem = createAnotherJourneyScreenItem()
-    val myPageScreenItem = createMyPageScreenItem()
+    val myPageScreenItem = createMyPageScreenItem(
+        mainViewModel = mainViewModel
+    )
 
     val context = LocalContext.current
     var joinPlannerErrorCode by remember { mutableStateOf("") }
@@ -330,20 +332,31 @@ private fun createAnotherJourneyScreenItem(): MainScreenItem {
     )
 }
 
-private fun createMyPageScreenItem(): MainScreenItem {
+private fun createMyPageScreenItem(
+    mainViewModel: MainViewModel
+): MainScreenItem {
     return MainScreenItem(
-        navItem = BottomNavItem.MY_PAGE,
-        content = {
-            GlobalNavigationBarLayout(
-                color = GlobalNavigationBarColor.GREY,
-                title = stringResource(id = BottomNavItem.MY_PAGE.labelRes),
-                titleSize = 16.sp,
-                titleFontWeight = FontWeight.Medium,
-            ) {
-                MyPageScreen(
-                    journeyPropensity = "자유로운 탐험가",
-                )
+            navItem = BottomNavItem.MY_PAGE,
+            content = {
+                val userName by mainViewModel.userName.collectAsState()
+                val personality by mainViewModel.personality.collectAsState()
+                val profileImagePath by mainViewModel.profileImagePath.collectAsState()
+
+                GlobalNavigationBarLayout(
+                        color = GlobalNavigationBarColor.WHITE,
+                        title = stringResource(id = BottomNavItem.MY_PAGE.labelRes),
+                        titleSize = 16.sp,
+                        titleFontWeight = FontWeight.Medium,
+                ) {
+                    MyPageScreen(
+                        profileImagePath = profileImagePath,
+                        personality = personality,
+                        userName = userName,
+                        onClickAppInfo = {},
+                        onClickSignOut = {},
+                        onClickWithdrawal = {}
+                    )
+                }
             }
-        }
     )
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.core_network.jyp.model.enumerate.PlaceCategory
 import com.jyp.core_network.jyp.model.enumerate.getDrawableResourceId
+import com.jyp.core_util.extensions.secondToDate
 import com.jyp.feature_planner.R
 import com.jyp.feature_planner.domain.PlannerPiki
 import com.jyp.feature_planner.presentation.planner.model.PlanItem
@@ -29,10 +30,12 @@ import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
+import java.util.concurrent.TimeUnit
 
 @Composable
 internal fun PlannerJourneyPlanScreen(
     planItems: List<PlanItem>,
+    startDate: Long,
     onClickEditRoute: (day: Int) -> Unit,
 ) {
     LazyColumn(
@@ -48,6 +51,7 @@ internal fun PlannerJourneyPlanScreen(
                 item {
                     PlanGroupItem(
                         day = planItem.day,
+                        startDate = startDate,
                         onClickEditRoute = {
                             onClickEditRoute.invoke(index)
                         },
@@ -66,6 +70,7 @@ internal fun PlannerJourneyPlanScreen(
                 item {
                     PlanEachTitle(
                         day = planItem.day,
+                        startDate = startDate,
                         onClickEditRoute = {
                             onClickEditRoute.invoke(index)
                         },
@@ -93,6 +98,7 @@ internal fun PlannerJourneyPlanScreen(
 @Composable
 private fun PlanGroupItem(
     day: Int,
+    startDate: Long,
     onClickEditRoute: () -> Unit,
 ) {
     Row(
@@ -118,7 +124,7 @@ private fun PlanGroupItem(
             )
             Spacer(modifier = Modifier.size(14.dp))
             JypText(
-                text = "7월 18일",
+                text = (startDate + TimeUnit.DAYS.toSeconds(day - 1L)).secondToDate("M월 d일"),
                 type = TextType.BODY_1,
                 color = JypColors.Text40,
             )
@@ -135,6 +141,7 @@ private fun PlanGroupItem(
 @Composable
 private fun PlanEachTitle(
     day: Int,
+    startDate: Long,
     onClickEditRoute: () -> Unit,
 ) {
     Row(
@@ -149,7 +156,7 @@ private fun PlanEachTitle(
             )
             Spacer(modifier = Modifier.size(14.dp))
             JypText(
-                text = "mm월 dd일",
+                text = (startDate + TimeUnit.DAYS.toSeconds(day - 1L)).secondToDate("M월 d일"),
                 type = TextType.BODY_1,
                 color = JypColors.Text40,
             )
@@ -357,6 +364,7 @@ private fun PlannerJourneyPlanScreenPreview() {
                 ),
             ),
         ),
+        startDate = 1523424321L,
         onClickEditRoute = {},
     )
 }

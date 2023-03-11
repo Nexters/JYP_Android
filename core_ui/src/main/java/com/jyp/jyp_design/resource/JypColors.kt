@@ -28,12 +28,12 @@ object JypColors {
     val Tag_grey200 = Color(0xFF7A7A7A)
     val Tag_white_grey100 = Color(0xFFF1F1F1)
 
-    val Text90 = Color(0xE61A1A1A)
-    val Text80 = Color(0xCC333333)
-    val Text75 = Color(0xBF404040)
-    val Text40 = Color(0x66999999)
-    val Text30 = Color(0x4D232323)
-    val Text20 = Color(0x33232323)
+    val Text90 = Color(0xFF1A1A1A)
+    val Text80 = Color(0xFF333333)
+    val Text75 = Color(0xFF404040)
+    val Text40 = Color(0xFF999999)
+    val Text30 = Color(0xFF232323)
+    val Text20 = Color(0xFF232323)
     val Text_white = Color(0xFFFFFFFF)
 
     val Border_grey = Color(0xFFECECEC)

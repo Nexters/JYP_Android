@@ -273,10 +273,9 @@ internal fun PlannedJourneyEmptyScreen(
                     contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
-                Text(
+                JypText(
                     text = stringResource(id = R.string.my_journey_empty_description_planned_journey),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
+                    type = TextType.BODY_1,
                     color = JypColors.Text75,
                     textAlign = TextAlign.Center
                 )
@@ -287,7 +286,7 @@ internal fun PlannedJourneyEmptyScreen(
                     .fillMaxWidth(),
                 text = "후보 장소 추가하기",
                 buttonType = ButtonType.MEDIUM,
-                buttonColorSet = ButtonColorSetType.BLACK,
+                buttonColorSet = ButtonColorSetType.PINK,
                 onClickEnabled = onClickNewJourney,
                 enabled = true,
             )
@@ -364,10 +363,9 @@ internal fun PastJourneyEmptyScreen() {
                     contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
-                Text(
+                JypText(
                     text = stringResource(id = R.string.my_journey_empty_description_past_journey),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
+                    type = TextType.BODY_1,
                     color = JypColors.Text75,
                     textAlign = TextAlign.Center
                 )
@@ -466,7 +464,7 @@ internal fun JourneyItem(
                         ),
                     painter = painterResource(id = R.drawable.ic_more_menu),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(JypColors.Text_white),
+                    colorFilter = ColorFilter.tint(themeType.iconColor),
                 )
             }
             Spacer(modifier = Modifier.padding(top = 16.dp))

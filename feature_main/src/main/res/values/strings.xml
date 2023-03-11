@@ -2,5 +2,5 @@
 <resources>
     <string name="bottom_nav_my_journey_label">나의 여행</string>
     <string name="bottom_nav_another_journey_label">다른 여행기</string>
-    <string name="bottom_nav_my_page_label">마이페이지</string>
+    <string name="bottom_nav_my_page_label">마이 페이지</string>
 </resources>

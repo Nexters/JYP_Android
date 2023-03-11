@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.jyp.core_util.extensions.secondToDate
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +35,7 @@ class AddPlannerRouteActivity : ComponentActivity() {
     companion object {
         const val EXTRA_JOURNEY_ID = "EXTRA_JOURNEY_ID"
         const val EXTRA_DAY_INDEX = "EXTRA_DAY_INDEX"
+        const val EXTRA_START_DATE = "EXTRA_START_DATE"
         const val EXTRA_PIKMIS = "EXTRA_PIKMIS"
         const val EXTRA_PIKIS = "EXTRA_PIKIS"
     }
@@ -46,13 +48,14 @@ private fun Screen(
 ) {
     val pikmis by viewModel.pikmis.collectAsState()
     val pikis by viewModel.pikis.collectAsState()
+    val currentDate by viewModel.currentDate.collectAsState()
 
     GlobalNavigationBarLayout(
         color = GlobalNavigationBarColor.WHITE,
         title = "Day1",
         titleFontWeight = FontWeight.SemiBold,
         titleSize = 20.sp,
-        description = "7월 18일",
+        description = currentDate.secondToDate("M월 d일"),
         backAction = onClickBackAction,
         activeBack = true,
     ) {

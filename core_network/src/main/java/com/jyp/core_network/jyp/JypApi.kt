@@ -59,4 +59,16 @@ interface JypApi {
         @Path("id") journeyId: String,
         @Body setPikiRequestBody: SetPikiRequestBody,
     ): JypBaseResponse<Any>
+
+    @POST("journeys/{journeyId}/pikmis/{pikmeId}/likes")
+    suspend fun likePikme(
+        @Path("journeyId") journeyId: String,
+        @Path("pikmeId") pikMeId: String,
+    ): JypBaseResponse<Any>
+
+    @POST("journeys/{journeyId}/pikmis/{pikmeId}/undoLikes")
+    suspend fun undoLikePikme(
+        @Path("journeyId") journeyId: String,
+        @Path("pikmeId") pikMeId: String,
+    ): JypBaseResponse<Any>
 }
