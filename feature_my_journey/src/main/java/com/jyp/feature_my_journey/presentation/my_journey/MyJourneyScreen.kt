@@ -363,10 +363,9 @@ internal fun PastJourneyEmptyScreen() {
                     contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
-                Text(
+                JypText(
                     text = stringResource(id = R.string.my_journey_empty_description_past_journey),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
+                    type = TextType.BODY_2,
                     color = JypColors.Text75,
                     textAlign = TextAlign.Center
                 )
