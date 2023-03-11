@@ -58,6 +58,7 @@ class PlannerActivity : ComponentActivity() {
 
                             putExtra(AddPlannerRouteActivity.EXTRA_JOURNEY_ID, plannerId)
                             putExtra(AddPlannerRouteActivity.EXTRA_DAY_INDEX, index)
+                            putExtra(AddPlannerRouteActivity.EXTRA_START_DATE, viewModel.plannerDates.value.first)
                         }
                     )
                 },
@@ -94,6 +95,7 @@ private fun Screen(
     onClickBackButton: () -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
 ) {
+    val plannerTitle by viewModel.plannerTitle.collectAsState()
     val plannerDates by viewModel.plannerDates.collectAsState()
     val pikMes by viewModel.pikmis.collectAsState()
     val tags by viewModel.tags.collectAsState()
@@ -121,6 +123,7 @@ private fun Screen(
             modifier = Modifier.fillMaxSize()
         ) {
             PlannerScreen(
+                plannerTitle = plannerTitle,
                 startDate = plannerDates.first,
                 endDate = plannerDates.second,
                 pikMes = pikMes,
