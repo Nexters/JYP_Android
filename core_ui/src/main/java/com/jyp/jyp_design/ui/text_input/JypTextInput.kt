@@ -25,32 +25,32 @@ import com.jyp.jyp_design.resource.JypColors
 
 @Composable
 fun JypTextInput(
-        modifier: Modifier = Modifier,
-        type: TextInputType,
-        text: String = "",
-        valueChange: (String) -> Unit = {},
-        hint: String = "",
-        trailingImage: Painter? = null,
-        maxLines: Int = Int.MAX_VALUE,
+    modifier: Modifier = Modifier,
+    type: TextInputType,
+    text: String = "",
+    valueChange: (String) -> Unit = {},
+    hint: String = "",
+    trailingImage: Painter? = null,
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     when (type) {
         TextInputType.FIELD -> {
             TextInputField(
-                    modifier = modifier,
-                    text = text,
-                    valueChange = valueChange,
-                    hint = hint,
-                    trailingImage = trailingImage,
+                modifier = modifier,
+                text = text,
+                valueChange = valueChange,
+                hint = hint,
+                trailingImage = trailingImage,
                 maxLines = maxLines,
             )
         }
         TextInputType.BOX -> {
             TextInputBox(
-                    modifier = modifier,
-                    text = text,
-                    valueChange = valueChange,
-                    hint = hint,
-                    trailingImage = trailingImage,
+                modifier = modifier,
+                text = text,
+                valueChange = valueChange,
+                hint = hint,
+                trailingImage = trailingImage,
                 maxLines = maxLines
             )
         }
@@ -59,54 +59,54 @@ fun JypTextInput(
 
 @Composable
 internal fun TextInputField(
-        modifier: Modifier = Modifier,
-        text: String,
-        valueChange: (String) -> Unit,
-        hint: String,
-        trailingImage: Painter? = null,
-        maxLines: Int = Int.MAX_VALUE,
+    modifier: Modifier = Modifier,
+    text: String,
+    valueChange: (String) -> Unit,
+    hint: String,
+    trailingImage: Painter? = null,
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     val textFieldFocus = remember {
         mutableStateOf(false)
     }
 
     Row(
-            modifier = modifier
-                    .fillMaxWidth()
-                    .drawWithContent {
-                        drawContent()
-                        drawLine(
-                                color = JypColors.Black20,
-                                strokeWidth = 1f,
-                                start = Offset(x = 0f, y = size.height),
-                                end = Offset(x = size.width, y = size.height),
-                        )
-                    }
-                    .padding(
-                            vertical = 4.dp,
-                    ),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .drawWithContent {
+                drawContent()
+                drawLine(
+                    color = JypColors.Black20,
+                    strokeWidth = 1f,
+                    start = Offset(x = 0f, y = size.height),
+                    end = Offset(x = size.width, y = size.height),
+                )
+            }
+            .padding(
+                vertical = 4.dp,
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         TextInputContent(
-                modifier = Modifier
-                        .weight(1f),
-                text = text,
-                valueChange = valueChange,
-                hint = hint,
-                fontSize = 24.sp,
-                textFieldFocus = textFieldFocus.value,
-                textFieldFocusChange = {
-                    textFieldFocus.value = it
-                },
+            modifier = Modifier
+                .weight(1f),
+            text = text,
+            valueChange = valueChange,
+            hint = hint,
+            fontSize = 24.sp,
+            textFieldFocus = textFieldFocus.value,
+            textFieldFocusChange = {
+                textFieldFocus.value = it
+            },
             maxLines = maxLines,
         )
 
         if (text.isEmpty() || (text.isNotEmpty() && !textFieldFocus.value)) {
             trailingImage?.let { painter ->
                 Image(
-                        painter = painter,
-                        contentDescription = null,
+                    painter = painter,
+                    contentDescription = null,
                 )
             }
         }
@@ -115,52 +115,52 @@ internal fun TextInputField(
 
 @Composable
 internal fun TextInputBox(
-        modifier: Modifier = Modifier,
-        text: String,
-        valueChange: (String) -> Unit,
-        hint: String,
-        trailingImage: Painter? = null,
-        maxLines: Int = Int.MAX_VALUE,
+    modifier: Modifier = Modifier,
+    text: String,
+    valueChange: (String) -> Unit,
+    hint: String,
+    trailingImage: Painter? = null,
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     val textFieldFocus = remember {
         mutableStateOf(false)
     }
 
     Row(
-            modifier = modifier
-                    .fillMaxWidth()
-                    .background(JypColors.Background_white200)
-                    .clip(RoundedCornerShape(6.dp))
-                    .border(
-                            border = BorderStroke(1.dp, JypColors.Border_grey),
-                            shape = RoundedCornerShape(6.dp)
-                    )
-                    .padding(
-                            horizontal = 12.dp,
-                            vertical = 6.dp,
-                    ),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(JypColors.Background_white200)
+            .clip(RoundedCornerShape(6.dp))
+            .border(
+                border = BorderStroke(1.dp, JypColors.Border_grey),
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(
+                horizontal = 12.dp,
+                vertical = 6.dp,
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         TextInputContent(
-                modifier = Modifier
-                        .weight(1f),
-                text = text,
-                valueChange = valueChange,
-                hint = hint,
-                fontSize = 18.sp,
-                textFieldFocus = textFieldFocus.value,
-                textFieldFocusChange = {
-                    textFieldFocus.value = it
-                },
+            modifier = Modifier
+                .weight(1f),
+            text = text,
+            valueChange = valueChange,
+            hint = hint,
+            fontSize = 18.sp,
+            textFieldFocus = textFieldFocus.value,
+            textFieldFocusChange = {
+                textFieldFocus.value = it
+            },
             maxLines = maxLines,
         )
 
         if (text.isEmpty() || (text.isNotEmpty() && !textFieldFocus.value)) {
             trailingImage?.let { painter ->
                 Image(
-                        painter = painter,
-                        contentDescription = null,
+                    painter = painter,
+                    contentDescription = null,
                 )
             }
         }
@@ -169,59 +169,59 @@ internal fun TextInputBox(
 
 @Composable
 internal fun TextInputContent(
-        modifier: Modifier = Modifier,
-        text: String,
-        valueChange: (String) -> Unit,
-        hint: String,
-        fontSize: TextUnit,
-        textFieldFocus: Boolean,
-        textFieldFocusChange: (Boolean) -> Unit = {},
-        maxLines: Int = Int.MAX_VALUE,
+    modifier: Modifier = Modifier,
+    text: String,
+    valueChange: (String) -> Unit,
+    hint: String,
+    fontSize: TextUnit,
+    textFieldFocus: Boolean,
+    textFieldFocusChange: (Boolean) -> Unit = {},
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         BasicTextField(
-                modifier = Modifier
-                        .onFocusChanged { focusState ->
-                            textFieldFocusChange.invoke(focusState.hasFocus)
-                        },
-                value = text,
-                onValueChange = valueChange,
-                textStyle = TextStyle(
-                        color = JypColors.Text90,
-                        fontSize = fontSize,
-                        fontWeight = FontWeight.SemiBold,
-                ),
-                cursorBrush = SolidColor(JypColors.Text90),
-                decorationBox = { innerTextField ->
-                    if (text.isEmpty()) {
-                        Text(
-                                text = hint,
-                                fontSize = fontSize,
-                                color = JypColors.Text30,
-                                fontWeight = FontWeight.Medium,
-                        )
-                    }
-
-                    innerTextField()
+            modifier = Modifier
+                .onFocusChanged { focusState ->
+                    textFieldFocusChange.invoke(focusState.hasFocus)
                 },
+            value = text,
+            onValueChange = valueChange,
+            textStyle = TextStyle(
+                color = JypColors.Text90,
+                fontSize = fontSize,
+                fontWeight = FontWeight.SemiBold,
+            ),
+            cursorBrush = SolidColor(JypColors.Text90),
+            decorationBox = { innerTextField ->
+                if (text.isEmpty()) {
+                    Text(
+                        text = hint,
+                        fontSize = fontSize,
+                        color = JypColors.Text30,
+                        fontWeight = FontWeight.Medium,
+                    )
+                }
+
+                innerTextField()
+            },
             maxLines = maxLines,
         )
 
         if (text.isNotEmpty() && textFieldFocus) {
             Image(
-                    modifier = Modifier
-                            .clickable(
-                                    interactionSource = MutableInteractionSource(),
-                                    indication = null,
-                            ) {
-                                valueChange.invoke("")
-                            },
-                    painter = painterResource(id = R.drawable.ic_text_delete),
-                    contentDescription = null,
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = MutableInteractionSource(),
+                        indication = null,
+                    ) {
+                        valueChange.invoke("")
+                    },
+                painter = painterResource(id = R.drawable.ic_text_delete),
+                contentDescription = null,
             )
         }
     }
@@ -231,11 +231,11 @@ internal fun TextInputContent(
 @Preview(showBackground = true)
 internal fun TextInputFieldPreview() {
     JypTextInput(
-            type = TextInputType.FIELD,
-            text = "아르떼 뮤지엄",
-            valueChange = {},
-            hint = "aa",
-            trailingImage = painterResource(id = R.drawable.ic_search),
+        type = TextInputType.FIELD,
+        text = "아르떼 뮤지엄",
+        valueChange = {},
+        hint = "aa",
+        trailingImage = painterResource(id = R.drawable.ic_search),
     )
 }
 
@@ -243,11 +243,11 @@ internal fun TextInputFieldPreview() {
 @Preview(showBackground = true)
 internal fun TextInputFieldHintPreview() {
     JypTextInput(
-            type = TextInputType.FIELD,
-            text = "",
-            valueChange = {},
-            hint = "예) 서울 저니 식당",
-            trailingImage = painterResource(id = R.drawable.ic_search),
+        type = TextInputType.FIELD,
+        text = "",
+        valueChange = {},
+        hint = "예) 서울 저니 식당",
+        trailingImage = painterResource(id = R.drawable.ic_search),
     )
 }
 
@@ -255,11 +255,11 @@ internal fun TextInputFieldHintPreview() {
 @Preview(showBackground = true)
 internal fun TextInputBoxPreview() {
     JypTextInput(
-            type = TextInputType.BOX,
-            text = "아르떼 뮤지엄",
-            valueChange = {},
-            hint = "aa",
-            trailingImage = painterResource(id = R.drawable.ic_search),
+        type = TextInputType.BOX,
+        text = "아르떼 뮤지엄",
+        valueChange = {},
+        hint = "aa",
+        trailingImage = painterResource(id = R.drawable.ic_search),
     )
 }
 
@@ -267,10 +267,10 @@ internal fun TextInputBoxPreview() {
 @Preview(showBackground = true)
 internal fun TextInputBoxHintPreview() {
     JypTextInput(
-            type = TextInputType.BOX,
-            text = "",
-            valueChange = {},
-            hint = "예) 서울 저니 식당",
-            trailingImage = painterResource(id = R.drawable.ic_search),
+        type = TextInputType.BOX,
+        text = "",
+        valueChange = {},
+        hint = "예) 서울 저니 식당",
+        trailingImage = painterResource(id = R.drawable.ic_search),
     )
 }
