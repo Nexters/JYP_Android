@@ -464,7 +464,7 @@ internal fun JourneyItem(
                         ),
                     painter = painterResource(id = R.drawable.ic_more_menu),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(JypColors.Text_white),
+                    colorFilter = ColorFilter.tint(themeType.iconColor),
                 )
             }
             Spacer(modifier = Modifier.padding(top = 16.dp))
