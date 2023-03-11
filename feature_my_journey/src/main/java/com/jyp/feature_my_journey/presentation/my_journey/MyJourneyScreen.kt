@@ -273,10 +273,9 @@ internal fun PlannedJourneyEmptyScreen(
                     contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
-                Text(
+                JypText(
                     text = stringResource(id = R.string.my_journey_empty_description_planned_journey),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
+                    type = TextType.BODY_1,
                     color = JypColors.Text75,
                     textAlign = TextAlign.Center
                 )
@@ -287,7 +286,7 @@ internal fun PlannedJourneyEmptyScreen(
                     .fillMaxWidth(),
                 text = "후보 장소 추가하기",
                 buttonType = ButtonType.MEDIUM,
-                buttonColorSet = ButtonColorSetType.BLACK,
+                buttonColorSet = ButtonColorSetType.PINK,
                 onClickEnabled = onClickNewJourney,
                 enabled = true,
             )
