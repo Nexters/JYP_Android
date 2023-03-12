@@ -14,6 +14,11 @@ interface JypApi {
         @Body body: CreateUserRequestBody
     ): UserResponse
 
+    @DELETE("users/{id}")
+    suspend fun withdrawAccount(
+        @Path("id") userId: String
+    ): WithdrawalResponse
+
     @GET("users/{id}")
     suspend fun getUser(
         @Path("id") userId: String
