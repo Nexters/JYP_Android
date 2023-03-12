@@ -8,4 +8,6 @@ sealed class MainBottomSheetItem {
     object JoinJourney : MainBottomSheetItem()
     data class JourneyMore(val journey: Journey) : MainBottomSheetItem()
     data class ConfirmRemoveJourney(val journey: Journey) : MainBottomSheetItem()
+    object ConfirmSignOut : MainBottomSheetItem()
+    data class ConfirmWithdrawal(val userId: String) : MainBottomSheetItem()
 }
