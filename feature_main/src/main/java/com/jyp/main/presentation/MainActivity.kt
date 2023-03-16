@@ -61,7 +61,6 @@ class MainActivity : ComponentActivity() {
     private val myPageViewModel: MyPageViewModel by viewModels()
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -187,7 +186,8 @@ private fun Screen(
         },
         onClickWithdrawal = {
             coroutineScope.launch {
-                currentBottomSheetItem = MainBottomSheetItem.ConfirmWithdrawal(mainViewModel.userId.value)
+                currentBottomSheetItem =
+                    MainBottomSheetItem.ConfirmWithdrawal(mainViewModel.userId.value)
                 modalBottomSheetState.show()
             }
         }
@@ -278,34 +278,35 @@ private fun Screen(
                             }
                         )
                     }
-                    is MainBottomSheetItem.ConfirmSignOut -> {
-                        ConfirmSignOutBottomSheetScreen(
-                            onClickSignOutButton = { myPageViewModel.signOut() },
-                            onClickCancelButton = {
-                                coroutineScope.launch {
-                                    modalBottomSheetState.hide()
-                                }
+                }
+                is MainBottomSheetItem.ConfirmSignOut -> {
+                    ConfirmSignOutBottomSheetScreen(
+                        onClickSignOutButton = { myPageViewModel.signOut() },
+                        onClickCancelButton = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
                             }
-                        )
-                    }
-                    is MainBottomSheetItem.ConfirmWithdrawal -> {
-                        ConfirmWithdrawalBottomSheetScreen(
-                            onClickWithdrawalButton = {
-                                myPageViewModel.withdrawAccount(bottomSheetItem.userId)
-                            },
-                            onClickCancelButton = {
-                                coroutineScope.launch {
-                                    modalBottomSheetState.hide()
-                                }
+                        }
+                    )
+                }
+                is MainBottomSheetItem.ConfirmWithdrawal -> {
+                    ConfirmWithdrawalBottomSheetScreen(
+                        onClickWithdrawalButton = {
+                            myPageViewModel.withdrawAccount(bottomSheetItem.userId)
+                        },
+                        onClickCancelButton = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
                             }
-                        )
-                    }
+                        }
+                    )
                 }
                 is MainBottomSheetItem.JourneyMore -> {
                     JourneyMoreBottomSheetScreen(
                         journey = bottomSheetItem.journey,
                         onClickRemove = { journey ->
-                            currentBottomSheetItem = MainBottomSheetItem.ConfirmRemoveJourney(journey)
+                            currentBottomSheetItem =
+                                MainBottomSheetItem.ConfirmRemoveJourney(journey)
                         },
                     )
                 }
@@ -434,27 +435,27 @@ private fun createMyPageScreenItem(
 ): MainScreenItem {
 
     return MainScreenItem(
-            navItem = BottomNavItem.MY_PAGE,
-            content = {
-                val userName by mainViewModel.userName.collectAsState()
-                val personality by mainViewModel.personality.collectAsState()
-                val profileImagePath by mainViewModel.profileImagePath.collectAsState()
+        navItem = BottomNavItem.MY_PAGE,
+        content = {
+            val userName by mainViewModel.userName.collectAsState()
+            val personality by mainViewModel.personality.collectAsState()
+            val profileImagePath by mainViewModel.profileImagePath.collectAsState()
 
-                GlobalNavigationBarLayout(
-                        color = GlobalNavigationBarColor.WHITE,
-                        title = stringResource(id = BottomNavItem.MY_PAGE.labelRes),
-                        titleSize = 16.sp,
-                        titleFontWeight = FontWeight.Medium,
-                ) {
-                    MyPageScreen(
-                        profileImagePath = profileImagePath,
-                        personality = personality,
-                        userName = userName,
-                        onClickAppInfo = {},
-                        onClickSignOut = onClickSignOut,
-                        onClickWithdrawal = onClickWithdrawal
-                    )
-                }
+            GlobalNavigationBarLayout(
+                color = GlobalNavigationBarColor.WHITE,
+                title = stringResource(id = BottomNavItem.MY_PAGE.labelRes),
+                titleSize = 16.sp,
+                titleFontWeight = FontWeight.Medium,
+            ) {
+                MyPageScreen(
+                    profileImagePath = profileImagePath,
+                    personality = personality,
+                    userName = userName,
+                    onClickAppInfo = {},
+                    onClickSignOut = onClickSignOut,
+                    onClickWithdrawal = onClickWithdrawal
+                )
             }
+        }
     )
 }
