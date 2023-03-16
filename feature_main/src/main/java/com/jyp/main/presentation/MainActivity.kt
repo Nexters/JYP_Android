@@ -17,10 +17,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.jyp.core_network.di.JypSessionManager
+import com.jyp.core_network.jyp.UiState
 import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.feature_my_journey.presentation.my_journey.*
+import com.jyp.feature_my_page.presentation.ConfirmSignOutBottomSheetScreen
+import com.jyp.feature_my_page.presentation.ConfirmWithdrawalBottomSheetScreen
 import com.jyp.feature_my_page.presentation.MyPageScreen
+import com.jyp.feature_my_page.presentation.MyPageViewModel
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity
 import com.jyp.feature_planner.presentation.planner.PlannerActivity
 import com.jyp.jyp_design.resource.JypColors
@@ -28,11 +36,18 @@ import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var sessionManager: JypSessionManager
+
     private val mainViewModel: MainViewModel by viewModels()
     private val myJourneyViewModel: MyJourneyViewModel by viewModels()
+    private val myPageViewModel: MyPageViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +56,7 @@ class MainActivity : ComponentActivity() {
             Screen(
                 mainViewModel = mainViewModel,
                 myJourneyViewModel = myJourneyViewModel,
+                myPageViewModel = myPageViewModel,
                 onClickCreateJourney = {
                     startActivity(Intent(this, CreatePlannerActivity::class.java))
                 },
@@ -55,11 +71,54 @@ class MainActivity : ComponentActivity() {
         }
 
         mainViewModel.fetchUser()
+        initSignOutStateFlowCollector()
+        initWithdrawalStateFlowCollector()
     }
 
     override fun onResume() {
         super.onResume()
         myJourneyViewModel.fetchJourneyList()
+    }
+
+    private fun initSignOutStateFlowCollector() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                myPageViewModel.signOutWithKakaoUiState.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Loading -> {}
+                        is UiState.Success<*> -> resetUserSignInState()
+                        is UiState.Failure -> {
+                            uiState.throwable.printStackTrace()
+                            resetUserSignInState()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initWithdrawalStateFlowCollector() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                myPageViewModel.withdrawAccountUiState.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Loading -> {}
+                        is UiState.Success<*> -> resetUserSignInState()
+                        is UiState.Failure -> uiState.throwable.printStackTrace()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun resetUserSignInState() {
+        sessionManager.bearerToken = null
+        startActivity(
+            Intent().setClassName(
+                this@MainActivity,
+                "com.jyp.feature_sign_in.onboarding.OnboardingActivity"
+            )
+        )
     }
 }
 
@@ -68,6 +127,7 @@ class MainActivity : ComponentActivity() {
 private fun Screen(
     mainViewModel: MainViewModel,
     myJourneyViewModel: MyJourneyViewModel,
+    myPageViewModel: MyPageViewModel,
     onClickCreateJourney: () -> Unit,
     onClickPlanner: (id: String) -> Unit
 ) {
@@ -104,7 +164,20 @@ private fun Screen(
 
     val anotherJourneyScreenItem = createAnotherJourneyScreenItem()
     val myPageScreenItem = createMyPageScreenItem(
-        mainViewModel = mainViewModel
+        mainViewModel = mainViewModel,
+        myPageViewModel = myPageViewModel,
+        onClickSignOut = {
+            coroutineScope.launch {
+                currentBottomSheetItem = MainBottomSheetItem.ConfirmSignOut
+                modalBottomSheetState.show()
+            }
+        },
+        onClickWithdrawal = {
+            coroutineScope.launch {
+                currentBottomSheetItem = MainBottomSheetItem.ConfirmWithdrawal(mainViewModel.userId.value)
+                modalBottomSheetState.show()
+            }
+        }
     )
 
     ModalBottomSheetLayout(
@@ -162,6 +235,28 @@ private fun Screen(
                                 onClickLeaveJourney = {
                                     myJourneyViewModel.leaveJourney(bottomSheetItem.journey.id)
                                 }
+                        )
+                    }
+                    is MainBottomSheetItem.ConfirmSignOut -> {
+                        ConfirmSignOutBottomSheetScreen(
+                            onClickSignOutButton = { myPageViewModel.signOut() },
+                            onClickCancelButton = {
+                                coroutineScope.launch {
+                                    modalBottomSheetState.hide()
+                                }
+                            }
+                        )
+                    }
+                    is MainBottomSheetItem.ConfirmWithdrawal -> {
+                        ConfirmWithdrawalBottomSheetScreen(
+                            onClickWithdrawalButton = {
+                                myPageViewModel.withdrawAccount(bottomSheetItem.userId)
+                            },
+                            onClickCancelButton = {
+                                coroutineScope.launch {
+                                    modalBottomSheetState.hide()
+                                }
+                            }
                         )
                     }
                 }
@@ -271,8 +366,12 @@ private fun createAnotherJourneyScreenItem(): MainScreenItem {
 }
 
 private fun createMyPageScreenItem(
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    myPageViewModel: MyPageViewModel,
+    onClickSignOut: () -> Unit,
+    onClickWithdrawal: () -> Unit,
 ): MainScreenItem {
+
     return MainScreenItem(
             navItem = BottomNavItem.MY_PAGE,
             content = {
@@ -291,8 +390,8 @@ private fun createMyPageScreenItem(
                         personality = personality,
                         userName = userName,
                         onClickAppInfo = {},
-                        onClickSignOut = {},
-                        onClickWithdrawal = {}
+                        onClickSignOut = onClickSignOut,
+                        onClickWithdrawal = onClickWithdrawal
                     )
                 }
             }

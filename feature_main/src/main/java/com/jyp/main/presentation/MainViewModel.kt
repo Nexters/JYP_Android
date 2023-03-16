@@ -17,6 +17,10 @@ class MainViewModel @Inject constructor(
     private val getMeUseCase: GetMeUseCase,
     private val setMyProfileUseCase: SetMyProfileUseCase,
 ) : ViewModel() {
+    private val _userId = MutableStateFlow("")
+    val userId: StateFlow<String>
+        get() = _userId
+
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String>
         get() = _userName
@@ -41,6 +45,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             getMeUseCase.invoke()
                 .onSuccess { user ->
+                    _userId.value = user.id
                     _userName.value = user.name
                     _profileImagePath.value = user.profileImagePath
                     _personality.value = user.personality
