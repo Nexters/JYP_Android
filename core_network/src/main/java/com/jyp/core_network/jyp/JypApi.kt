@@ -39,6 +39,12 @@ interface JypApi {
     @POST("journeys")
     suspend fun createPlanner(@Body body: CreatePlannerRequestBody): Any
 
+    @POST("journeys/{id}/join")
+    suspend fun joinPlanner(
+        @Path("id") plannerId: String,
+        @Body joinPlannerRequestBody: JoinPlannerRequestBody
+    ): JypBaseResponse<Any>
+
     @GET("journeys/{id}")
     suspend fun getPlanner(@Path("id") id: String): PlannerResponse
 

@@ -20,6 +20,7 @@ import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteAct
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
 class PlannerActivity : ComponentActivity() {
     private val viewModel: PlannerViewModel by viewModels()
@@ -33,13 +34,17 @@ class PlannerActivity : ComponentActivity() {
         setContent {
             Screen(
                 onClickInviteUserButton = {
-                    startActivity(Intent(this, InviteUserActivity::class.java))
+                    startActivity(
+                        Intent(this, InviteUserActivity::class.java).apply {
+                            putExtra(EXTRA_PLANNER_ID, plannerId)
+                        }
+                    )
                 },
                 viewModel = viewModel,
                 onNewPikMeClick = {
                     startActivity(
                         Intent(this, SearchPlaceActivity::class.java).apply {
-                            putExtra(SearchPlaceActivity.EXTRA_PLANNER_ID, plannerId)
+                            putExtra(EXTRA_PLANNER_ID, plannerId)
                         }
                     )
                 },

@@ -18,13 +18,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.jyp.core_network.jyp.UiState
+import com.jyp.core_network.util.toJypApiFailure
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.create_planner.model.*
+import com.jyp.feature_planner.presentation.planner.PlannerActivity
+import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EXTRA_PLANNER_ID
 import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class CreatePlannerActivity : AppCompatActivity() {
@@ -42,8 +50,13 @@ class CreatePlannerActivity : AppCompatActivity() {
         intent.getSerializableExtra(EXTRA_CREATE_PLANNER_DATE) as? Pair<Long, Long>
     }
 
+    private val plannerId: String? by lazy {
+        intent.getStringExtra(EXTRA_PLANNER_ID)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initStateFlowCollector()
         setContent {
             Screen(
                 viewModel = viewModel,
@@ -74,22 +87,61 @@ class CreatePlannerActivity : AppCompatActivity() {
                     )
                 },
                 submitOnTaste = { tags ->
-                    viewModel.createPlanner(
-                        title ?: return@Screen,
-                        themeType?.imagePath ?: return@Screen,
-                        date?.first ?: return@Screen,
-                        date?.second ?: return@Screen,
-                        tags,
-                    )
-
-                    finishAffinity()
+                    when (plannerId.isNullOrBlank()) {
+                        true -> {
+                            viewModel.createPlanner(
+                                title ?: return@Screen,
+                                themeType?.imagePath ?: return@Screen,
+                                date?.first ?: return@Screen,
+                                date?.second ?: return@Screen,
+                                tags,
+                            )
+                            finishAffinity()
+                        }
+                        false -> viewModel.joinPlanner(
+                            plannerId ?: "",
+                            tags
+                        )
+                    }
                 },
                 onClickBackAction = this::finish
             )
         }
     }
 
+    private fun initStateFlowCollector() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.joinPlannerUiState.collect { uiState ->
+                    when (uiState) {
+                        is UiState.Loading -> {}
+                        is UiState.Success -> startActivity(
+                            Intent(this@CreatePlannerActivity, PlannerActivity::class.java).apply {
+                                putExtra(EXTRA_PLANNER_ID, plannerId)
+                            }
+                        )
+                        is UiState.Failure -> {
+                            uiState.throwable.printStackTrace()
+                            uiState.throwable.toJypApiFailure()?.let {
+                                setResult(
+                                    RESULT_CODE_JOIN_PLANNER_FAILURE,
+                                    Intent()
+                                        .setClassName(this@CreatePlannerActivity, "com.jyp.main.presentation.MainActivity")
+                                        .putExtra(JOIN_PLANNER_ERROR_CODE, it.code)
+                                )
+                                finish()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
+        const val RESULT_CODE_JOIN_PLANNER_FAILURE = 1000
+        const val JOIN_PLANNER_ERROR_CODE = "JOIN_PLANNER_ERROR_CODE"
+
         const val EXTRA_CREATE_PLANNER_STEP = "EXTRA_CREATE_PLANNER_STEP"
         const val EXTRA_CREATE_PLANNER_TITLE = "EXTRA_CREATE_PLANNER_TITLE"
         const val EXTRA_CREATE_PLANNER_THEME_TYPE = "EXTRA_CREATE_PLANNER_THEME_TYPE"

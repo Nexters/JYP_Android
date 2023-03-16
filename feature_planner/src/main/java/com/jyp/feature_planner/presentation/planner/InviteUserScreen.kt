@@ -1,5 +1,6 @@
 package com.jyp.feature_planner.presentation.planner
 
+import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -30,10 +31,11 @@ import kotlinx.coroutines.*
 @Composable
 fun InviteUserScreen(
     onClickBackButton: () -> Unit,
-    onClickCopyInvitationLinkButton: () -> Unit
+    onClickCopyInvitationCodeButton: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    var isInvitationLinkCopyButtonClicked by remember { mutableStateOf(false) }
+    var isInvitationCodeCopyButtonClicked by remember { mutableStateOf(false) }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         GlobalNavigationBarLayout(
@@ -65,18 +67,18 @@ fun InviteUserScreen(
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 JypTextButton(
-                    text = "초대링크 복사",
+                    text = "참여코드 복사하기",
                     buttonType = ButtonType.THICK,
                     modifier = Modifier.fillMaxWidth(1f),
                     enabled = true,
                     buttonColorSet = ButtonColorSetType.PINK,
                     onClickEnabled = {
-                        onClickCopyInvitationLinkButton()
-                        if (!isInvitationLinkCopyButtonClicked) {
+                        onClickCopyInvitationCodeButton()
+                        if (!isInvitationCodeCopyButtonClicked) {
                             coroutineScope.launch {
-                                isInvitationLinkCopyButtonClicked = true
+                                isInvitationCodeCopyButtonClicked = true
                                 delay(1000)
-                                isInvitationLinkCopyButtonClicked = false
+                                isInvitationCodeCopyButtonClicked = false
                             }
                         }
                     }
@@ -85,7 +87,13 @@ fun InviteUserScreen(
         }
 
         AnimatedVisibility(
-            visible = isInvitationLinkCopyButtonClicked,
+            visible = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                isInvitationCodeCopyButtonClicked
+            } else {
+                // In Android 13 and higher, feedback automatically provided when copying to the clipboard.
+                // https://developer.android.com/develop/ui/views/touch-and-input/copy-paste#Feedback
+                false
+            },
             modifier = Modifier.fillMaxWidth(),
             enter = fadeIn(animationSpec = tween(300)),
             exit = fadeOut(animationSpec = tween(600))
@@ -135,6 +143,6 @@ private fun CustomToast(
 private fun InviteUserScreenPreview() {
     InviteUserScreen(
         onClickBackButton = {},
-        onClickCopyInvitationLinkButton = {}
+        onClickCopyInvitationCodeButton = {}
     )
 }

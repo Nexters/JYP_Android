@@ -7,12 +7,13 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
 import com.jyp.core_network.di.JypSessionManager
+import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.KakaoSignIn
+import com.jyp.core_network.util.toJypApiFailure
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity
 import com.jyp.feature_sign_in.R
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity.Companion.PROFILE_IMAGE_PATH
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity.Companion.USER_NAME
-import com.jyp.feature_sign_in.util.UiState
 import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.feature_sign_in.util.showToast
 import com.jyp.main.presentation.MainActivity
@@ -81,7 +82,7 @@ class SignInActivity : ComponentActivity() {
             viewModel.signInWithKakaoUiState.collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {}
-                    is UiState.Success -> (uiState.result as KakaoSignIn).let { signIn ->
+                    is UiState.Success<*> -> (uiState.data as KakaoSignIn).let { signIn ->
                         sessionManager.bearerToken = signIn.token
 
                         when (signIn.kakaoAccount == null) {
@@ -96,7 +97,12 @@ class SignInActivity : ComponentActivity() {
                             }
                         }
                     }
-                    is UiState.Failure -> showToast(uiState.message)
+                    is UiState.Failure -> {
+                        uiState.throwable.printStackTrace()
+                        uiState.throwable.toJypApiFailure()?.let {
+                            showToast(it.message)
+                        }
+                    }
                 }
             }
         }

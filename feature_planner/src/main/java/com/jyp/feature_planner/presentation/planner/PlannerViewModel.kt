@@ -70,8 +70,8 @@ class PlannerViewModel @Inject constructor(
 
                     pikmis = planner.pikmis
                 }
-                .onFailure { exception ->
-                    exception.printStackTrace()
+                .onFailure { throwable ->
+                    throwable.printStackTrace()
                 }
 
             val pikmeMapper = PlannerPikmeMapper()

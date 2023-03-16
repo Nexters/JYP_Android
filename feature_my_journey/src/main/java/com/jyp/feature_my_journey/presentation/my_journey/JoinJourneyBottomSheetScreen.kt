@@ -14,8 +14,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.jyp_design.resource.JypColors
@@ -31,7 +31,8 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun JoinJourneyBottomSheetScreen(
-    onClickCancelButton: () -> Unit
+    onClickCancelButton: () -> Unit,
+    onClickNextButton: (String) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     var joinCodeFromTextInput by remember { mutableStateOf("") }
@@ -42,6 +43,7 @@ fun JoinJourneyBottomSheetScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .fillMaxHeight(0.9f)
             .padding(
                 start = 24.dp,
                 end = 24.dp,
@@ -49,9 +51,14 @@ fun JoinJourneyBottomSheetScreen(
                 bottom = 34.dp
             )
     ) {
-        Header(onClickCancelButton = onClickCancelButton)
+        Header(onClickCancelButton = {
+            onClickCancelButton()
+            keyboard?.hide()
+        })
         Spacer(modifier = Modifier.size(32.dp))
         Content(
+            modifier = Modifier.weight(1f),
+            keyboard = keyboard,
             focusRequester = focusRequester,
             joinCodeFromTextInput = joinCodeFromTextInput,
             onJoinCodeChanged = {
@@ -61,7 +68,15 @@ fun JoinJourneyBottomSheetScreen(
                     keyboard?.show()
                 }
             },
-            onClickJoinCodeFromClipboard = { joinCodeFromTextInput = it }
+            onClickJoinCodeFromClipboard = { joinCodeFromTextInput = it },
+        )
+        JypTextButton(
+            text = stringResource(id = com.jyp.jyp_design.R.string.button_next),
+            buttonType = ButtonType.THICK,
+            modifier = Modifier.fillMaxWidth(),
+            buttonColorSet = ButtonColorSetType.PINK,
+            enabled = joinCodeFromTextInput.isNotBlank(),
+            onClickEnabled = { onClickNextButton(joinCodeFromTextInput) }
         )
     }
 }
@@ -94,17 +109,20 @@ private fun Header(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Content(
+    modifier: Modifier,
+    keyboard: SoftwareKeyboardController?,
     focusRequester: FocusRequester,
     joinCodeFromTextInput: String,
     onJoinCodeChanged: (String) -> Unit,
     onClickJoinCodeFromClipboard: (String) -> Unit
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val joinCodeFromClipboard = clipboardManager.getText()?.text
 
 
-    Column(modifier = Modifier.fillMaxWidth(1f)) {
+    Column(
+        modifier = modifier
+    ) {
         JypText(
             text = "참여 코드",
             type = TextType.BODY_3,
@@ -141,30 +159,12 @@ private fun Content(
                         enabled = it.isNotBlank(),
                         onClick = {
                             onClickJoinCodeFromClipboard(it)
-                            keyboardController?.hide()
+                            keyboard?.hide()
                         }
                     ),
                 color = JypColors.Sub_blue300
             )
         }
-        Spacer(modifier = Modifier.height(420.dp))
-//        if (isWrongJoinCode) {
-        JypText(
-            text = "잘못된 참여 코드에요",
-            type = TextType.BODY_3,
-            modifier = Modifier.fillMaxWidth(1f),
-            textAlign = TextAlign.Center,
-            color = JypColors.Pink
-        )
-//        }
-        Spacer(modifier = Modifier.height(12.dp))
-        JypTextButton(
-            text = stringResource(id = com.jyp.jyp_design.R.string.button_next),
-            buttonType = ButtonType.THICK,
-            modifier = Modifier.fillMaxWidth(),
-            buttonColorSet = ButtonColorSetType.PINK,
-            enabled = joinCodeFromTextInput.isNotBlank()
-        )
     }
 
     LaunchedEffect(Unit) {
@@ -177,6 +177,7 @@ private fun Content(
 @Composable
 fun JoinJourneyBottomSheetScreenPreview() {
     JoinJourneyBottomSheetScreen(
-        onClickCancelButton = {}
+        onClickCancelButton = {},
+        onClickNextButton = {}
     )
 }

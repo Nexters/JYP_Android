@@ -67,8 +67,8 @@ class MyJourneyViewModel @Inject constructor(
                         )
                     }
                 }
-                .onFailure { e ->
-                    e.printStackTrace()
+                .onFailure { throwable ->
+                    throwable.printStackTrace()
                 }
         }
     }

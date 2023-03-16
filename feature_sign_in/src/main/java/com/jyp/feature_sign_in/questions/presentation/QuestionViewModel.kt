@@ -2,12 +2,12 @@ package com.jyp.feature_sign_in.questions.presentation
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.*
+import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.request.CreateUserRequestBody
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
 import com.jyp.feature_sign_in.questions.QuestionResultEnum
 import com.jyp.feature_sign_in.questions.domain.QuestionUseCase
-import com.jyp.feature_sign_in.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,8 +24,8 @@ class QuestionViewModel @Inject constructor(
     private val _selectedQuestionOptions = mutableStateListOf<Int?>(null, null, null)
     val selectedQuestionOptions: List<Int?> get() = _selectedQuestionOptions
 
-    private val _createUserAccountUiState = MutableStateFlow<UiState>(UiState.Loading)
-    val createUserAccountUiState: StateFlow<UiState>
+    private val _createUserAccountUiState = MutableStateFlow<UiState<*>>(UiState.Loading)
+    val createUserAccountUiState: StateFlow<UiState<*>>
         get() = _createUserAccountUiState
 
 
@@ -55,9 +55,7 @@ class QuestionViewModel @Inject constructor(
                     _createUserAccountUiState.value = UiState.Success(it)
                 }
                 .onFailure { throwable ->
-                    throwable.localizedMessage?.let {
-                        _createUserAccountUiState.value = UiState.Failure(it)
-                    }
+                    _createUserAccountUiState.value = UiState.Failure(throwable)
                 }
         }
     }

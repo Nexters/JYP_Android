@@ -6,6 +6,7 @@ sealed class MainBottomSheetItem {
     object None : MainBottomSheetItem()
     object NewJourney : MainBottomSheetItem()
     object JoinJourney : MainBottomSheetItem()
+    object FailToJoinJourney : MainBottomSheetItem()
     data class JourneyMore(val journey: Journey) : MainBottomSheetItem()
     data class ConfirmRemoveJourney(val journey: Journey) : MainBottomSheetItem()
     object ConfirmSignOut : MainBottomSheetItem()

@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jyp.feature_my_journey.enum.FailToJoinJourneyEnum
+import com.jyp.core_network.jyp.model.enumerate.JoinJourneyFailure
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.text.JypText
@@ -14,7 +14,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 fun FailToJoinJourneyBottomSheetScreen(
-    failToJoinJourneyEnum: FailToJoinJourneyEnum,
+    joinJourneyFailure: JoinJourneyFailure,
     onClickConfirmButton: () -> Unit
 ) {
     Column(
@@ -28,13 +28,13 @@ fun FailToJoinJourneyBottomSheetScreen(
             )
     ) {
         JypText(
-            text = failToJoinJourneyEnum.title,
+            text = joinJourneyFailure.title,
             type = TextType.TITLE_2,
             color = JypColors.Text80
         )
         Spacer(modifier = Modifier.size(8.dp))
         JypText(
-            text = failToJoinJourneyEnum.body,
+            text = joinJourneyFailure.body,
             type = TextType.BODY_2,
             color = JypColors.Text75
         )
@@ -58,7 +58,7 @@ fun FailToJoinJourneyBottomSheetScreen(
 @Preview(showBackground = true)
 private fun FailToJoinJourneyBottomSheetScreenPreview() {
     FailToJoinJourneyBottomSheetScreen(
-        failToJoinJourneyEnum = FailToJoinJourneyEnum.FAIL_WITH_EXPIRED,
+        joinJourneyFailure = JoinJourneyFailure.JOURNEY_JOINED_FULL,
         onClickConfirmButton = {}
     )
 }
