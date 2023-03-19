@@ -18,6 +18,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -175,9 +176,14 @@ private fun Screen(
     )
 
     val anotherJourneyScreenItem = createAnotherJourneyScreenItem()
+
+    val localUrlHandler = LocalUriHandler.current
     val myPageScreenItem = createMyPageScreenItem(
         mainViewModel = mainViewModel,
         myPageViewModel = myPageViewModel,
+        onClickAppInfo = {
+            localUrlHandler.openUri("https://plausible-seahorse-ba5.notion.site/Journey-piki-688aac1424924a30bf974c7866592a98")
+        },
         onClickSignOut = {
             coroutineScope.launch {
                 currentBottomSheetItem = MainBottomSheetItem.ConfirmSignOut
@@ -430,6 +436,7 @@ private fun createAnotherJourneyScreenItem(): MainScreenItem {
 private fun createMyPageScreenItem(
     mainViewModel: MainViewModel,
     myPageViewModel: MyPageViewModel,
+    onClickAppInfo: () -> Unit,
     onClickSignOut: () -> Unit,
     onClickWithdrawal: () -> Unit,
 ): MainScreenItem {
@@ -451,7 +458,7 @@ private fun createMyPageScreenItem(
                     profileImagePath = profileImagePath,
                     personality = personality,
                     userName = userName,
-                    onClickAppInfo = {},
+                    onClickAppInfo = onClickAppInfo,
                     onClickSignOut = onClickSignOut,
                     onClickWithdrawal = onClickWithdrawal
                 )
