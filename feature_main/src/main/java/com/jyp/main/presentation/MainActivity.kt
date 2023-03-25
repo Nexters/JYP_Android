@@ -18,7 +18,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,10 +31,7 @@ import com.jyp.core_network.jyp.UiState
 import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.feature_my_journey.presentation.my_journey.*
-import com.jyp.feature_my_page.presentation.ConfirmSignOutBottomSheetScreen
-import com.jyp.feature_my_page.presentation.ConfirmWithdrawalBottomSheetScreen
-import com.jyp.feature_my_page.presentation.MyPageScreen
-import com.jyp.feature_my_page.presentation.MyPageViewModel
+import com.jyp.feature_my_page.presentation.*
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.EXTRA_CREATE_PLANNER_STEP
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.JOIN_PLANNER_ERROR_CODE
@@ -78,6 +74,11 @@ class MainActivity : ComponentActivity() {
                         Intent(this, PlannerActivity::class.java).apply {
                             putExtra(EXTRA_PLANNER_ID, plannerId)
                         }
+                    )
+                },
+                onClickAppInfo = {
+                    startActivity(
+                        Intent(this, AppInfoActivity::class.java)
                     )
                 }
             )
@@ -143,6 +144,7 @@ private fun Screen(
     myPageViewModel: MyPageViewModel,
     onClickCreateJourney: () -> Unit,
     onClickPlanner: (id: String) -> Unit,
+    onClickAppInfo: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     var currentBottomSheetItem by remember {
@@ -177,13 +179,10 @@ private fun Screen(
 
     val anotherJourneyScreenItem = createAnotherJourneyScreenItem()
 
-    val localUrlHandler = LocalUriHandler.current
     val myPageScreenItem = createMyPageScreenItem(
         mainViewModel = mainViewModel,
         myPageViewModel = myPageViewModel,
-        onClickAppInfo = {
-            localUrlHandler.openUri("https://plausible-seahorse-ba5.notion.site/Journey-piki-688aac1424924a30bf974c7866592a98")
-        },
+        onClickAppInfo = onClickAppInfo,
         onClickSignOut = {
             coroutineScope.launch {
                 currentBottomSheetItem = MainBottomSheetItem.ConfirmSignOut
