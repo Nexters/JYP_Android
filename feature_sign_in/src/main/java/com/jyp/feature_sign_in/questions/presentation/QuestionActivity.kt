@@ -1,5 +1,6 @@
 package com.jyp.feature_sign_in.questions.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -64,7 +65,10 @@ class QuestionActivity : ComponentActivity() {
                 when (uiState) {
                     is UiState.Loading -> {}
                     is UiState.Success<*> -> (uiState.data as User).apply {
-                        setIntentTo(MainActivity::class.java)
+                        setIntentTo(
+                            it = MainActivity::class.java,
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP,
+                        )
                     }
                     is UiState.Failure -> {
                         uiState.throwable.printStackTrace()
