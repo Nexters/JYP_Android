@@ -44,36 +44,13 @@ class QuestionActivity : ComponentActivity() {
                     if (userName.isNullOrBlank()) showToast(R.string.sign_in_error)
                     if (profileImagePath.isNullOrBlank()) showToast(R.string.sign_in_error)
 
-                    viewModel.createUserAccount(
-                        CreateUserRequestBody(
-                            name = userName!!,
-                            profileImagePath = profileImagePath!!,
-                            personalityId = viewModel.getSelectedQuestionOptionsAsEnum().name
-                        )
-                    )
+                    setIntentTo(MainActivity::class.java) {
+                        putString(MainActivity.EXTRA_USER_NAME, userName)
+                        putString(MainActivity.EXTRA_PROFILE_IMAGE_PATH, profileImagePath)
+                        putString(MainActivity.EXTRA_PERSONALITY, viewModel.getSelectedQuestionOptionsAsEnum().name)
+                    }
                 }
             )
-        }
-
-        initCreateUserAccountUiStateCollector()
-    }
-
-    private fun initCreateUserAccountUiStateCollector() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.createUserAccountUiState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> {}
-                    is UiState.Success<*> -> (uiState.data as User).apply {
-                        setIntentTo(MainActivity::class.java)
-                    }
-                    is UiState.Failure -> {
-                        uiState.throwable.printStackTrace()
-                        uiState.throwable.toJypApiFailure()?.let {
-                            showToast(it.message)
-                        }
-                    }
-                }
-            }
         }
     }
 

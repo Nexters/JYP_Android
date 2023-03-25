@@ -11,6 +11,14 @@ class UserRepositoryImpl @Inject constructor(
         return userDataSource.getMe()
     }
 
+    override suspend fun createUserAccount(
+        name: String,
+        profileImagePath: String,
+        personalityId: String
+    ): UserResponse {
+        return userDataSource.createUserAccount(name, profileImagePath, personalityId)
+    }
+
     override suspend fun updateUserProfile(id: String, profileImagePath: String): UserResponse {
         return userDataSource.updateUserProfile(id, profileImagePath)
     }
