@@ -17,8 +17,9 @@ fun Context.showToast(message: Any) {
     toast?.show()
 }
 
-fun <T> Context.setIntentTo(it: Class<T>, extras: Bundle.() -> Unit = {}) {
+fun <T> Context.setIntentTo(it: Class<T>, flags: Int = 0, extras: Bundle.() -> Unit = {}) {
     Intent(this, it).apply {
+        setFlags(flags)
         putExtras(Bundle().apply(extras))
         startActivity(this)
     }

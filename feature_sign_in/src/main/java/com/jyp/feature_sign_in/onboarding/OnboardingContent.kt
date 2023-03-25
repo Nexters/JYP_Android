@@ -2,7 +2,6 @@ package com.jyp.feature_sign_in.onboarding
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,7 +26,6 @@ import com.jyp.jyp_design.ui.button.ButtonType
 import com.jyp.jyp_design.ui.button.JypTextButton
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 
 
@@ -37,9 +36,7 @@ fun OnboardingContent(
     onOnboardingFinished: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState().apply {
-        coroutineScope.launch { disableScrolling() }
-    }
+    val pagerState = rememberPagerState()
     val onboardings = listOf(
         OnboardingEnum.ONBOARDING_01,
         OnboardingEnum.ONBOARDING_02
@@ -49,73 +46,62 @@ fun OnboardingContent(
         0 -> BackHandler(enabled = true) { onBackPressed() }
         1 -> BackHandler(enabled = true) {
             coroutineScope.launch {
-                pagerState.enableScrolling()
-                pagerState.scrollToPage(pagerState.currentPage - 1)
-                pagerState.disableScrolling()
+                pagerState.animateScrollToPage(pagerState.currentPage - 1)
             }
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(JypColors.Background_white100),
-        verticalArrangement = Arrangement.SpaceBetween,
+            .background(JypColors.Background_white200)
     ) {
-        OnboardingViewPager(
-            pagerState = pagerState,
-            onboardings = onboardings,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = JypColors.Background_white100,
-                    shape = RoundedCornerShape(
-                        bottomStart = 40.dp,
-                        bottomEnd = 40.dp
-                    )
-                )
-                .weight(1f, false),
-            itemModifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-        )
-        JypTextButton(
-            text = stringResource(id = com.jyp.jyp_design.R.string.button_next),
-            buttonType = ButtonType.THICK,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(
-                    top = 36.dp,
-                    bottom = 28.dp
-                ),
-            enabled = true,
-            buttonColorSet = ButtonColorSetType.PINK,
-            onClickEnabled = {
-                when (pagerState.currentPage >= onboardings.size - 1) {
-                    true -> onOnboardingFinished()
-                    false -> coroutineScope.launch {
-                        pagerState.enableScrolling()
-                        pagerState.scrollToPage(pagerState.currentPage + 1)
-                        pagerState.disableScrolling()
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            OnboardingViewPager(
+                pagerState = pagerState,
+                onboardings = onboardings,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .weight(1f)
+            )
+            JypTextButton(
+                text = stringResource(id = com.jyp.jyp_design.R.string.button_next),
+                buttonType = ButtonType.THICK,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .padding(
+                        top = 36.dp,
+                        bottom = 28.dp
+                    ),
+                enabled = true,
+                buttonColorSet = ButtonColorSetType.PINK,
+                onClickEnabled = {
+                    when (pagerState.currentPage >= onboardings.size - 1) {
+                        true -> onOnboardingFinished()
+                        false -> coroutineScope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
                     }
                 }
-            }
+            )
+        }
+        Image(
+            painter = painterResource(
+                id = com.jyp.jyp_design.R.drawable.image_logotype
+            ),
+            contentDescription = null,
+            modifier = Modifier
+                .width(100.dp)
+                .wrapContentHeight()
+                .padding(
+                    start = 24.dp,
+                    top = 24.dp
+                )
         )
-    }
-}
-
-@ExperimentalPagerApi
-internal suspend fun PagerState.disableScrolling() {
-    scroll(scrollPriority = MutatePriority.PreventUserInput) {
-        awaitCancellation()
-    }
-}
-
-@ExperimentalPagerApi
-internal suspend fun PagerState.enableScrolling() {
-    scroll(scrollPriority = MutatePriority.PreventUserInput) {
-        // Do nothing, just cancel the previous indefinite "scroll"
     }
 }
 
@@ -124,8 +110,7 @@ internal suspend fun PagerState.enableScrolling() {
 internal fun OnboardingViewPager(
     pagerState: PagerState,
     onboardings: List<OnboardingEnum>,
-    modifier: Modifier,
-    itemModifier: Modifier
+    modifier: Modifier
 ) {
     HorizontalPager(
         count = onboardings.size,
@@ -135,33 +120,27 @@ internal fun OnboardingViewPager(
         itemSpacing = 0.dp,
         contentPadding = PaddingValues(0.dp)
     ) { page ->
-        OnboardingScreenItem(
-            onboarding = onboardings[page],
-            modifier = itemModifier
-        )
+        OnboardingScreenItem(onboarding = onboardings[page])
     }
 }
 
 @Composable
 internal fun OnboardingScreenItem(
-    onboarding: OnboardingEnum,
-    modifier: Modifier
+    onboarding: OnboardingEnum
 ) {
     Column(
-        modifier = modifier
-    ) {
-        Image(
-            painter = painterResource(id = com.jyp.jyp_design.R.drawable.image_logotype),
-            contentDescription = null,
-            modifier = Modifier
-                .width(100.dp)
-                .wrapContentHeight()
-                .align(Alignment.Start)
-                .padding(
-                    start = 24.dp,
-                    top = 24.dp
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                color = JypColors.Background_white100,
+                shape = RoundedCornerShape(
+                    topStart = 0.dp,
+                    topEnd = 0.dp,
+                    bottomStart = 40.dp,
+                    bottomEnd = 40.dp
                 )
-        )
+            )
+    ) {
         JypText(
             text = stringResource(id = onboarding.titleRes),
             type = TextType.TITLE_1,
@@ -170,20 +149,60 @@ internal fun OnboardingScreenItem(
                 .wrapContentHeight()
                 .align(Alignment.Start)
                 .padding(horizontal = 24.dp)
-                .padding(top = 40.dp),
+                .padding(top = 88.dp),
             maxLines = 2,
             textAlign = TextAlign.Start,
             color = JypColors.Text90
         )
-        Image(
-            painter = painterResource(id = onboarding.imageRes),
-            contentDescription = null,
+        Spacer(modifier = Modifier.weight(1f))
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(top = 40.dp),
-            contentScale = ContentScale.FillWidth
-        )
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .align(Alignment.BottomCenter)
+                    .shadow(
+                        elevation = 32.dp,
+                        shape = RoundedCornerShape(
+                            topStart = 0.dp,
+                            topEnd = 0.dp,
+                            bottomStart = 40.dp,
+                            bottomEnd = 40.dp
+                        ),
+                        spotColor = JypColors.Border_grey
+                    )
+                    .background(
+                        color = JypColors.Background_white100,
+                        shape = RoundedCornerShape(
+                            topStart = 0.dp,
+                            topEnd = 0.dp,
+                            bottomStart = 40.dp,
+                            bottomEnd = 40.dp
+                        )
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 40.dp)
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .align(Alignment.BottomCenter)
+                    .background(color = JypColors.Background_white100)
+            )
+            Image(
+                painter = painterResource(id = onboarding.imageRes),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(top = 40.dp),
+                contentScale = ContentScale.FillWidth
+            )
+        }
     }
 }
 

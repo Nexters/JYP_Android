@@ -57,7 +57,7 @@ interface JypApi {
     suspend fun addPikme(
         @Path("id") plannerId: String,
         @Body addPlaceRequestBody: AddPlaceRequestBody,
-    ): JypBaseResponse<Any>
+    ): AddPikmeResponse
 
     @POST("journeys/{id}/pikis")
     suspend fun setPikis(
