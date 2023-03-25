@@ -1,17 +1,13 @@
 package com.jyp.feature_sign_in.questions.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.lifecycle.lifecycleScope
 import com.jyp.core_network.di.JypSessionManager
-import com.jyp.core_network.jyp.UiState
-import com.jyp.core_network.jyp.model.User
-import com.jyp.core_network.jyp.model.request.CreateUserRequestBody
-import com.jyp.core_network.util.toJypApiFailure
 import com.jyp.feature_sign_in.R
 import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.feature_sign_in.util.showToast
@@ -44,7 +40,10 @@ class QuestionActivity : ComponentActivity() {
                     if (userName.isNullOrBlank()) showToast(R.string.sign_in_error)
                     if (profileImagePath.isNullOrBlank()) showToast(R.string.sign_in_error)
 
-                    setIntentTo(MainActivity::class.java) {
+                    setIntentTo(
+                        it = MainActivity::class.java,
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP,
+                    ) {
                         putString(MainActivity.EXTRA_USER_NAME, userName)
                         putString(MainActivity.EXTRA_PROFILE_IMAGE_PATH, profileImagePath)
                         putString(MainActivity.EXTRA_PERSONALITY, viewModel.getSelectedQuestionOptionsAsEnum().name)
