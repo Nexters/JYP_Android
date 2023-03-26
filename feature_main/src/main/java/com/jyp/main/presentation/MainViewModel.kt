@@ -1,11 +1,13 @@
 package com.jyp.main.presentation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jyp.core_network.jyp.model.User
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
+import com.jyp.main.domain.CreateUserUseCase
 import com.jyp.main.domain.GetMeUseCase
-import com.jyp.main.domain.SetMyProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,26 +16,33 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getMeUseCase: GetMeUseCase,
-    private val setMyProfileUseCase: SetMyProfileUseCase,
+    private val createUserUseCase: CreateUserUseCase,
 ) : ViewModel() {
+    private val signUpTempUserName = savedStateHandle[MainActivity.EXTRA_USER_NAME] ?: ""
+    private val signUpTempProfileImagePath =
+        savedStateHandle[MainActivity.EXTRA_PROFILE_IMAGE_PATH] ?: ""
+    private val signUpTempPersonality = savedStateHandle[MainActivity.EXTRA_PERSONALITY] ?: ""
+
     private val _userId = MutableStateFlow("")
     val userId: StateFlow<String>
         get() = _userId
 
-    private val _userName = MutableStateFlow("")
+    private val _userName = MutableStateFlow(signUpTempUserName)
     val userName: StateFlow<String>
         get() = _userName
 
-    private val _profileImagePath = MutableStateFlow("")
+    private val _profileImagePath = MutableStateFlow(signUpTempProfileImagePath)
     val profileImagePath: StateFlow<String>
         get() = _profileImagePath
 
-    private val _personality = MutableStateFlow("")
+    private val _personality = MutableStateFlow(signUpTempPersonality.toPersonalityName())
     val personality: StateFlow<String>
         get() = _personality
 
-    private val _personalityImagePath = MutableStateFlow("")
+    private val _personalityImagePath =
+        MutableStateFlow(signUpTempPersonality.toPersonalityImagePath())
     val personalityImagePath: StateFlow<String>
         get() = _personalityImagePath
 
@@ -41,17 +50,17 @@ class MainViewModel @Inject constructor(
     val profileSelectedPosition: StateFlow<Int?>
         get() = _profileSelectedPosition
 
+    private val _isExistMyAccount = MutableStateFlow(signUpTempUserName.isEmpty())
+    val isExistMyAccount: StateFlow<Boolean>
+        get() = _isExistMyAccount
+
     fun fetchUser() {
         viewModelScope.launch {
             getMeUseCase.invoke()
                 .onSuccess { user ->
-                    _userId.value = user.id
-                    _userName.value = user.name
-                    _profileImagePath.value = user.profileImagePath
-                    _personality.value = user.personality
-                    _personalityImagePath.value = user.personality.toPersonalityImagePath()
-
-                }.onFailure { throwable ->
+                    applyUserData(user)
+                }
+                .onFailure { throwable ->
                     throwable.printStackTrace()
                 }
         }
@@ -59,30 +68,57 @@ class MainViewModel @Inject constructor(
 
     private fun String.toPersonalityImagePath(): String {
         return when (this) {
-            "꼼꼼한 탐험가" -> "https://journeypiki.duckdns.org/static/profile_me.png"
-            "열정왕 탐험가" -> "https://journeypiki.duckdns.org/static/profile_pe.png"
-            "낭만적인 여행자" -> "https://journeypiki.duckdns.org/static/profile_rt.png"
-            "자유로운 방랑자" -> "https://journeypiki.duckdns.org/static/profile_fw.png"
+            "ME" -> "https://journeypiki.duckdns.org/static/profile_me.png"
+            "PE" -> "https://journeypiki.duckdns.org/static/profile_pe.png"
+            "RT" -> "https://journeypiki.duckdns.org/static/profile_rt.png"
+            "FW" -> "https://journeypiki.duckdns.org/static/profile_fw.png"
 
             else -> ""
         }
+    }
+
+    private fun String.toPersonalityName(): String {
+        return when (this) {
+            "ME" -> "꼼꼼한 탐험가"
+            "PE" -> "열정왕 탐험가"
+            "RT" -> "낭만적인 여행자"
+            "FW" -> "자유로운 방랑자"
+
+            else -> ""
+        }
+    }
+
+    private fun applyUserData(user: User) {
+        _userId.value = user.id
+        _userName.value = user.name
+        _profileImagePath.value = user.profileImagePath
+        _personality.value = user.personality
+        _personalityImagePath.value = user.personality.toPersonalityImagePath()
     }
 
     fun selectProfile(position: Int) {
         _profileSelectedPosition.value = position
     }
 
-    fun updateSelectedProfile() {
+    fun createUser() {
         viewModelScope.launch {
-            when (profileSelectedPosition.value) {
-                0 -> setMyProfileUseCase.invoke(profileImagePath.value)
-                1 -> setMyProfileUseCase.invoke(personalityImagePath.value)
-                else -> return@launch
+            val profileImagePath = when (profileSelectedPosition.value) {
+                0 -> profileImagePath.value
+                1 -> personalityImagePath.value
+                else -> ""
             }
-                .onSuccess {  }
-                .onFailure { throwable ->
-                    throwable.printStackTrace()
-                }
+
+            createUserUseCase.createUserAccount(
+                signUpTempUserName,
+                profileImagePath,
+                signUpTempPersonality
+            ).onSuccess { user ->
+                _isExistMyAccount.value = true
+
+                applyUserData(user)
+            }.onFailure { throwable ->
+                throwable.printStackTrace()
+            }
         }
     }
 }

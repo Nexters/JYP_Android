@@ -1,5 +1,6 @@
 package com.jyp.feature_sign_in.sign_in.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -87,7 +88,10 @@ class SignInActivity : ComponentActivity() {
 
                         when (signIn.kakaoAccount == null) {
                             true -> {
-                                setIntentTo(MainActivity::class.java)
+                                setIntentTo(
+                                    it = MainActivity::class.java,
+                                    flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP,
+                                )
                             }
                             false -> {
                                 setIntentTo(QuestionActivity::class.java) {
