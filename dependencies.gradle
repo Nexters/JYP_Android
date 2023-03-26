@@ -1,5 +1,6 @@
 ext {
     versions = [
+            splash_screen_version                      : "1.0.0-alpha01",
             retrofit_version                           : "2.9.0",
             okhttp3_version                            : "4.9.0",
             glide_version                              : "4.12.0",
@@ -19,27 +20,33 @@ ext {
             kakao_sign_in                              : "2.11.2"
     ]
 
+    splashDependency = [
+            implementation: [
+                    spalsh: "androidx.core:core-splashscreen:$versions.splash_screen_version"
+            ]
+    ]
+
     composeDependencies = [
             implementation     : [
-                    compose_ui                         : "androidx.compose.ui:ui:$versions.compose_version",
-                    compose_material                   : "androidx.compose.material:material:$versions.compose_version",
-                    compose_preview                    : "androidx.compose.ui:ui-tooling-preview:$versions.compose_version",
-                    compose_live_data                  : "androidx.compose.runtime:runtime-livedata:$versions.compose_version",
-                    compose_activity                   : "androidx.activity:activity-compose:$versions.compose_activity_version",
-                    compose_navigation                 : "androidx.navigation:navigation-compose:$versions.compose_navigation_version",
-                    compose_constrintlayout            : "androidx.constraintlayout:constraintlayout-compose:$versions.compose_constrintlayout_version",
-                    compose_flowlayout                 : "com.google.accompanist:accompanist-flowlayout:$versions.compose_flowlayout_version",
-                    compose_pager                      : "com.google.accompanist:accompanist-pager:$versions.accompanist_pager_version",
-                    compose_pager_indicators           : "com.google.accompanist:accompanist-pager-indicators:$versions.accompanist_pager_version"
+                    compose_ui              : "androidx.compose.ui:ui:$versions.compose_version",
+                    compose_material        : "androidx.compose.material:material:$versions.compose_version",
+                    compose_preview         : "androidx.compose.ui:ui-tooling-preview:$versions.compose_version",
+                    compose_live_data       : "androidx.compose.runtime:runtime-livedata:$versions.compose_version",
+                    compose_activity        : "androidx.activity:activity-compose:$versions.compose_activity_version",
+                    compose_navigation      : "androidx.navigation:navigation-compose:$versions.compose_navigation_version",
+                    compose_constrintlayout : "androidx.constraintlayout:constraintlayout-compose:$versions.compose_constrintlayout_version",
+                    compose_flowlayout      : "com.google.accompanist:accompanist-flowlayout:$versions.compose_flowlayout_version",
+                    compose_pager           : "com.google.accompanist:accompanist-pager:$versions.accompanist_pager_version",
+                    compose_pager_indicators: "com.google.accompanist:accompanist-pager-indicators:$versions.accompanist_pager_version"
             ],
             debugImplementation: [
-                    compose_tooling                    : "androidx.compose.ui:ui-tooling:$versions.compose_version",
+                    compose_tooling: "androidx.compose.ui:ui-tooling:$versions.compose_version",
             ]
     ]
 
     kakaoSignInDependencies = [
             implementation: [
-                    kakao_sign_in:  "com.kakao.sdk:v2-user:$versions.kakao_sign_in"
+                    kakao_sign_in: "com.kakao.sdk:v2-user:$versions.kakao_sign_in"
             ]
     ]
 
@@ -76,7 +83,7 @@ ext {
 
     googleMapsDependencies = [
             implementation: [
-                    google_maps_compose: "com.google.maps.android:maps-compose:$versions.google_maps_version",
+                    google_maps_compose : "com.google.maps.android:maps-compose:$versions.google_maps_version",
                     google_play_services: "com.google.android.gms:play-services-maps:$versions.google_play_services_maps_version"
             ]
     ]
