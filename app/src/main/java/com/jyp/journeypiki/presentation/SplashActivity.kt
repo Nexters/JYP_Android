@@ -11,8 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import com.jyp.core_network.di.JypSessionManager
 import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.KakaoSignIn
+import com.jyp.core_util.extensions.setIntentTo
 import com.jyp.feature_sign_in.onboarding.OnboardingActivity
-import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.main.presentation.MainActivity
 import com.kakao.sdk.auth.AuthApiClient
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,11 +31,13 @@ class SplashActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContent { Screen() }
+    }
 
+    override fun onResume() {
+        super.onResume()
         checkUserSignInStateWithKakaoToken()
         initSignInUiStateCollector()
-
-        setContent { Screen() }
     }
 
     private fun checkUserSignInStateWithKakaoToken() {
