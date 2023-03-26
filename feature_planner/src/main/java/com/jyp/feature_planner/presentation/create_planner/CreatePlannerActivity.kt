@@ -33,7 +33,6 @@ import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
 class CreatePlannerActivity : AppCompatActivity() {
     private val viewModel: CreatePlannerViewModel by viewModels()
@@ -127,7 +126,7 @@ class CreatePlannerActivity : AppCompatActivity() {
                         }
                         is CreatePlannerAction.Join -> {
                             viewModel.joinPlanner(
-                                plannerId ?: "",
+                                action.plannerId,
                                 tags
                             )
                         }
@@ -146,7 +145,7 @@ class CreatePlannerActivity : AppCompatActivity() {
                         is UiState.Loading -> {}
                         is UiState.Success -> startActivity(
                             Intent(this@CreatePlannerActivity, PlannerActivity::class.java).apply {
-                                putExtra(EXTRA_PLANNER_ID, plannerId)
+                                putExtra(EXTRA_PLANNER_ID, uiState.data)
                             }
                         )
                         is UiState.Failure -> {

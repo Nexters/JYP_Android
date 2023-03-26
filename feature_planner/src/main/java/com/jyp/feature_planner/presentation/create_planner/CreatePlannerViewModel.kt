@@ -29,7 +29,7 @@ class CreatePlannerViewModel @Inject constructor(
     val endDateMillis: StateFlow<Long>
         get() = _endDateMillis
 
-    private val _joinPlannerUiState = MutableStateFlow<UiState<*>>(UiState.Loading)
+    private val _joinPlannerUiState = MutableStateFlow<UiState<String>>(UiState.Loading)
     val joinPlannerUiState = _joinPlannerUiState.asStateFlow()
 
     private val _tags = MutableStateFlow(
@@ -130,8 +130,8 @@ class CreatePlannerViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             joinPlannerUseCase(plannerId, tags)
-                .onSuccess { journeys ->
-                    _joinPlannerUiState.value = UiState.Success(journeys)
+                .onSuccess {
+                    _joinPlannerUiState.value = UiState.Success(plannerId)
                 }
                 .onFailure { throwable ->
                     _joinPlannerUiState.value = UiState.Failure(throwable)
