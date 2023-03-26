@@ -14,7 +14,7 @@ class PlannerTagMapper {
                 TagOrientation.NO_MATTER -> TagType.Soso
             },
             content = tag.topic,
-            selectPeople = tag.users.map { Person(it.name, it.profileImagePath) }
+            selectPeople = tag.users?.map { Person(it.name, it.profileImagePath) } ?: emptyList()
         )
     }
 

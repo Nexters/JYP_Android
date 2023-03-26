@@ -5,20 +5,21 @@ import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.onFailure
 import com.jyp.core_network.jyp.onSuccess
-import com.jyp.feature_planner.domain.CreatePlannerUseCase
-import com.jyp.feature_planner.domain.JoinPlannerUseCase
-import com.jyp.feature_planner.domain.PlannerTag
+import com.jyp.feature_planner.domain.*
 import com.jyp.jyp_design.ui.tag.TagState
-import com.jyp.jyp_design.ui.tag.TagType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CreatePlannerViewModel @Inject constructor(
-        private val createPlannerUseCase: CreatePlannerUseCase,
-        private val joinPlannerUseCase: JoinPlannerUseCase
+    private val createPlannerUseCase: CreatePlannerUseCase,
+    private val joinPlannerUseCase: JoinPlannerUseCase,
+    private val getDefaultTagsUseCase: GetDefaultTagsUseCase,
+    private val getTagsUseCase: GetTagsUseCase,
 ) : ViewModel() {
 
     private val _startDateMillis = MutableStateFlow(0L)
@@ -32,32 +33,41 @@ class CreatePlannerViewModel @Inject constructor(
     private val _joinPlannerUiState = MutableStateFlow<UiState<String>>(UiState.Loading)
     val joinPlannerUiState = _joinPlannerUiState.asStateFlow()
 
-    private val _tags = MutableStateFlow(
-            listOf(
-                    PlannerTag(type = TagType.Soso, content = "모두 찬성"),
-                    PlannerTag(type = TagType.Soso, content = "상관없어"),
-                    PlannerTag(type = TagType.Like, content = "고기"),
-                    PlannerTag(type = TagType.Like, content = "해산물"),
-                    PlannerTag(type = TagType.Like, content = "쇼핑"),
-                    PlannerTag(type = TagType.Like, content = "산"),
-                    PlannerTag(type = TagType.Like, content = "바다"),
-                    PlannerTag(type = TagType.Like, content = "도시"),
-                    PlannerTag(type = TagType.Like, content = "핫플레이스"),
-                    PlannerTag(type = TagType.Dislike, content = "고기"),
-                    PlannerTag(type = TagType.Dislike, content = "해산물"),
-                    PlannerTag(type = TagType.Dislike, content = "쇼핑"),
-                    PlannerTag(type = TagType.Dislike, content = "산"),
-                    PlannerTag(type = TagType.Dislike, content = "바다"),
-                    PlannerTag(type = TagType.Dislike, content = "도시"),
-                    PlannerTag(type = TagType.Dislike, content = "핫플레이스"),
-            )
-    )
+    private val _tags = MutableStateFlow<List<PlannerTag>>(listOf())
     val tags: StateFlow<List<PlannerTag>>
         get() = _tags
+
+    init {
+        viewModelScope.launch {
+            getDefaultTagsUseCase.invoke()
+                .onSuccess {
+                    val mapper = PlannerTagMapper()
+
+                    _tags.value = it.tags.map(mapper::toPlannerTag)
+                }
+                .onFailure {
+                    it.printStackTrace()
+                }
+        }
+    }
 
     fun updateDate(startMillis: Long, endMillis: Long) {
         _startDateMillis.value = startMillis
         _endDateMillis.value = endMillis
+    }
+
+    fun fetchTags(plannerId: String) {
+        viewModelScope.launch {
+            getTagsUseCase.invoke(plannerId)
+                .onSuccess {
+                    val mapper = PlannerTagMapper()
+
+                    _tags.value += it.tags.map(mapper::toPlannerTag)
+                }
+                .onFailure {
+                    it.printStackTrace()
+                }
+        }
     }
 
     fun addTag(tag: PlannerTag) {
@@ -72,11 +82,11 @@ class CreatePlannerViewModel @Inject constructor(
         val clickIndex = tags.value.indexOf(tag)
         val tagState = tag.state
         val newTag = tag.copy(
-                state = when (tagState) {
-                    TagState.DEFAULT -> TagState.SELECTED
-                    TagState.SELECTED -> TagState.DEFAULT
-                    TagState.DISABLED -> TagState.DISABLED
-                }
+            state = when (tagState) {
+                TagState.DEFAULT -> TagState.SELECTED
+                TagState.SELECTED -> TagState.DEFAULT
+                TagState.DISABLED -> TagState.DISABLED
+            }
         )
 
         val mutableTags = tags.value.toMutableList()
@@ -107,19 +117,19 @@ class CreatePlannerViewModel @Inject constructor(
     }
 
     fun createPlanner(
-            title: String,
-            themeType: String,
-            startMillis: Long,
-            endMillis: Long,
-            tags: List<PlannerTag>
+        title: String,
+        themeType: String,
+        startMillis: Long,
+        endMillis: Long,
+        tags: List<PlannerTag>
     ) {
         viewModelScope.launch {
             createPlannerUseCase.invoke(
-                    title,
-                    startMillis / 1000,
-                    endMillis / 1000,
-                    themeType,
-                    tags,
+                title,
+                startMillis / 1000,
+                endMillis / 1000,
+                themeType,
+                tags,
             )
         }
     }

@@ -55,6 +55,14 @@ class CreatePlannerActivity : AppCompatActivity() {
 
         val action = createAction
 
+        when (action) {
+            is CreatePlannerAction.Create -> null
+            is CreatePlannerAction.Edit -> action.plannerId
+            is CreatePlannerAction.Join -> action.plannerId
+        }?.let {
+            viewModel.fetchTags(it)
+        }
+
         setContent {
             Screen(
                 viewModel = viewModel,

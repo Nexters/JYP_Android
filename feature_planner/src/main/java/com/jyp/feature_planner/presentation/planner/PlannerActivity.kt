@@ -27,6 +27,7 @@ import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteAct
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_PIKMIS
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_START_DATE
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerAction
 import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -100,11 +101,14 @@ class PlannerActivity : ComponentActivity() {
                     }
                 },
                 onClickEditTag = {
-                    startActivity(
-                        Intent(this, CreatePlannerActivity::class.java).apply {
-                            putExtra(CreatePlannerActivity.EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
-                        }
-                    )
+                    plannerId?.let {
+                        startActivity(
+                            Intent(this, CreatePlannerActivity::class.java).apply {
+                                putExtra(CreatePlannerActivity.EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
+                                putExtra(CreatePlannerActivity.EXTRA_CREATE_PLANNER_ACTION, CreatePlannerAction.Edit(it))
+                            }
+                        )
+                    }
                 },
             )
         }
