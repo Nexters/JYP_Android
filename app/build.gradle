@@ -65,6 +65,7 @@ android {
 dependencies {
     // module dependencies
     implementation project(':core_ui')
+    implementation project(':core_util')
     implementation project(':core_network')
     implementation project(':feature_sign_in')
     implementation project(':feature_main')
