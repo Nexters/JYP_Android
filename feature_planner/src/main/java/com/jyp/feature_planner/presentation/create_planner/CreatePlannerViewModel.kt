@@ -61,8 +61,26 @@ class CreatePlannerViewModel @Inject constructor(
             getTagsUseCase.invoke(plannerId)
                 .onSuccess {
                     val mapper = PlannerTagMapper()
+                    val plannerTags = it.tags.map(mapper::toPlannerTag)
 
-                    _tags.value += it.tags.map(mapper::toPlannerTag)
+                    val list = mutableListOf<PlannerTag>()
+
+
+                    tags.value.forEach { plannerTag ->
+                        list.add(plannerTag)
+                    }
+
+                    plannerTags.forEach { plannerTag ->
+                        val containsTag = list.any { element ->
+                            element.content == plannerTag.content && element.type == plannerTag.type
+                        }
+
+                        if (!containsTag) {
+                            list.add(plannerTag)
+                        }
+                    }
+
+                    _tags.value = list.toList()
                 }
                 .onFailure {
                     it.printStackTrace()
