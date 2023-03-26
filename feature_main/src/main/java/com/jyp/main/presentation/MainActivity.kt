@@ -60,7 +60,6 @@ class MainActivity : ComponentActivity() {
     private val myJourneyViewModel: MyJourneyViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -131,6 +130,12 @@ class MainActivity : ComponentActivity() {
                 "com.jyp.feature_sign_in.onboarding.OnboardingActivity"
             )
         )
+    }
+
+    companion object {
+        const val EXTRA_USER_NAME = "EXTRA_USER_NAME"
+        const val EXTRA_PROFILE_IMAGE_PATH = "EXTRA_PROFILE_IMAGE_PATH"
+        const val EXTRA_PERSONALITY = "EXTRA_PERSONALITY"
     }
 }
 
@@ -336,7 +341,11 @@ private fun Screen(
         )
     }
 
-    SelectProfileScreen(mainViewModel)
+    val isExistMyAccount by mainViewModel.isExistMyAccount.collectAsState()
+
+    if (!isExistMyAccount) {
+        SelectProfileScreen(mainViewModel)
+    }
 }
 
 @Composable
@@ -370,7 +379,7 @@ private fun SelectProfileScreen(mainViewModel: MainViewModel) {
             onSelectProfile = mainViewModel::selectProfile,
             submitProfile = {
                 isShow = false
-                mainViewModel.updateSelectedProfile()
+                mainViewModel.createUser()
             }
         )
     }
