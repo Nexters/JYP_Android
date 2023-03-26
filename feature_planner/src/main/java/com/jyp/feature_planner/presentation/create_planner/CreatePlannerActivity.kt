@@ -38,16 +38,9 @@ import kotlinx.coroutines.launch
 class CreatePlannerActivity : AppCompatActivity() {
     private val viewModel: CreatePlannerViewModel by viewModels()
 
-    private val createExtra: CreatePlannerExtra.Create by lazy {
-        intent.getParcelableExtra(EXTRA_CREATE_PLANNER_CREATE) ?: CreatePlannerExtra.Create()
-    }
-
-    private val joinExtra: CreatePlannerExtra.Join? by lazy {
-        intent.getParcelableExtra(EXTRA_CREATE_PLANNER_JOIN)
-    }
-
-    private val editExtra: CreatePlannerExtra.Edit? by lazy {
-        intent.getParcelableExtra(EXTRA_CREATE_PLANNER_EDIT)
+    private val createAction: CreatePlannerAction by lazy {
+        intent.getParcelableExtra(EXTRA_CREATE_PLANNER_ACTION)
+            ?: CreatePlannerAction.Create() as CreatePlannerAction
     }
 
     private val plannerId: String? by lazy {
@@ -60,25 +53,33 @@ class CreatePlannerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initStateFlowCollector()
+
+        val action = createAction
+
         setContent {
             Screen(
                 viewModel = viewModel,
                 step = intent.getSerializableExtra(EXTRA_CREATE_PLANNER_STEP) as? CreatePlannerStep
                     ?: CreatePlannerStep.TITLE,
                 submitOnTitle = { title, themeType ->
-                    startActivity(
-                        Intent(this, CreatePlannerActivity::class.java).apply {
-                            putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.DATE)
+                    when (action) {
+                        is CreatePlannerAction.Create -> {
+                            startActivity(
+                                Intent(this, CreatePlannerActivity::class.java).apply {
+                                    putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.DATE)
 
-                            putExtra(
-                                EXTRA_CREATE_PLANNER_CREATE,
-                                createExtra.copy(
-                                    title = title,
-                                    themeType = themeType,
-                                )
+                                    putExtra(
+                                        EXTRA_CREATE_PLANNER_ACTION,
+                                        action.copy(
+                                            title = title,
+                                            themeType = themeType,
+                                        )
+                                    )
+                                }
                             )
                         }
-                    )
+                        else -> Unit
+                    }
                 },
                 selectDateClick = {
                     when (rangeDatePicker == null) {
@@ -90,36 +91,46 @@ class CreatePlannerActivity : AppCompatActivity() {
                     }
                 },
                 submitOnDate = { startMillis, endMillis ->
-                    startActivity(
-                        Intent(this, CreatePlannerActivity::class.java).apply {
-                            putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
+                    when (action) {
+                        is CreatePlannerAction.Create -> {
+                            startActivity(
+                                Intent(this, CreatePlannerActivity::class.java).apply {
+                                    putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
 
-                            putExtra(
-                                EXTRA_CREATE_PLANNER_CREATE,
-                                createExtra.copy(
-                                    startDateMillis = startMillis,
-                                    endDateMillis = endMillis,
-                                )
+                                    putExtra(
+                                        EXTRA_CREATE_PLANNER_ACTION,
+                                        action.copy(
+                                            startDateMillis = startMillis,
+                                            endDateMillis = endMillis,
+                                        )
+                                    )
+                                }
                             )
                         }
-                    )
+                        else -> Unit
+                    }
                 },
                 submitOnTaste = { tags ->
-                    when (plannerId.isNullOrBlank()) {
-                        true -> {
+                    when (action) {
+                        is CreatePlannerAction.Create -> {
                             viewModel.createPlanner(
-                                createExtra.title ?: return@Screen,
-                                createExtra.themeType?.imagePath ?: return@Screen,
-                                createExtra.startDateMillis ?: return@Screen,
-                                createExtra.endDateMillis ?: return@Screen,
+                                action.title ?: return@Screen,
+                                action.themeType?.imagePath ?: return@Screen,
+                                action.startDateMillis ?: return@Screen,
+                                action.endDateMillis ?: return@Screen,
                                 tags,
                             )
                             finishAffinity()
                         }
-                        false -> viewModel.joinPlanner(
-                            plannerId ?: "",
-                            tags
-                        )
+                        is CreatePlannerAction.Edit -> {
+
+                        }
+                        is CreatePlannerAction.Join -> {
+                            viewModel.joinPlanner(
+                                plannerId ?: "",
+                                tags
+                            )
+                        }
                     }
                 },
                 onClickBackAction = this::finish
@@ -165,13 +176,7 @@ class CreatePlannerActivity : AppCompatActivity() {
 
         const val EXTRA_CREATE_PLANNER_STEP = "EXTRA_CREATE_PLANNER_STEP"
 
-        const val EXTRA_CREATE_PLANNER_CREATE = "EXTRA_CREATE_PLANNER_TITLE"
-        const val EXTRA_CREATE_PLANNER_JOIN = "EXTRA_CREATE_PLANNER_JOIN"
-        const val EXTRA_CREATE_PLANNER_EDIT = "EXTRA_CREATE_PLANNER_EDIT"
-
-//        const val EXTRA_CREATE_PLANNER_TITLE = "EXTRA_CREATE_PLANNER_TITLE"
-//        const val EXTRA_CREATE_PLANNER_THEME_TYPE = "EXTRA_CREATE_PLANNER_THEME_TYPE"
-//        const val EXTRA_CREATE_PLANNER_DATE = "EXTRA_CREATE_PLANNER_DATE"
+        const val EXTRA_CREATE_PLANNER_ACTION = "EXTRA_CREATE_PLANNER_ACTION"
     }
 }
 
