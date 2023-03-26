@@ -38,16 +38,16 @@ import kotlinx.coroutines.launch
 class CreatePlannerActivity : AppCompatActivity() {
     private val viewModel: CreatePlannerViewModel by viewModels()
 
-    private val title: String? by lazy {
-        intent.getStringExtra(EXTRA_CREATE_PLANNER_TITLE)
+    private val createExtra: CreatePlannerExtra.Create by lazy {
+        intent.getParcelableExtra(EXTRA_CREATE_PLANNER_CREATE) ?: CreatePlannerExtra.Create()
     }
 
-    private val themeType: ThemeType? by lazy {
-        intent.getSerializableExtra(EXTRA_CREATE_PLANNER_THEME_TYPE) as? ThemeType
+    private val joinExtra: CreatePlannerExtra.Join? by lazy {
+        intent.getParcelableExtra(EXTRA_CREATE_PLANNER_JOIN)
     }
 
-    private val date: Pair<Long, Long>? by lazy {
-        intent.getSerializableExtra(EXTRA_CREATE_PLANNER_DATE) as? Pair<Long, Long>
+    private val editExtra: CreatePlannerExtra.Edit? by lazy {
+        intent.getParcelableExtra(EXTRA_CREATE_PLANNER_EDIT)
     }
 
     private val plannerId: String? by lazy {
@@ -69,8 +69,14 @@ class CreatePlannerActivity : AppCompatActivity() {
                     startActivity(
                         Intent(this, CreatePlannerActivity::class.java).apply {
                             putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.DATE)
-                            putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
-                            putExtra(EXTRA_CREATE_PLANNER_THEME_TYPE, themeType)
+
+                            putExtra(
+                                EXTRA_CREATE_PLANNER_CREATE,
+                                createExtra.copy(
+                                    title = title,
+                                    themeType = themeType,
+                                )
+                            )
                         }
                     )
                 },
@@ -87,9 +93,14 @@ class CreatePlannerActivity : AppCompatActivity() {
                     startActivity(
                         Intent(this, CreatePlannerActivity::class.java).apply {
                             putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
-                            putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
-                            putExtra(EXTRA_CREATE_PLANNER_THEME_TYPE, themeType)
-                            putExtra(EXTRA_CREATE_PLANNER_DATE, startMillis to endMillis)
+
+                            putExtra(
+                                EXTRA_CREATE_PLANNER_CREATE,
+                                createExtra.copy(
+                                    startDateMillis = startMillis,
+                                    endDateMillis = endMillis,
+                                )
+                            )
                         }
                     )
                 },
@@ -97,10 +108,10 @@ class CreatePlannerActivity : AppCompatActivity() {
                     when (plannerId.isNullOrBlank()) {
                         true -> {
                             viewModel.createPlanner(
-                                title ?: return@Screen,
-                                themeType?.imagePath ?: return@Screen,
-                                date?.first ?: return@Screen,
-                                date?.second ?: return@Screen,
+                                createExtra.title ?: return@Screen,
+                                createExtra.themeType?.imagePath ?: return@Screen,
+                                createExtra.startDateMillis ?: return@Screen,
+                                createExtra.endDateMillis ?: return@Screen,
                                 tags,
                             )
                             finishAffinity()
@@ -133,7 +144,10 @@ class CreatePlannerActivity : AppCompatActivity() {
                                 setResult(
                                     RESULT_CODE_JOIN_PLANNER_FAILURE,
                                     Intent()
-                                        .setClassName(this@CreatePlannerActivity, "com.jyp.main.presentation.MainActivity")
+                                        .setClassName(
+                                            this@CreatePlannerActivity,
+                                            "com.jyp.main.presentation.MainActivity"
+                                        )
                                         .putExtra(JOIN_PLANNER_ERROR_CODE, it.code)
                                 )
                                 finish()
@@ -150,9 +164,14 @@ class CreatePlannerActivity : AppCompatActivity() {
         const val JOIN_PLANNER_ERROR_CODE = "JOIN_PLANNER_ERROR_CODE"
 
         const val EXTRA_CREATE_PLANNER_STEP = "EXTRA_CREATE_PLANNER_STEP"
-        const val EXTRA_CREATE_PLANNER_TITLE = "EXTRA_CREATE_PLANNER_TITLE"
-        const val EXTRA_CREATE_PLANNER_THEME_TYPE = "EXTRA_CREATE_PLANNER_THEME_TYPE"
-        const val EXTRA_CREATE_PLANNER_DATE = "EXTRA_CREATE_PLANNER_DATE"
+
+        const val EXTRA_CREATE_PLANNER_CREATE = "EXTRA_CREATE_PLANNER_TITLE"
+        const val EXTRA_CREATE_PLANNER_JOIN = "EXTRA_CREATE_PLANNER_JOIN"
+        const val EXTRA_CREATE_PLANNER_EDIT = "EXTRA_CREATE_PLANNER_EDIT"
+
+//        const val EXTRA_CREATE_PLANNER_TITLE = "EXTRA_CREATE_PLANNER_TITLE"
+//        const val EXTRA_CREATE_PLANNER_THEME_TYPE = "EXTRA_CREATE_PLANNER_THEME_TYPE"
+//        const val EXTRA_CREATE_PLANNER_DATE = "EXTRA_CREATE_PLANNER_DATE"
     }
 }
 
