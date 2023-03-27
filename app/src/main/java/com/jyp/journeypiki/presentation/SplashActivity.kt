@@ -35,7 +35,7 @@ class SplashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent { Screen() }
 
-        Handler(mainLooper).postDelayed(300L) {
+        Handler(mainLooper).postDelayed(250L) {
             checkUserSignInStateWithKakaoToken()
             initSignInUiStateCollector()
         }
