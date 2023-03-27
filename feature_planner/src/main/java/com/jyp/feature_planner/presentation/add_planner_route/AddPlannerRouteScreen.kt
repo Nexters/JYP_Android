@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.DefaultShadowColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -219,8 +220,9 @@ private fun CandidatePikiItem(
                 onClick = { onSelectPikme.invoke(pikme) }
             )
             .shadow(
-                elevation = 4.dp,
+                elevation = 20.dp,
                 shape = RoundedCornerShape(10.dp),
+                spotColor = DefaultShadowColor.copy(alpha = 0.1f),
             )
             .background(
                 color = JypColors.Background_white100,
