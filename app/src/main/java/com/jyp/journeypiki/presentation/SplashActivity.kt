@@ -44,7 +44,10 @@ class SplashActivity : ComponentActivity() {
     private fun checkUserSignInStateWithKakaoToken() {
         val kakaoToken = AuthApiClient.instance.tokenManagerProvider.manager.getToken()
         when (kakaoToken == null) {
-            true -> setIntentTo(OnboardingActivity::class.java)
+            true -> {
+                setIntentTo(OnboardingActivity::class.java)
+                finish()
+            }
             false -> {
                 sessionManager.bearerToken = kakaoToken.accessToken
                 viewModel.signInWithKakao()
