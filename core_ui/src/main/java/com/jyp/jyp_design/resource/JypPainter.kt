@@ -68,4 +68,14 @@ object JypPainter {
     val anotherJourneyInPrepare: Painter
         @Composable
         get() = painterResource(id = R.drawable.image_another_journey)
+        
+    val invitationGuide01: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.image_invitation_01)
+    val invitationGuide02: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.image_invitation_02)
+    val invitationGuide03: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.image_invitation_03)
 }
