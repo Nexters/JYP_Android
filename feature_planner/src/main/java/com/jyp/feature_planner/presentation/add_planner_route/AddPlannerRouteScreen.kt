@@ -15,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.DefaultShadowColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.feature_planner.R
@@ -37,10 +39,14 @@ internal fun AddPlannerRouteScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        SelectedPikis(
-            pikis = pikis,
-            onRemovePiki = onRemovePiki,
-        )
+        when (pikis.isEmpty()) {
+            true -> SelectedPikisEmptyText()
+            false -> SelectedPikis(
+                pikis = pikis,
+                onRemovePiki = onRemovePiki,
+            )
+        }
+
         CandidatePikis(
             modifier = Modifier.weight(1f),
             pikmis = pikmis,
@@ -109,7 +115,7 @@ private fun CandidatePikis(
                 .padding(24.dp),
         ) {
             JypText(
-                text = "여행 후보 장소",
+                text = stringResource(id = R.string.planner_pik_me_title),
                 type = TextType.TITLE_6,
                 color = JypColors.Text80,
             )
@@ -128,6 +134,22 @@ private fun CandidatePikis(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SelectedPikisEmptyText() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp)
+    ) {
+        JypText(
+            text = "방문할 장소를 선택해 주세요",
+            type = TextType.BODY_2,
+            modifier = Modifier.align(Alignment.Center),
+            color = JypColors.Text40
+        )
     }
 }
 
@@ -198,8 +220,9 @@ private fun CandidatePikiItem(
                 onClick = { onSelectPikme.invoke(pikme) }
             )
             .shadow(
-                elevation = 4.dp,
+                elevation = 20.dp,
                 shape = RoundedCornerShape(10.dp),
+                spotColor = DefaultShadowColor.copy(alpha = 0.1f),
             )
             .background(
                 color = JypColors.Background_white100,
@@ -245,7 +268,7 @@ private fun CandidatePikiItem(
 private fun AddPlannerRouteScreenPreview() {
     AddPlannerRouteScreen(
         pikmis = listOf(
-            PlannerPikme("", "아르떼 뮤지엄", "대한민국", "박물관", 3, false,0.0, 0.0, ""),
+            PlannerPikme("", "아르떼 뮤지엄", "대한민국", "박물관", 3, false, 0.0, 0.0, ""),
             PlannerPikme("", "아르떼 뮤지엄", "대한민국", "박물관", 3, false, 0.0, 0.0, ""),
         ),
         pikis = listOf(
