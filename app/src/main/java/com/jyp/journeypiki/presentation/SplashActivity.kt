@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
 import com.jyp.core_network.di.JypSessionManager
 import com.jyp.core_network.jyp.UiState
@@ -33,12 +34,11 @@ class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { Screen() }
-    }
 
-    override fun onResume() {
-        super.onResume()
-        checkUserSignInStateWithKakaoToken()
-        initSignInUiStateCollector()
+        Handler(mainLooper).postDelayed(300L) {
+            checkUserSignInStateWithKakaoToken()
+            initSignInUiStateCollector()
+        }
     }
 
     private fun checkUserSignInStateWithKakaoToken() {
