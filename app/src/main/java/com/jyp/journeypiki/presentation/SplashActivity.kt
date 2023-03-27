@@ -8,12 +8,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
 import com.jyp.core_network.di.JypSessionManager
 import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.KakaoSignIn
+import com.jyp.core_util.extensions.setIntentTo
 import com.jyp.feature_sign_in.onboarding.OnboardingActivity
-import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.main.presentation.MainActivity
 import com.kakao.sdk.auth.AuthApiClient
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,17 +33,21 @@ class SplashActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        checkUserSignInStateWithKakaoToken()
-        initSignInUiStateCollector()
-
         setContent { Screen() }
+
+        Handler(mainLooper).postDelayed(250L) {
+            checkUserSignInStateWithKakaoToken()
+            initSignInUiStateCollector()
+        }
     }
 
     private fun checkUserSignInStateWithKakaoToken() {
         val kakaoToken = AuthApiClient.instance.tokenManagerProvider.manager.getToken()
         when (kakaoToken == null) {
-            true -> setIntentTo(OnboardingActivity::class.java)
+            true -> {
+                setIntentTo(OnboardingActivity::class.java)
+                finish()
+            }
             false -> {
                 sessionManager.bearerToken = kakaoToken.accessToken
                 viewModel.signInWithKakao()

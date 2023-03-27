@@ -16,7 +16,7 @@
         <activity
             android:name="com.jyp.journeypiki.presentation.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.JYPAndroid">
+            android:theme="@style/Theme.JYPAndroid.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
