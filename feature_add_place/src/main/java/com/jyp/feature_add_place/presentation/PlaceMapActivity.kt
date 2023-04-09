@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.jyp.core_network.jyp.UiState
+import com.jyp.core_util.extensions.setIntentTo
 import com.jyp.feature_add_place.R
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.EXTRA_PLANNER_ID
@@ -19,6 +20,7 @@ import com.jyp.feature_add_place.presentation.viewmodel.PlaceMapViewModel
 import com.jyp.feature_add_place.util.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class PlaceMapActivity : ComponentActivity() {
@@ -55,11 +57,11 @@ class PlaceMapActivity : ComponentActivity() {
                         )
                     },
                     onClickInfoButton = {
-                        startActivity(
-                            Intent(this, PlaceInfoActivity::class.java).apply {
+                        searchPlaceResultModel?.let {
+                            setIntentTo(PlaceInfoActivity::class.java) {
                                 putExtra(SEARCH_PLACE_RESULT, searchPlaceResultModel)
                             }
-                        )
+                        }
                     },
                     onClickAddPlaceButton = {
                         (plannerId to searchPlaceResultModel).let { (id, model) ->

@@ -1,8 +1,6 @@
 package com.jyp.feature_sign_in.util
 
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.widget.Toast
 
 
@@ -15,12 +13,4 @@ fun Context.showToast(message: Any) {
         else -> null
     }
     toast?.show()
-}
-
-fun <T> Context.setIntentTo(it: Class<T>, flags: Int = 0, extras: Bundle.() -> Unit = {}) {
-    Intent(this, it).apply {
-        setFlags(flags)
-        putExtras(Bundle().apply(extras))
-        startActivity(this)
-    }
 }
