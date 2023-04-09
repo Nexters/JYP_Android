@@ -14,7 +14,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.jyp.core_util.extensions.setIntentTo
+import com.jyp.feature_add_place.presentation.PlaceInfoActivity
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity
+import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.PLACE_INFO_NAME
+import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.PLACE_INFO_URL
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,6 +72,12 @@ class PlannerActivity : ComponentActivity() {
                     )
                 },
                 onClickBackButton = this::finish,
+                onClickInfo = { plannerPikme ->
+                    setIntentTo(PlaceInfoActivity::class.java) {
+                        putString(PLACE_INFO_NAME, plannerPikme.title)
+                        putString(PLACE_INFO_URL, plannerPikme.link)
+                    }
+                },
                 onClickLike = { plannerPikme ->
                     plannerId?.let {
                         viewModel.switchPikmeLike(it, plannerPikme)
@@ -98,6 +108,7 @@ private fun Screen(
     onClickEditRoute: (day: Int) -> Unit,
     onNewPikMeClick: () -> Unit,
     onClickBackButton: () -> Unit,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
 ) {
     val plannerTitle by viewModel.plannerTitle.collectAsState()
@@ -147,6 +158,7 @@ private fun Screen(
                 onClickEditRoute = onClickEditRoute,
                 onClickInviteUserButton = onClickInviteUserButton,
                 onClickBackButton = onClickBackButton,
+                onClickInfo = onClickInfo,
                 onClickLike = onClickLike,
             )
         }
