@@ -108,7 +108,7 @@ private fun ThemeItem(
                     if (themeType == ThemeType.DEFAULT) {
                         it.border(
                             width = 1.dp,
-                            color = JypColors.Text20,
+                            color = JypColors.Black15,
                             shape = RoundedCornerShape(6.dp)
                         )
                     } else {
