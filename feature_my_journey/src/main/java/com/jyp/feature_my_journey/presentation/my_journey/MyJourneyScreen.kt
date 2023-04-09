@@ -284,7 +284,7 @@ internal fun PlannedJourneyEmptyScreen(
             JypTextButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = "후보 장소 추가하기",
+                text = "만들기",
                 buttonType = ButtonType.MEDIUM,
                 buttonColorSet = ButtonColorSetType.PINK,
                 onClickEnabled = onClickNewJourney,
