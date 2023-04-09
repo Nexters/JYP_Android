@@ -47,7 +47,7 @@ fun GlobalNavigationBar(
         if (activeBack) {
             Icon(
                     modifier = Modifier
-                            .padding(start = 12.dp)
+                            .padding(start = 8.dp)
                             .clickable(onClick = backAction),
                     painter = painterResource(R.drawable.icon_left_arrow),
                     contentDescription = null,
