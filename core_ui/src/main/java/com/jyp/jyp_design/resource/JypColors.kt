@@ -33,7 +33,6 @@ object JypColors {
     val Text75 = Color(0xFF404040)
     val Text40 = Color(0xFF999999)
     val Text30 = Color(0xFF232323)
-    val Text20 = Color(0xFF232323)
     val Text_white = Color(0xFFFFFFFF)
 
     val Border_grey = Color(0xFFECECEC)
