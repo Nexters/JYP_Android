@@ -73,14 +73,13 @@ internal fun MyJourneyHeader(
         modifier = Modifier.padding(top = 8.dp, bottom = 35.dp),
         verticalAlignment = Alignment.Bottom
     ) {
-        Text(
-            modifier = Modifier.padding(start = 24.dp),
+        JypText(
             text = stringResource(
                 id = R.string.my_journey_header,
                 formatArgs = arrayOf(journeyPropensity, userName),
             ),
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
+            type = TextType.HEADING_1,
+            modifier = Modifier.padding(start = 24.dp),
             color = JypColors.Text90,
         )
     }
