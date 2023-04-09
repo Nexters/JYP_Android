@@ -12,13 +12,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.jyp.feature_add_place.R
-import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
-import com.jyp.feature_add_place.util.JourneyPikiPlaceCategoryEnum
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.text.JypText
@@ -28,7 +24,8 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 internal fun PlaceInfoScreen(
-    searchPlaceResultModel: SearchPlaceResultModel,
+    placeInfoName: String,
+    placeInfoUrl: String,
     onClickCloseButton: () -> Unit
 ) {
     Column(
@@ -62,7 +59,7 @@ internal fun PlaceInfoScreen(
                     .wrapContentHeight()
             ) {
                 JypText(
-                    text = searchPlaceResultModel.name,
+                    text = placeInfoName,
                     type = TextType.TITLE_3,
                     modifier = Modifier.padding(vertical = 6.dp),
                     color = JypColors.Text80
@@ -70,10 +67,11 @@ internal fun PlaceInfoScreen(
 
             }
         }
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(1.dp)
-            .background(color = JypColors.Black15)
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(color = JypColors.Black15)
         )
 
         var webView: WebView? = null
@@ -94,7 +92,7 @@ internal fun PlaceInfoScreen(
                     }
                     settings.javaScriptEnabled = true
 
-                    loadUrl(searchPlaceResultModel.infoUrl)
+                    loadUrl(placeInfoUrl)
                     webView = this
                 }
             }, update = {
@@ -111,14 +109,8 @@ internal fun PlaceInfoScreen(
 @Preview(showBackground = true)
 internal fun PlaceInfoScreenPreview() {
     PlaceInfoScreen(
-        searchPlaceResultModel = SearchPlaceResultModel(
-            name = "",
-            address = "",
-            categoryEnum = JourneyPikiPlaceCategoryEnum.CAFE,
-            latitude = 0.0,
-            longitude = 0.0,
-            infoUrl = "https://place.map.kakao.com/m/2115731103"
-        ),
+        placeInfoName = "",
+        placeInfoUrl = "https://place.map.kakao.com/m/2115731103",
         onClickCloseButton = {}
     )
 }

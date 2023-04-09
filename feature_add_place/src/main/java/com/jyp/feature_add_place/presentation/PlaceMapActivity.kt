@@ -15,6 +15,8 @@ import com.jyp.core_util.extensions.setIntentTo
 import com.jyp.feature_add_place.R
 import com.jyp.feature_add_place.data.model.SearchPlaceResultModel
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.EXTRA_PLANNER_ID
+import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.PLACE_INFO_NAME
+import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.PLACE_INFO_URL
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.SEARCH_PLACE_RESULT
 import com.jyp.feature_add_place.presentation.viewmodel.PlaceMapViewModel
 import com.jyp.feature_add_place.util.showToast
@@ -59,7 +61,8 @@ class PlaceMapActivity : ComponentActivity() {
                     onClickInfoButton = {
                         searchPlaceResultModel?.let {
                             setIntentTo(PlaceInfoActivity::class.java) {
-                                putExtra(SEARCH_PLACE_RESULT, searchPlaceResultModel)
+                                putString(PLACE_INFO_NAME, it.name)
+                                putString(PLACE_INFO_URL, it.infoUrl)
                             }
                         }
                     },
