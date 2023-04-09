@@ -215,7 +215,7 @@ internal fun TextInputContent(
                     Text(
                         text = hint,
                         fontSize = fontSize,
-                        color = JypColors.Text30,
+                        color = JypColors.Text40,
                         fontWeight = FontWeight.Medium,
                     )
                 }
