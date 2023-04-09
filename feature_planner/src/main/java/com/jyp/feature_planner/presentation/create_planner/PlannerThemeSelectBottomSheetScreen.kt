@@ -19,34 +19,34 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 internal fun PlannerThemeSelectBottomSheetScreen(
-        onSubmitTheme: (ThemeType) -> Unit,
+    onSubmitTheme: (ThemeType) -> Unit,
 ) {
     var selectedTheme by remember {
         mutableStateOf<ThemeType?>(null)
     }
 
     Column(
-            modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                            top = 28.dp,
-                            start = 24.dp,
-                            end = 24.dp,
-                            bottom = 28.dp,
-                    ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 28.dp,
+                start = 24.dp,
+                end = 24.dp,
+                bottom = 28.dp,
+            ),
     ) {
         Header()
         Spacer(modifier = Modifier.size(24.dp))
         ThemeList(
-                selectedTheme = selectedTheme,
-                onSelectTheme = {
-                    selectedTheme = it
-                },
+            selectedTheme = selectedTheme,
+            onSelectTheme = {
+                selectedTheme = it
+            },
         )
         Spacer(modifier = Modifier.size(40.dp))
         Footer(
-                selectedTheme = selectedTheme,
-                onSubmitTheme = onSubmitTheme,
+            selectedTheme = selectedTheme,
+            onSubmitTheme = onSubmitTheme,
         )
     }
 }
@@ -55,37 +55,37 @@ internal fun PlannerThemeSelectBottomSheetScreen(
 private fun Header() {
     Column {
         JypText(
-                text = "여행기 커버 이미지",
-                type = TextType.HEADING_2,
-                color = JypColors.Text80,
+            text = "여행기 커버 이미지",
+            type = TextType.HEADING_2,
+            color = JypColors.Text80,
         )
         Spacer(modifier = Modifier.size(8.dp))
         JypText(
-                text = "여행 테마에 맞게 선택해주세요!",
-                type = TextType.BODY_2,
-                color = JypColors.Text40,
+            text = "여행 테마에 맞게 선택해주세요!",
+            type = TextType.BODY_2,
+            color = JypColors.Text40,
         )
     }
 }
 
 @Composable
 private fun ThemeList(
-        selectedTheme: ThemeType?,
-        onSelectTheme: (ThemeType) -> Unit,
+    selectedTheme: ThemeType?,
+    onSelectTheme: (ThemeType) -> Unit,
 ) {
     LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         ThemeType.values().forEach { themeType ->
             item {
                 ThemeItem(
-                        modifier = Modifier.clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = { onSelectTheme.invoke(themeType) }
-                        ),
-                        themeType = themeType,
-                        isSelected = themeType == selectedTheme
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = { onSelectTheme.invoke(themeType) }
+                    ),
+                    themeType = themeType,
+                    isSelected = themeType == selectedTheme
                 )
             }
         }
@@ -94,53 +94,53 @@ private fun ThemeList(
 
 @Composable
 private fun ThemeItem(
-        modifier: Modifier = Modifier,
-        themeType: ThemeType,
-        isSelected: Boolean,
+    modifier: Modifier = Modifier,
+    themeType: ThemeType,
+    isSelected: Boolean,
 ) {
     Box {
         Image(
-                modifier = modifier
-                        .align(Alignment.BottomCenter)
-                        .width(96.dp)
-                        .height(140.dp)
-                        .let {
-                            if (themeType == ThemeType.DEFAULT) {
-                                it.border(
-                                        width = 1.dp,
-                                        color = JypColors.Text20,
-                                        shape = RoundedCornerShape(6.dp)
-                                )
-                            } else {
-                                it
-                            }
-                        },
-                painter = painterResource(id = themeType.imageRes),
-                contentDescription = null,
+            modifier = modifier
+                .align(Alignment.BottomCenter)
+                .width(96.dp)
+                .height(140.dp)
+                .let {
+                    if (themeType == ThemeType.DEFAULT) {
+                        it.border(
+                            width = 1.dp,
+                            color = JypColors.Text20,
+                            shape = RoundedCornerShape(6.dp)
+                        )
+                    } else {
+                        it
+                    }
+                },
+            painter = painterResource(id = themeType.imageRes),
+            contentDescription = null,
         )
         JypText(
-                modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(start = 12.dp, bottom = 10.dp),
-                text = themeType.description,
-                type = TextType.TITLE_6,
-                color = if (themeType == ThemeType.DEFAULT) {
-                    JypColors.Text75
-                } else {
-                    JypColors.Text_white
-                },
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(start = 12.dp, bottom = 10.dp),
+            text = themeType.description,
+            type = TextType.TITLE_6,
+            color = if (themeType == ThemeType.DEFAULT) {
+                JypColors.Text75
+            } else {
+                JypColors.Text_white
+            },
         )
 
         if (isSelected) {
             Image(
-                    modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(
-                                    top = 2.dp,
-                                    end = 4.dp,
-                            ),
-                    painter = JypPainter.check,
-                    contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(
+                        top = 2.dp,
+                        end = 4.dp,
+                    ),
+                painter = JypPainter.check,
+                contentDescription = null,
             )
         }
     }
@@ -148,17 +148,17 @@ private fun ThemeItem(
 
 @Composable
 private fun Footer(
-        selectedTheme: ThemeType?,
-        onSubmitTheme: (ThemeType) -> Unit,
+    selectedTheme: ThemeType?,
+    onSubmitTheme: (ThemeType) -> Unit,
 ) {
     JypTextButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "선택 완료하기",
-            buttonType = ButtonType.THICK,
-            buttonColorSet = ButtonColorSetType.PINK,
-            enabled = selectedTheme != null,
-            onClickEnabled = {
-                selectedTheme?.let(onSubmitTheme)
-            },
+        modifier = Modifier.fillMaxWidth(),
+        text = "선택 완료하기",
+        buttonType = ButtonType.THICK,
+        buttonColorSet = ButtonColorSetType.PINK,
+        enabled = selectedTheme != null,
+        onClickEnabled = {
+            selectedTheme?.let(onSubmitTheme)
+        },
     )
 }
