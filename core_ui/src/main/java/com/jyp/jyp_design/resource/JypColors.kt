@@ -47,4 +47,6 @@ object JypColors {
     val Background_white100 = Color(0xFFFFFFFF)
 
     val Background_dim = Color(0xBF000000)
+
+    val Onboarding_indicator_unselected = Color(0xFFDADADA)
 }
