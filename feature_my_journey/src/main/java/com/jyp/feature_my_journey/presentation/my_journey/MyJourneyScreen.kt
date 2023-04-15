@@ -305,7 +305,7 @@ internal fun PastJourney(
         PastJourneyEmptyScreen()
     } else {
         LazyRow(
-            contentPadding = PaddingValues(start = 24.dp),
+            contentPadding = PaddingValues(horizontal = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             journeys.forEach { journey ->
@@ -430,21 +430,37 @@ internal fun JourneyItem(
             limitListCount = 4
         )
 
+        Image(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(20.dp)
+                .clip(CircleShape)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(),
+                    onClick = onClickMore,
+                ),
+            painter = painterResource(id = R.drawable.ic_more_menu),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(themeType.iconColor),
+        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(
+                    start = 20.dp,
+                    top = 20.dp,
+                    end = 52.dp,
+                    bottom = 20.dp
+                )
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
                     onClick = onClickPlanner
                 ),
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
+            if (dDay.isNotBlank()) {
                 JypText(
                     modifier = Modifier
                         .background(
@@ -459,20 +475,9 @@ internal fun JourneyItem(
                     type = TextType.TAG_2,
                     color = JypColors.Text_white,
                 )
-                Image(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(),
-                            onClick = onClickMore,
-                        ),
-                    painter = painterResource(id = R.drawable.ic_more_menu),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(themeType.iconColor),
-                )
+                Spacer(modifier = Modifier.padding(top = 16.dp))
             }
-            Spacer(modifier = Modifier.padding(top = 16.dp))
+
             Text(
                 text = journeyName,
                 fontWeight = FontWeight.SemiBold,
