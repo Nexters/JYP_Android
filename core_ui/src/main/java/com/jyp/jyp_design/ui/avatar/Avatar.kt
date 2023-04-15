@@ -105,7 +105,12 @@ fun AvatarList(
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Row(
             modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy((-18).dp),
+            horizontalArrangement = Arrangement.spacedBy(
+                when (limitListCount == Int.MAX_VALUE) {
+                    true -> (-(avatarType.size / 2)).dp
+                    false -> (-18).dp
+                }
+            ),
         ) {
             if (overflowCount > 0) {
                 MoreAvatar(
