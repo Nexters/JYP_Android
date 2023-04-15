@@ -233,8 +233,9 @@ private fun PlanEachContent(
             .padding(end = 4.dp)
             .fillMaxSize()
             .shadow(
-                elevation = 2.dp,
-                shape = RoundedCornerShape(size = 12.dp),
+                elevation = 32.dp,
+                shape = RoundedCornerShape(12.dp),
+                spotColor = JypColors.Black20
             )
             .background(
                 color = JypColors.Background_white100,
