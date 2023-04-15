@@ -122,7 +122,14 @@ private fun PlannerBackLayer(
             ) {
                 Image(
                     modifier = Modifier
-                        .size(52.dp)
+                        .size(AvatarType.SMALL.size.dp)
+                        .padding(all = 1.5.dp)
+                        .shadow(
+                            elevation = 20.dp,
+                            shape = RoundedCornerShape(AvatarType.SMALL.radius.dp),
+                            ambientColor = Color.Black,
+                            spotColor = Color.Black
+                        )
                         .clickable { onClickInviteUserButton() },
                     painter = painterResource(id = drawable.icon_invite_small),
                     contentDescription = null,
