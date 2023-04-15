@@ -205,7 +205,7 @@ private fun PlanEachOrder(
                 .background(
                     color = JypColors.Sub_black,
                     shape = CircleShape,
-                ),
+                ).padding(top = 1.5.dp),
             text = "$order",
             fontWeight = FontWeight.SemiBold,
             color = JypColors.Text_white,
