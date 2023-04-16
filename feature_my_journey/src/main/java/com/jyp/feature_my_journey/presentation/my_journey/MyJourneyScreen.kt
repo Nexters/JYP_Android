@@ -16,6 +16,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultShadowColor
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -407,16 +408,14 @@ internal fun JourneyItem(
                 shape = RoundedCornerShape(16.dp)
             ),
     ) {
-        val painter = painterResource(themeType.imageRes)
-        val imageRatio = painter.intrinsicSize.width / painter.intrinsicSize.height
-
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(imageRatio)
-                .align(Alignment.BottomCenter),
-            painter = painter,
+                .align(Alignment.BottomCenter)
+                .clip(RoundedCornerShape(16.dp)),
+            painter = painterResource(themeType.imageRes),
             contentDescription = null,
+            contentScale = ContentScale.Crop
         )
 
         AvatarList(
