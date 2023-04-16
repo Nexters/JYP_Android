@@ -42,6 +42,8 @@ internal fun CreatePlannerScreen(
         mutableStateOf("")
     }
 
+    val plannerTitleMaxLength = 10
+
     Box(
         modifier = Modifier
             .background(JypColors.Background_white100)
@@ -57,6 +59,7 @@ internal fun CreatePlannerScreen(
                 modifier = Modifier.weight(1f),
                 step = step,
                 title = title,
+                titleMaxLength = plannerTitleMaxLength,
                 titleChange = { title = it },
                 selectDateClick = selectDateClick,
                 startDateMillis = startDateMillis,
@@ -78,7 +81,7 @@ internal fun CreatePlannerScreen(
                 buttonType = ButtonType.THICK,
                 buttonColorSet = ButtonColorSetType.PINK,
                 enabled = when (step) {
-                    CreatePlannerStep.TITLE -> title.isNotEmpty() && title.length <= 6
+                    CreatePlannerStep.TITLE -> title.isNotEmpty() && title.length <= plannerTitleMaxLength
                     CreatePlannerStep.DATE -> startDateMillis > 0 && endDateMillis > 0
                     CreatePlannerStep.TASTE -> tags.count { it.state == TagState.SELECTED } >= 1
                 },
@@ -127,6 +130,7 @@ private fun CreatePlannerContent(
     modifier: Modifier = Modifier,
     step: CreatePlannerStep,
     title: String,
+    titleMaxLength: Int,
     titleChange: (String) -> Unit,
     selectDateClick: () -> Unit,
     startDateMillis: Long,
@@ -139,6 +143,7 @@ private fun CreatePlannerContent(
         CreatePlannerStep.TITLE -> CreatePlannerTitleArea(
             modifier = modifier,
             title = title,
+            titleMaxLength = titleMaxLength,
             titleChange = titleChange
         )
         CreatePlannerStep.DATE -> CreatePlannerDateArea(
@@ -160,6 +165,7 @@ private fun CreatePlannerContent(
 private fun CreatePlannerTitleArea(
     modifier: Modifier = Modifier,
     title: String,
+    titleMaxLength: Int,
     titleChange: (String) -> Unit
 ) {
     Column(modifier = modifier) {
@@ -187,7 +193,7 @@ private fun CreatePlannerTitleArea(
                 )
             }
         }
-        if (title.length > 6) {
+        if (title.length > titleMaxLength) {
             Spacer(modifier = Modifier.weight(1f))
             JypText(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
