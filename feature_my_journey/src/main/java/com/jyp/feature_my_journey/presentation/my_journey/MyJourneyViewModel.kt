@@ -33,40 +33,29 @@ class MyJourneyViewModel @Inject constructor(
         viewModelScope.launch {
             getJourneysUseCase()
                 .onSuccess { response ->
-                    _plannedJourneys.value = response.journeys.map { journey ->
-                        val startDay = SimpleDateFormat("d", Locale.getDefault())
-                            .format(Date(journey.startDate * 1000))
-                            .toInt()
 
-                        val today = SimpleDateFormat("d", Locale.getDefault())
-                            .format(Date(System.currentTimeMillis()))
-                            .toInt()
+                    val currentTimeMillis = System.currentTimeMillis()
 
-                        val dDay = (startDay - today).takeIf { gap ->
-                            gap > 0
-                        } ?: "day"
-
-                        Journey(
-                            id = journey.id,
-                            dDay = "D-$dDay",
-                            title = journey.name,
-                            themeType = ThemeType.values()
-                                .firstOrNull { themeType -> themeType.imagePath == journey.themePath }
-                                ?: ThemeType.DEFAULT,
-                            startDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(
-                                Date(
-                                    journey.startDate * 1000
-                                )
-                            ),
-                            endDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(
-                                Date(
-                                    journey.endDate * 1000
-                                )
-                            ),
-                            profileUrls = journey.users.map { it.profileImagePath },
-                        )
+                    val filteredPlannedJourneys = response.journeys.filter { journey ->
+                        val endTimeMillis = journey.endDate * 1000
+                        currentTimeMillis <= endTimeMillis
                     }
+
+                    val filteredPastJourneys = response.journeys.filter { journey ->
+                        val endTimeMillis = journey.endDate * 1000
+                        endTimeMillis < currentTimeMillis
+                    }
+
+                    _plannedJourneys.value = mappingJourneyList(
+                        filteredPlannedJourneys,
+                        false
+                    )
+                    _pastJourneys.value = mappingJourneyList(
+                        filteredPastJourneys,
+                        true
+                    )
                 }
+
                 .onFailure { throwable ->
                     throwable.printStackTrace()
                 }
@@ -82,6 +71,43 @@ class MyJourneyViewModel @Inject constructor(
                 .onFailure { throwable ->
                     throwable.printStackTrace()
                 }
+        }
+    }
+
+    private fun mappingJourneyList(
+        journeys: List<com.jyp.core_network.jyp.model.Journey>,
+        isPastJourney: Boolean
+    ): List<Journey> {
+
+        val today = SimpleDateFormat("d", Locale.getDefault())
+            .format(Date(System.currentTimeMillis()))
+            .toInt()
+
+        return journeys.map { journey ->
+            Journey(
+                id = journey.id,
+                dDay = when (isPastJourney) {
+                    true -> ""
+                    false -> {
+                        val startDate = SimpleDateFormat("d", Locale.getDefault())
+                            .format(Date(journey.startDate * 1000))
+                            .toInt()
+                        val leftDay = startDate - today
+                        if (leftDay > 0) "D-$leftDay" else "D-day"
+                    }
+                },
+                title = journey.name,
+                themeType = ThemeType.values().firstOrNull { themeType ->
+                    themeType.imagePath == journey.themePath
+                } ?: ThemeType.DEFAULT,
+                startDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(
+                    Date(journey.startDate * 1000)
+                ),
+                endDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(
+                    Date(journey.endDate * 1000)
+                ),
+                profileUrls = journey.users.map { user -> user.profileImagePath }
+            )
         }
     }
 }

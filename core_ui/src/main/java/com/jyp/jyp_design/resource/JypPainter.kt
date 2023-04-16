@@ -63,7 +63,7 @@ object JypPainter {
         get() = painterResource(id = R.drawable.illust_question03_01)
     val question03Illustration02: Painter
         @Composable
-        get() = painterResource(id = R.drawable.illust_question01_02)
+        get() = painterResource(id = R.drawable.illust_question03_02)
 
     val anotherJourneyInPrepare: Painter
         @Composable

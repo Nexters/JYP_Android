@@ -71,11 +71,7 @@ fun InviteUserScreen(
                         color = JypColors.Text80
                     )
                     Spacer(modifier = Modifier.height(6.dp))
-                    JypText(
-                        text = "일행은 최대 8명까지 초대할 수 있어요",
-                        type = TextType.BODY_2,
-                        color = JypColors.Text40
-                    )
+                    InvitationSubText()
                     Spacer(modifier = Modifier.height(48.dp))
                     JypTextButton(
                         text = "참여코드 복사하기",
@@ -188,6 +184,39 @@ fun InviteUserScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun InvitationSubText() {
+    Row() {
+        JypText(
+            text = "일행은 ",
+            type = TextType.BODY_2,
+            color = JypColors.Text40
+        )
+        JypText(
+            text = "최대 8명",
+            type = TextType.TITLE_6,
+            color = JypColors.Text80
+        )
+        JypText(
+            text = "까지 초대할 수 있어요.",
+            type = TextType.BODY_2,
+            color = JypColors.Text40
+        )
+    }
+    Row() {
+        JypText(
+            text = "참여코드를 복사하여 일행에게 전달",
+            type = TextType.TITLE_6,
+            color = JypColors.Text80
+        )
+        JypText(
+            text = "해주세요.",
+            type = TextType.BODY_2,
+            color = JypColors.Text40
+        )
     }
 }
 

@@ -7,9 +7,14 @@ import androidx.core.util.Pair
 import androidx.fragment.app.FragmentManager
 import com.jyp.feature_planner.R
 
+
 class RangeDatePicker {
-    fun show(supportFragmentManager: FragmentManager, onPositiveButtonClickListener: (Long, Long) -> Unit) {
-        MaterialDatePicker.Builder.dateRangePicker().apply {
+
+    private var materialDatePicker: MaterialDatePicker<Pair<Long, Long>>? = null
+
+
+    init {
+        materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().apply {
             setTheme(R.style.MaterialRangeDatePickerStyle)
             val now = Calendar.getInstance()
             setTitleText("")
@@ -25,15 +30,28 @@ class RangeDatePicker {
             val end = calendar.timeInMillis
 
             setCalendarConstraints(
-                    CalendarConstraints.Builder().setStart(start).setEnd(end).build()
+                CalendarConstraints.Builder().setStart(start).setEnd(end).build()
             )
-        }.build().apply {
+        }.build()
+    }
+
+    fun show(
+        supportFragmentManager: FragmentManager,
+        onPositiveButtonClickListener: (Long, Long) -> Unit
+    ) {
+        materialDatePicker?.apply {
             addOnPositiveButtonClickListener {
                 val startTimeStamp = it.first ?: return@addOnPositiveButtonClickListener
                 val endTimeStamp = it.second ?: return@addOnPositiveButtonClickListener
-
-                onPositiveButtonClickListener.invoke(startTimeStamp,endTimeStamp)
+                onPositiveButtonClickListener.invoke(startTimeStamp, endTimeStamp)
             }
-        }.show(supportFragmentManager, "")
+            addOnNegativeButtonClickListener {
+                this.dismiss()
+            }
+        }?.show(supportFragmentManager, "")
+    }
+
+    fun dismiss() {
+        materialDatePicker?.dismiss()
     }
 }
