@@ -29,7 +29,6 @@ import com.jyp.jyp_design.ui.tag.DecoratedTag
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
-
 @Composable
 internal fun PlannerForumScreen(
     pikMes: List<PlannerPikme>,
@@ -38,6 +37,7 @@ internal fun PlannerForumScreen(
     newPikMeClick: () -> Unit,
     onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
+    onClickEditTag: () -> Unit,
 ) {
     val rememberScrollState = rememberScrollState()
 
@@ -50,6 +50,7 @@ internal fun PlannerForumScreen(
         PlannerJourneyTagContent(
             tags = tags,
             tagClick = tagClick,
+            onClickEditTag = onClickEditTag,
         )
         Spacer(modifier = Modifier.size(48.dp))
         PlannerPikMeContent(
@@ -66,6 +67,7 @@ internal fun PlannerForumScreen(
 private fun PlannerJourneyTagContent(
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
+    onClickEditTag: () -> Unit,
 ) {
     var isCollapsed by remember {
         mutableStateOf(false)
@@ -94,6 +96,8 @@ private fun PlannerJourneyTagContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Image(
+                    modifier = Modifier
+                        .clickable { onClickEditTag.invoke() },
                     painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_pencil),
                     contentDescription = null,
                 )
@@ -369,7 +373,7 @@ private fun PlannerPikMeEmptyCard(
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 private fun PlannerForumScreenPreview() {
     PlannerForumScreen(
         pikMes = emptyList(),
@@ -377,6 +381,7 @@ private fun PlannerForumScreenPreview() {
         tagClick = {},
         newPikMeClick = {},
         onClickInfo = {},
-        onClickLike = {}
+        onClickLike = {},
+        onClickEditTag = {},
     )
 }

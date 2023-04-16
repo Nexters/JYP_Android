@@ -33,21 +33,13 @@ import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
 class CreatePlannerActivity : AppCompatActivity() {
     private val viewModel: CreatePlannerViewModel by viewModels()
 
-    private val title: String? by lazy {
-        intent.getStringExtra(EXTRA_CREATE_PLANNER_TITLE)
-    }
-
-    private val themeType: ThemeType? by lazy {
-        intent.getSerializableExtra(EXTRA_CREATE_PLANNER_THEME_TYPE) as? ThemeType
-    }
-
-    private val date: Pair<Long, Long>? by lazy {
-        intent.getSerializableExtra(EXTRA_CREATE_PLANNER_DATE) as? Pair<Long, Long>
+    private val createAction: CreatePlannerAction by lazy {
+        intent.getParcelableExtra(EXTRA_CREATE_PLANNER_ACTION)
+            ?: CreatePlannerAction.Create() as CreatePlannerAction
     }
 
     private val plannerId: String? by lazy {
@@ -60,19 +52,33 @@ class CreatePlannerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initStateFlowCollector()
+
+        val action = createAction
+
         setContent {
             Screen(
                 viewModel = viewModel,
                 step = intent.getSerializableExtra(EXTRA_CREATE_PLANNER_STEP) as? CreatePlannerStep
                     ?: CreatePlannerStep.TITLE,
                 submitOnTitle = { title, themeType ->
-                    startActivity(
-                        Intent(this, CreatePlannerActivity::class.java).apply {
-                            putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.DATE)
-                            putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
-                            putExtra(EXTRA_CREATE_PLANNER_THEME_TYPE, themeType)
+                    when (action) {
+                        is CreatePlannerAction.Create -> {
+                            startActivity(
+                                Intent(this, CreatePlannerActivity::class.java).apply {
+                                    putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.DATE)
+
+                                    putExtra(
+                                        EXTRA_CREATE_PLANNER_ACTION,
+                                        action.copy(
+                                            title = title,
+                                            themeType = themeType,
+                                        )
+                                    )
+                                }
+                            )
                         }
-                    )
+                        else -> Unit
+                    }
                 },
                 selectDateClick = {
                     when (rangeDatePicker == null) {
@@ -84,35 +90,64 @@ class CreatePlannerActivity : AppCompatActivity() {
                     }
                 },
                 submitOnDate = { startMillis, endMillis ->
-                    startActivity(
-                        Intent(this, CreatePlannerActivity::class.java).apply {
-                            putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
-                            putExtra(EXTRA_CREATE_PLANNER_TITLE, title)
-                            putExtra(EXTRA_CREATE_PLANNER_THEME_TYPE, themeType)
-                            putExtra(EXTRA_CREATE_PLANNER_DATE, startMillis to endMillis)
+                    when (action) {
+                        is CreatePlannerAction.Create -> {
+                            startActivity(
+                                Intent(this, CreatePlannerActivity::class.java).apply {
+                                    putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
+
+                                    putExtra(
+                                        EXTRA_CREATE_PLANNER_ACTION,
+                                        action.copy(
+                                            startDateMillis = startMillis,
+                                            endDateMillis = endMillis,
+                                        )
+                                    )
+                                }
+                            )
                         }
-                    )
+                        else -> Unit
+                    }
                 },
                 submitOnTaste = { tags ->
-                    when (plannerId.isNullOrBlank()) {
-                        true -> {
+                    when (action) {
+                        is CreatePlannerAction.Create -> {
                             viewModel.createPlanner(
-                                title ?: return@Screen,
-                                themeType?.imagePath ?: return@Screen,
-                                date?.first ?: return@Screen,
-                                date?.second ?: return@Screen,
+                                action.title ?: return@Screen,
+                                action.themeType?.imagePath ?: return@Screen,
+                                action.startDateMillis ?: return@Screen,
+                                action.endDateMillis ?: return@Screen,
                                 tags,
                             )
                             finishAffinity()
                         }
-                        false -> viewModel.joinPlanner(
-                            plannerId ?: "",
-                            tags
-                        )
+                        is CreatePlannerAction.Edit -> {
+
+                        }
+                        is CreatePlannerAction.Join -> {
+                            viewModel.joinPlanner(
+                                action.plannerId,
+                                tags
+                            )
+                        }
                     }
                 },
                 onClickBackAction = this::finish
             )
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        val action = createAction
+
+        when (action) {
+            is CreatePlannerAction.Create -> null
+            is CreatePlannerAction.Edit -> action.plannerId
+            is CreatePlannerAction.Join -> action.plannerId
+        }?.let {
+            viewModel.fetchTags(it)
         }
     }
 
@@ -124,7 +159,7 @@ class CreatePlannerActivity : AppCompatActivity() {
                         is UiState.Loading -> {}
                         is UiState.Success -> startActivity(
                             Intent(this@CreatePlannerActivity, PlannerActivity::class.java).apply {
-                                putExtra(EXTRA_PLANNER_ID, plannerId)
+                                putExtra(EXTRA_PLANNER_ID, uiState.data)
                             }
                         )
                         is UiState.Failure -> {
@@ -133,7 +168,10 @@ class CreatePlannerActivity : AppCompatActivity() {
                                 setResult(
                                     RESULT_CODE_JOIN_PLANNER_FAILURE,
                                     Intent()
-                                        .setClassName(this@CreatePlannerActivity, "com.jyp.main.presentation.MainActivity")
+                                        .setClassName(
+                                            this@CreatePlannerActivity,
+                                            "com.jyp.main.presentation.MainActivity"
+                                        )
                                         .putExtra(JOIN_PLANNER_ERROR_CODE, it.code)
                                 )
                                 finish()
@@ -150,9 +188,8 @@ class CreatePlannerActivity : AppCompatActivity() {
         const val JOIN_PLANNER_ERROR_CODE = "JOIN_PLANNER_ERROR_CODE"
 
         const val EXTRA_CREATE_PLANNER_STEP = "EXTRA_CREATE_PLANNER_STEP"
-        const val EXTRA_CREATE_PLANNER_TITLE = "EXTRA_CREATE_PLANNER_TITLE"
-        const val EXTRA_CREATE_PLANNER_THEME_TYPE = "EXTRA_CREATE_PLANNER_THEME_TYPE"
-        const val EXTRA_CREATE_PLANNER_DATE = "EXTRA_CREATE_PLANNER_DATE"
+
+        const val EXTRA_CREATE_PLANNER_ACTION = "EXTRA_CREATE_PLANNER_ACTION"
     }
 }
 

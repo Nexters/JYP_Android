@@ -9,5 +9,5 @@ sealed class UiState<out T : Any> {
 
     data class Failure(
         val throwable: Throwable
-    ) : UiState<Throwable>()
+    ) : UiState<Nothing>()
 }

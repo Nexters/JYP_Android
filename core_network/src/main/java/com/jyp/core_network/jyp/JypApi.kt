@@ -76,4 +76,10 @@ interface JypApi {
         @Path("journeyId") journeyId: String,
         @Path("pikmeId") pikMeId: String,
     ): JypBaseResponse<Any>
+
+    @GET("/journeys/default-tags")
+    suspend fun getDefaultTags(): TagsResponse
+
+    @GET("/journeys/{id}/tags")
+    suspend fun getTags(@Path("id") journeyId: String): TagsResponse
 }

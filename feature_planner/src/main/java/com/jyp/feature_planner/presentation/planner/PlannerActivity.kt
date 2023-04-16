@@ -26,6 +26,9 @@ import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteAct
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_PIKIS
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_PIKMIS
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_START_DATE
+import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerAction
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -71,6 +74,17 @@ class PlannerActivity : ComponentActivity() {
                             putExtra(EXTRA_JOURNEY_ID, plannerId)
                             putExtra(EXTRA_DAY_INDEX, index)
                             putExtra(EXTRA_START_DATE, viewModel.plannerDates.value.first)
+                            putExtra(
+                                AddPlannerRouteActivity.EXTRA_PIKIS,
+                                ArrayList(viewModel.planItems.value[index].pikis)
+                            )
+
+                            putExtra(AddPlannerRouteActivity.EXTRA_JOURNEY_ID, plannerId)
+                            putExtra(AddPlannerRouteActivity.EXTRA_DAY_INDEX, index)
+                            putExtra(
+                                AddPlannerRouteActivity.EXTRA_START_DATE,
+                                viewModel.plannerDates.value.first
+                            )
                         }
                     )
                 },
@@ -85,7 +99,17 @@ class PlannerActivity : ComponentActivity() {
                     plannerId?.let {
                         viewModel.switchPikmeLike(it, plannerPikme)
                     }
-                }
+                },
+                onClickEditTag = {
+                    plannerId?.let {
+                        startActivity(
+                            Intent(this, CreatePlannerActivity::class.java).apply {
+                                putExtra(CreatePlannerActivity.EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
+                                putExtra(CreatePlannerActivity.EXTRA_CREATE_PLANNER_ACTION, CreatePlannerAction.Edit(it))
+                            }
+                        )
+                    }
+                },
             )
         }
     }
@@ -115,6 +139,7 @@ private fun Screen(
     onClickBackButton: () -> Unit,
     onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
+    onClickEditTag: () -> Unit,
 ) {
     val plannerTitle by viewModel.plannerTitle.collectAsState()
     val plannerDates by viewModel.plannerDates.collectAsState()
@@ -166,6 +191,7 @@ private fun Screen(
                 onClickBackButton = onClickBackButton,
                 onClickInfo = onClickInfo,
                 onClickLike = onClickLike,
+                onClickEditTag = onClickEditTag,
             )
         }
     }
