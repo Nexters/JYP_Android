@@ -29,3 +29,13 @@ inline fun <T : Any> apiResult(call: () -> JypBaseResponse<T>): ApiResult<T> {
         ApiResult.Failure(it)
     } as ApiResult<T>
 }
+
+@Suppress("UNCHECKED_CAST")
+inline fun <T : Any> apiUnitResult(call: () -> JypWithoutDataResponse): ApiResult<T> {
+    return runCatching {
+        call.invoke()
+        ApiResult.Success(Unit)
+    }.getOrElse {
+        ApiResult.Failure(it)
+    } as ApiResult<T>
+}

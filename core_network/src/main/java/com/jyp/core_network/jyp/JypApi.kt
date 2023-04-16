@@ -51,7 +51,7 @@ interface JypApi {
     @POST("/journeys/{id}/drop")
     suspend fun leaveJourney(
         @Path("id") id: String
-    ): JypBaseResponse<Any>
+    ): JypWithoutDataResponse
 
     @POST("journeys/{id}/pikmis")
     suspend fun addPikme(

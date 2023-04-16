@@ -2,6 +2,7 @@ package com.jyp.feature_my_journey.data
 
 import com.jyp.core_network.jyp.JypApi
 import com.jyp.core_network.jyp.JypBaseResponse
+import com.jyp.core_network.jyp.JypWithoutDataResponse
 import com.jyp.core_network.jyp.model.response.JourneysResponse
 import javax.inject.Inject
 
@@ -14,7 +15,7 @@ class JourneyDataSource @Inject constructor(
 
     suspend fun leaveJourney(
         journeyId: String
-    ): JypBaseResponse<Any> {
+    ): JypWithoutDataResponse {
         return jypApi.leaveJourney(journeyId)
     }
 }

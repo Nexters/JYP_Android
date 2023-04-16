@@ -5,3 +5,8 @@ abstract class JypBaseResponse<T : Any> {
     lateinit var message: String
     lateinit var data: T
 }
+
+class JypWithoutDataResponse {
+    lateinit var code: String
+    lateinit var message: String
+}
