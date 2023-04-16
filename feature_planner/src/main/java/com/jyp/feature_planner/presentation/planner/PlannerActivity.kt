@@ -17,6 +17,11 @@ import androidx.compose.ui.unit.dp
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity
+import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_DAY_INDEX
+import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_JOURNEY_ID
+import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_PIKIS
+import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_PIKMIS
+import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_START_DATE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,6 +33,7 @@ class PlannerActivity : ComponentActivity() {
     private val plannerId: String? by lazy {
         intent.getStringExtra(EXTRA_PLANNER_ID)
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,19 +57,12 @@ class PlannerActivity : ComponentActivity() {
                 onClickEditRoute = { index ->
                     startActivity(
                         Intent(this, AddPlannerRouteActivity::class.java).apply {
-                            putExtra(
-                                AddPlannerRouteActivity.EXTRA_PIKMIS,
-                                ArrayList(viewModel.pikmis.value)
-                            )
+                            putExtra(EXTRA_PIKMIS, ArrayList(viewModel.pikmis.value))
+                            putExtra(EXTRA_PIKIS, ArrayList(viewModel.planItems.value[index].pikis))
 
-                            putExtra(
-                                AddPlannerRouteActivity.EXTRA_PIKIS,
-                                ArrayList(viewModel.planItems.value[index].pikis)
-                            )
-
-                            putExtra(AddPlannerRouteActivity.EXTRA_JOURNEY_ID, plannerId)
-                            putExtra(AddPlannerRouteActivity.EXTRA_DAY_INDEX, index)
-                            putExtra(AddPlannerRouteActivity.EXTRA_START_DATE, viewModel.plannerDates.value.first)
+                            putExtra(EXTRA_JOURNEY_ID, plannerId)
+                            putExtra(EXTRA_DAY_INDEX, index)
+                            putExtra(EXTRA_START_DATE, viewModel.plannerDates.value.first)
                         }
                     )
                 },
