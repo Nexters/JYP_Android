@@ -1,9 +1,8 @@
 package com.jyp.feature_my_journey.domain
 
 import com.jyp.core_network.jyp.ApiResult
-import com.jyp.core_network.jyp.apiResult
+import com.jyp.core_network.jyp.apiUnitResult
 import javax.inject.Inject
-
 
 class LeaveJourneyUseCase @Inject constructor(
     private val journeyRepository: JourneyRepository,
@@ -11,7 +10,7 @@ class LeaveJourneyUseCase @Inject constructor(
     suspend operator fun invoke(
         journeyId: String
     ): ApiResult<Any> {
-        return apiResult {
+        return apiUnitResult {
             journeyRepository.leaveJourney(journeyId)
         }
     }

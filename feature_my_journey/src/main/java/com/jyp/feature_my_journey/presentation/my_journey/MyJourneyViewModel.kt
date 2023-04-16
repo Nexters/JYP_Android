@@ -1,5 +1,6 @@
 package com.jyp.feature_my_journey.presentation.my_journey
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jyp.core_network.jyp.onFailure
@@ -63,6 +64,7 @@ class MyJourneyViewModel @Inject constructor(
     }
 
     fun leaveJourney(journeyId: String) {
+        Log.d("leave journey", "$journeyId")
         viewModelScope.launch {
             leaveJourneyUseCase.invoke(journeyId)
                 .onSuccess { _ ->
