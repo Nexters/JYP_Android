@@ -54,6 +54,9 @@ class CreatePlannerActivity : AppCompatActivity() {
         intent.getStringExtra(EXTRA_PLANNER_ID)
     }
 
+    private var rangeDatePicker: RangeDatePicker? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initStateFlowCollector()
@@ -72,7 +75,11 @@ class CreatePlannerActivity : AppCompatActivity() {
                     )
                 },
                 selectDateClick = {
-                    RangeDatePicker().show(supportFragmentManager) { start, end ->
+                    when (rangeDatePicker == null) {
+                        true -> rangeDatePicker = RangeDatePicker()
+                        false -> rangeDatePicker?.dismiss()
+                    }
+                    rangeDatePicker?.show(supportFragmentManager) { start, end ->
                         viewModel.updateDate(start, end)
                     }
                 },
