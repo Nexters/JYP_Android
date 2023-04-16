@@ -74,14 +74,13 @@ internal fun MyJourneyHeader(
         modifier = Modifier.padding(top = 8.dp, bottom = 35.dp),
         verticalAlignment = Alignment.Bottom
     ) {
-        Text(
-            modifier = Modifier.padding(start = 24.dp),
+        JypText(
             text = stringResource(
                 id = R.string.my_journey_header,
                 formatArgs = arrayOf(journeyPropensity, userName),
             ),
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
+            type = TextType.HEADING_1,
+            modifier = Modifier.padding(start = 24.dp),
             color = JypColors.Text90,
         )
     }
@@ -286,7 +285,7 @@ internal fun PlannedJourneyEmptyScreen(
             JypTextButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = "후보 장소 추가하기",
+                text = "만들기",
                 buttonType = ButtonType.MEDIUM,
                 buttonColorSet = ButtonColorSetType.PINK,
                 onClickEnabled = onClickNewJourney,
