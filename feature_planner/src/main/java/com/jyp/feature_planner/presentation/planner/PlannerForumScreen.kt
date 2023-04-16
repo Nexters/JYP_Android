@@ -29,12 +29,14 @@ import com.jyp.jyp_design.ui.tag.DecoratedTag
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
+
 @Composable
 internal fun PlannerForumScreen(
     pikMes: List<PlannerPikme>,
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
 ) {
     val rememberScrollState = rememberScrollState()
@@ -53,6 +55,7 @@ internal fun PlannerForumScreen(
         PlannerPikMeContent(
             pikMes = pikMes,
             newPikMeClick = newPikMeClick,
+            onClickInfo = onClickInfo,
             onClickLike = onClickLike,
         )
         Spacer(modifier = Modifier.size(20.dp))
@@ -157,6 +160,7 @@ private fun PlannerTagLayout(
 private fun PlannerPikMeContent(
     pikMes: List<PlannerPikme>,
     newPikMeClick: () -> Unit,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
 ) {
     Column {
@@ -198,6 +202,7 @@ private fun PlannerPikMeContent(
             pikMes.forEach { pikMe ->
                 PlannerPikMeCard(
                     pikMe = pikMe,
+                    onClickInfo = onClickInfo,
                     onClickLike = onClickLike,
                 )
                 Spacer(modifier = Modifier.size(20.dp))
@@ -209,6 +214,7 @@ private fun PlannerPikMeContent(
 @Composable
 private fun PlannerPikMeCard(
     pikMe: PlannerPikme,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
 ) {
     Box(
@@ -247,9 +253,7 @@ private fun PlannerPikMeCard(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = {
-                        onClickLike.invoke(pikMe)
-                    }
+                    onClick = { onClickLike.invoke(pikMe) }
                 )
                 .size(62.dp)
                 .shadow(
@@ -304,7 +308,8 @@ private fun PlannerPikMeCard(
                     )
                     .clip(RoundedCornerShape(8.dp))
                     .background(JypColors.Background_white100)
-                    .padding(2.dp),
+                    .padding(2.dp)
+                    .clickable { onClickInfo(pikMe) }
             ) {
                 Spacer(modifier = Modifier.size(2.dp))
                 Image(
@@ -371,6 +376,7 @@ private fun PlannerForumScreenPreview() {
         tags = emptyList(),
         tagClick = {},
         newPikMeClick = {},
-        onClickLike = {},
+        onClickInfo = {},
+        onClickLike = {}
     )
 }

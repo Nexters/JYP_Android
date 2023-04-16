@@ -32,6 +32,7 @@ import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PlannerScreen(
@@ -48,6 +49,7 @@ internal fun PlannerScreen(
     onClickEditRoute: (day: Int) -> Unit,
     onClickInviteUserButton: () -> Unit,
     onClickBackButton: () -> Unit,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
@@ -91,6 +93,7 @@ internal fun PlannerScreen(
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
                 onClickEditRoute = onClickEditRoute,
+                onClickInfo = onClickInfo,
                 onClickLike = onClickLike,
             )
         },
@@ -157,6 +160,7 @@ private fun PlannerContent(
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
 ) {
     Column(
@@ -184,6 +188,7 @@ private fun PlannerContent(
                 tags = tags,
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
+                onClickInfo = onClickInfo,
                 onClickLike = onClickLike,
             )
             1 -> PlannerJourneyPlanScreen(
@@ -272,6 +277,7 @@ internal fun PlannerScreenPreview() {
         onClickInviteUserButton = {},
         onClickEditRoute = {},
         onClickBackButton = {},
+        onClickInfo = {},
         onClickLike = {},
     )
 }
