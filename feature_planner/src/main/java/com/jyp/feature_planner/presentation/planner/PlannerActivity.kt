@@ -33,12 +33,16 @@ class PlannerActivity : ComponentActivity() {
     private val plannerId: String? by lazy {
         intent.getStringExtra(EXTRA_PLANNER_ID)
     }
+    private val isDDay: Boolean by lazy {
+        intent.getBooleanExtra(EXTRA_IS_D_DAY, false)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Screen(
+                isDDay = isDDay,
                 onClickInviteUserButton = {
                     startActivity(
                         Intent(this, InviteUserActivity::class.java).apply {
@@ -86,12 +90,14 @@ class PlannerActivity : ComponentActivity() {
 
     companion object {
         const val EXTRA_PLANNER_ID = "EXTRA_PLANNER_ID"
+        const val EXTRA_IS_D_DAY = "EXTRA_IS_D_DAY"
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun Screen(
+    isDDay: Boolean,
     viewModel: PlannerViewModel,
     onClickInviteUserButton: () -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
@@ -127,6 +133,7 @@ private fun Screen(
             modifier = Modifier.fillMaxSize()
         ) {
             PlannerScreen(
+                isDDay = isDDay,
                 plannerTitle = plannerTitle,
                 startDate = plannerDates.first,
                 endDate = plannerDates.second,

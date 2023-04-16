@@ -34,6 +34,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PlannerScreen(
+    isDDay: Boolean,
     plannerTitle: String,
     startDate: Long,
     endDate: Long,
@@ -50,7 +51,10 @@ internal fun PlannerScreen(
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
-        mutableStateOf(0)
+        when (isDDay) {
+            true -> mutableStateOf(1)
+            false -> mutableStateOf(0)
+        }
     }
 
     BackdropScaffold(
@@ -248,6 +252,7 @@ private fun PlannerContentTab(
 @Preview(showBackground = true)
 internal fun PlannerScreenPreview() {
     PlannerScreen(
+        isDDay = true,
         plannerTitle = "무슨 무슨 여행기~",
         startDate = 21312412L,
         endDate = 21312412L,
