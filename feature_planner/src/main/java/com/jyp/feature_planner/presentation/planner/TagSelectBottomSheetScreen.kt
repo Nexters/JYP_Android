@@ -11,6 +11,7 @@ import com.jyp.feature_planner.domain.Person
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.avatar.Avatar
+import com.jyp.jyp_design.ui.avatar.AvatarType
 import com.jyp.jyp_design.ui.tag.DecoratedTag
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
@@ -80,9 +81,7 @@ private fun Person(person: Person) {
     ) {
         Avatar(
                 profileImageUrl = person.profileUrl,
-                width = 44.dp,
-                height = 44.dp,
-                showBorder = false,
+                avatarType = AvatarType.SMALL
         )
         Spacer(modifier = Modifier.size(8.dp))
         JypText(

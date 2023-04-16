@@ -29,6 +29,7 @@ import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.avatar.AvatarList
+import com.jyp.jyp_design.ui.avatar.AvatarType
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.shadow.drawShadow
 import com.jyp.jyp_design.ui.text.JypText
@@ -424,8 +425,7 @@ internal fun JourneyItem(
                 .align(Alignment.BottomStart)
                 .padding(20.dp),
             profileImageUrls = profileUrls,
-            width = 44.dp,
-            height = 44.dp,
+            avatarType = AvatarType.SMALL,
             borderColor = themeType.profileBorderColor,
             limitListCount = 4
         )

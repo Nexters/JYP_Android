@@ -26,6 +26,7 @@ import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.planner.model.PlanItem
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.avatar.AvatarList
+import com.jyp.jyp_design.ui.avatar.AvatarType
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBar
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.text.JypText
@@ -116,13 +117,19 @@ private fun PlannerBackLayer(
         Box {
             AvatarList(
                 profileImageUrls = profileImageUrls,
-                width = 44.dp,
-                height = 44.dp,
+                avatarType = AvatarType.SMALL,
                 borderColor = JypColors.Background_grey300,
             ) {
                 Image(
                     modifier = Modifier
-                        .size(52.dp)
+                        .size(AvatarType.SMALL.size.dp)
+                        .padding(all = 1.5.dp)
+                        .shadow(
+                            elevation = 20.dp,
+                            shape = RoundedCornerShape(AvatarType.SMALL.radius.dp),
+                            ambientColor = Color.Black,
+                            spotColor = Color.Black
+                        )
                         .clickable { onClickInviteUserButton() },
                     painter = painterResource(id = drawable.icon_invite_small),
                     contentDescription = null,
