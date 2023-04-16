@@ -14,14 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.jyp.jyp_design.resource.JypColors
-import com.jyp.jyp_design.ui.shadow.drawShadow
+
 
 @Composable
 internal fun MainScreen(
@@ -106,11 +104,9 @@ internal fun MainBottomNavigation(
             navItems.forEach { navItem ->
                 MainBottomNavigationItem(
                     selected = navItem == currentScreen,
-                    activeIconRes = navItem.activeIconRes,
-                    inactiveIconRes = navItem.inactiveIconRes,
+                    activatedIconRes = navItem.activatedIconRes,
+                    inactivatedIconRes = navItem.inactivatedIconRes,
                     labelRes = navItem.labelRes,
-                    activeLabelColor = JypColors.Pink,
-                    inactiveLabelColor = JypColors.Text40,
                     onTabSelectAction = {
                         onTabSelectAction.invoke(navItem.name)
                     }
@@ -123,64 +119,32 @@ internal fun MainBottomNavigation(
 @Composable
 internal fun RowScope.MainBottomNavigationItem(
     selected: Boolean,
-    @DrawableRes activeIconRes: Int,
-    @DrawableRes inactiveIconRes: Int,
+    @DrawableRes activatedIconRes: Int,
+    @DrawableRes inactivatedIconRes: Int,
     @StringRes labelRes: Int,
-    activeLabelColor: Color,
-    inactiveLabelColor: Color,
     onTabSelectAction: () -> Unit,
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .weight(1f)
             .fillMaxHeight()
+            .background(JypColors.Background_white100)
             .clickable(
                 onClick = onTabSelectAction,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(),
+                indication = rememberRipple()
             ),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .padding(top = 14.dp)
-                .size(30.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Image(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .drawShadow(
-                        color = JypColors.PinkShadow,
-                        enabled = selected
-                    ),
-                painter = painterResource(
-                    id = if (selected) {
-                        activeIconRes
-                    } else {
-                        inactiveIconRes
-                    }
-                ),
-                contentDescription = null
-            )
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Text(
-            modifier = Modifier.padding(bottom = 14.dp),
-            text = stringResource(id = labelRes),
-            fontSize = 10.sp,
-            fontWeight = if (selected) {
-                FontWeight.SemiBold
-            } else {
-                FontWeight.Medium
-            },
-            color = if (selected) {
-                activeLabelColor
-            } else {
-                inactiveLabelColor
-            }
+        Image(
+            modifier = Modifier.wrapContentSize(),
+            painter = painterResource(
+                id = when (selected) {
+                    true -> activatedIconRes
+                    false -> inactivatedIconRes
+                }
+            ),
+            contentDescription = stringResource(id = labelRes)
         )
     }
 }
