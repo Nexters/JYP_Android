@@ -199,6 +199,7 @@ internal fun TextInputContent(
     ) {
         BasicTextField(
             modifier = Modifier
+                .weight(1f)
                 .onFocusChanged { focusState ->
                     textFieldFocusChange.invoke(focusState.hasFocus)
                 },
