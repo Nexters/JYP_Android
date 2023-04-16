@@ -86,7 +86,7 @@ sealed interface TagType : Serializable {
     }
 
     object Dislike : TagType {
-        override val iconRes: Int = R.drawable.icon_smile
+        override val iconRes: Int = R.drawable.icon_close
 
         override fun getBackgroundColor(state: TagState): Color {
             return when (state) {

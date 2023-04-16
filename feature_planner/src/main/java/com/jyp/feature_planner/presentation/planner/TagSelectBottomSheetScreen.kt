@@ -13,6 +13,7 @@ import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.avatar.Avatar
 import com.jyp.jyp_design.ui.avatar.AvatarType
 import com.jyp.jyp_design.ui.tag.DecoratedTag
+import com.jyp.jyp_design.ui.tag.TagType
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
@@ -28,7 +29,7 @@ internal fun TagSelectedBottomSheetScreen(tag: PlannerTag) {
                             bottom = 40.dp,
                     ),
     ) {
-        Header()
+        Header(tag.type)
         Spacer(modifier = Modifier.size(24.dp))
         DecoratedTag(
                 tagType = tag.type,
@@ -42,14 +43,20 @@ internal fun TagSelectedBottomSheetScreen(tag: PlannerTag) {
 }
 
 @Composable
-private fun Header() {
+private fun Header(
+    tagType: TagType
+) {
     Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
     ) {
         JypText(
-                text = "좋아요 태그",
+                text = when (tagType) {
+                    TagType.Soso -> "상관 없어요 태그"
+                    TagType.Like -> "좋아요 태그"
+                    TagType.Dislike -> "싫어요 태그"
+                },
                 type = TextType.TITLE_2,
                 color = JypColors.Text80,
         )
