@@ -26,6 +26,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 @Composable
 internal fun CreatePlannerScreen(
     step: CreatePlannerStep,
@@ -40,6 +41,8 @@ internal fun CreatePlannerScreen(
     var title by remember {
         mutableStateOf("")
     }
+
+    val plannerTitleMaxLength = 10
 
     Box(
         modifier = Modifier
@@ -56,6 +59,7 @@ internal fun CreatePlannerScreen(
                 modifier = Modifier.weight(1f),
                 step = step,
                 title = title,
+                titleMaxLength = plannerTitleMaxLength,
                 titleChange = { title = it },
                 selectDateClick = selectDateClick,
                 startDateMillis = startDateMillis,
@@ -77,7 +81,7 @@ internal fun CreatePlannerScreen(
                 buttonType = ButtonType.THICK,
                 buttonColorSet = ButtonColorSetType.PINK,
                 enabled = when (step) {
-                    CreatePlannerStep.TITLE -> title.isNotEmpty() && title.length <= 6
+                    CreatePlannerStep.TITLE -> title.isNotEmpty() && title.length <= plannerTitleMaxLength
                     CreatePlannerStep.DATE -> startDateMillis > 0 && endDateMillis > 0
                     CreatePlannerStep.TASTE -> tags.count { it.state == TagState.SELECTED } >= 1
                 },
@@ -126,6 +130,7 @@ private fun CreatePlannerContent(
     modifier: Modifier = Modifier,
     step: CreatePlannerStep,
     title: String,
+    titleMaxLength: Int,
     titleChange: (String) -> Unit,
     selectDateClick: () -> Unit,
     startDateMillis: Long,
@@ -138,6 +143,7 @@ private fun CreatePlannerContent(
         CreatePlannerStep.TITLE -> CreatePlannerTitleArea(
             modifier = modifier,
             title = title,
+            titleMaxLength = titleMaxLength,
             titleChange = titleChange
         )
         CreatePlannerStep.DATE -> CreatePlannerDateArea(
@@ -159,6 +165,7 @@ private fun CreatePlannerContent(
 private fun CreatePlannerTitleArea(
     modifier: Modifier = Modifier,
     title: String,
+    titleMaxLength: Int,
     titleChange: (String) -> Unit
 ) {
     Column(modifier = modifier) {
@@ -186,7 +193,7 @@ private fun CreatePlannerTitleArea(
                 )
             }
         }
-        if (title.length > 6) {
+        if (title.length > titleMaxLength) {
             Spacer(modifier = Modifier.weight(1f))
             JypText(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -208,7 +215,10 @@ private fun PlannerCreateTitleSuggestion(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
             .background(JypColors.Tag_white_blue100)
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(
+                horizontal = 8.dp,
+                vertical = 4.dp
+            )
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
