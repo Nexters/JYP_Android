@@ -9,16 +9,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
+import com.jyp.jyp_design.ui.avatar.Avatar
+import com.jyp.jyp_design.ui.avatar.AvatarType
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
-import com.jyp.main.R
-import com.skydoves.landscapist.glide.GlideImage
+
 
 @Composable
 fun SelectProfileScreen(
@@ -29,7 +29,7 @@ fun SelectProfileScreen(
     selectedPosition: Int?,
     showDim: Boolean,
     onSelectProfile: (Int) -> Unit,
-    submitProfile: () -> Unit,
+    submitProfile: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -119,7 +119,7 @@ private fun Content(
             index = 0,
             isSelected = selectedPosition == 0,
         )
-        Spacer(modifier = Modifier.size(64.dp))
+        Spacer(modifier = Modifier.size(42.dp))
         Profile(
             name = name,
             profileImagePath = personalityImagePath,
@@ -139,37 +139,24 @@ private fun Profile(
     isSelected: Boolean,
 ) {
     Box(
-        modifier = Modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = {
-                    onSelectProfile.invoke(index)
-                },
-            ),
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = { onSelectProfile.invoke(index) }
+        ),
     ) {
         Column(
+            modifier = Modifier.padding(
+                top = 12.dp,
+                start = 11.dp,
+                end = 11.dp
+            ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (index == 0) {
-                GlideImage(
-                    modifier = Modifier
-                        .padding(top = 12.dp, start = 11.dp, end = 11.dp)
-                        .size(70.dp)
-                        .clip(RoundedCornerShape(20.dp)),
-                    imageModel = profileImagePath,
-                    previewPlaceholder = R.drawable.group,
-                )
-            } else {
-                GlideImage(
-                    modifier = Modifier
-                        .padding(top = 12.dp, start = 11.dp, end = 11.dp)
-                        .size(70.dp)
-                        .clip(RoundedCornerShape(20.dp)),
-                    imageModel = profileImagePath,
-                    previewPlaceholder = R.drawable.group,
-                )
-            }
+            Avatar(
+                profileImageUrl = profileImagePath,
+                avatarType = AvatarType.MEDIUM
+            )
             Spacer(modifier = Modifier.size(4.dp))
             JypText(
                 text = name.takeIf { it.length >= 4 }

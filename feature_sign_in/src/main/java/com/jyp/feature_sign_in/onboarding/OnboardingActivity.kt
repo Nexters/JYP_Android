@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import com.jyp.core_util.extensions.setIntentTo
 import com.jyp.feature_sign_in.sign_in.presentation.SignInActivity
-import com.jyp.feature_sign_in.util.setIntentTo
 
 
 class OnboardingActivity : ComponentActivity() {

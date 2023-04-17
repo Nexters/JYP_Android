@@ -23,8 +23,35 @@ class AddPlannerRouteViewModel @Inject constructor(
     private val journeyId: String? = savedStateHandle[AddPlannerRouteActivity.EXTRA_JOURNEY_ID]
     private val dayIndex: Int = savedStateHandle[AddPlannerRouteActivity.EXTRA_DAY_INDEX] ?: 0
 
-    private val _pikmis: MutableStateFlow<List<PlannerPikme>> =
-        MutableStateFlow(savedStateHandle[AddPlannerRouteActivity.EXTRA_PIKMIS] ?: emptyList())
+    private val _pikmis =
+        savedStateHandle.get<List<PlannerPikme>>(AddPlannerRouteActivity.EXTRA_PIKMIS)
+            ?.let { plannerPikmes ->
+                val sortedPimes = plannerPikmes.sortedByDescending { it.likeCount }.toMutableList()
+
+                var ranking = 0
+
+                for (i in sortedPimes.indices) {
+                    val pikme = sortedPimes[i]
+
+                    val beforeLiked = sortedPimes.getOrNull(i - 1)?.likeCount ?: 0
+
+                    if (pikme.likeCount > beforeLiked) {
+                        ranking++
+                    }
+
+                    if (pikme.likeCount > 0) {
+                        sortedPimes[i] = pikme.copy(ranking = ranking)
+                    } else {
+                        break
+                    }
+                }
+
+                sortedPimes
+            }
+            .orEmpty()
+            .let {
+                MutableStateFlow(it)
+            }
 
     val pikmis: StateFlow<List<PlannerPikme>>
         get() = _pikmis

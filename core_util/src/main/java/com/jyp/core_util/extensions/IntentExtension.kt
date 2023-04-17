@@ -7,8 +7,8 @@ import android.os.Bundle
 
 fun <T> Context.setIntentTo(
     it: Class<T>,
-    extras: Bundle.() -> Unit = {},
-    flags: Int? = null
+    flags: Int? = null,
+    extras: Bundle.() -> Unit = {}
 ) {
     Intent(this, it).apply {
         putExtras(Bundle().apply(extras))

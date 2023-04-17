@@ -16,6 +16,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultShadowColor
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +30,7 @@ import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.avatar.AvatarList
+import com.jyp.jyp_design.ui.avatar.AvatarType
 import com.jyp.jyp_design.ui.button.*
 import com.jyp.jyp_design.ui.shadow.drawShadow
 import com.jyp.jyp_design.ui.text.JypText
@@ -73,14 +75,13 @@ internal fun MyJourneyHeader(
         modifier = Modifier.padding(top = 8.dp, bottom = 35.dp),
         verticalAlignment = Alignment.Bottom
     ) {
-        Text(
-            modifier = Modifier.padding(start = 24.dp),
+        JypText(
             text = stringResource(
                 id = R.string.my_journey_header,
                 formatArgs = arrayOf(journeyPropensity, userName),
             ),
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
+            type = TextType.HEADING_1,
+            modifier = Modifier.padding(start = 24.dp),
             color = JypColors.Text90,
         )
     }
@@ -285,7 +286,7 @@ internal fun PlannedJourneyEmptyScreen(
             JypTextButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = "후보 장소 추가하기",
+                text = "만들기",
                 buttonType = ButtonType.MEDIUM,
                 buttonColorSet = ButtonColorSetType.PINK,
                 onClickEnabled = onClickNewJourney,
@@ -305,7 +306,7 @@ internal fun PastJourney(
         PastJourneyEmptyScreen()
     } else {
         LazyRow(
-            contentPadding = PaddingValues(start = 24.dp),
+            contentPadding = PaddingValues(horizontal = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             journeys.forEach { journey ->
@@ -407,16 +408,14 @@ internal fun JourneyItem(
                 shape = RoundedCornerShape(16.dp)
             ),
     ) {
-        val painter = painterResource(themeType.imageRes)
-        val imageRatio = painter.intrinsicSize.width / painter.intrinsicSize.height
-
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(imageRatio)
-                .align(Alignment.BottomCenter),
-            painter = painter,
+                .align(Alignment.BottomCenter)
+                .clip(RoundedCornerShape(16.dp)),
+            painter = painterResource(themeType.imageRes),
             contentDescription = null,
+            contentScale = ContentScale.Crop
         )
 
         AvatarList(
@@ -424,27 +423,42 @@ internal fun JourneyItem(
                 .align(Alignment.BottomStart)
                 .padding(20.dp),
             profileImageUrls = profileUrls,
-            width = 44.dp,
-            height = 44.dp,
+            avatarType = AvatarType.SMALL,
             borderColor = themeType.profileBorderColor,
             limitListCount = 4
+        )
+
+        Image(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(20.dp)
+                .clip(CircleShape)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(),
+                    onClick = onClickMore,
+                ),
+            painter = painterResource(id = R.drawable.ic_more_menu),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(themeType.iconColor),
         )
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(
+                    start = 20.dp,
+                    top = 20.dp,
+                    end = 52.dp,
+                    bottom = 20.dp
+                )
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
                     onClick = onClickPlanner
                 ),
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
+            if (dDay.isNotBlank()) {
                 JypText(
                     modifier = Modifier
                         .background(
@@ -459,20 +473,9 @@ internal fun JourneyItem(
                     type = TextType.TAG_2,
                     color = JypColors.Text_white,
                 )
-                Image(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(),
-                            onClick = onClickMore,
-                        ),
-                    painter = painterResource(id = R.drawable.ic_more_menu),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(themeType.iconColor),
-                )
+                Spacer(modifier = Modifier.padding(top = 16.dp))
             }
-            Spacer(modifier = Modifier.padding(top = 16.dp))
+
             Text(
                 text = journeyName,
                 fontWeight = FontWeight.SemiBold,

@@ -26,14 +26,17 @@ import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.planner.model.PlanItem
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.avatar.AvatarList
+import com.jyp.jyp_design.ui.avatar.AvatarType
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBar
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PlannerScreen(
+    isDDay: Boolean,
     plannerTitle: String,
     startDate: Long,
     endDate: Long,
@@ -46,11 +49,16 @@ internal fun PlannerScreen(
     onClickEditRoute: (day: Int) -> Unit,
     onClickInviteUserButton: () -> Unit,
     onClickBackButton: () -> Unit,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
+    onClickEditTag: () -> Unit,
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
-        mutableStateOf(0)
+        when (isDDay) {
+            true -> mutableStateOf(1)
+            false -> mutableStateOf(0)
+        }
     }
 
     BackdropScaffold(
@@ -86,7 +94,9 @@ internal fun PlannerScreen(
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
                 onClickEditRoute = onClickEditRoute,
+                onClickInfo = onClickInfo,
                 onClickLike = onClickLike,
+                onClickEditTag = onClickEditTag,
             )
         },
         backLayerBackgroundColor = JypColors.Background_grey300,
@@ -116,13 +126,19 @@ private fun PlannerBackLayer(
         Box {
             AvatarList(
                 profileImageUrls = profileImageUrls,
-                width = 44.dp,
-                height = 44.dp,
+                avatarType = AvatarType.SMALL,
                 borderColor = JypColors.Background_grey300,
             ) {
                 Image(
                     modifier = Modifier
-                        .size(52.dp)
+                        .size(AvatarType.SMALL.size.dp)
+                        .padding(all = 1.5.dp)
+                        .shadow(
+                            elevation = 20.dp,
+                            shape = RoundedCornerShape(AvatarType.SMALL.radius.dp),
+                            ambientColor = Color.Black,
+                            spotColor = Color.Black
+                        )
                         .clickable { onClickInviteUserButton() },
                     painter = painterResource(id = drawable.icon_invite_small),
                     contentDescription = null,
@@ -146,7 +162,9 @@ private fun PlannerContent(
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
+    onClickEditTag: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -173,7 +191,9 @@ private fun PlannerContent(
                 tags = tags,
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
+                onClickInfo = onClickInfo,
                 onClickLike = onClickLike,
+                onClickEditTag = onClickEditTag,
             )
             1 -> PlannerJourneyPlanScreen(
                 planItems = planItems,
@@ -248,6 +268,7 @@ private fun PlannerContentTab(
 @Preview(showBackground = true)
 internal fun PlannerScreenPreview() {
     PlannerScreen(
+        isDDay = true,
         plannerTitle = "무슨 무슨 여행기~",
         startDate = 21312412L,
         endDate = 21312412L,
@@ -260,6 +281,8 @@ internal fun PlannerScreenPreview() {
         onClickInviteUserButton = {},
         onClickEditRoute = {},
         onClickBackButton = {},
+        onClickInfo = {},
         onClickLike = {},
+        onClickEditTag = {},
     )
 }

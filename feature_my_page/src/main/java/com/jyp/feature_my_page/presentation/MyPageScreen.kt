@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jyp.feature_my_page.BuildConfig
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.avatar.Avatar
+import com.jyp.jyp_design.ui.avatar.AvatarType
 import com.jyp.jyp_design.ui.text.*
 import com.jyp.jyp_design.ui.typography.type.*
 
@@ -67,12 +67,9 @@ private fun Profile(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Avatar(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally),
+            modifier = Modifier.align(Alignment.CenterHorizontally),
             profileImageUrl = profileImagePath,
-            width = 88.dp,
-            height = 88.dp,
-            showBorder = false,
+            avatarType = AvatarType.LARGE
         )
         Spacer(modifier = Modifier.size(12.dp))
         JypText(

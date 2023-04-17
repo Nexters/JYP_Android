@@ -35,7 +35,9 @@ internal fun PlannerForumScreen(
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
+    onClickEditTag: () -> Unit,
 ) {
     val rememberScrollState = rememberScrollState()
 
@@ -48,11 +50,13 @@ internal fun PlannerForumScreen(
         PlannerJourneyTagContent(
             tags = tags,
             tagClick = tagClick,
+            onClickEditTag = onClickEditTag,
         )
         Spacer(modifier = Modifier.size(48.dp))
         PlannerPikMeContent(
             pikMes = pikMes,
             newPikMeClick = newPikMeClick,
+            onClickInfo = onClickInfo,
             onClickLike = onClickLike,
         )
         Spacer(modifier = Modifier.size(20.dp))
@@ -63,6 +67,7 @@ internal fun PlannerForumScreen(
 private fun PlannerJourneyTagContent(
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
+    onClickEditTag: () -> Unit,
 ) {
     var isCollapsed by remember {
         mutableStateOf(false)
@@ -91,6 +96,8 @@ private fun PlannerJourneyTagContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Image(
+                    modifier = Modifier
+                        .clickable { onClickEditTag.invoke() },
                     painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_pencil),
                     contentDescription = null,
                 )
@@ -157,6 +164,7 @@ private fun PlannerTagLayout(
 private fun PlannerPikMeContent(
     pikMes: List<PlannerPikme>,
     newPikMeClick: () -> Unit,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
 ) {
     Column {
@@ -198,6 +206,7 @@ private fun PlannerPikMeContent(
             pikMes.forEach { pikMe ->
                 PlannerPikMeCard(
                     pikMe = pikMe,
+                    onClickInfo = onClickInfo,
                     onClickLike = onClickLike,
                 )
                 Spacer(modifier = Modifier.size(20.dp))
@@ -209,6 +218,7 @@ private fun PlannerPikMeContent(
 @Composable
 private fun PlannerPikMeCard(
     pikMe: PlannerPikme,
+    onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
 ) {
     Box(
@@ -247,9 +257,7 @@ private fun PlannerPikMeCard(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = {
-                        onClickLike.invoke(pikMe)
-                    }
+                    onClick = { onClickLike.invoke(pikMe) }
                 )
                 .size(62.dp)
                 .shadow(
@@ -304,7 +312,8 @@ private fun PlannerPikMeCard(
                     )
                     .clip(RoundedCornerShape(8.dp))
                     .background(JypColors.Background_white100)
-                    .padding(2.dp),
+                    .padding(2.dp)
+                    .clickable { onClickInfo(pikMe) }
             ) {
                 Spacer(modifier = Modifier.size(2.dp))
                 Image(
@@ -364,13 +373,15 @@ private fun PlannerPikMeEmptyCard(
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 private fun PlannerForumScreenPreview() {
     PlannerForumScreen(
         pikMes = emptyList(),
         tags = emptyList(),
         tagClick = {},
         newPikMeClick = {},
+        onClickInfo = {},
         onClickLike = {},
+        onClickEditTag = {},
     )
 }

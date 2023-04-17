@@ -187,7 +187,7 @@ internal fun QuestionOptionButtons(
                 .shadow(
                     elevation = 32.dp,
                     shape = RoundedCornerShape(16.dp),
-                    spotColor = JypColors.Border_grey
+                    spotColor = JypColors.Text40
                 )
                 .background(
                     color = JypColors.Background_white100,

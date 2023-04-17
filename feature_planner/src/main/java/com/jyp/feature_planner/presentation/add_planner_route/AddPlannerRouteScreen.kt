@@ -250,10 +250,19 @@ private fun CandidatePikiItem(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.icon_vote_first),
-                contentDescription = null,
-            )
+            val iconVoteResId = when (pikme.ranking) {
+                1 -> R.drawable.icon_vote_first
+                2 -> R.drawable.icon_vote_second
+                3 -> R.drawable.icon_vote_third
+                else -> null
+            }
+
+            iconVoteResId?.let {
+                Image(
+                    painter = painterResource(id = iconVoteResId),
+                    contentDescription = null,
+                )
+            }
             JypText(
                 text = pikme.category,
                 type = TextType.BODY_4,

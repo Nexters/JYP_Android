@@ -11,11 +11,11 @@ import com.jyp.core_network.di.JypSessionManager
 import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.KakaoSignIn
 import com.jyp.core_network.util.toJypApiFailure
+import com.jyp.core_util.extensions.setIntentTo
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity
 import com.jyp.feature_sign_in.R
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity.Companion.PROFILE_IMAGE_PATH
 import com.jyp.feature_sign_in.questions.presentation.QuestionActivity.Companion.USER_NAME
-import com.jyp.feature_sign_in.util.setIntentTo
 import com.jyp.feature_sign_in.util.showToast
 import com.jyp.main.presentation.MainActivity
 import com.kakao.sdk.auth.model.OAuthToken

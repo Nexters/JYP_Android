@@ -199,6 +199,7 @@ internal fun TextInputContent(
     ) {
         BasicTextField(
             modifier = Modifier
+                .weight(1f)
                 .onFocusChanged { focusState ->
                     textFieldFocusChange.invoke(focusState.hasFocus)
                 },
@@ -215,7 +216,7 @@ internal fun TextInputContent(
                     Text(
                         text = hint,
                         fontSize = fontSize,
-                        color = JypColors.Text30,
+                        color = JypColors.Text40,
                         fontWeight = FontWeight.Medium,
                     )
                 }

@@ -21,116 +21,120 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun Avatar(
-        modifier: Modifier = Modifier,
-        profileImageUrl: String,
-        width: Dp,
-        height: Dp,
-        showBorder: Boolean = true,
-        borderColor: Color = JypColors.Background_white100,
+    modifier: Modifier = Modifier,
+    profileImageUrl: String,
+    avatarType: AvatarType,
+    showBorder: Boolean = true,
+    borderColor: Color = JypColors.Background_white100,
 ) {
     Box(
-            modifier = if (showBorder) {
-                Modifier.border(
-                        width = 2.dp,
-                        color = borderColor,
-                        shape = RoundedCornerShape(12.dp),
-                )
-            } else {
-                Modifier
-            }
+        modifier = if (showBorder) {
+            Modifier.border(
+                width = 2.dp,
+                color = borderColor,
+                shape = RoundedCornerShape(avatarType.radius.dp),
+            )
+        } else {
+            Modifier
+        }
     ) {
         GlideImage(
-                modifier = modifier
-                        .size(width = width, height = height)
-                        .clip(RoundedCornerShape(12.dp))
-                        .padding(2.dp),
-                imageModel = profileImageUrl,
-                previewPlaceholder = R.drawable.ic_search,
+            modifier = modifier
+                .size(
+                    width = avatarType.size.dp,
+                    height = avatarType.size.dp
+                )
+                .clip(RoundedCornerShape(avatarType.radius.dp))
+                .padding(2.dp),
+            imageModel = profileImageUrl,
+            previewPlaceholder = R.drawable.image_another_journey,
         )
     }
 }
 
 @Composable
 internal fun MoreAvatar(
-        overflowCount: Int,
-        width: Dp,
-        height: Dp,
-        showBorder: Boolean,
-        borderColor: Color,
+    overflowCount: Int,
+    avatarType: AvatarType,
+    showBorder: Boolean,
+    borderColor: Color,
 ) {
     Box(
-            modifier = Modifier
-                    .size(width = width, height = height)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(color = JypColors.Background_grey300)
-                    .let { modifier ->
-                        if (showBorder) {
-                            modifier.border(
-                                    width = 2.dp,
-                                    color = borderColor,
-                                    shape = RoundedCornerShape(12.dp),
-                            )
-                        } else {
-                            modifier
-                        }
-                    },
-            contentAlignment = Alignment.CenterStart,
+        modifier = Modifier
+            .size(
+                width = avatarType.size.dp,
+                height = avatarType.size.dp
+            )
+            .clip(RoundedCornerShape(avatarType.radius.dp))
+            .background(color = JypColors.Background_grey300)
+            .let { modifier ->
+                if (showBorder) {
+                    modifier.border(
+                        width = 2.dp,
+                        color = borderColor,
+                        shape = RoundedCornerShape(avatarType.radius.dp),
+                    )
+                } else {
+                    modifier
+                }
+            },
+        contentAlignment = Alignment.CenterStart,
     ) {
         Text(
-                modifier = Modifier
-                        .padding(start = 9.dp),
-                text = "$overflowCount+",
-                color = JypColors.Text_white,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 9.dp),
+            text = "$overflowCount+",
+            color = JypColors.Text_white,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
         )
     }
 }
 
 @Composable
 fun AvatarList(
-        modifier: Modifier = Modifier,
-        profileImageUrls: List<String>,
-        width: Dp,
-        height: Dp,
-        showBorder: Boolean = true,
-        borderColor: Color = JypColors.Background_white100,
-        limitListCount: Int = Int.MAX_VALUE,
-        tailContent: @Composable () -> Unit = {},
+    modifier: Modifier = Modifier,
+    profileImageUrls: List<String>,
+    avatarType: AvatarType,
+    showBorder: Boolean = true,
+    borderColor: Color = JypColors.Background_white100,
+    limitListCount: Int = Int.MAX_VALUE,
+    tailContent: @Composable () -> Unit = {},
 ) {
     val overflowCount: Int = profileImageUrls.size - limitListCount
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Row(
-                modifier = modifier,
-                horizontalArrangement = Arrangement.spacedBy((-18).dp),
+            modifier = modifier,
+            horizontalArrangement = Arrangement.spacedBy(
+                when (limitListCount == Int.MAX_VALUE) {
+                    true -> (-(avatarType.size / 2)).dp
+                    false -> (-18).dp
+                }
+            ),
         ) {
             if (overflowCount > 0) {
                 MoreAvatar(
-                        overflowCount = overflowCount + 1,
-                        width = width,
-                        height = height,
-                        showBorder = showBorder,
-                        borderColor = borderColor,
+                    overflowCount = overflowCount + 1,
+                    avatarType = avatarType,
+                    showBorder = showBorder,
+                    borderColor = borderColor,
                 )
 
                 profileImageUrls.subList(0, 3).forEach { url ->
                     Avatar(
-                            profileImageUrl = url,
-                            width = width,
-                            height = height,
-                            showBorder = showBorder,
-                            borderColor = borderColor,
+                        profileImageUrl = url,
+                        avatarType = avatarType,
+                        showBorder = showBorder,
+                        borderColor = borderColor,
                     )
                 }
             } else {
                 profileImageUrls.forEach { url ->
                     Avatar(
-                            profileImageUrl = url,
-                            width = width,
-                            height = height,
-                            showBorder = showBorder,
-                            borderColor = borderColor,
+                        profileImageUrl = url,
+                        avatarType = avatarType,
+                        showBorder = showBorder,
+                        borderColor = borderColor,
                     )
                 }
 
@@ -144,17 +148,14 @@ fun AvatarList(
 @Preview(showBackground = true)
 internal fun AvatarPreview() {
     Box(
-            modifier = Modifier
-                    .size(100.dp)
-                    .background(JypColors.Background_grey300),
-            contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .size(100.dp)
+            .background(JypColors.Background_grey300),
+        contentAlignment = Alignment.Center,
     ) {
         Avatar(
-                profileImageUrl = "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                width = 44.dp,
-                height = 44.dp,
-                showBorder = true,
-                borderColor = JypColors.Background_white100,
+            profileImageUrl = "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+            avatarType = AvatarType.SMALL
         )
     }
 }
@@ -163,23 +164,22 @@ internal fun AvatarPreview() {
 @Preview(showBackground = true)
 internal fun AvatarListPreview() {
     Box(
-            modifier = Modifier
-                    .size(width = 300.dp, height = 100.dp)
-                    .background(JypColors.Background_grey300),
-            contentAlignment = Alignment.CenterStart,
+        modifier = Modifier
+            .size(width = 300.dp, height = 100.dp)
+            .background(JypColors.Background_grey300),
+        contentAlignment = Alignment.CenterStart,
     ) {
         AvatarList(
-                profileImageUrls = listOf(
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                ),
-                width = 44.dp,
-                height = 44.dp,
-                showBorder = true,
-                borderColor = JypColors.Background_white100,
+            profileImageUrls = listOf(
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+            ),
+            avatarType = AvatarType.SMALL,
+            showBorder = true,
+            borderColor = JypColors.Background_white100,
         )
     }
 }
@@ -188,24 +188,23 @@ internal fun AvatarListPreview() {
 @Preview(showBackground = true)
 internal fun AvatarListMorePreview() {
     Box(
-            modifier = Modifier
-                    .size(width = 300.dp, height = 100.dp)
-                    .background(JypColors.Background_grey300),
-            contentAlignment = Alignment.CenterStart,
+        modifier = Modifier
+            .size(width = 300.dp, height = 100.dp)
+            .background(JypColors.Background_grey300),
+        contentAlignment = Alignment.CenterStart,
     ) {
         AvatarList(
-                profileImageUrls = listOf(
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                        "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
-                ),
-                width = 44.dp,
-                height = 44.dp,
-                showBorder = true,
-                borderColor = JypColors.Background_white100,
-                limitListCount = 4,
+            profileImageUrls = listOf(
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+                "https://file.mk.co.kr/meet/neds/2021/04/image_readtop_2021_330747_16177500644599916.jpg",
+            ),
+            avatarType = AvatarType.SMALL,
+            showBorder = true,
+            borderColor = JypColors.Background_white100,
+            limitListCount = 4
         )
     }
 }

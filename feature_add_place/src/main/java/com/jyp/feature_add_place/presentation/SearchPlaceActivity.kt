@@ -44,6 +44,8 @@ class SearchPlaceActivity : ComponentActivity() {
 
     companion object {
         const val SEARCH_PLACE_RESULT = "SEARCH_PLACE_RESULT"
+        const val PLACE_INFO_NAME = "PLACE_INFO_NAME"
+        const val PLACE_INFO_URL = "PLACE_INFO_URL"
         const val EXTRA_PLANNER_ID = "EXTRA_PLANNER_ID"
     }
 }

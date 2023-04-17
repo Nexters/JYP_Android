@@ -4,11 +4,14 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -57,7 +60,8 @@ fun OnboardingContent(
             .background(JypColors.Background_white200)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OnboardingViewPager(
                 pagerState = pagerState,
@@ -67,16 +71,18 @@ fun OnboardingContent(
                     .wrapContentHeight()
                     .weight(1f)
             )
+            Spacer(modifier = Modifier.size(16.dp))
+            OnboardingIndicator(
+                totalSize = onboardings.size,
+                selectedIndex = pagerState.currentPage
+            )
+            Spacer(modifier = Modifier.size(28.dp))
             JypTextButton(
                 text = stringResource(id = com.jyp.jyp_design.R.string.button_next),
                 buttonType = ButtonType.THICK,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .padding(
-                        top = 36.dp,
-                        bottom = 28.dp
-                    ),
+                    .padding(horizontal = 24.dp),
                 enabled = true,
                 buttonColorSet = ButtonColorSetType.PINK,
                 onClickEnabled = {
@@ -88,6 +94,8 @@ fun OnboardingContent(
                     }
                 }
             )
+            Spacer(modifier = Modifier.size(28.dp))
+
         }
         Image(
             painter = painterResource(
@@ -166,14 +174,14 @@ internal fun OnboardingScreenItem(
                     .height(60.dp)
                     .align(Alignment.BottomCenter)
                     .shadow(
-                        elevation = 32.dp,
+                        elevation = 8.dp,
                         shape = RoundedCornerShape(
                             topStart = 0.dp,
                             topEnd = 0.dp,
                             bottomStart = 40.dp,
                             bottomEnd = 40.dp
                         ),
-                        spotColor = JypColors.Border_grey
+                        spotColor = JypColors.Tag_grey200
                     )
                     .background(
                         color = JypColors.Background_white100,
@@ -206,6 +214,32 @@ internal fun OnboardingScreenItem(
     }
 }
 
+@Composable
+internal fun OnboardingIndicator(
+    totalSize: Int,
+    selectedIndex: Int
+) {
+    LazyRow(
+        modifier = Modifier.wrapContentSize()
+    ) {
+        items(totalSize) {index ->
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .clip(CircleShape)
+                    .background(
+                        when (index) {
+                            selectedIndex -> JypColors.Text80
+                            else -> JypColors.Onboarding_indicator_unselected
+                        }
+                    )
+            )
+            if (index != totalSize - 1) {
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+        }
+    }
+}
 
 @Composable
 @Preview(showBackground = true)

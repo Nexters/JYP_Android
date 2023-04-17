@@ -33,11 +33,14 @@ import com.jyp.feature_my_journey.domain.Journey
 import com.jyp.feature_my_journey.presentation.my_journey.*
 import com.jyp.feature_my_page.presentation.*
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity
+import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.EXTRA_CREATE_PLANNER_ACTION
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.EXTRA_CREATE_PLANNER_STEP
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.JOIN_PLANNER_ERROR_CODE
 import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity.Companion.RESULT_CODE_JOIN_PLANNER_FAILURE
+import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerAction
 import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
 import com.jyp.feature_planner.presentation.planner.PlannerActivity
+import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EXTRA_IS_D_DAY
 import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EXTRA_PLANNER_ID
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
@@ -68,10 +71,11 @@ class MainActivity : ComponentActivity() {
                 onClickCreateJourney = {
                     startActivity(Intent(this, CreatePlannerActivity::class.java))
                 },
-                onClickPlanner = { plannerId ->
+                onClickPlanner = { journey ->
                     startActivity(
                         Intent(this, PlannerActivity::class.java).apply {
-                            putExtra(EXTRA_PLANNER_ID, plannerId)
+                            putExtra(EXTRA_PLANNER_ID, journey.id)
+                            putExtra(EXTRA_IS_D_DAY, journey.dDay == "D-day")
                         }
                     )
                 },
@@ -148,7 +152,7 @@ private fun Screen(
     myJourneyViewModel: MyJourneyViewModel,
     myPageViewModel: MyPageViewModel,
     onClickCreateJourney: () -> Unit,
-    onClickPlanner: (id: String) -> Unit,
+    onClickPlanner: (journey: Journey) -> Unit,
     onClickAppInfo: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -172,7 +176,7 @@ private fun Screen(
             }
         },
         onClickPlanner = { journey ->
-            onClickPlanner.invoke(journey.id)
+            onClickPlanner.invoke(journey)
         },
         onClickMore = { journey ->
             coroutineScope.launch {
@@ -262,7 +266,7 @@ private fun Screen(
                                 context,
                                 0,
                                 Intent(context, CreatePlannerActivity::class.java)
-                                    .putExtra(EXTRA_PLANNER_ID, plannerId)
+                                    .putExtra(EXTRA_CREATE_PLANNER_ACTION, CreatePlannerAction.Join(plannerId))
                                     .putExtra(EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE),
                                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                             )
