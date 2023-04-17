@@ -14,4 +14,5 @@ data class PlannerPikme(
         val longitude: Double,
         val latitude: Double,
         val link: String,
+        val ranking: Int? = null,
 ): Parcelable
