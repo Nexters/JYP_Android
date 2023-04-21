@@ -56,9 +56,12 @@ internal fun PlannerJourneyPlanScreen(
                             onClickEditRoute.invoke(index)
                         },
                     )
-                    if (index != planItems.lastIndex) {
-                        Spacer(modifier = Modifier.size(12.dp))
-                    }
+                    Spacer(modifier = Modifier.size(
+                        when (index == planItems.lastIndex) {
+                            true -> 28.dp
+                            false -> 12.dp
+                        }
+                    ))
                 }
             } else {
                 if (index > 0 && planItems[index].pikis.isNotEmpty() && planItems[index - 1].pikis.isEmpty()) {
