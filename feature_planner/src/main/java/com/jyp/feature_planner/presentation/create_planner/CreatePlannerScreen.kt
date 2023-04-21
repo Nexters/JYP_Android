@@ -331,12 +331,14 @@ private fun CreatePlannerTasteArea(
     tagClick: (PlannerTag) -> Unit,
     addTagClick: (TagType) -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     val sosoTags = tags.filter { tag -> tag.type is TagType.Soso }
     val likeTags = tags.filter { tag -> tag.type is TagType.Like }
     val dislikeTags = tags.filter { tag -> tag.type is TagType.Dislike }
 
     Column(
-        modifier = modifier
+        modifier = modifier.verticalScroll(scrollState)
     ) {
         TastesSection(
             tagCategory = "상관 없어요 태그",
@@ -357,6 +359,7 @@ private fun CreatePlannerTasteArea(
             tagClick = tagClick,
             addTagClick = { addTagClick.invoke(TagType.Dislike) }
         )
+        Spacer(modifier = Modifier.size(40.dp))
     }
 }
 
