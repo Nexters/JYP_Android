@@ -52,7 +52,7 @@ private fun Screen(
 
     GlobalNavigationBarLayout(
         color = GlobalNavigationBarColor.WHITE,
-        title = "Day1",
+        title = "Day ${viewModel.dayIndex + 1}",
         titleFontWeight = FontWeight.SemiBold,
         titleSize = 20.sp,
         description = currentDate.secondToDate("M월 d일"),

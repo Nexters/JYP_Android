@@ -21,7 +21,7 @@ class AddPlannerRouteViewModel @Inject constructor(
     private val setPikisUseCase: SetPikisUseCase,
 ) : ViewModel() {
     private val journeyId: String? = savedStateHandle[AddPlannerRouteActivity.EXTRA_JOURNEY_ID]
-    private val dayIndex: Int = savedStateHandle[AddPlannerRouteActivity.EXTRA_DAY_INDEX] ?: 0
+    val dayIndex: Int = savedStateHandle[AddPlannerRouteActivity.EXTRA_DAY_INDEX] ?: 0
 
     private val _pikmis =
         savedStateHandle.get<List<PlannerPikme>>(AddPlannerRouteActivity.EXTRA_PIKMIS)
