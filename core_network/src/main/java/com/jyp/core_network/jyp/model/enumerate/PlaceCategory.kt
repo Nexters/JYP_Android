@@ -45,14 +45,14 @@ fun PlaceCategory.toName(): String {
 
 fun String.toPlaceCategory(): PlaceCategory {
     return when (this) {
-        "대형마트" -> PlaceCategory.M
+        "마트" -> PlaceCategory.M
         "편의점" -> PlaceCategory.CS
         "학교" -> PlaceCategory.S
-        "지하철역" -> PlaceCategory.T
+        "교통" -> PlaceCategory.T
         "문화시설" -> PlaceCategory.CI
         "공공기관" -> PlaceCategory.PI
-        "관광명소" -> PlaceCategory.TS
-        "숙박" -> PlaceCategory.L
+        "관광지" -> PlaceCategory.TS
+        "숙소" -> PlaceCategory.L
         "음식점" -> PlaceCategory.R
         "카페" -> PlaceCategory.C
         "병원" -> PlaceCategory.H
