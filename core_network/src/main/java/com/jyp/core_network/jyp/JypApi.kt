@@ -69,13 +69,13 @@ interface JypApi {
     suspend fun likePikme(
         @Path("journeyId") journeyId: String,
         @Path("pikmeId") pikMeId: String,
-    ): JypBaseResponse<Any>
+    ): JypWithoutDataResponse
 
     @POST("journeys/{journeyId}/pikmis/{pikmeId}/undoLikes")
     suspend fun undoLikePikme(
         @Path("journeyId") journeyId: String,
         @Path("pikmeId") pikMeId: String,
-    ): JypBaseResponse<Any>
+    ): JypWithoutDataResponse
 
     @GET("/journeys/default-tags")
     suspend fun getDefaultTags(): TagsResponse

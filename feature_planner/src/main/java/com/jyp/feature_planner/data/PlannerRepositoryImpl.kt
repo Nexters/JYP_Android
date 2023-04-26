@@ -1,6 +1,7 @@
 package com.jyp.feature_planner.data
 
 import com.jyp.core_network.jyp.JypBaseResponse
+import com.jyp.core_network.jyp.JypWithoutDataResponse
 import com.jyp.core_network.jyp.model.response.PlannerResponse
 import com.jyp.feature_planner.domain.PlannerRepository
 import javax.inject.Inject
@@ -16,7 +17,7 @@ class PlannerRepositoryImpl @Inject constructor(
         plannerId: String,
         pikmeId: String,
         isLike: Boolean
-    ): JypBaseResponse<Any> {
+    ): JypWithoutDataResponse {
         return if (isLike) {
             plannerDataSource.likePikme(plannerId, pikmeId)
         } else {
