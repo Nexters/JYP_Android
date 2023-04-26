@@ -25,8 +25,8 @@ class AddPlannerRouteViewModel @Inject constructor(
 
     private val _pikmis =
         savedStateHandle.get<List<PlannerPikme>>(AddPlannerRouteActivity.EXTRA_PIKMIS)
-            ?.let { plannerPikmes ->
-                val sortedPimes = plannerPikmes.sortedByDescending { it.likeCount }.toMutableList()
+            ?.let { plannerPikMis ->
+                val sortedPimes = plannerPikMis.sortedByDescending { it.likeCount }.toMutableList()
 
                 var ranking = 0
 

@@ -33,7 +33,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 internal fun PlannerForumScreen(
-    pikMes: List<PlannerPikme>,
+    pikMis: List<PlannerPikme>,
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
@@ -56,7 +56,7 @@ internal fun PlannerForumScreen(
         )
         Spacer(modifier = Modifier.size(48.dp))
         PlannerPikMeContent(
-            pikMes = pikMes,
+            pikMis = pikMis,
             newPikMeClick = newPikMeClick,
             onClickInfo = onClickInfo,
             onClickLike = onClickLike,
@@ -164,7 +164,7 @@ private fun PlannerTagLayout(
 
 @Composable
 private fun PlannerPikMeContent(
-    pikMes: List<PlannerPikme>,
+    pikMis: List<PlannerPikme>,
     newPikMeClick: () -> Unit,
     onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
@@ -200,12 +200,12 @@ private fun PlannerPikMeContent(
         )
         Spacer(modifier = Modifier.size(20.dp))
 
-        if (pikMes.isEmpty()) {
+        if (pikMis.isEmpty()) {
             PlannerPikMeEmptyCard(
                 newPikMeClick = newPikMeClick,
             )
         } else {
-            pikMes.forEach { pikMe ->
+            pikMis.forEach { pikMe ->
                 PlannerPikMeCard(
                     pikMe = pikMe,
                     onClickInfo = onClickInfo,
@@ -417,7 +417,7 @@ private fun PlannerPikMeEmptyCard(
 @Preview(showBackground = true)
 private fun PlannerForumScreenPreview() {
     PlannerForumScreen(
-        pikMes = emptyList(),
+        pikMis = emptyList(),
         tags = emptyList(),
         tagClick = {},
         newPikMeClick = {},

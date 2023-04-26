@@ -78,25 +78,25 @@ class PlannerViewModel @Inject constructor(
                 .onSuccess { user ->
                     _pikmis.value = pikmis.let { pikmis ->
                         var ranking = 0
-                        val sortedPikmes = pikmis.sortedByDescending { it.likeBy.size }
+                        val sortedPikmis = pikmis.sortedByDescending { it.likeBy.size }
                             .map { pikmeMapper.toPlannerPikme(it, user.id) }
                             .toMutableList()
 
-                        for (i in sortedPikmes.indices) {
-                            val currentPikme = sortedPikmes[i]
+                        for (i in sortedPikmis.indices) {
+                            val currentPikme = sortedPikmis[i]
                             if (currentPikme.likeCount > 0) {
 
-                                val previousPikmeLikedCount = sortedPikmes.getOrNull(i - 1)?.likeCount ?: 0
+                                val previousPikmeLikedCount = sortedPikmis.getOrNull(i - 1)?.likeCount ?: 0
                                 if (currentPikme.likeCount > previousPikmeLikedCount) {
                                     ranking++
                                 }
-                                sortedPikmes[i] = currentPikme.copy(ranking = ranking)
+                                sortedPikmis[i] = currentPikme.copy(ranking = ranking)
 
                             } else {
                                 break
                             }
                         }
-                        sortedPikmes
+                        sortedPikmis
                     }
                 }
                 .onFailure {
