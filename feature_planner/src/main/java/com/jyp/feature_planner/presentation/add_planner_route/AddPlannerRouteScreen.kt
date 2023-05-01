@@ -228,7 +228,7 @@ private fun CandidatePikiItem(
                 color = JypColors.Background_white100,
                 shape = RoundedCornerShape(10.dp),
             )
-            .padding(horizontal = 20.dp)
+            .padding(start = 20.dp)
     ) {
         Column(
             modifier = Modifier
@@ -248,25 +248,29 @@ private fun CandidatePikiItem(
             )
         }
         Column(
+            modifier = Modifier.width(72.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val iconVoteResId = when (pikme.ranking) {
+            when (pikme.ranking) {
                 1 -> R.drawable.icon_vote_first
                 2 -> R.drawable.icon_vote_second
                 3 -> R.drawable.icon_vote_third
                 else -> null
-            }
 
-            iconVoteResId?.let {
-                Image(
-                    painter = painterResource(id = iconVoteResId),
-                    contentDescription = null,
-                )
+            }.let {
+                when (it) {
+                    null -> Spacer(modifier = Modifier.size(40.dp))
+                    else -> Image(
+                        painter = painterResource(id = it),
+                        contentDescription = null
+                    )
+                }
             }
             JypText(
                 text = pikme.category,
                 type = TextType.BODY_4,
-                color = JypColors.Text40,
+                maxLines = 1,
+                color = JypColors.Text40
             )
         }
     }
