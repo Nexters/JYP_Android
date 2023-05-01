@@ -93,21 +93,23 @@ private fun SelectedPikis(
     LazyRow(
         modifier = Modifier
             .height(140.dp)
-            .padding(horizontal = 24.dp)
             .background(JypColors.Background_white200),
         state = lazyListState,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        items(pikis.size) { idx ->
+        items(pikis.size) { index ->
+            if (index == 0) {
+                Spacer(modifier = Modifier.size(24.dp))
+            }
             SelectedPikiItem(
                 piki = pikis[idx],
                 onRemovePiki = onRemovePiki,
             )
 
-            if (idx != pikis.lastIndex) {
+            if (index != pikis.lastIndex) {
                 SelectedPikiItemDivider()
             } else {
-                Spacer(modifier = Modifier.size(6.dp))
+                Spacer(modifier = Modifier.size(24.dp))
             }
         }
     }
