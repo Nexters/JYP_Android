@@ -406,7 +406,12 @@ internal fun JourneyItem(
             .background(
                 color = themeType.backgroundColor,
                 shape = RoundedCornerShape(16.dp)
-            ),
+            )
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClickPlanner
+            )
     ) {
         Image(
             modifier = Modifier
@@ -452,11 +457,6 @@ internal fun JourneyItem(
                     end = 52.dp,
                     bottom = 20.dp
                 )
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onClickPlanner
-                ),
         ) {
             if (dDay.isNotBlank()) {
                 JypText(
