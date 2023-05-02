@@ -84,8 +84,10 @@ class AddPlannerRouteViewModel @Inject constructor(
         )
     }
 
-    fun removePiki(piki: PlannerPiki) {
-        _pikis.value -= piki
+    fun removePiki(index: Int) {
+        val mutablePikis = _pikis.value.toMutableList()
+        mutablePikis.removeAt(index)
+        _pikis.value = mutablePikis
     }
 
     fun setPikis() {
