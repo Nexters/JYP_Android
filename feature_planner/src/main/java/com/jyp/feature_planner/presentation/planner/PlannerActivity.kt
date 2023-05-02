@@ -160,7 +160,14 @@ private fun Screen(
         sheetState = bottomSheetScaffoldState,
         sheetContent = {
             selectedTag?.let {
-                TagSelectedBottomSheetScreen(tag = it)
+                TagSelectedBottomSheetScreen(
+                    tag = it,
+                    onClickTagInfoCloseButton = {
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.hide()
+                        }
+                    }
+                )
             } ?: Spacer(modifier = Modifier.size(1.dp))
         },
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
