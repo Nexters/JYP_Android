@@ -82,4 +82,10 @@ interface JypApi {
 
     @GET("/journeys/{id}/tags")
     suspend fun getTags(@Path("id") journeyId: String): TagsResponse
+
+    @POST("/journeys/{id}/tags")
+    suspend fun editTags(
+        @Path("id") journeyId: String,
+        @Body tags: JoinPlannerRequestBody
+    ): JypWithoutDataResponse
 }
