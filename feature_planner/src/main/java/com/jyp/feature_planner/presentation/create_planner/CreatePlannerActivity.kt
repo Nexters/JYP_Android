@@ -42,10 +42,6 @@ class CreatePlannerActivity : AppCompatActivity() {
             ?: CreatePlannerAction.Create() as CreatePlannerAction
     }
 
-    private val plannerId: String? by lazy {
-        intent.getStringExtra(EXTRA_PLANNER_ID)
-    }
-
     private var rangeDatePicker: RangeDatePicker? = null
 
 
@@ -121,9 +117,6 @@ class CreatePlannerActivity : AppCompatActivity() {
                             )
                             finishAffinity()
                         }
-                        is CreatePlannerAction.Edit -> {
-
-                        }
                         is CreatePlannerAction.Join -> {
                             viewModel.joinPlanner(
                                 action.plannerId,
@@ -144,7 +137,6 @@ class CreatePlannerActivity : AppCompatActivity() {
 
         when (action) {
             is CreatePlannerAction.Create -> null
-            is CreatePlannerAction.Edit -> action.plannerId
             is CreatePlannerAction.Join -> action.plannerId
         }?.let {
             viewModel.fetchTags(it)
