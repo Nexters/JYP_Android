@@ -85,6 +85,11 @@ class MyJourneyViewModel @Inject constructor(
             .format(Date(System.currentTimeMillis()))
             .toInt()
 
+        val dateFormat = when (isPastJourney) {
+            true -> "yy. MM. dd"
+            false -> "M월 d일"
+        }
+
         return journeys.map { journey ->
             Journey(
                 id = journey.id,
@@ -102,10 +107,10 @@ class MyJourneyViewModel @Inject constructor(
                 themeType = ThemeType.values().firstOrNull { themeType ->
                     themeType.imagePath == journey.themePath
                 } ?: ThemeType.DEFAULT,
-                startDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(
+                startDay = SimpleDateFormat(dateFormat, Locale.getDefault()).format(
                     Date(journey.startDate * 1000)
                 ),
-                endDay = SimpleDateFormat("M월 d일", Locale.getDefault()).format(
+                endDay = SimpleDateFormat(dateFormat, Locale.getDefault()).format(
                     Date(journey.endDate * 1000)
                 ),
                 profileUrls = journey.users.map { user -> user.profileImagePath }

@@ -35,7 +35,7 @@ fun JypTextInput(
     hint: String = "",
     trailingImage: Painter? = null,
     maxLines: Int = Int.MAX_VALUE,
-    singleLine: Boolean = false,
+    singleLine: Boolean = true
 ) {
     when (type) {
         TextInputType.FIELD -> {
