@@ -13,7 +13,7 @@
     <string name="create_planner_taste_description">일행과 공유할 태그를 <b>최대 3개</b> 선택해 주세요</string>
 
     <string name="planner_tab_forum">토론장</string>
-    <string name="planner_tab_piki">여행계획</string>
+    <string name="planner_tab_piki">여행 계획</string>
 
     <string name="planner_journey_tags_title">여행 태그</string>
     <string name="planner_journey_tags_description">여행 취향을 확인해보세요!</string>

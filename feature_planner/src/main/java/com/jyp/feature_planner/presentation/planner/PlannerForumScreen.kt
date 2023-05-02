@@ -13,6 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.DefaultShadowColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -209,7 +210,7 @@ private fun PlannerPikMeContent(
                     onClickInfo = onClickInfo,
                     onClickLike = onClickLike,
                 )
-                Spacer(modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.size(12.dp))
             }
         }
     }
@@ -225,8 +226,9 @@ private fun PlannerPikMeCard(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 2.dp,
+                elevation = 30.dp,
                 shape = RoundedCornerShape(12.dp),
+                spotColor = DefaultShadowColor.copy(alpha = 0.1f),
             )
             .clip(RoundedCornerShape(12.dp))
             .background(JypColors.Background_white100)
@@ -345,8 +347,9 @@ private fun PlannerPikMeEmptyCard(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 2.dp,
+                elevation = 30.dp,
                 shape = RoundedCornerShape(16.dp),
+                spotColor = DefaultShadowColor.copy(alpha = 0.1f),
             )
             .clip(RoundedCornerShape(16.dp))
             .background(JypColors.Background_white100),

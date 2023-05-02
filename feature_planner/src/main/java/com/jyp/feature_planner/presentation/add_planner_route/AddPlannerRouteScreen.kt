@@ -35,7 +35,7 @@ internal fun AddPlannerRouteScreen(
     pikmis: List<PlannerPikme>,
     pikis: List<PlannerPiki>,
     onSelectPikme: (PlannerPikme) -> Unit,
-    onRemovePiki: (PlannerPiki) -> Unit,
+    onRemovePiki: (Int) -> Unit,
     onSubmitPikis: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -87,8 +87,8 @@ internal fun AddPlannerRouteScreen(
 @Composable
 private fun SelectedPikis(
     pikis: List<PlannerPiki>,
-    onRemovePiki: (PlannerPiki) -> Unit,
     lazyListState: LazyListState
+    onRemovePiki: (Int) -> Unit
 ) {
     LazyRow(
         modifier = Modifier
@@ -102,7 +102,8 @@ private fun SelectedPikis(
                 Spacer(modifier = Modifier.size(24.dp))
             }
             SelectedPikiItem(
-                piki = pikis[idx],
+                index = index,
+                piki = pikis[index],
                 onRemovePiki = onRemovePiki,
             )
 
@@ -172,8 +173,9 @@ private fun SelectedPikisEmptyText() {
 
 @Composable
 private fun SelectedPikiItem(
+    index: Int,
     piki: PlannerPiki,
-    onRemovePiki: (PlannerPiki) -> Unit,
+    onRemovePiki: (Int) -> Unit,
 ) {
     Box {
         Column(
@@ -207,7 +209,7 @@ private fun SelectedPikiItem(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = { onRemovePiki.invoke(piki) },
+                    onClick = { onRemovePiki.invoke(index) }
                 ),
             painter = painterResource(id = R.drawable.icon_delete_journey_route),
             contentDescription = null,

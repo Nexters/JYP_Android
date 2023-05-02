@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,23 +29,27 @@ fun MyPageScreen(
     onClickSignOut: () -> Unit,
     onClickWithdrawal: () -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(JypColors.Background_white100),
+            .background(JypColors.Background_white200)
+            .verticalScroll(scrollState)
     ) {
-        Spacer(modifier = Modifier.size(30.dp))
         Profile(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(JypColors.Background_white100),
             profileImagePath = profileImagePath,
             personality = personality,
             userName = userName
         )
         Menu(
             modifier = Modifier
-                .fillMaxSize()
-                .weight(1f, true)
-                .background(color = JypColors.Background_white200)
+                .fillMaxWidth()
+                .wrapContentHeight()
                 .padding(
                     horizontal = 24.dp,
                     vertical = 28.dp
@@ -66,6 +72,7 @@ private fun Profile(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.size(30.dp))
         Avatar(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             profileImageUrl = profileImagePath,
@@ -129,6 +136,7 @@ internal fun Menu(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .wrapContentHeight()
                 .background(
                     color = JypColors.Background_white100,
                     shape = RoundedCornerShape(10.dp)
