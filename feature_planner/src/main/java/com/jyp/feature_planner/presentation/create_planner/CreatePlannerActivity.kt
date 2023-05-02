@@ -15,9 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -30,6 +28,7 @@ import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EX
 import com.jyp.jyp_design.enumerate.ThemeType
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
+import com.jyp.jyp_design.ui.typography.type.TextType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -268,8 +267,7 @@ private fun Screen(
             GlobalNavigationBarLayout(
                 color = GlobalNavigationBarColor.WHITE,
                 title = stringResource(id = step.navigationTitleRes),
-                titleSize = 16.sp,
-                titleFontWeight = FontWeight.Medium,
+                textType = TextType.HEADING_3,
                 activeBack = true,
                 backAction = onClickBackAction,
             ) {
