@@ -482,6 +482,7 @@ internal fun JourneyItem(
                 fontSize = 22.sp,
                 color = themeType.textColor,
             )
+            Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = "$startDay - $endDay",
                 fontWeight = FontWeight.Medium,
