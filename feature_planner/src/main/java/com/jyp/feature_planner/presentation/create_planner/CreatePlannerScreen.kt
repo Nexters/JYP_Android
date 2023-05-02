@@ -6,8 +6,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun CreatePlannerScreen(
     step: CreatePlannerStep,
@@ -38,9 +43,8 @@ internal fun CreatePlannerScreen(
     addTagClick: (TagType) -> Unit,
     submit: (CreatePlannerSubmit) -> Unit
 ) {
-    var title by remember {
-        mutableStateOf("")
-    }
+    var title by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val plannerTitleMaxLength = 10
 
@@ -86,6 +90,7 @@ internal fun CreatePlannerScreen(
                     CreatePlannerStep.TASTE -> tags.count { it.state == TagState.SELECTED } >= 1
                 },
                 onClickEnabled = {
+                    keyboardController?.hide()
                     when (step) {
                         CreatePlannerStep.TITLE -> submit.invoke(
                             CreatePlannerSubmit.Title(title)
@@ -168,9 +173,13 @@ private fun CreatePlannerTitleArea(
     titleMaxLength: Int,
     titleChange: (String) -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     Column(modifier = modifier) {
         JypTextInput(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
             type = TextInputType.FIELD,
             text = title,
             valueChange = titleChange,
