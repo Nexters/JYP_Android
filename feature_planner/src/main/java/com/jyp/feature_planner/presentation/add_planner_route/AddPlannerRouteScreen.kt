@@ -87,7 +87,7 @@ internal fun AddPlannerRouteScreen(
 @Composable
 private fun SelectedPikis(
     pikis: List<PlannerPiki>,
-    lazyListState: LazyListState
+    lazyListState: LazyListState,
     onRemovePiki: (Int) -> Unit
 ) {
     LazyRow(
