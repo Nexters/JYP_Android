@@ -8,6 +8,10 @@
             android:taskAffinity=".presentation.create_planner.CreatePlannerActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
 
+        <activity
+            android:name=".presentation.edit_tag.EditTagActivity"
+            android:windowSoftInputMode="adjustResize" />
+        
         <activity android:name=".presentation.planner.PlannerActivity" />
         <activity android:name=".presentation.add_planner_route.AddPlannerRouteActivity" />
         <activity android:name=".presentation.planner.InviteUserActivity" />

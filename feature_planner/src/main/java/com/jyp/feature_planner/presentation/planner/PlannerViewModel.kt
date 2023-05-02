@@ -11,8 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,6 +30,9 @@ class PlannerViewModel @Inject constructor(
     private val _tags = MutableStateFlow<List<PlannerTag>>(emptyList())
     val tags: StateFlow<List<PlannerTag>>
         get() = _tags
+
+    private val _user = MutableStateFlow(Person("", ""))
+    val user: StateFlow<Person> get() = _user
 
     private val _membersProfileUrl = MutableStateFlow<List<String>>(emptyList())
     val membersProfileUrl: StateFlow<List<String>>
@@ -81,6 +82,10 @@ class PlannerViewModel @Inject constructor(
                     _pikmis.value = pikmis.map { pikme ->
                         pikmeMapper.toPlannerPikme(pikme, user.id)
                     }
+                    _user.value = Person(
+                        name = user.name,
+                        profileUrl = user.profileImagePath
+                    )
                 }
                 .onFailure {
                     it.printStackTrace()
