@@ -7,8 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -28,6 +30,7 @@ import com.jyp.feature_planner.presentation.create_planner.model.*
 import com.jyp.feature_planner.presentation.planner.PlannerActivity
 import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EXTRA_PLANNER_ID
 import com.jyp.jyp_design.enumerate.ThemeType
+import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -228,6 +231,13 @@ private fun Screen(
         sheetState = bottomSheetScaffoldState,
         sheetContent = {
             when (val type = createPlannerBottomSheetType) {
+                is CreatePlannerBottomSheetType.None -> {
+                    Box(
+                        modifier = Modifier
+                            .background(JypColors.Background_grey300)
+                            .size(1.dp)
+                    )
+                }
                 is CreatePlannerBottomSheetType.AddTag -> {
                     AddTagBottomSheetScreen(
                         modifier = Modifier
