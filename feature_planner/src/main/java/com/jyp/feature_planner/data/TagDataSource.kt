@@ -13,8 +13,11 @@ class TagDataSource @Inject constructor(
         return jypApi.getDefaultTags()
     }
 
-    suspend fun getTags(plannerId: String): TagsResponse {
-        return jypApi.getTags(plannerId)
+    suspend fun getTags(
+        plannerId: String,
+        isIncludeDefaultTags: Boolean
+    ): TagsResponse {
+        return jypApi.getTags(plannerId, isIncludeDefaultTags)
     }
 
     suspend fun editTags(

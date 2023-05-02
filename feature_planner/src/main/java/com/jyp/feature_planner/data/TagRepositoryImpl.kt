@@ -13,8 +13,11 @@ class TagRepositoryImpl @Inject constructor(
         return tagDataSource.getDefaultTags()
     }
 
-    override suspend fun getTags(plannerId: String): TagsResponse {
-        return tagDataSource.getTags(plannerId)
+    override suspend fun getTags(
+        plannerId: String,
+        isIncludeDefaultTags: Boolean
+    ): TagsResponse {
+        return tagDataSource.getTags(plannerId, isIncludeDefaultTags)
     }
 
     override suspend fun editTags(
