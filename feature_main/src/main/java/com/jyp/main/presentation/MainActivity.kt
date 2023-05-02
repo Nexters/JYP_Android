@@ -163,7 +163,10 @@ private fun Screen(
     }
 
     val modalBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = {
+            currentBottomSheetItem !is MainBottomSheetItem.JoinJourney
+        }
     )
 
     val myJourneyScreenItem = createMyJourneyScreenItem(
