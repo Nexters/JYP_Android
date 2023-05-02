@@ -6,7 +6,8 @@
         <activity
             android:name=".presentation.create_planner.CreatePlannerActivity"
             android:taskAffinity=".presentation.create_planner.CreatePlannerActivity"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".presentation.edit_tag.EditTagActivity"

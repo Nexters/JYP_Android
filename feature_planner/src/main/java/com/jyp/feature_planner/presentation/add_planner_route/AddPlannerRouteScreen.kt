@@ -33,7 +33,7 @@ internal fun AddPlannerRouteScreen(
     pikmis: List<PlannerPikme>,
     pikis: List<PlannerPiki>,
     onSelectPikme: (PlannerPikme) -> Unit,
-    onRemovePiki: (PlannerPiki) -> Unit,
+    onRemovePiki: (Int) -> Unit,
     onSubmitPikis: () -> Unit,
 ) {
     Column(
@@ -74,7 +74,7 @@ internal fun AddPlannerRouteScreen(
 @Composable
 private fun SelectedPikis(
     pikis: List<PlannerPiki>,
-    onRemovePiki: (PlannerPiki) -> Unit,
+    onRemovePiki: (Int) -> Unit,
 ) {
     LazyRow(
         modifier = Modifier
@@ -83,13 +83,14 @@ private fun SelectedPikis(
             .background(JypColors.Background_white200),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        items(pikis.size) { idx ->
+        items(pikis.size) { index ->
             SelectedPikiItem(
-                piki = pikis[idx],
+                index = index,
+                piki = pikis[index],
                 onRemovePiki = onRemovePiki,
             )
 
-            if (idx != pikis.lastIndex) {
+            if (index != pikis.lastIndex) {
                 SelectedPikiItemDivider()
             } else {
                 Spacer(modifier = Modifier.size(6.dp))
@@ -155,8 +156,9 @@ private fun SelectedPikisEmptyText() {
 
 @Composable
 private fun SelectedPikiItem(
+    index: Int,
     piki: PlannerPiki,
-    onRemovePiki: (PlannerPiki) -> Unit,
+    onRemovePiki: (Int) -> Unit,
 ) {
     Box {
         Column(
@@ -190,7 +192,7 @@ private fun SelectedPikiItem(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = { onRemovePiki.invoke(piki) },
+                    onClick = { onRemovePiki.invoke(index) }
                 ),
             painter = painterResource(id = R.drawable.icon_delete_journey_route),
             contentDescription = null,

@@ -320,6 +320,11 @@ private fun Screen(
                 is MainBottomSheetItem.JourneyMore -> {
                     JourneyMoreBottomSheetScreen(
                         journey = bottomSheetItem.journey,
+                        onClickCancelButton = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
+                            }
+                        },
                         onClickRemove = { journey ->
                             currentBottomSheetItem =
                                 MainBottomSheetItem.ConfirmRemoveJourney(journey)
