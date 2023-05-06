@@ -286,15 +286,17 @@ private fun PlannerPikMeCard(
                 progress = { lottieAnimatable.progress },
             )
 
-            if (pikMe.liked) {
-                Text(
+            if (pikMe.likeCount != 0) {
+                JypText(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 8.dp),
                     text = pikMe.likeCount.toString(),
-                    color = JypColors.Pink,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    type = TextType.BODY_4,
+                    color = when (pikMe.liked) {
+                        true -> JypColors.Pink
+                        false -> JypColors.Text40
+                    }
                 )
             }
         }
