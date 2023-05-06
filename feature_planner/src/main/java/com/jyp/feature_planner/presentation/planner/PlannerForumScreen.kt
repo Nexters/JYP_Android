@@ -262,13 +262,23 @@ private fun PlannerPikMeCard(
                     onClick = { onClickLike.invoke(pikMe) }
                 )
                 .size(62.dp)
-                .shadow(
-                    elevation = 2.dp,
-                    shape = CircleShape,
-                )
+                .run {
+                    if (pikMe.liked) {
+                        shadow(
+                            elevation = 24.dp,
+                            shape = CircleShape,
+                            spotColor = DefaultShadowColor.copy(alpha = 0.2f)
+                        )
+                    } else this
+                }
                 .clip(CircleShape)
                 .align(Alignment.BottomEnd)
-                .background(JypColors.Background_white100),
+                .background(JypColors.Background_white100)
+                .border(
+                    width = 1.dp,
+                    color = JypColors.Border_grey,
+                    shape = CircleShape
+                ),
             contentAlignment = Alignment.Center,
         ) {
             LottieAnimation(
