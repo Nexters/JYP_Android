@@ -163,6 +163,11 @@ private fun SelectedPikiItem(
     Box {
         Column(
             modifier = Modifier
+                .shadow(
+                    elevation = 30.dp,
+                    shape = RoundedCornerShape(12.dp),
+                    spotColor = DefaultShadowColor.copy(alpha = 0.1f),
+                )
                 .background(
                     color = JypColors.Background_white100,
                     shape = RoundedCornerShape(12.dp),
