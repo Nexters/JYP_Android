@@ -306,35 +306,10 @@ private fun PlannerPikMeCard(
                 color = JypColors.Tag_grey200,
             )
             Spacer(modifier = Modifier.size(14.dp))
-            Row(
-                modifier = Modifier
-                    .shadow(
-                        elevation = 2.dp,
-                        shape = RoundedCornerShape(8.dp),
-                    )
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(JypColors.Background_white100)
-                    .padding(2.dp)
-                    .clickable { onClickInfo(pikMe) }
-            ) {
-                Spacer(modifier = Modifier.size(2.dp))
-                Image(
-                    modifier = Modifier.size(36.dp),
-                    painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_eyes),
-                    contentDescription = null,
-                )
-                Spacer(modifier = Modifier.size(3.dp))
-                JypText(
-                    modifier = Modifier.padding(
-                        top = 6.dp,
-                        end = 6.dp,
-                        bottom = 6.dp,
-                    ),
-                    text = "정보 보기",
-                    type = TextType.BODY_1,
-                    color = JypColors.Text80,
-                )
-            }
+            PlaceInfoButton(
+                modifier = Modifier.wrapContentSize( ),
+                onClick = { onClickInfo(pikMe) }
+            )
         }
     }
 }

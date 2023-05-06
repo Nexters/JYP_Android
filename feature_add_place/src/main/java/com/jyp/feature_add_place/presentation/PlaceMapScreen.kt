@@ -24,6 +24,7 @@ import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
 import com.jyp.jyp_design.ui.button.ButtonType
 import com.jyp.jyp_design.ui.button.JypTextButton
+import com.jyp.jyp_design.ui.button.PlaceInfoButton
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
@@ -183,63 +184,40 @@ private fun ComposablePlaceInfoBottomSheet(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(JypColors.Background_white100),
-        verticalArrangement = Arrangement.Bottom
+            .background(JypColors.Background_white100)
+            .padding(horizontal = 24.dp)
+            .padding(bottom = 28.dp)
     ) {
         JypText(
             text = placeName,
             type = TextType.TITLE_1,
-            modifier = Modifier.padding(horizontal = 24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
             color = JypColors.Text90
         )
+        Spacer(modifier = Modifier.size(6.dp))
         JypText(
             text = placeAddress,
             type = TextType.BODY_3,
             modifier = Modifier
-                .padding(top = 6.dp)
-                .padding(horizontal = 24.dp),
-            color = JypColors.Text40
-        )
-        Row(
-            modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.Top,
-        ) {
-            Button(
-                onClick = { onClickInfoButton() },
-                modifier = Modifier
-                    .wrapContentSize()
-                    .padding(bottom = 20.dp)
-                    .padding(horizontal = 24.dp),
-                enabled = true,
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = JypColors.Background_white100
-                ),
-                contentPadding = PaddingValues(horizontal = 8.dp)
-            ) {
-                Image(
-                    painter = JypPainter.eyes,
-                    contentDescription = null,
-                    modifier = Modifier.padding(all = 0.dp)
-                )
-                JypText(
-                    text = stringResource(id = R.string.button_see_info),
-                    type = TextType.BODY_1,
-                    modifier = Modifier.padding(all = 8.dp),
-                    color = JypColors.Text90,
-                )
-            }
-        }
+            color = JypColors.Text40
+        )
+        PlaceInfoButton(
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.End),
+            onClick = onClickInfoButton
+        )
+        Spacer(modifier = Modifier.size(20.dp))
         JypTextButton(
             text = stringResource(id = R.string.button_add_place),
             buttonType = ButtonType.THICK,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 28.dp),
+                .wrapContentHeight(),
             enabled = true,
             buttonColorSet = ButtonColorSetType.PINK,
             onClickEnabled = onClickAddPlaceButton,
