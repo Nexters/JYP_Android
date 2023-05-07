@@ -256,11 +256,51 @@ private fun PlannerPikMeCard(
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(all = 20.dp),
-            horizontalAlignment = Alignment.Start
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = { onClickLike.invoke(pikMe) }
+                )
+                .size(62.dp)
+                .run {
+                    if (pikMe.liked) {
+                        shadow(
+                            elevation = 24.dp,
+                            shape = CircleShape,
+                            spotColor = DefaultShadowColor.copy(alpha = 0.2f)
+                        )
+                    } else this
+                }
+                .clip(CircleShape)
+                .align(Alignment.BottomEnd)
+                .background(JypColors.Background_white100)
+                .border(
+                    width = 1.dp,
+                    color = JypColors.Border_grey,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center,
         ) {
+            LottieAnimation(
+                composition = composition,
+                progress = { lottieAnimatable.progress },
+            )
+
+            if (pikMe.likeCount != 0) {
+                JypText(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 8.dp),
+                    text = pikMe.likeCount.toString(),
+                    type = TextType.BODY_4,
+                    color = when (pikMe.liked) {
+                        true -> JypColors.Pink
+                        false -> JypColors.Text40
+                    }
+                )
+            }
+        }
+        Column {
             JypText(
                 text = pikMe.category,
                 type = TextType.BODY_4,
@@ -278,35 +318,10 @@ private fun PlannerPikMeCard(
                 color = JypColors.Tag_grey200,
             )
             Spacer(modifier = Modifier.size(14.dp))
-            Row(
-                modifier = Modifier
-                    .shadow(
-                        elevation = 2.dp,
-                        shape = RoundedCornerShape(8.dp),
-                    )
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(JypColors.Background_white100)
-                    .padding(2.dp)
-                    .clickable { onClickInfo(pikMe) }
-            ) {
-                Spacer(modifier = Modifier.size(2.dp))
-                Image(
-                    modifier = Modifier.size(36.dp),
-                    painter = painterResource(id = R.drawable.icon_eyes),
-                    contentDescription = null,
-                )
-                Spacer(modifier = Modifier.size(3.dp))
-                JypText(
-                    modifier = Modifier.padding(
-                        top = 6.dp,
-                        end = 6.dp,
-                        bottom = 6.dp,
-                    ),
-                    text = "정보 보기",
-                    type = TextType.BODY_1,
-                    color = JypColors.Text80,
-                )
-            }
+            PlaceInfoButton(
+                modifier = Modifier.wrapContentSize( ),
+                onClick = { onClickInfo(pikMe) }
+            )
         }
         when (pikMe.ranking) {
             1 -> R.drawable.icon_vote_first
