@@ -5,12 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -24,9 +23,12 @@ import com.jyp.feature_planner.R
 import com.jyp.feature_planner.domain.PlannerPiki
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.jyp_design.resource.JypColors
-import com.jyp.jyp_design.ui.button.*
+import com.jyp.jyp_design.ui.button.ButtonColorSetType
+import com.jyp.jyp_design.ui.button.ButtonType
+import com.jyp.jyp_design.ui.button.JypTextButton
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun AddPlannerRouteScreen(
@@ -36,6 +38,9 @@ internal fun AddPlannerRouteScreen(
     onRemovePiki: (Int) -> Unit,
     onSubmitPikis: () -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val lazyListState = rememberLazyListState()
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -44,13 +49,21 @@ internal fun AddPlannerRouteScreen(
             false -> SelectedPikis(
                 pikis = pikis,
                 onRemovePiki = onRemovePiki,
+                lazyListState = lazyListState
             )
         }
 
         CandidatePikis(
             modifier = Modifier.weight(1f),
             pikmis = pikmis,
-            onSelectPikme = onSelectPikme,
+            onSelectPikme = {
+                onSelectPikme(it)
+                if (pikis.isNotEmpty()) {
+                    coroutineScope.launch {
+                        lazyListState.animateScrollToItem(pikis.size - 1)
+                    }
+                }
+            },
         )
 
         JypTextButton(
@@ -74,16 +87,20 @@ internal fun AddPlannerRouteScreen(
 @Composable
 private fun SelectedPikis(
     pikis: List<PlannerPiki>,
-    onRemovePiki: (Int) -> Unit,
+    lazyListState: LazyListState,
+    onRemovePiki: (Int) -> Unit
 ) {
     LazyRow(
         modifier = Modifier
             .height(140.dp)
-            .padding(horizontal = 24.dp)
             .background(JypColors.Background_white200),
+        state = lazyListState,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         items(pikis.size) { index ->
+            if (index == 0) {
+                Spacer(modifier = Modifier.size(24.dp))
+            }
             SelectedPikiItem(
                 index = index,
                 piki = pikis[index],
@@ -93,7 +110,7 @@ private fun SelectedPikis(
             if (index != pikis.lastIndex) {
                 SelectedPikiItemDivider()
             } else {
-                Spacer(modifier = Modifier.size(6.dp))
+                Spacer(modifier = Modifier.size(24.dp))
             }
         }
     }
@@ -230,7 +247,7 @@ private fun CandidatePikiItem(
                 color = JypColors.Background_white100,
                 shape = RoundedCornerShape(10.dp),
             )
-            .padding(horizontal = 20.dp)
+            .padding(start = 20.dp)
     ) {
         Column(
             modifier = Modifier
@@ -250,25 +267,29 @@ private fun CandidatePikiItem(
             )
         }
         Column(
+            modifier = Modifier.width(72.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val iconVoteResId = when (pikme.ranking) {
+            when (pikme.ranking) {
                 1 -> R.drawable.icon_vote_first
                 2 -> R.drawable.icon_vote_second
                 3 -> R.drawable.icon_vote_third
                 else -> null
-            }
 
-            iconVoteResId?.let {
-                Image(
-                    painter = painterResource(id = iconVoteResId),
-                    contentDescription = null,
-                )
+            }.let {
+                when (it) {
+                    null -> Spacer(modifier = Modifier.size(40.dp))
+                    else -> Image(
+                        painter = painterResource(id = it),
+                        contentDescription = null
+                    )
+                }
             }
             JypText(
                 text = pikme.category,
                 type = TextType.BODY_4,
-                color = JypColors.Text40,
+                maxLines = 1,
+                color = JypColors.Text40
             )
         }
     }
