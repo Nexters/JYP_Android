@@ -16,10 +16,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.resource.JypPainter
 import com.jyp.jyp_design.ui.button.ButtonColorSetType
@@ -46,8 +44,7 @@ fun InviteUserScreen(
         GlobalNavigationBarLayout(
             color = GlobalNavigationBarColor.WHITE,
             title = "",
-            titleSize = 16.sp,
-            titleFontWeight = FontWeight.Medium,
+            textType = TextType.HEADING_3,
             activeBack = true,
             backAction = { onClickBackButton() }
         ) {

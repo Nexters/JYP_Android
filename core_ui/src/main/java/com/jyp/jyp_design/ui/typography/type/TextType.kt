@@ -15,7 +15,7 @@ enum class TextType(
         fontFamily = PretendardFontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 22,
-        lineHeight = 1.55
+        lineHeight = 1.5
     ),
     HEADING_2(
         fontFamily = PretendardFontFamily,
@@ -99,6 +99,12 @@ enum class TextType(
         fontFamily = PretendardFontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 14,
+        lineHeight = 1.5
+    ),
+    AVATAR_OVERFLOW_COUNT(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 11,
         lineHeight = 1.5
     )
 }

@@ -7,17 +7,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -28,8 +28,10 @@ import com.jyp.feature_planner.presentation.create_planner.model.*
 import com.jyp.feature_planner.presentation.planner.PlannerActivity
 import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EXTRA_PLANNER_ID
 import com.jyp.jyp_design.enumerate.ThemeType
+import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
+import com.jyp.jyp_design.ui.typography.type.TextType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,10 +42,6 @@ class CreatePlannerActivity : AppCompatActivity() {
     private val createAction: CreatePlannerAction by lazy {
         intent.getParcelableExtra(EXTRA_CREATE_PLANNER_ACTION)
             ?: CreatePlannerAction.Create() as CreatePlannerAction
-    }
-
-    private val plannerId: String? by lazy {
-        intent.getStringExtra(EXTRA_PLANNER_ID)
     }
 
     private var rangeDatePicker: RangeDatePicker? = null
@@ -121,9 +119,6 @@ class CreatePlannerActivity : AppCompatActivity() {
                             )
                             finishAffinity()
                         }
-                        is CreatePlannerAction.Edit -> {
-
-                        }
                         is CreatePlannerAction.Join -> {
                             viewModel.joinPlanner(
                                 action.plannerId,
@@ -144,7 +139,6 @@ class CreatePlannerActivity : AppCompatActivity() {
 
         when (action) {
             is CreatePlannerAction.Create -> null
-            is CreatePlannerAction.Edit -> action.plannerId
             is CreatePlannerAction.Join -> action.plannerId
         }?.let {
             viewModel.fetchTags(it)
@@ -236,6 +230,13 @@ private fun Screen(
         sheetState = bottomSheetScaffoldState,
         sheetContent = {
             when (val type = createPlannerBottomSheetType) {
+                is CreatePlannerBottomSheetType.None -> {
+                    Box(
+                        modifier = Modifier
+                            .background(JypColors.Background_grey300)
+                            .size(1.dp)
+                    )
+                }
                 is CreatePlannerBottomSheetType.AddTag -> {
                     AddTagBottomSheetScreen(
                         modifier = Modifier
@@ -268,8 +269,7 @@ private fun Screen(
             GlobalNavigationBarLayout(
                 color = GlobalNavigationBarColor.WHITE,
                 title = stringResource(id = step.navigationTitleRes),
-                titleSize = 16.sp,
-                titleFontWeight = FontWeight.Medium,
+                textType = TextType.HEADING_3,
                 activeBack = true,
                 backAction = onClickBackAction,
             ) {

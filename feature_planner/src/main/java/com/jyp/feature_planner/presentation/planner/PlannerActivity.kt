@@ -19,6 +19,7 @@ import com.jyp.feature_add_place.presentation.PlaceInfoActivity
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.PLACE_INFO_NAME
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.PLACE_INFO_URL
+import com.jyp.feature_planner.domain.PlannerPiki
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_DAY_INDEX
@@ -26,9 +27,7 @@ import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteAct
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_PIKIS
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_PIKMIS
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_START_DATE
-import com.jyp.feature_planner.presentation.create_planner.CreatePlannerActivity
-import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerAction
-import com.jyp.feature_planner.presentation.create_planner.model.CreatePlannerStep
+import com.jyp.feature_planner.presentation.edit_tag.EditTagActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -64,6 +63,12 @@ class PlannerActivity : ComponentActivity() {
                             putExtra(EXTRA_PLANNER_ID, plannerId)
                         }
                     )
+                },
+                onClickRoutePiki = { piki ->
+                    setIntentTo(PlaceInfoActivity::class.java) {
+                        putString(PLACE_INFO_NAME, piki.name)
+                        putString(PLACE_INFO_URL, piki.link)
+                    }
                 },
                 onClickEditRoute = { index ->
                     startActivity(
@@ -103,9 +108,9 @@ class PlannerActivity : ComponentActivity() {
                 onClickEditTag = {
                     plannerId?.let {
                         startActivity(
-                            Intent(this, CreatePlannerActivity::class.java).apply {
-                                putExtra(CreatePlannerActivity.EXTRA_CREATE_PLANNER_STEP, CreatePlannerStep.TASTE)
-                                putExtra(CreatePlannerActivity.EXTRA_CREATE_PLANNER_ACTION, CreatePlannerAction.Edit(it))
+                            Intent(this, EditTagActivity::class.java).apply {
+                                putExtra(EXTRA_PLANNER_ID, plannerId)
+                                putExtra(EXTRA_USER_INFO, viewModel.user.value)
                             }
                         )
                     }
@@ -124,6 +129,7 @@ class PlannerActivity : ComponentActivity() {
 
     companion object {
         const val EXTRA_PLANNER_ID = "EXTRA_PLANNER_ID"
+        const val EXTRA_USER_INFO = "EXTRA_USER_INFO"
         const val EXTRA_IS_D_DAY = "EXTRA_IS_D_DAY"
     }
 }
@@ -134,6 +140,7 @@ private fun Screen(
     isDDay: Boolean,
     viewModel: PlannerViewModel,
     onClickInviteUserButton: () -> Unit,
+    onClickRoutePiki: (PlannerPiki) -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
     onNewPikMeClick: () -> Unit,
     onClickBackButton: () -> Unit,
@@ -143,7 +150,7 @@ private fun Screen(
 ) {
     val plannerTitle by viewModel.plannerTitle.collectAsState()
     val plannerDates by viewModel.plannerDates.collectAsState()
-    val pikMes by viewModel.pikmis.collectAsState()
+    val pikMis by viewModel.pikmis.collectAsState()
     val tags by viewModel.tags.collectAsState()
     val membersProfileUrl by viewModel.membersProfileUrl.collectAsState()
     val planItems by viewModel.planItems.collectAsState()
@@ -160,7 +167,14 @@ private fun Screen(
         sheetState = bottomSheetScaffoldState,
         sheetContent = {
             selectedTag?.let {
-                TagSelectedBottomSheetScreen(tag = it)
+                TagSelectedBottomSheetScreen(
+                    tag = it,
+                    onClickTagInfoCloseButton = {
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.hide()
+                        }
+                    }
+                )
             } ?: Spacer(modifier = Modifier.size(1.dp))
         },
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
@@ -173,7 +187,7 @@ private fun Screen(
                 plannerTitle = plannerTitle,
                 startDate = plannerDates.first,
                 endDate = plannerDates.second,
-                pikMes = pikMes,
+                pikMis = pikMis,
                 joinMembers = membersProfileUrl,
                 tags = tags,
                 tagClick = {
@@ -186,6 +200,7 @@ private fun Screen(
                 },
                 planItems = planItems,
                 newPikMeClick = onNewPikMeClick,
+                onClickRoutePiki = onClickRoutePiki,
                 onClickEditRoute = onClickEditRoute,
                 onClickInviteUserButton = onClickInviteUserButton,
                 onClickBackButton = onClickBackButton,
