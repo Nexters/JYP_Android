@@ -6,6 +6,6 @@ import com.jyp.jyp_design.ui.tag.TagType
 data class PlannerTag(
         val type: TagType,
         val content: String,
-        val state: TagState = TagState.DEFAULT,
+        var state: TagState = TagState.DEFAULT,
         val selectPeople: List<Person> = emptyList(),
 )

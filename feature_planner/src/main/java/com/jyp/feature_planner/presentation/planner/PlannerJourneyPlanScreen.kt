@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeUnit
 internal fun PlannerJourneyPlanScreen(
     planItems: List<PlanItem>,
     startDate: Long,
+    onClickRoutePiki: (PlannerPiki) -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
 ) {
     LazyColumn(
@@ -53,12 +56,14 @@ internal fun PlannerJourneyPlanScreen(
                             onClickEditRoute.invoke(index)
                         },
                     )
-                    Spacer(modifier = Modifier.size(
-                        when (index == planItems.lastIndex) {
-                            true -> 28.dp
-                            false -> 12.dp
-                        }
-                    ))
+                    Spacer(
+                        modifier = Modifier.size(
+                            when (index == planItems.lastIndex) {
+                                true -> 28.dp
+                                false -> 12.dp
+                            }
+                        )
+                    )
                 }
             } else {
                 if (index > 0 && planItems[index].pikis.isNotEmpty() && planItems[index - 1].pikis.isEmpty()) {
@@ -82,6 +87,7 @@ internal fun PlannerJourneyPlanScreen(
                         PlanEachItem(
                             order = pikisIndex + 1,
                             piki = piki,
+                            onClickRoutePiki = onClickRoutePiki
                         )
                         if (pikisIndex != planItem.pikis.lastIndex) {
                             PlanEachContentDivider()
@@ -179,17 +185,18 @@ private fun PlanEachTitle(
 private fun PlanEachItem(
     order: Int,
     piki: PlannerPiki,
+    onClickRoutePiki: (PlannerPiki) -> Unit
 ) {
     Row(
-        modifier = Modifier
-            .height(81.dp)
+        modifier = Modifier.height(81.dp)
     ) {
         PlanEachOrder(
             order = order,
         )
         Spacer(modifier = Modifier.size(12.dp))
         PlanEachContent(
-            piki = piki
+            piki = piki,
+            onClickRoutePiki = onClickRoutePiki
         )
     }
 }
@@ -205,7 +212,8 @@ private fun PlanEachOrder(
                 .background(
                     color = JypColors.Sub_black,
                     shape = CircleShape,
-                ).padding(top = 1.5.dp),
+                )
+                .padding(top = 1.5.dp),
             text = "$order",
             type = TextType.BODY_4,
             color = JypColors.Text_white,
@@ -226,6 +234,7 @@ private fun PlanEachOrder(
 @Composable
 private fun PlanEachContent(
     piki: PlannerPiki,
+    onClickRoutePiki: (PlannerPiki) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -239,6 +248,11 @@ private fun PlanEachContent(
             .background(
                 color = JypColors.Background_white100,
                 shape = RoundedCornerShape(size = 12.dp),
+            )
+            .clickable(
+                onClick = { onClickRoutePiki(piki) },
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple()
             )
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -365,6 +379,7 @@ private fun PlannerJourneyPlanScreenPreview() {
             ),
         ),
         startDate = 1523424321L,
+        onClickRoutePiki = {},
         onClickEditRoute = {},
     )
 }

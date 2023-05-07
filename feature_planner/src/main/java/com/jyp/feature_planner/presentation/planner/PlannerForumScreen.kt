@@ -17,8 +17,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.*
 import com.google.accompanist.flowlayout.FlowRow
+import com.jyp.feature_planner.R
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.jyp_design.resource.JypColors
@@ -29,7 +32,7 @@ import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 internal fun PlannerForumScreen(
-    pikMes: List<PlannerPikme>,
+    pikMis: List<PlannerPikme>,
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
@@ -52,7 +55,7 @@ internal fun PlannerForumScreen(
         )
         Spacer(modifier = Modifier.size(48.dp))
         PlannerPikMeContent(
-            pikMes = pikMes,
+            pikMis = pikMis,
             newPikMeClick = newPikMeClick,
             onClickInfo = onClickInfo,
             onClickLike = onClickLike,
@@ -160,7 +163,7 @@ private fun PlannerTagLayout(
 
 @Composable
 private fun PlannerPikMeContent(
-    pikMes: List<PlannerPikme>,
+    pikMis: List<PlannerPikme>,
     newPikMeClick: () -> Unit,
     onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
@@ -196,12 +199,12 @@ private fun PlannerPikMeContent(
         )
         Spacer(modifier = Modifier.size(20.dp))
 
-        if (pikMes.isEmpty()) {
+        if (pikMis.isEmpty()) {
             PlannerPikMeEmptyCard(
                 newPikMeClick = newPikMeClick,
             )
         } else {
-            pikMes.forEach { pikMe ->
+            pikMis.forEach { pikMe ->
                 PlannerPikMeCard(
                     pikMe = pikMe,
                     onClickInfo = onClickInfo,
@@ -217,7 +220,7 @@ private fun PlannerPikMeContent(
 private fun PlannerPikMeCard(
     pikMe: PlannerPikme,
     onClickInfo: (PlannerPikme) -> Unit,
-    onClickLike: (PlannerPikme) -> Unit,
+    onClickLike: (PlannerPikme) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -229,13 +232,13 @@ private fun PlannerPikMeCard(
             )
             .clip(RoundedCornerShape(12.dp))
             .background(JypColors.Background_white100)
-            .padding(20.dp),
     ) {
         var initialLiked by rememberSaveable {
             mutableStateOf(pikMe.liked)
         }
-
-        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(com.jyp.feature_planner.R.raw.like_alone_alpha))
+        val composition by rememberLottieComposition(
+            spec = LottieCompositionSpec.RawRes(R.raw.like_alone_alpha)
+        )
         val lottieAnimatable = rememberLottieAnimatable()
 
         LaunchedEffect(pikMe.liked) {
@@ -251,40 +254,13 @@ private fun PlannerPikMeCard(
             }
         }
 
-        Box(
+        Column(
             modifier = Modifier
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { onClickLike.invoke(pikMe) }
-                )
-                .size(62.dp)
-                .shadow(
-                    elevation = 2.dp,
-                    shape = CircleShape,
-                )
-                .clip(CircleShape)
-                .align(Alignment.BottomEnd)
-                .background(JypColors.Background_white100),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(all = 20.dp),
+            horizontalAlignment = Alignment.Start
         ) {
-            LottieAnimation(
-                composition = composition,
-                progress = { lottieAnimatable.progress },
-            )
-
-            if (pikMe.liked) {
-                JypText(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 8.dp),
-                    text = pikMe.likeCount.toString(),
-                    type = TextType.BODY_4,
-                    color = JypColors.Pink
-                )
-            }
-        }
-        Column {
             JypText(
                 text = pikMe.category,
                 type = TextType.BODY_4,
@@ -316,7 +292,7 @@ private fun PlannerPikMeCard(
                 Spacer(modifier = Modifier.size(2.dp))
                 Image(
                     modifier = Modifier.size(36.dp),
-                    painter = painterResource(id = com.jyp.feature_planner.R.drawable.icon_eyes),
+                    painter = painterResource(id = R.drawable.icon_eyes),
                     contentDescription = null,
                 )
                 Spacer(modifier = Modifier.size(3.dp))
@@ -331,6 +307,72 @@ private fun PlannerPikMeCard(
                     color = JypColors.Text80,
                 )
             }
+        }
+        when (pikMe.ranking) {
+            1 -> R.drawable.icon_vote_first
+            2 -> R.drawable.icon_vote_second
+            3 -> R.drawable.icon_vote_third
+            else -> null
+
+        }?.let {
+            Image(
+                painter = painterResource(id = it),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(horizontal = 30.dp)
+            )
+        }
+        PlannerPikMeLikeButton(
+            modifier = Modifier
+                .padding(all = 20.dp)
+                .align(Alignment.BottomEnd),
+            pikMe = pikMe,
+            onClickLike = onClickLike,
+            composition = composition,
+            lottieAnimatable = lottieAnimatable
+        )
+    }
+}
+
+@Composable
+private fun PlannerPikMeLikeButton(
+    modifier: Modifier,
+    pikMe: PlannerPikme,
+    onClickLike: (PlannerPikme) -> Unit,
+    composition: LottieComposition?,
+    lottieAnimatable: LottieAnimatable
+) {
+    Box(
+        modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { onClickLike.invoke(pikMe) }
+            )
+            .size(62.dp)
+            .shadow(
+                elevation = 2.dp,
+                shape = CircleShape
+            )
+            .clip(CircleShape)
+            .background(JypColors.Background_white100),
+        contentAlignment = Alignment.Center
+    ) {
+        LottieAnimation(
+            composition = composition,
+            progress = { lottieAnimatable.progress }
+        )
+
+        if (pikMe.liked) {
+            JypText(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp),
+                text = pikMe.likeCount.toString(),
+                type = TextType.BODY_4,
+                color = JypColors.Pink
+            )
         }
     }
 }
@@ -375,12 +417,33 @@ private fun PlannerPikMeEmptyCard(
 @Preview(showBackground = true)
 private fun PlannerForumScreenPreview() {
     PlannerForumScreen(
-        pikMes = emptyList(),
+        pikMis = emptyList(),
         tags = emptyList(),
         tagClick = {},
         newPikMeClick = {},
         onClickInfo = {},
         onClickLike = {},
         onClickEditTag = {},
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun PlannerPikMeCardPreview() {
+    PlannerPikMeCard(
+        PlannerPikme(
+            id = "",
+            title = "title",
+            address = "",
+            category = "마트",
+            likeCount = 3,
+            liked = true,
+            longitude = 0.0,
+            latitude = 0.0,
+            link = "",
+            ranking = 1
+        ),
+        onClickInfo = {},
+        onClickLike = {}
     )
 }

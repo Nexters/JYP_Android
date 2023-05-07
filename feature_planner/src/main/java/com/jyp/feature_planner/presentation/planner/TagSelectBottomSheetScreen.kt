@@ -1,5 +1,6 @@
 package com.jyp.feature_planner.presentation.planner
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,7 +19,10 @@ import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
-internal fun TagSelectedBottomSheetScreen(tag: PlannerTag) {
+internal fun TagSelectedBottomSheetScreen(
+    tag: PlannerTag,
+    onClickTagInfoCloseButton: () -> Unit
+) {
     Column(
             modifier = Modifier
                     .fillMaxWidth()
@@ -29,7 +33,10 @@ internal fun TagSelectedBottomSheetScreen(tag: PlannerTag) {
                             bottom = 40.dp,
                     ),
     ) {
-        Header(tag.type)
+        Header(
+            tag.type,
+            onClickTagInfoCloseButton
+        )
         Spacer(modifier = Modifier.size(24.dp))
         DecoratedTag(
                 tagType = tag.type,
@@ -44,7 +51,8 @@ internal fun TagSelectedBottomSheetScreen(tag: PlannerTag) {
 
 @Composable
 private fun Header(
-    tagType: TagType
+    tagType: TagType,
+    onClickTagInfoCloseButton: () -> Unit
 ) {
     Row(
             modifier = Modifier.fillMaxWidth(),
@@ -61,6 +69,9 @@ private fun Header(
                 color = JypColors.Text80,
         )
         JypText(
+                modifier = Modifier.clickable {
+                    onClickTagInfoCloseButton()
+                },
                 text = "확인",
                 type = TextType.BODY_2,
                 color = JypColors.Text40,

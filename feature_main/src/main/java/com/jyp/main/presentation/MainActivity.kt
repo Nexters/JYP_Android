@@ -74,6 +74,8 @@ class MainActivity : ComponentActivity() {
                     startActivity(
                         Intent(this, PlannerActivity::class.java).apply {
                             putExtra(EXTRA_PLANNER_ID, journey.id)
+                            putExtra(EXTRA_USER_NAME, mainViewModel.userName.value)
+                            putExtra(EXTRA_PROFILE_IMAGE_PATH, mainViewModel.profileImagePath.value)
                             putExtra(EXTRA_IS_D_DAY, journey.dDay == "D-day")
                         }
                     )
@@ -162,7 +164,10 @@ private fun Screen(
     }
 
     val modalBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = {
+            currentBottomSheetItem !is MainBottomSheetItem.JoinJourney
+        }
     )
 
     val myJourneyScreenItem = createMyJourneyScreenItem(
