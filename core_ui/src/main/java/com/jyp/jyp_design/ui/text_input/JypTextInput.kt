@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -25,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.ui.text.JypText
+import com.jyp.jyp_design.ui.typography.type.TextType
 
 @Composable
 fun JypTextInput(
@@ -96,12 +97,11 @@ internal fun TextInputField(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextInputContent(
-            modifier = Modifier
-                .weight(1f),
+            modifier = Modifier.weight(1f),
             text = text,
+            textType = TextType.TITLE_1,
             valueChange = valueChange,
             hint = hint,
-            fontSize = 24.sp,
             textFieldFocus = textFieldFocus.value,
             textFieldFocusChange = {
                 textFieldFocus.value = it
@@ -152,12 +152,11 @@ internal fun TextInputBox(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextInputContent(
-            modifier = Modifier
-                .weight(1f),
+            modifier = Modifier.weight(1f),
             text = text,
+            textType = TextType.TITLE_3,
             valueChange = valueChange,
             hint = hint,
-            fontSize = 18.sp,
             textFieldFocus = textFieldFocus.value,
             textFieldFocusChange = {
                 textFieldFocus.value = it
@@ -182,9 +181,9 @@ internal fun TextInputBox(
 internal fun TextInputContent(
     modifier: Modifier = Modifier,
     text: String,
+    textType: TextType,
     valueChange: (String) -> Unit,
     hint: String,
-    fontSize: TextUnit,
     textFieldFocus: Boolean,
     textFieldFocusChange: (Boolean) -> Unit = {},
     maxLines: Int = Int.MAX_VALUE,
@@ -207,17 +206,16 @@ internal fun TextInputContent(
             onValueChange = valueChange,
             textStyle = TextStyle(
                 color = JypColors.Text90,
-                fontSize = fontSize,
+                fontSize = textType.fontSize.sp,
                 fontWeight = FontWeight.SemiBold,
             ),
             cursorBrush = SolidColor(JypColors.Text90),
             decorationBox = { innerTextField ->
                 if (text.isEmpty()) {
-                    Text(
+                    JypText(
                         text = hint,
-                        fontSize = fontSize,
-                        color = JypColors.Text40,
-                        fontWeight = FontWeight.Medium,
+                        type = textType,
+                        color = JypColors.Text40
                     )
                 }
 

@@ -16,11 +16,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jyp.core_network.jyp.model.enumerate.PlaceCategory
 import com.jyp.core_network.jyp.model.enumerate.getDrawableResourceId
 import com.jyp.core_util.extensions.secondToDate
@@ -208,7 +206,7 @@ private fun PlanEachOrder(
     order: Int,
 ) {
     Column {
-        Text(
+        JypText(
             modifier = Modifier
                 .size(20.dp)
                 .background(
@@ -217,10 +215,9 @@ private fun PlanEachOrder(
                 )
                 .padding(top = 1.5.dp),
             text = "$order",
-            fontWeight = FontWeight.SemiBold,
+            type = TextType.BODY_4,
             color = JypColors.Text_white,
-            fontSize = 12.sp,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Center
         )
         Box(
             modifier = Modifier
