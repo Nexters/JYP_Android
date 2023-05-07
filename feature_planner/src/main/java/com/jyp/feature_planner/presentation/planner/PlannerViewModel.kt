@@ -32,6 +32,9 @@ class PlannerViewModel @Inject constructor(
     val tags: StateFlow<List<PlannerTag>>
         get() = _tags
 
+    private val _user = MutableStateFlow(Person("", ""))
+    val user: StateFlow<Person> get() = _user
+
     private val _membersProfileUrl = MutableStateFlow<List<String>>(emptyList())
     val membersProfileUrl: StateFlow<List<String>>
         get() = _membersProfileUrl
@@ -98,6 +101,10 @@ class PlannerViewModel @Inject constructor(
                         }
                         sortedPikmis
                     }
+                    _user.value = Person(
+                        name = user.name,
+                        profileUrl = user.profileImagePath
+                    )
                 }
                 .onFailure {
                     it.printStackTrace()

@@ -81,5 +81,14 @@ interface JypApi {
     suspend fun getDefaultTags(): TagsResponse
 
     @GET("/journeys/{id}/tags")
-    suspend fun getTags(@Path("id") journeyId: String): TagsResponse
+    suspend fun getTags(
+        @Path("id") journeyId: String,
+        @Query("includeDefaultTags") isIncludeDefaultTags: Boolean
+    ): TagsResponse
+
+    @POST("/journeys/{id}/tags")
+    suspend fun editTags(
+        @Path("id") journeyId: String,
+        @Body tags: JoinPlannerRequestBody
+    ): JypWithoutDataResponse
 }

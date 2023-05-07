@@ -58,7 +58,7 @@ class CreatePlannerViewModel @Inject constructor(
 
     fun fetchTags(plannerId: String) {
         viewModelScope.launch {
-            getTagsUseCase.invoke(plannerId)
+            getTagsUseCase.invoke(plannerId, true)
                 .onSuccess {
                     val mapper = PlannerTagMapper()
                     val plannerTags = it.tags.map(mapper::toPlannerTag)
