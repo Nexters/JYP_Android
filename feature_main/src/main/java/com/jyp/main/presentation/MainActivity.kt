@@ -19,9 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jyp.core_network.jyp.model.enumerate.JoinJourneyFailure
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -45,6 +43,7 @@ import com.jyp.feature_planner.presentation.planner.PlannerActivity.Companion.EX
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarLayout
+import com.jyp.jyp_design.ui.typography.type.TextType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -75,6 +74,8 @@ class MainActivity : ComponentActivity() {
                     startActivity(
                         Intent(this, PlannerActivity::class.java).apply {
                             putExtra(EXTRA_PLANNER_ID, journey.id)
+                            putExtra(EXTRA_USER_NAME, mainViewModel.userName.value)
+                            putExtra(EXTRA_PROFILE_IMAGE_PATH, mainViewModel.profileImagePath.value)
                             putExtra(EXTRA_IS_D_DAY, journey.dDay == "D-day")
                         }
                     )
@@ -163,7 +164,10 @@ private fun Screen(
     }
 
     val modalBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmStateChange = {
+            currentBottomSheetItem !is MainBottomSheetItem.JoinJourney
+        }
     )
 
     val myJourneyScreenItem = createMyJourneyScreenItem(
@@ -417,8 +421,7 @@ private fun createMyJourneyScreenItem(
             GlobalNavigationBarLayout(
                 color = GlobalNavigationBarColor.GREY,
                 title = stringResource(id = BottomNavItem.MY_JOURNEY.labelRes),
-                titleSize = 16.sp,
-                titleFontWeight = FontWeight.Medium,
+                textType = TextType.HEADING_3
             ) {
                 MyJourneyScreen(
                     journeyPropensity = personality,
@@ -441,8 +444,7 @@ private fun createAnotherJourneyScreenItem(): MainScreenItem {
             GlobalNavigationBarLayout(
                 color = GlobalNavigationBarColor.WHITE,
                 title = stringResource(id = BottomNavItem.ANOTHER_JOURNEY.labelRes),
-                titleSize = 16.sp,
-                titleFontWeight = FontWeight.Medium,
+                textType = TextType.HEADING_3
             ) {
                 AnotherJourneyScreen()
             }
@@ -468,8 +470,7 @@ private fun createMyPageScreenItem(
             GlobalNavigationBarLayout(
                 color = GlobalNavigationBarColor.WHITE,
                 title = stringResource(id = BottomNavItem.MY_PAGE.labelRes),
-                titleSize = 16.sp,
-                titleFontWeight = FontWeight.Medium,
+                textType = TextType.HEADING_3
             ) {
                 MyPageScreen(
                     profileImagePath = profileImagePath,

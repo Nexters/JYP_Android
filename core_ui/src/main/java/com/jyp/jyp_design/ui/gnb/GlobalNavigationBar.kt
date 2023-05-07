@@ -4,16 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.jyp.jyp_design.R
 import com.jyp.jyp_design.resource.JypColors
+import com.jyp.jyp_design.ui.text.JypText
+import com.jyp.jyp_design.ui.typography.type.TextType
 
 enum class GlobalNavigationBarColor {
     BLACK, WHITE, GREY
@@ -23,8 +23,7 @@ enum class GlobalNavigationBarColor {
 fun GlobalNavigationBar(
         color: GlobalNavigationBarColor = GlobalNavigationBarColor.WHITE,
         title: String = "",
-        titleSize: TextUnit = 20.sp,
-        titleFontWeight: FontWeight = FontWeight.Medium,
+        textType: TextType,
         description: String = "",
         activeBack: Boolean = false,
         backAction: () -> Unit = {},
@@ -59,24 +58,22 @@ fun GlobalNavigationBar(
             )
         }
 
-        Text(
+        JypText(
                 modifier = Modifier.padding(start = 12.dp),
                 text = title,
-                fontSize = titleSize,
+                type = textType,
                 color = when (color) {
                     GlobalNavigationBarColor.BLACK -> JypColors.Text_white
                     GlobalNavigationBarColor.WHITE -> JypColors.Text90
                     GlobalNavigationBarColor.GREY -> JypColors.Text90
-                },
-                fontWeight = titleFontWeight,
+                }
         )
 
-        Text(
+        JypText(
                 modifier = Modifier.padding(start = 12.dp),
                 text = description,
-                fontSize = 18.sp,
-                color = JypColors.Tag_grey200,
-                fontWeight = FontWeight.Medium,
+                type = TextType.TITLE_4,
+                color = JypColors.Tag_grey200
         )
     }
 }
@@ -85,8 +82,7 @@ fun GlobalNavigationBar(
 fun GlobalNavigationBarLayout(
         color: GlobalNavigationBarColor = GlobalNavigationBarColor.WHITE,
         title: String = "",
-        titleSize: TextUnit = 20.sp,
-        titleFontWeight: FontWeight = FontWeight.Medium,
+        textType: TextType,
         description: String = "",
         activeBack: Boolean = false,
         backAction: () -> Unit = {},
@@ -98,8 +94,7 @@ fun GlobalNavigationBarLayout(
         GlobalNavigationBar(
                 color = color,
                 title = title,
-                titleSize = titleSize,
-                titleFontWeight = titleFontWeight,
+                textType = textType,
                 description = description,
                 activeBack = activeBack,
                 backAction = backAction,
@@ -114,8 +109,7 @@ fun GlobalNavigationBarLayout(
 internal fun GlobalNavigationBarBoldPreview() {
     GlobalNavigationBar(
             title = "BoldPreview",
-            titleFontWeight = FontWeight.SemiBold,
-            titleSize = 20.sp,
+            textType = TextType.HEADING_2,
             description = "12m 25d",
             activeBack = true,
     )
@@ -126,8 +120,7 @@ internal fun GlobalNavigationBarBoldPreview() {
 internal fun GlobalNavigationBarMediumPreview() {
     GlobalNavigationBar(
             title = "MediumPreview",
-            titleFontWeight = FontWeight.Normal,
-            titleSize = 16.sp,
+            textType = TextType.BODY_2,
             activeBack = false,
     )
 }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -12,11 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.jyp.jyp_design.resource.JypColors
 import com.jyp.jyp_design.R
+import com.jyp.jyp_design.ui.text.JypText
+import com.jyp.jyp_design.ui.typography.type.TextType
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
@@ -80,12 +80,11 @@ internal fun MoreAvatar(
             },
         contentAlignment = Alignment.CenterStart,
     ) {
-        Text(
+        JypText(
             modifier = Modifier.padding(start = 9.dp),
             text = "$overflowCount+",
-            color = JypColors.Text_white,
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Bold,
+            type = TextType.AVATAR_OVERFLOW_COUNT,
+            color = JypColors.Text_white
         )
     }
 }

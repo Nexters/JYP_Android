@@ -11,9 +11,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
+
 
 @HiltViewModel
 class PlannerViewModel @Inject constructor(
@@ -32,6 +31,9 @@ class PlannerViewModel @Inject constructor(
     private val _tags = MutableStateFlow<List<PlannerTag>>(emptyList())
     val tags: StateFlow<List<PlannerTag>>
         get() = _tags
+
+    private val _user = MutableStateFlow(Person("", ""))
+    val user: StateFlow<Person> get() = _user
 
     private val _membersProfileUrl = MutableStateFlow<List<String>>(emptyList())
     val membersProfileUrl: StateFlow<List<String>>
@@ -58,7 +60,6 @@ class PlannerViewModel @Inject constructor(
 
                     _tags.value = planner.tags.map(tagMapper::toPlannerTag)
                     _membersProfileUrl.value = planner.users.map { it.profileImagePath }
-
                     _planItems.value = planner.pikidays.mapIndexed { index, pikiDay ->
                         PlanItem(index + 1, pikiDay.pikis.map(pikiMapper::toPlannerPiki))
                     }
@@ -78,9 +79,32 @@ class PlannerViewModel @Inject constructor(
 
             getMeUseCase.invoke()
                 .onSuccess { user ->
-                    _pikmis.value = pikmis.map { pikme ->
-                        pikmeMapper.toPlannerPikme(pikme, user.id)
+                    _pikmis.value = pikmis.let { pikmis ->
+                        var ranking = 0
+                        val sortedPikmis = pikmis.sortedByDescending { it.likeBy.size }
+                            .map { pikmeMapper.toPlannerPikme(it, user.id) }
+                            .toMutableList()
+
+                        for (i in sortedPikmis.indices) {
+                            val currentPikme = sortedPikmis[i]
+                            if (currentPikme.likeCount > 0) {
+
+                                val previousPikmeLikedCount = sortedPikmis.getOrNull(i - 1)?.likeCount ?: 0
+                                if (currentPikme.likeCount > previousPikmeLikedCount) {
+                                    ranking++
+                                }
+                                sortedPikmis[i] = currentPikme.copy(ranking = ranking)
+
+                            } else {
+                                break
+                            }
+                        }
+                        sortedPikmis
                     }
+                    _user.value = Person(
+                        name = user.name,
+                        profileUrl = user.profileImagePath
+                    )
                 }
                 .onFailure {
                     it.printStackTrace()
@@ -91,31 +115,12 @@ class PlannerViewModel @Inject constructor(
     fun switchPikmeLike(plannerId: String, pikme: PlannerPikme) {
         viewModelScope.launch {
             val isLike = !pikme.liked
-
             setPikmeLikeUseCase.invoke(plannerId, pikme.id, isLike)
                 .onSuccess {
-
+                    fetchPlannerData(plannerId)
                 }
                 .onFailure {
                     it.printStackTrace()
-                }
-
-            // data 가 null인 케이스를 처리하지 못해서 임시방편으로 onSuccess에 넣지 못했음
-            val pikmeIndex = pikmis.value.indexOf(pikme)
-
-            _pikmis.value = pikmis.value.toMutableList()
-                .apply {
-                    set(
-                        pikmeIndex,
-                        pikme.copy(
-                            likeCount = pikme.likeCount + if (isLike) {
-                                1
-                            } else {
-                                -1
-                            },
-                            liked = isLike,
-                        )
-                    )
                 }
         }
     }

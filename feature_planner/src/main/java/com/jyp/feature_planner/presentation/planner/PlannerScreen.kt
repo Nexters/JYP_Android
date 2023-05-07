@@ -19,12 +19,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jyp.core_util.extensions.secondToDate
 import com.jyp.feature_planner.R.*
+import com.jyp.feature_planner.domain.PlannerPiki
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.planner.model.PlanItem
@@ -46,12 +45,13 @@ internal fun PlannerScreen(
     plannerTitle: String,
     startDate: Long,
     endDate: Long,
-    pikMes: List<PlannerPikme>,
+    pikMis: List<PlannerPikme>,
     joinMembers: List<String>,
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     planItems: List<PlanItem>,
     newPikMeClick: () -> Unit,
+    onClickRoutePiki: (PlannerPiki) -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
     onClickInviteUserButton: () -> Unit,
     onClickBackButton: () -> Unit,
@@ -194,11 +194,12 @@ private fun PlannerContent(
     startDate: Long,
     selectedTabPosition: Int,
     tabSelected: (position: Int) -> Unit,
-    pikMes: List<PlannerPikme>,
+    pikMis: List<PlannerPikme>,
     planItems: List<PlanItem>,
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
+    onClickRoutePiki: (PlannerPiki) -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
     onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
@@ -225,7 +226,7 @@ private fun PlannerContent(
 
         when (selectedTabPosition) {
             0 -> PlannerForumScreen(
-                pikMes = pikMes,
+                pikMis = pikMis,
                 tags = tags,
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
@@ -236,7 +237,8 @@ private fun PlannerContent(
             1 -> PlannerJourneyPlanScreen(
                 planItems = planItems,
                 startDate = startDate,
-                onClickEditRoute = onClickEditRoute,
+                onClickRoutePiki = onClickRoutePiki,
+                onClickEditRoute = onClickEditRoute
             )
         }
     }
@@ -263,7 +265,7 @@ private fun PlannerContentTab(
     ) {
         tabTitles.forEachIndexed { index, tabTitle ->
             val selected = selectedTabPosition == index
-            Text(
+            JypText(
                 modifier = Modifier
                     .let { modifier ->
                         if (index > 0) {
@@ -290,8 +292,7 @@ private fun PlannerContentTab(
                     }
                     .padding(vertical = 6.dp),
                 text = tabTitle,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
+                type = TextType.TITLE_3,
                 color = if (selected) {
                     JypColors.Text80
                 } else {
@@ -310,13 +311,14 @@ internal fun PlannerScreenPreview() {
         plannerTitle = "무슨 무슨 여행기~",
         startDate = 21312412L,
         endDate = 21312412L,
-        pikMes = emptyList(),
+        pikMis = emptyList(),
         joinMembers = emptyList(),
         tags = emptyList(),
         tagClick = {},
         planItems = emptyList(),
         newPikMeClick = {},
         onClickInviteUserButton = {},
+        onClickRoutePiki = {},
         onClickEditRoute = {},
         onClickBackButton = {},
         onClickInfo = {},
