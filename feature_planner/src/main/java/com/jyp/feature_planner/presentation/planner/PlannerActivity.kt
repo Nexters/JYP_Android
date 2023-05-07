@@ -115,6 +115,11 @@ class PlannerActivity : ComponentActivity() {
                         )
                     }
                 },
+                onRefreshPlanner = {
+                    plannerId?.let {
+                        viewModel.fetchPlannerData(it)
+                    }
+                }
             )
         }
     }
@@ -147,6 +152,7 @@ private fun Screen(
     onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
     onClickEditTag: () -> Unit,
+    onRefreshPlanner: () -> Unit
 ) {
     val plannerTitle by viewModel.plannerTitle.collectAsState()
     val plannerDates by viewModel.plannerDates.collectAsState()
@@ -207,6 +213,7 @@ private fun Screen(
                 onClickInfo = onClickInfo,
                 onClickLike = onClickLike,
                 onClickEditTag = onClickEditTag,
+                onRefreshPlanner = onRefreshPlanner
             )
         }
     }

@@ -5,8 +5,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.CornerRadius
@@ -30,6 +34,8 @@ import com.jyp.jyp_design.ui.gnb.GlobalNavigationBar
 import com.jyp.jyp_design.ui.gnb.GlobalNavigationBarColor
 import com.jyp.jyp_design.ui.text.JypText
 import com.jyp.jyp_design.ui.typography.type.TextType
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -52,6 +58,7 @@ internal fun PlannerScreen(
     onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
     onClickEditTag: () -> Unit,
+    onRefreshPlanner: () -> Unit
 ) {
     val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     var selectedTabPosition by remember {
@@ -61,49 +68,78 @@ internal fun PlannerScreen(
         }
     }
 
-    BackdropScaffold(
-        scaffoldState = scaffoldState,
-        appBar = {
-            GlobalNavigationBar(
-                color = GlobalNavigationBarColor.BLACK,
-                title = plannerTitle,
-                textType = TextType.HEADING_2,
-                activeBack = true,
-                backAction = onClickBackButton,
-            )
-        },
-        backLayerContent = {
-            PlannerBackLayer(
-                startDate = startDate,
-                endDate = endDate,
-                profileImageUrls = joinMembers,
-                onClickInviteUserButton = onClickInviteUserButton,
-            )
-        },
-        frontLayerContent = {
-            PlannerContent(
-                tabTitles = listOf(
-                    stringResource(id = string.planner_tab_forum),
-                    stringResource(id = string.planner_tab_piki),
-                ),
-                startDate = startDate,
-                selectedTabPosition = selectedTabPosition,
-                tabSelected = { selectedTabPosition = it },
-                pikMis = pikMis,
-                planItems = planItems,
-                tags = tags,
-                tagClick = tagClick,
-                newPikMeClick = newPikMeClick,
-                onClickRoutePiki = onClickRoutePiki,
-                onClickEditRoute = onClickEditRoute,
-                onClickInfo = onClickInfo,
-                onClickLike = onClickLike,
-                onClickEditTag = onClickEditTag,
-            )
-        },
-        backLayerBackgroundColor = JypColors.Background_grey300,
-        frontLayerScrimColor = Color.Unspecified,
+    val coroutineScope = rememberCoroutineScope()
+    var isRefreshing by remember { mutableStateOf(false) }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            // pullRefresh 구현 중 하단으로 스크롤을 당겼을 때, 리프레시 후 리프레시 인디케이터가
+            // 사라지지 않는 문제가 있어 isRefreshing 값을 수동으로 전환하고 작업이 끝난 후 delay를 추가함.
+            // compose 1.4.0-alpha03 버전에서는 수정되었다고 하나, 라이브러리 버전업 시 gradle 싱크 문제가 있음
+            // 참고: https://stackoverflow.com/a/75518842
+            coroutineScope.launch {
+                isRefreshing = true
+                onRefreshPlanner()
+                delay(1000L)
+                isRefreshing = false
+            }
+        }
     )
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState)
+    ) {
+        BackdropScaffold(
+            scaffoldState = scaffoldState,
+            appBar = {
+                GlobalNavigationBar(
+                    color = GlobalNavigationBarColor.BLACK,
+                    title = plannerTitle,
+                    activeBack = true,
+                    backAction = onClickBackButton,
+                )
+            },
+            backLayerContent = {
+                PlannerBackLayer(
+                    startDate = startDate,
+                    endDate = endDate,
+                    profileImageUrls = joinMembers,
+                    onClickInviteUserButton = onClickInviteUserButton,
+                )
+            },
+            frontLayerContent = {
+                PlannerContent(
+                    tabTitles = listOf(
+                        stringResource(id = string.planner_tab_forum),
+                        stringResource(id = string.planner_tab_piki),
+                    ),
+                    startDate = startDate,
+                    selectedTabPosition = selectedTabPosition,
+                    tabSelected = { selectedTabPosition = it },
+                    pikMes = pikMes,
+                    planItems = planItems,
+                    tags = tags,
+                    tagClick = tagClick,
+                    newPikMeClick = newPikMeClick,
+                    onClickEditRoute = onClickEditRoute,
+                    onClickInfo = onClickInfo,
+                    onClickLike = onClickLike,
+                    onClickEditTag = onClickEditTag
+                )
+            },
+            backLayerBackgroundColor = JypColors.Background_grey300,
+            frontLayerScrimColor = Color.Unspecified,
+        )
+
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
+    }
 }
 
 @Composable
@@ -288,5 +324,6 @@ internal fun PlannerScreenPreview() {
         onClickInfo = {},
         onClickLike = {},
         onClickEditTag = {},
+        onRefreshPlanner = {},
     )
 }

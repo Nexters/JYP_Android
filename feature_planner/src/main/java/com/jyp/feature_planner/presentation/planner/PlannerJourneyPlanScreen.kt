@@ -40,6 +40,10 @@ internal fun PlannerJourneyPlanScreen(
 ) {
     LazyColumn(
         modifier = Modifier
+            // pullRefresh 구현 중, LazyColumn 내 레이아웃의 높이가 너무 작을 시
+            // pullRefresh가 실행되지 않는 문제가 있어 최소 높이를 임의로 300.dp로 지정함
+            // 참고: https://stackoverflow.com/a/70916438
+            .defaultMinSize(minHeight = 300.dp)
             .padding(horizontal = 20.dp),
     ) {
         item {
