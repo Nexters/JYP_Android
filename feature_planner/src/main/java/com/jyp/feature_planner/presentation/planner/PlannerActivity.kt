@@ -151,7 +151,7 @@ private fun Screen(
 ) {
     val plannerTitle by viewModel.plannerTitle.collectAsState()
     val plannerDates by viewModel.plannerDates.collectAsState()
-    val pikMes by viewModel.pikmis.collectAsState()
+    val pikMis by viewModel.pikmis.collectAsState()
     val tags by viewModel.tags.collectAsState()
     val membersProfileUrl by viewModel.membersProfileUrl.collectAsState()
     val planItems by viewModel.planItems.collectAsState()
@@ -181,7 +181,7 @@ private fun Screen(
                 plannerTitle = plannerTitle,
                 startDate = plannerDates.first,
                 endDate = plannerDates.second,
-                pikMes = pikMes,
+                pikMis = pikMis,
                 joinMembers = membersProfileUrl,
                 tags = tags,
                 tagClick = {

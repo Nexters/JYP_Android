@@ -1,7 +1,7 @@
 package com.jyp.feature_planner.domain
 
 import com.jyp.core_network.jyp.ApiResult
-import com.jyp.core_network.jyp.apiResult
+import com.jyp.core_network.jyp.apiUnitResult
 import javax.inject.Inject
 
 class SetPikmeLikeUseCase @Inject constructor(
@@ -12,7 +12,7 @@ class SetPikmeLikeUseCase @Inject constructor(
         pikmeId: String,
         isLike: Boolean
     ): ApiResult<Any> {
-        return apiResult {
+        return apiUnitResult {
             plannerRepository.setPikmeLike(plannerId, pikmeId, isLike)
         }
     }
