@@ -98,6 +98,7 @@ internal fun PlannerScreen(
                 GlobalNavigationBar(
                     color = GlobalNavigationBarColor.BLACK,
                     title = plannerTitle,
+                    textType = TextType.HEADING_2,
                     activeBack = true,
                     backAction = onClickBackButton,
                 )
@@ -119,11 +120,12 @@ internal fun PlannerScreen(
                     startDate = startDate,
                     selectedTabPosition = selectedTabPosition,
                     tabSelected = { selectedTabPosition = it },
-                    pikMes = pikMes,
+                    pikMis = pikMis,
                     planItems = planItems,
                     tags = tags,
                     tagClick = tagClick,
                     newPikMeClick = newPikMeClick,
+                    onClickRoutePiki = onClickRoutePiki,
                     onClickEditRoute = onClickEditRoute,
                     onClickInfo = onClickInfo,
                     onClickLike = onClickLike,
