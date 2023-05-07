@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyp.core_util.extensions.secondToDate
 import com.jyp.feature_planner.R.*
+import com.jyp.feature_planner.domain.PlannerPiki
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.domain.PlannerTag
 import com.jyp.feature_planner.presentation.planner.model.PlanItem
@@ -46,6 +47,7 @@ internal fun PlannerScreen(
     tagClick: (PlannerTag) -> Unit,
     planItems: List<PlanItem>,
     newPikMeClick: () -> Unit,
+    onClickRoutePiki: (PlannerPiki) -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
     onClickInviteUserButton: () -> Unit,
     onClickBackButton: () -> Unit,
@@ -93,6 +95,7 @@ internal fun PlannerScreen(
                 tags = tags,
                 tagClick = tagClick,
                 newPikMeClick = newPikMeClick,
+                onClickRoutePiki = onClickRoutePiki,
                 onClickEditRoute = onClickEditRoute,
                 onClickInfo = onClickInfo,
                 onClickLike = onClickLike,
@@ -161,6 +164,7 @@ private fun PlannerContent(
     tags: List<PlannerTag>,
     tagClick: (PlannerTag) -> Unit,
     newPikMeClick: () -> Unit,
+    onClickRoutePiki: (PlannerPiki) -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
     onClickInfo: (PlannerPikme) -> Unit,
     onClickLike: (PlannerPikme) -> Unit,
@@ -198,7 +202,8 @@ private fun PlannerContent(
             1 -> PlannerJourneyPlanScreen(
                 planItems = planItems,
                 startDate = startDate,
-                onClickEditRoute = onClickEditRoute,
+                onClickRoutePiki = onClickRoutePiki,
+                onClickEditRoute = onClickEditRoute
             )
         }
     }
@@ -279,6 +284,7 @@ internal fun PlannerScreenPreview() {
         planItems = emptyList(),
         newPikMeClick = {},
         onClickInviteUserButton = {},
+        onClickRoutePiki = {},
         onClickEditRoute = {},
         onClickBackButton = {},
         onClickInfo = {},

@@ -19,6 +19,7 @@ import com.jyp.feature_add_place.presentation.PlaceInfoActivity
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.PLACE_INFO_NAME
 import com.jyp.feature_add_place.presentation.SearchPlaceActivity.Companion.PLACE_INFO_URL
+import com.jyp.feature_planner.domain.PlannerPiki
 import com.jyp.feature_planner.domain.PlannerPikme
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity
 import com.jyp.feature_planner.presentation.add_planner_route.AddPlannerRouteActivity.Companion.EXTRA_DAY_INDEX
@@ -64,6 +65,12 @@ class PlannerActivity : ComponentActivity() {
                             putExtra(EXTRA_PLANNER_ID, plannerId)
                         }
                     )
+                },
+                onClickRoutePiki = { piki ->
+                    setIntentTo(PlaceInfoActivity::class.java) {
+                        putString(PLACE_INFO_NAME, piki.name)
+                        putString(PLACE_INFO_URL, piki.link)
+                    }
                 },
                 onClickEditRoute = { index ->
                     startActivity(
@@ -134,6 +141,7 @@ private fun Screen(
     isDDay: Boolean,
     viewModel: PlannerViewModel,
     onClickInviteUserButton: () -> Unit,
+    onClickRoutePiki: (PlannerPiki) -> Unit,
     onClickEditRoute: (day: Int) -> Unit,
     onNewPikMeClick: () -> Unit,
     onClickBackButton: () -> Unit,
@@ -186,6 +194,7 @@ private fun Screen(
                 },
                 planItems = planItems,
                 newPikMeClick = onNewPikMeClick,
+                onClickRoutePiki = onClickRoutePiki,
                 onClickEditRoute = onClickEditRoute,
                 onClickInviteUserButton = onClickInviteUserButton,
                 onClickBackButton = onClickBackButton,
