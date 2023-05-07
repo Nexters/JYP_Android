@@ -41,8 +41,7 @@ internal fun EditTagScreen(
         GlobalNavigationBarLayout(
             color = GlobalNavigationBarColor.WHITE,
             title = stringResource(id = CreatePlannerStep.TASTE.navigationTitleRes),
-            titleSize = 16.sp,
-            titleFontWeight = FontWeight.Medium,
+            textType = TextType.HEADING_3,
             activeBack = true,
             backAction = onClickBackAction,
         ) {
