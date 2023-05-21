@@ -17,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.*
 import com.google.accompanist.flowlayout.FlowRow
@@ -256,51 +255,9 @@ private fun PlannerPikMeCard(
 
         Column(
             modifier = Modifier
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { onClickLike.invoke(pikMe) }
-                )
-                .size(62.dp)
-                .run {
-                    if (pikMe.liked) {
-                        shadow(
-                            elevation = 24.dp,
-                            shape = CircleShape,
-                            spotColor = DefaultShadowColor.copy(alpha = 0.2f)
-                        )
-                    } else this
-                }
-                .clip(CircleShape)
-                .align(Alignment.BottomEnd)
-                .background(JypColors.Background_white100)
-                .border(
-                    width = 1.dp,
-                    color = JypColors.Border_grey,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth()
+                .padding(20.dp)
         ) {
-            LottieAnimation(
-                composition = composition,
-                progress = { lottieAnimatable.progress },
-            )
-
-            if (pikMe.likeCount != 0) {
-                JypText(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 8.dp),
-                    text = pikMe.likeCount.toString(),
-                    type = TextType.BODY_4,
-                    color = when (pikMe.liked) {
-                        true -> JypColors.Pink
-                        false -> JypColors.Text40
-                    }
-                )
-            }
-        }
-        Column {
             JypText(
                 text = pikMe.category,
                 type = TextType.BODY_4,
