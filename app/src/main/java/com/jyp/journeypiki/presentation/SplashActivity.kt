@@ -10,9 +10,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.core.os.postDelayed
 import androidx.lifecycle.lifecycleScope
-import com.jyp.core_network.di.JypSessionManager
 import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.KakaoSignIn
+import com.jyp.core_network.util.TokenManager
 import com.jyp.core_util.extensions.setIntentTo
 import com.jyp.feature_sign_in.onboarding.OnboardingActivity
 import com.jyp.main.presentation.MainActivity
@@ -27,7 +27,7 @@ import javax.inject.Inject
 class SplashActivity : ComponentActivity() {
 
     @Inject
-    lateinit var sessionManager: JypSessionManager
+    lateinit var tokenManager: TokenManager
     private val viewModel by viewModels<SplashViewModel>()
 
 
@@ -49,7 +49,7 @@ class SplashActivity : ComponentActivity() {
                 finish()
             }
             false -> {
-                sessionManager.bearerToken = kakaoToken.accessToken
+                tokenManager.setToken(kakaoToken.accessToken)
                 viewModel.signInWithKakao()
             }
         }
@@ -64,7 +64,7 @@ class SplashActivity : ComponentActivity() {
                         when (signIn.kakaoAccount != null) {
                             true -> setIntentTo(OnboardingActivity::class.java)
                             false -> {
-                                sessionManager.bearerToken = signIn.token
+                                tokenManager.setToken(signIn.token)
 
                                 setIntentTo(
                                     it = MainActivity::class.java,
@@ -72,7 +72,6 @@ class SplashActivity : ComponentActivity() {
                                 )
                             }
                         }
-
                         finish()
                     }
                     is UiState.Failure -> {

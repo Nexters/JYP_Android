@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
-import com.jyp.core_network.di.JypSessionManager
+import com.jyp.core_network.util.TokenManager
 import com.jyp.core_network.jyp.UiState
 import com.jyp.core_network.jyp.model.KakaoSignIn
 import com.jyp.core_network.util.toJypApiFailure
@@ -30,7 +30,7 @@ import javax.inject.Inject
 class SignInActivity : ComponentActivity() {
 
     @Inject
-    lateinit var sessionManager: JypSessionManager
+    lateinit var tokenManager: TokenManager
     private val viewModel by viewModels<SignInViewModel>()
 
 
@@ -64,7 +64,7 @@ class SignInActivity : ComponentActivity() {
                 UserApiClient.instance.me { user, error ->
                     error?.let { showToast(R.string.sign_in_error) }
                     user?.kakaoAccount?.profile?.let {
-                        sessionManager.bearerToken = kakaoToken.accessToken
+                        tokenManager.setToken(kakaoToken.accessToken)
                         viewModel.signInWithKakao()
                     }
                 }
@@ -84,7 +84,7 @@ class SignInActivity : ComponentActivity() {
                 when (uiState) {
                     is UiState.Loading -> {}
                     is UiState.Success<*> -> (uiState.data as KakaoSignIn).let { signIn ->
-                        sessionManager.bearerToken = signIn.token
+                        tokenManager.setToken(signIn.token)
 
                         when (signIn.kakaoAccount == null) {
                             true -> {

@@ -7,20 +7,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.jyp.core_network.di.JypSessionManager
 import com.jyp.core_util.extensions.setIntentTo
 import com.jyp.feature_sign_in.R
 import com.jyp.feature_sign_in.util.showToast
 import com.jyp.main.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class QuestionActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var sessionManager: JypSessionManager
     private val viewModel: QuestionViewModel by viewModels()
 
     private val userName: String? by lazy {
