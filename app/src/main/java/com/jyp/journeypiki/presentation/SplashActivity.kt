@@ -1,7 +1,6 @@
 package com.jyp.journeypiki.presentation
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.*
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -65,11 +64,7 @@ class SplashActivity : ComponentActivity() {
                             true -> setIntentTo(OnboardingActivity::class.java)
                             false -> {
                                 sessionManager.bearerToken = signIn.token
-
-                                setIntentTo(
-                                    it = MainActivity::class.java,
-                                    flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP,
-                                )
+                                setIntentTo(MainActivity::class.java)
                             }
                         }
 
