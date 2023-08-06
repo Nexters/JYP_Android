@@ -1,7 +1,6 @@
 package com.jyp.journeypiki.presentation
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.*
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

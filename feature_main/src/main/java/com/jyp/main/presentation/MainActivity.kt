@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
     private val myJourneyViewModel: MyJourneyViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by viewModels()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -137,6 +138,7 @@ class MainActivity : ComponentActivity() {
                 "com.jyp.feature_sign_in.onboarding.OnboardingActivity"
             )
         )
+        finish()
     }
 
     companion object {
