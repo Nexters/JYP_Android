@@ -24,7 +24,7 @@ import com.jyp.core_network.jyp.model.enumerate.JoinJourneyFailure
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.jyp.core_network.di.JypSessionManager
+import com.jyp.core_network.util.TokenManager
 import com.jyp.core_network.jyp.UiState
 import com.jyp.feature_another_journey.presentation.AnotherJourneyScreen
 import com.jyp.feature_my_journey.domain.Journey
@@ -53,7 +53,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var sessionManager: JypSessionManager
+    lateinit var tokenManager: TokenManager
 
     private val mainViewModel: MainViewModel by viewModels()
     private val myJourneyViewModel: MyJourneyViewModel by viewModels()
@@ -131,7 +131,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun resetUserSignInState() {
-        sessionManager.bearerToken = null
+        tokenManager.clearToken()
         startActivity(
             Intent().setClassName(
                 this@MainActivity,
